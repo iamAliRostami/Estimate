@@ -5,4 +5,11 @@
     <string name="user_location_permission_not_granted">user_location_permission_not_granted</string>
     <string name="zoom_map_in_and_out_instruction">zoom_map_in_and_out_instruction</string>
     <string name="zoom_map_in_and_out_variable_label_instruction">zoom_map_in_and_out_variable_label_instruction</string>
+    <string name="tap_on_marker_instruction">tap_on_marker_instruction</string>
+    <string name="move_the_map_and_research">move_the_map_and_research</string>
+    <string name="layer_not_found">layer_not_found</string>
+    <string name="download">بارگیری</string>
+    <string name="upload">بارگزاری</string>
+    <string name="paper">مدارک</string>
+    <string name="exit">خروج</string>
 </resources>
