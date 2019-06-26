@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">ارزیابی</string>
-    <string name="mapbox_access_token">MAPBOX_ACCESS_TOKEN</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiaWFtYWxpcm9zdGFtaSIsImEiOiJjanhjbmptcmowMjZnM3BvdnY0YWx4ampxIn0.iv9I6s34q_-k9GqCiz2seg</string>
 </resources>
