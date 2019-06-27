@@ -22,4 +22,6 @@
     <string name="request_date">تاریخ درخواست</string>
     <string name="account_number">اشتراک</string>
     <string name="license">پروانه</string>
+    <string name="open">بازکردن منو</string>
+    <string name="close">بستن</string>
 </resources>
