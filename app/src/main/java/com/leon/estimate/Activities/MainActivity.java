@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         Mapbox.getInstance(this, accessToken);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         setImageViewFindByViewId();
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
