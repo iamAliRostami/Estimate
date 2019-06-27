@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl"
-    tools:context=".Activities.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
+    <include
+        layout="@layout/app_bar_main2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        mapbox:mapbox_cameraTargetLat="40.73581"
-        mapbox:mapbox_cameraTargetLng="-73.99155"
-        mapbox:mapbox_cameraZoom="11">
+        android:layout_height="match_parent" />
 
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_margin="-19dp"
+        android:background="@color/transparent"
+        android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="top"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:weightSum="6">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -52,8 +56,8 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -78,8 +82,8 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -104,8 +108,8 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -129,10 +133,9 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -156,13 +159,9 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+
         </LinearLayout>
-    </com.mapbox.mapboxsdk.maps.MapView>
-    <!--<org.osmdroid.views.MapView-->
-    <!--android:id="@+id/mapView"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="fill_parent"-->
-    <!--android:clickable="true"-->
-    <!--tools:ignore="MissingConstraints"-->
-    <!--android:focusable="true" />-->
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>
