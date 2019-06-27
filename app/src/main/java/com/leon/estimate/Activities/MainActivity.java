@@ -3,12 +3,14 @@ package com.leon.estimate.Activities;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +39,8 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +50,35 @@ public class MainActivity extends AppCompatActivity implements
     private MapboxMap mapboxMap;
     private MapView mapView;
     private List<Point> routeCoordinates;
-    private List<Point> routeCoordinates1;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        Mapbox.getInstance(this, "pk.eyJ1IjoiaWFtYWxpcm9zdGFtaSIsImEiOiJjanhjbmptcmowMjZnM3BvdnY0YWx4ampxIn0.iv9I6s34q_-k9GqCiz2seg");
-        setContentView(R.layout.activity_main);
-        mapView = findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
-    }
+    ImageView imageViewExit, imageViewDownload, imageViewUpload, imageViewPaper, imageViewForm;
+    String accessToken = "pk.eyJ1IjoiaWFtYWxpcm9zdGFtaSIsImEiOiJjanhjbmptcmowMjZnM3BvdnY0YWx4ampxIn0.iv9I6s34q_-k9GqCiz2seg";
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = null;
+            switch (view.getId()) {
+                case R.id.imageViewForm:
+                    intent = new Intent(getApplicationContext(), FormActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.imageViewDownload:
+                    intent = new Intent(getApplicationContext(), DownloadActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.imageViewUpload:
+                    intent = new Intent(getApplicationContext(), UploadActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.imageViewPaper:
+                    intent = new Intent(getApplicationContext(), PaperActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.imageViewExit:
+                    finishAffinity();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
@@ -175,16 +196,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onMoveEnd(MoveGestureDetector detector) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        Mapbox.getInstance(this, accessToken);
+        setContentView(R.layout.activity_main);
+        setImageViewFindByViewId();
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
     }
 
     @Override
-    public void onMoveBegin(MoveGestureDetector detector) {
-// Left empty on purpose
+    public void onMoveEnd(@NotNull MoveGestureDetector detector) {
     }
 
     @Override
-    public void onMove(MoveGestureDetector detector) {
+    public void onMoveBegin(@NotNull MoveGestureDetector detector) {
 // Left empty on purpose
     }
 
@@ -205,5 +233,28 @@ public class MainActivity extends AppCompatActivity implements
         routeCoordinates = new ArrayList<>();
         routeCoordinates.add(Point.fromLngLat(longitude, latitude));
         routeCoordinates.add(Point.fromLngLat(longitude + i * 10, latitude + i * 10));
+    }
+
+    @Override
+    public void onMove(@NotNull MoveGestureDetector detector) {
+// Left empty on purpose
+    }
+
+    void setImageViewFindByViewId() {
+        imageViewDownload = findViewById(R.id.imageViewDownload);
+        imageViewDownload.setOnClickListener(onClickListener);
+
+        imageViewUpload = findViewById(R.id.imageViewUpload);
+        imageViewUpload.setOnClickListener(onClickListener);
+
+
+        imageViewPaper = findViewById(R.id.imageViewPaper);
+        imageViewPaper.setOnClickListener(onClickListener);
+
+        imageViewExit = findViewById(R.id.imageViewExit);
+        imageViewExit.setOnClickListener(onClickListener);
+
+        imageViewForm = findViewById(R.id.imageViewForm);
+        imageViewForm.setOnClickListener(onClickListener);
     }
 }
