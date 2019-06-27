@@ -11,8 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.leon.estimate.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SplashActivity extends AppCompatActivity {
+
+    @BindView(R.id.imageViewSplashScreen)
     ImageView imageViewSplash;
+    @BindView(R.id.shimmer_view_container)
     ShimmerFrameLayout container;
     private boolean splashLoaded = false;
 
@@ -22,8 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_activity);
-        container = findViewById(R.id.shimmer_view_container);
-        imageViewSplash = findViewById(R.id.imageViewSplashScreen);
+        ButterKnife.bind(this);
         if (!splashLoaded) {
             setContentView(R.layout.splash_activity);
             initialize();
