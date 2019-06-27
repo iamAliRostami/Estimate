@@ -7,6 +7,9 @@
     <dimen name="activity_mid_margin">6dp</dimen>
     <dimen name="activity_mid_padding">6dp</dimen>
 
+    <dimen name="activity_medium_padding">10dp</dimen>
+    <dimen name="activity_medium_margin">10dp</dimen>
+
     <dimen name="activity_large_margin">30dp</dimen>
     <dimen name="activity_large_padding">14dp</dimen>
 
