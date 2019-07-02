@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,9 @@
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
-            android:label="@string/login" />
+            android:label="@string/login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.Main2Activity"
             android:label="@string/app_name"
@@ -48,7 +51,9 @@
         </activity>
         <activity
             android:name=".Activities.FormActivity"
-            android:label="@string/form" />
+            android:label="@string/form"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.PaperActivity"
             android:label="@string/paper" />

@@ -9,7 +9,7 @@
     <string name="move_the_map_and_research">move_the_map_and_research</string>
     <string name="layer_not_found">layer_not_found</string>
     <string name="download">بارگیری</string>
-    <string name="upload">بارگزاری</string>
+    <string name="upload">بارگذاری</string>
     <string name="paper">مدارک</string>
     <string name="exit">خروج</string>
     <string name="form">فرم</string>
@@ -28,7 +28,35 @@
     <string name="username">نام کاربری</string>
     <string name="password">گذرواژه</string>
     <string name="login">ورود</string>
+    <string name="loading_getting_info">ارتباط با سرویس دهنده</string>
+    <string name="loading_connecting">ارتباط با سرور</string>
     <string name="company_site">WWW.ABFAISFAHAN.IR</string>
     <string name="copy_right">copyright 2017 by H.G.K co</string>
     <string name="version">نسخه 1.1.0.1</string>
+
+    <string name="accepted">OK</string>
+    <string name="message">message</string>
+    <string name="dear_user">همکار گرامی!</string>
+
+    <string name="error">خطا</string>
+    <string name="error_empty">این فیلد باید پر شود.</string>
+    <string name="error_empty_all">همه فیلد ها خالی است.</string>
+    <string name="error_short_length">.این فیلد کوتاه است</string>
+    <string name="error_similar">شماره پرونده و شماره اشتراک مطابق نیستند.</string>
+    <string name="error_IO">خطا در جابجای اطلاعات، لطفا مجدد تلاش کنید</string>
+    <string name="error_Socket">خطادر ارتباط با سرور، لطفا تنظیمات شبکه خود را بررسی و مجدد تلاش کنید</string>
+    <string name="error_other">جهت ارتباط با پشتیبانی; علت خطا:</string>
+    <string name="error_disconnected">برقراری ارتباط حین جابجایی اطلاعات با خطا مواجه شد</string>
+    <string name="error_is_not_match">نام کاربری و گذرواژه با یکدیگر مطابقت ندارند</string>
+    <string name="error_passwords_is_not_match">گذرواژه و تکرار آن با یکدیکر مطابق نیستند</string>
+    <string name="error_in_record_voice">در ضبظ صدا مشکلی به وجود آمد</string>
+    <string name="error_in_play_voice">در پخش صدا مشکلی به وجود آمد</string>
+    <string name="error_in_format">فرمت وارد نشده نادرست است</string>
+    <string name="error_internal">خطای داخلی سرور، با پشتیبان تماس حاصل فرمایید</string>
+    <string name="error_input">ورودی های خود را چک کنید</string>
+    <string name="error_change_server">سرور در حال تغییرات است، لطفا منتظر بمانید و در صورت برطرف نشدن مشکل با پشتیبان تماس حاصل فرماید</string>
+    <string name="error_user_password">نام کاربری و گذرواژه در سیستم موجود نیست، لطفا در ورود اطلاعات دقت قرمایید</string>
+    <string name="error_not_update1">همکار گرامی لطفا نسخه به روز شده اپلیکیشن را از منوی تنظیمات  بخش به روز رسانی دریافت نمایید</string>
+    <string name="error_not_update2">همکار گرامی لطفا چهت دریافت آخرین نسخه اپلیکیشن با راهبر تماس حاصل فرمایید</string>
+    <string name="error_not_auth">مجوز های شما باطل شده است، از برنامه خارج و مجددا وارد شوید</string>
 </resources>

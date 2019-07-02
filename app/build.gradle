@@ -50,12 +50,18 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
-//    implementation 'org.slf4j:slf4j-android:1.7.25'
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.facebook.shimmer:shimmer:0.4.0@aar'
     implementation 'com.jakewharton:butterknife:10.1.0'
     implementation 'com.jakewharton:butterknife-compiler:10.1.0'
     annotationProcessor "com.jakewharton:butterknife-compiler:10.1.0"
+    implementation 'com.yarolegovich:lovely-dialog:1.0.7'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    // Room components
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    androidTestImplementation "androidx.room:room-testing:2.1.0"
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"
 }

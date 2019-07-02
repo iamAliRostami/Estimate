@@ -54,37 +54,51 @@ public class Main2Activity extends AppCompatActivity
 
     ImageView imageViewExit, imageViewDownload, imageViewUpload, imageViewPaper, imageViewForm;
     String accessToken = "pk.eyJ1IjoiaWFtYWxpcm9zdGFtaSIsImEiOiJjanhjbmptcmowMjZnM3BvdnY0YWx4ampxIn0.iv9I6s34q_-k9GqCiz2seg";
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = null;
-            switch (view.getId()) {
-                case R.id.imageViewForm:
-                    intent = new Intent(getApplicationContext(), FormActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewDownload:
-                    intent = new Intent(getApplicationContext(), DownloadActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewUpload:
-                    intent = new Intent(getApplicationContext(), UploadActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewPaper:
-                    intent = new Intent(getApplicationContext(), PaperActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewExit:
-                    finishAffinity();
-                    break;
-            }
-        }
-    };
+
     private PermissionsManager permissionsManager;
     private MapboxMap mapboxMap;
     private MapView mapView;
     private List<Point> routeCoordinates;
+    DrawerLayout drawer;
+    View.OnClickListener onClickListener = view -> {
+        Intent intent = null;
+        switch (view.getId()) {
+            case R.id.imageViewForm:
+                intent = new Intent(getApplicationContext(), FormActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewDownload:
+                intent = new Intent(getApplicationContext(), DownloadActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewUpload:
+                intent = new Intent(getApplicationContext(), UploadActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewPaper:
+                intent = new Intent(getApplicationContext(), PaperActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewExit:
+                finishAffinity();
+                break;
+        }
+    };
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NotNull MenuItem item) {
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,23 +115,8 @@ public class Main2Activity extends AppCompatActivity
         setSupportActionBar(toolbar);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NotNull MenuItem item) {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        drawer = findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
     }
 
     @Override
