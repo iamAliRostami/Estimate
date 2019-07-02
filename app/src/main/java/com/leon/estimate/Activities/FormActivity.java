@@ -1,9 +1,11 @@
 package com.leon.estimate.Activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -14,6 +16,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.FontManager;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,6 +113,7 @@ public class FormActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;
 
     View view;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,15 +125,28 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void initialize() {
+        context = this;
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(constraintLayout);
         setOnEditTextOnFocusChangeListener();
         initializeSpinner();
+        setOnButtonClickListener();
     }
 
     void initializeSpinner() {
+        ArrayList<String> arrayListSpinner = new ArrayList<>();
+        arrayListSpinner.add("1");
+        arrayListSpinner.add("2");
+        ArrayAdapter arrayAdapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner);
+        spinner1.setAdapter(arrayAdapter);
+        spinner2.setAdapter(arrayAdapter);
+    }
 
+    void setOnButtonClickListener() {
+        button.setOnClickListener(view -> {
 
+        });
     }
 
     void setOnEditTextOnFocusChangeListener() {
@@ -763,5 +781,4 @@ public class FormActivity extends AppCompatActivity {
             }
         });
     }
-
 }
