@@ -93,13 +93,13 @@ public class DifferentCompanyManager {
             case TSW:
                 return "http://81.90.148.25/";
             case TE:
-                return "http://185.120.137.254";//http://185.12.60.135/,185.120.137.243
+                return "http://185.120.137.254";
             case TSE:
                 return "http://5.160.85.228:9098/";
             case TOWNS_WEST:
                 return "http://217.66.195.75/";
             case ESF:
-                return "http://172.18.12.122/";
+                return "http://37.191.92.130/";
             case DEBUG:
                 return "http://192.168.43.185:45458/";
             default:
@@ -123,7 +123,6 @@ public class DifferentCompanyManager {
             case ZONE6:
                 return "http://172.26.0.32/";
             case TSW:
-                //return "http://192.168.42.12:45455/";
                 return "http://172.30.1.22/";
             case TE:
                 return "http://172.31.0.25/";
@@ -199,7 +198,7 @@ public class DifferentCompanyManager {
     }
 
     public static CompanyNames getActiveCompanyName() {
-        return CompanyNames.TSW;
+        return CompanyNames.ESF;
     }
 
 

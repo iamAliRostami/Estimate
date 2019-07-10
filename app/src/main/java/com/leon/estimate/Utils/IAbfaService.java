@@ -1,7 +1,12 @@
 package com.leon.estimate.Utils;
 
+import com.leon.estimate.Tables.Calculation;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -131,5 +136,9 @@ public interface IAbfaService {
     @PATCH("/Auth/Account/UpdateDeviceIdAnanymous")
     Call<SimpleMessage> signSerial(
             @Body LoginInfo logininfo);
+
+    @GET("/MoshtarakinApi/ExaminationManager/GetMyWorksTest")
+    Call<List<Calculation>> getMyWorks();
+
 }
 

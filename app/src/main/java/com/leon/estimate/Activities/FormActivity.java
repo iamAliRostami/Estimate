@@ -119,7 +119,7 @@ public class FormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.form_activity1);
+        setContentView(R.layout.form_activity);
         ButterKnife.bind(this);
         initialize();
     }
@@ -137,7 +137,7 @@ public class FormActivity extends AppCompatActivity {
         ArrayList<String> arrayListSpinner = new ArrayList<>();
         arrayListSpinner.add("1");
         arrayListSpinner.add("2");
-        ArrayAdapter arrayAdapter = new ArrayAdapter<String>(context,
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner);
         spinner1.setAdapter(arrayAdapter);
         spinner2.setAdapter(arrayAdapter);
@@ -196,8 +196,8 @@ public class FormActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                view = editText2;
-                view.requestFocus();
+//                view = editText2;
+//                view.requestFocus();
             }
         });
     }

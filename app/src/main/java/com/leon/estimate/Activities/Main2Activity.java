@@ -1,28 +1,37 @@
 package com.leon.estimate.Activities;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.google.android.material.navigation.NavigationView;
+import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.Calculation;
+import com.leon.estimate.Tables.DaoCalculation;
+import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.IAbfaService;
+import com.leon.estimate.Utils.ICallback;
+import com.leon.estimate.Utils.NetworkHelper;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.android.gestures.MoveGestureDetector;
@@ -49,6 +58,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Retrofit;
+
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, PermissionsListener, MapboxMap.OnMoveListener {
 
@@ -60,6 +72,14 @@ public class Main2Activity extends AppCompatActivity
     private MapView mapView;
     private List<Point> routeCoordinates;
     DrawerLayout drawer;
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Calculation "
+                    + " Add COLUMN id AUTO_INCREMENT ");
+        }
+    };
+    Context context;
     View.OnClickListener onClickListener = view -> {
         Intent intent = null;
         switch (view.getId()) {
@@ -68,8 +88,9 @@ public class Main2Activity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.imageViewDownload:
-                intent = new Intent(getApplicationContext(), DownloadActivity.class);
-                startActivity(intent);
+                download();
+//                intent = new Intent(getApplicationContext(), DownloadActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.imageViewUpload:
                 intent = new Intent(getApplicationContext(), UploadActivity.class);
@@ -84,6 +105,36 @@ public class Main2Activity extends AppCompatActivity
                 break;
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        Mapbox.getInstance(this, accessToken);
+        setContentView(R.layout.main2_activity);
+        context = this;
+        setImageViewFindByViewId();
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        drawer = findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
+
+//        Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "mydb")
+//                .addMigrations(MIGRATION_1_2).build();
+
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "mydb")
+                .allowMainThreadQueries()
+                .build();
+        DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
+        List<Calculation> calculations = daoCalculation.fetchCalculate();
+        Log.e("size", String.valueOf(calculations.size()));
+        Log.e("address", String.valueOf(calculations.get(0).getAddress()));
+    }
 
     @Override
     public void onBackPressed() {
@@ -101,52 +152,28 @@ public class Main2Activity extends AppCompatActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        Mapbox.getInstance(this, accessToken);
-        setContentView(R.layout.main2_activity);
-        setImageViewFindByViewId();
-        mapView = findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        drawer = findViewById(R.id.drawer_layout);
-        drawer.openDrawer(GravityCompat.START);
-    }
-
-    @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         Main2Activity.this.mapboxMap = mapboxMap;
         mapboxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/mapbox/cjerxnqt3cgvp2rmyuxbeqme7"),
-                new Style.OnStyleLoaded() {
-                    @TargetApi(Build.VERSION_CODES.KITKAT)
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onStyleLoaded(@NonNull final Style style) {
-                        enableLocationComponent(style);
-                        for (int i = 1; i < 4; i++) {
-                            initRouteCoordinates(i);
-                            // Create the LineString from the list of coordinates and then make a GeoJSON
-                            // FeatureCollection so we can add the line to our map as a layer.
-                            style.addSource(new GeoJsonSource("line-source".concat(String.valueOf(i)),
-                                    FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(
-                                            LineString.fromLngLats(routeCoordinates)
-                                    )})));
-                            // The layer properties for our line. This is where we make the line dotted, set the color, etc.
-                            style.addLayer(new LineLayer("linelayer".concat(String.valueOf(i))
-                                    , "line-source".concat(String.valueOf(i))).withProperties(
-                                    PropertyFactory.lineDasharray(new Float[]{0.01f, 2f}),
-                                    PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
-                                    PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
-                                    PropertyFactory.lineWidth(5f),
-                                    PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
-                            ));
-                        }
+                style -> {
+                    enableLocationComponent(style);
+                    for (int i = 1; i < 4; i++) {
+                        initRouteCoordinates(i);
+                        // Create the LineString from the list of coordinates and then make a GeoJSON
+                        // FeatureCollection so we can add the line to our map as a layer.
+                        style.addSource(new GeoJsonSource("line-source".concat(String.valueOf(i)),
+                                FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(
+                                        LineString.fromLngLats(routeCoordinates)
+                                )})));
+                        // The layer properties for our line. This is where we make the line dotted, set the color, etc.
+                        style.addLayer(new LineLayer("linelayer".concat(String.valueOf(i))
+                                , "line-source".concat(String.valueOf(i))).withProperties(
+                                PropertyFactory.lineDasharray(new Float[]{0.01f, 2f}),
+                                PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
+                                PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
+                                PropertyFactory.lineWidth(5f),
+                                PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
+                        ));
                     }
                 });
     }
@@ -284,5 +311,24 @@ public class Main2Activity extends AppCompatActivity
 
         imageViewForm = findViewById(R.id.imageViewForm);
         imageViewForm.setOnClickListener(onClickListener);
+    }
+
+    void download() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "header");
+        final IAbfaService getKardex = retrofit.create(IAbfaService.class);
+        Call<List<Calculation>> call = getKardex.getMyWorks();
+        Download download = new Download();
+        HttpClientWrapper.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
+    }
+
+    class Download implements ICallback<List<Calculation>> {
+        @Override
+        public void execute(List<Calculation> calculations) {
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "mydb")
+                    .allowMainThreadQueries()
+                    .build();
+            DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
+            daoCalculation.insertAll(calculations);
+        }
     }
 }
