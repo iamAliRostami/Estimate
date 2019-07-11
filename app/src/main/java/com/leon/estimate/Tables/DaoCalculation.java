@@ -18,7 +18,7 @@ public interface DaoCalculation {
     @Query("SELECT * FROM Calculation WHERE trackNumber =:trackingNumber")
     List<Calculation> getCalculate(String trackingNumber);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertCalculation(Calculation calculation);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

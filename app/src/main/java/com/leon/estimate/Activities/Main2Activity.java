@@ -19,8 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.room.Room;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.google.android.material.navigation.NavigationView;
 import com.leon.estimate.Enums.ProgressType;
@@ -61,6 +59,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Tables.MyDatabase.MIGRATION_1_2;
+
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, PermissionsListener, MapboxMap.OnMoveListener {
 
@@ -72,13 +72,7 @@ public class Main2Activity extends AppCompatActivity
     private MapView mapView;
     private List<Point> routeCoordinates;
     DrawerLayout drawer;
-    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE Calculation "
-                    + " Add COLUMN id AUTO_INCREMENT ");
-        }
-    };
+
     Context context;
     View.OnClickListener onClickListener = view -> {
         Intent intent = null;
@@ -124,16 +118,35 @@ public class Main2Activity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
 
-//        Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "mydb")
-//                .addMigrations(MIGRATION_1_2).build();
+        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .addMigrations(MIGRATION_1_2).build();
 
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "mydb")
-                .allowMainThreadQueries()
-                .build();
+
+        MyDatabase dataBase1 = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoCalculation daoCalculation1 = dataBase1.daoCalculateCalculation();
+        Calculation calculation = new Calculation("AS5", "As", "As", "as", true,
+                "As", "As", "as", "AS", "As", "As", "as");
+        daoCalculation1.insertCalculation(calculation);
+
+        MyDatabase dataBase2 = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoCalculation daoCalculation2 = dataBase2.daoCalculateCalculation();
+        Calculation calculation1 = new Calculation("AS6", "As", "As", "as", true,
+                "As", "As", "as", "AS", "As", "As", "as");
+        daoCalculation2.insertCalculation(calculation1);
+
+
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
         DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
         List<Calculation> calculations = daoCalculation.fetchCalculate();
         Log.e("size", String.valueOf(calculations.size()));
-        Log.e("address", String.valueOf(calculations.get(0).getAddress()));
+        Log.e("address", String.valueOf(calculations.get(1).getAddress()));
+
+        List<Calculation> calculations1 = daoCalculation.getCalculate("1810308.0");
+        Log.e("size", String.valueOf(calculations1.size()));
+//        Log.e("address", String.valueOf(calculations1.get(0).getAddress()));
     }
 
     @Override
@@ -324,11 +337,14 @@ public class Main2Activity extends AppCompatActivity
     class Download implements ICallback<List<Calculation>> {
         @Override
         public void execute(List<Calculation> calculations) {
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "mydb")
-                    .allowMainThreadQueries()
-                    .build();
-            DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-            daoCalculation.insertAll(calculations);
+            for (int i = 0; i < calculations.size() - 3; i++) {
+                Calculation calculation = calculations.get(i);
+                Log.e("address", calculation.getAddress());
+                MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                        .allowMainThreadQueries().build();
+                DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
+                daoCalculation.insertCalculation(calculation);
+            }
         }
     }
 }

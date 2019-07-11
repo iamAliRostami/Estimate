@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Calculation {
-    @PrimaryKey//(autoGenerate = true)
-            int id;
+    @PrimaryKey(autoGenerate = true)
+    int id;
     String address;
     String billId;
     String examinationDay;
@@ -20,11 +20,10 @@ public class Calculation {
     String serviceGroup;
     String trackNumber;
 
-    public Calculation(int id, String address, String billId, String examinationDay,
+    public Calculation(String address, String billId, String examinationDay,
                        String examinationId, boolean isPeymayesh, String moshtarakMobile,
                        String nameAndFamily, String neighbourBillId, String notificationMobile,
                        String radif, String serviceGroup, String trackNumber) {
-        this.id = id;
         this.address = address;
         this.billId = billId;
         this.examinationDay = examinationDay;
@@ -37,6 +36,9 @@ public class Calculation {
         this.radif = radif;
         this.serviceGroup = serviceGroup;
         this.trackNumber = trackNumber;
+    }
+
+    public Calculation() {
     }
 
     public int getId() {
