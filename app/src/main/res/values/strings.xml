@@ -8,7 +8,7 @@
     <string name="tap_on_marker_instruction">tap_on_marker_instruction</string>
     <string name="move_the_map_and_research">move_the_map_and_research</string>
     <string name="layer_not_found">layer_not_found</string>
-    <string name="download">بارگیری</string>
+    <string name="downloadDetails">بارگیری</string>
     <string name="upload">بارگذاری</string>
     <string name="paper">مدارک</string>
     <string name="exit">خروج</string>
@@ -60,6 +60,14 @@
     <string name="error_not_update2">همکار گرامی لطفا چهت دریافت آخرین نسخه اپلیکیشن با راهبر تماس حاصل فرمایید</string>
     <string name="error_not_auth">مجوز های شما باطل شده است، از برنامه خارج و مجددا وارد شوید</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location">مکان یابی</string>
+    <string name="setting">تنظیمات برنامه</string>
+    <string name="setting_">تنظیمات</string>
+    <string name="setting_gps">تنظیمات جی پی اس</string>
+    <string name="gps_question">مکان یابی شما غیر فعال است ،آیا مایلید به قسمت تنظیمات مکان یابی منتقل شوید</string>
+    <string name="close_app">بستن برنامه</string>
+    <string name="call_operator">"لطفا با راهبر سیستم تماس حاصل فرمایید"</string>
+    <string name="delete">حذف با موفقیت انجام شد</string>
+    <string name="force_close">مجوز ها کامل نیست</string>
+    <string name="permission_not_completed">بستن برنامه</string>
 </resources>

@@ -5,24 +5,17 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalculationInfo.class, Calculation.class}, version = 2, exportSchema = false)
+@Database(entities = {CalculationInformation.class, Calculation.class}, version = 10, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public abstract DaoCalculateInfo daoCalcuateInfo();
-
-    public abstract DaoCalculation daoCalculateCalculation();
-
-    public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-//            alter table `users` modify column id INT NOT NULL AUTO_INCREMENT;
-//            database.execSQL("ALTER TABLE Calculation "
-//                    + "  Add COLUMN id AUTO_INCREMENT ");
             database.execSQL("CREATE TABLE backup_table (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "address TEXT," +
                     "billId TEXT, " +
                     "examinationDay TEXT, " +
-                    "examinationId TEXT, " +
+                    "examinationId TEXT UNIQUE, " +
                     "isPeymayesh INTEGER, " +
                     "moshtarakMobile TEXT, " +
                     "nameAndFamily TEXT, " +
@@ -32,8 +25,29 @@ public abstract class MyDatabase extends RoomDatabase {
                     "serviceGroup TEXT, " +
                     "trackNumber TEXT" +
                     ")");
-            database.execSQL("DROP TABLE Calculation");
-            database.execSQL("ALTER TABLE backup_table RENAME TO Calculation");
         }
     };
+
+    public abstract DaoCalculation daoCalculateCalculation();
+
+    public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("DROP TABLE Calculation");
+        }
+    };
+    public static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Calculation ADD COLUMN read INTEGER ");
+        }
+    };
+    public static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Calculation RENAME TO CalculationInformation");
+        }
+    };
+
+    public abstract DaoCalculateInfo daoCalculateInfo();
 }

@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.ListActivity"></activity>
+        <activity
+            android:name=".Activities.ListActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".Activities.SplashActivity"
             android:screenOrientation="portrait"
@@ -63,7 +65,7 @@
             android:label="@string/upload" />
         <activity
             android:name=".Activities.DownloadActivity"
-            android:label="@string/download" />
+            android:label="@string/downloadDetails" />
     </application>
 
 </manifest>

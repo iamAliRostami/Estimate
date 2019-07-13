@@ -1,5 +1,6 @@
 package com.leon.estimate.Activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +22,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.CompanyNames;
+import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ErrorHandlerType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -29,6 +33,7 @@ import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.ConnectingManager;
 import com.leon.estimate.Utils.Crypto;
+import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
@@ -38,6 +43,8 @@ import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void initialize() {
+        manage_M_permissions();
         context = this;
         connectingManager = new ConnectingManager(getApplicationContext());
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
@@ -304,7 +312,6 @@ public class LoginActivity extends AppCompatActivity {
 
     class LoginFeedBack
             implements ICallback<com.leon.estimate.Utils.LoginFeedBack> {
-
         @Override
         public void execute(com.leon.estimate.Utils.LoginFeedBack loginFeedBack) {
             if (loginFeedBack.getAccess_token() == null ||
@@ -324,4 +331,37 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    public void manage_M_permissions() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                forceClose();
+            }
+        };
+
+        new TedPermission(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleMessage("جهت استفاده بهتر از برنامه مجوز های پیشنهادی را قبول فرمایید")
+                .setDeniedMessage("در صورت رد این مجوز قادر با استفاده از این دستگاه نخواهید بود" + "\n" +
+                        "لطفا با فشار دادن دکمه" + " " + "اعطای دسترسی" + " " + "و سپس در بخش " + " دسترسی ها" + " " + " با این مجوز هاموافقت نمایید")
+                .setGotoSettingButtonText("اعطای دسترسی")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .check();
+    }
+
+    private void forceClose() {
+        new CustomDialog(DialogType.Red, getApplicationContext(),
+                getApplicationContext().getString(R.string.permission_not_completed),
+                getApplicationContext().getString(R.string.dear_user),
+                getApplicationContext().getString(R.string.call_operator),
+                getApplicationContext().getString(R.string.force_close));
+        finishAffinity();
+    }
 }

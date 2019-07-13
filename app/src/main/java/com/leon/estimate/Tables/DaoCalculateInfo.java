@@ -12,19 +12,19 @@ import java.util.List;
 @Dao
 public interface DaoCalculateInfo {
 
-    @Query("SELECT * FROM CalculationInfo ORDER BY TrackingId desc")
-    LiveData<List<CalculationInfo>> fetchCalcuateInfo();
+    @Query("SELECT * FROM CalculationInformation ORDER BY TrackingId desc")
+    LiveData<List<CalculationInformation>> fetchCalcuateInfo();
 
 
-    @Query("SELECT * FROM CalculationInfo WHERE TrackingId =:trackingId")
-    LiveData<CalculationInfo> getCalcuateInfo(int trackingId);
+    @Query("SELECT * FROM CalculationInformation WHERE TrackingId =:trackingId")
+    LiveData<CalculationInformation> getCalcuateInfo(int trackingId);
 
     @Insert
-    Long insertCalcuateInfo(CalculationInfo calculationInfo);
+    Long insertCalculateInfo(CalculationInformation calculationInformation);
 
     @Update
-    void updateCalcuateInfo(CalculationInfo calculationInfo);
+    void updateCalcuateInfo(CalculationInformation calculationInformation);
 
     @Delete
-    void deleteCalcuateInfo(CalculationInfo calculationInfo);
+    void deleteCalcuateInfo(CalculationInformation calculationInformation);
 }

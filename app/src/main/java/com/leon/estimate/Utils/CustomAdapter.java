@@ -2,6 +2,7 @@ package com.leon.estimate.Utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,24 +12,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leon.estimate.Activities.FormActivity;
+import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.Calculation;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<Calculation> calculations;
+    private List<Calculation> calculations;
     private int width;
-
     private int size = 0;
 
-    public CustomAdapter(Context context, ArrayList<Calculation> calculations, int width) {
+    public CustomAdapter(Context context, List<Calculation> calculations, int width) {
         this.context = context;
         this.calculations = calculations;
         this.width = width;
@@ -43,8 +42,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         if (size % 2 == 0)
             view = layoutInflater.inflate(R.layout.item_address_1, null);
         else
-            view = layoutInflater.inflate(R.layout.item_address_1, null);
-        return new ViewHolder(view);
+            view = layoutInflater.inflate(R.layout.item_address_2, null);
+        ViewHolder holder = new ViewHolder(view);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FormActivity.class);
+                intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), calculations.get(i).getTrackNumber());
+                context.startActivity(intent);
+            }
+        });
+        return holder;
     }
 
 
@@ -60,14 +68,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         viewHolder.textViewExaminationDay.setText(calculation.getExaminationDay());
         viewHolder.textViewServiceGroup.setText(calculation.getServiceGroup());
-        viewHolder.textViewAddress.setText(calculation.getAddress());
+        viewHolder.textViewAddress.setText(calculation.getAddress().trim());
         viewHolder.textViewRadif.setText(calculation.getRadif());
         viewHolder.textViewTrackNumber.setText(calculation.getTrackNumber());
         viewHolder.textViewNotificationMobile.setText(calculation.getNotificationMobile());
         viewHolder.textViewMoshtarakMobile.setText(calculation.getMoshtarakMobile());
         viewHolder.textViewNeighbourBillId.setText(calculation.getNeighbourBillId());
 
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/BYekan_3.ttf");
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
         viewHolder.textViewName.setTypeface(typeface);
         viewHolder.textViewPeymayesh.setTypeface(typeface);
         viewHolder.textViewExaminationDay.setTypeface(typeface);
@@ -79,10 +87,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewHolder.textViewMoshtarakMobile.setTypeface(typeface);
         viewHolder.textViewNeighbourBillId.setTypeface(typeface);
 
-//        viewHolder.textViewNote.setWidth((width - viewHolder.imageViewInfo.getWidth()) / 4);
-//        viewHolder.textViewCost.setWidth((width - viewHolder.imageViewInfo.getWidth()) / 4);
-//        viewHolder.textViewDate.setWidth((width - viewHolder.imageViewInfo.getWidth()) / 3);
-//        viewHolder.textViewUse.setWidth((width - viewHolder.imageViewInfo.getWidth()) / 6);
+        viewHolder.textViewName.setWidth(width / 6);
+        viewHolder.textViewExaminationDay.setWidth(width / 6);
+        viewHolder.textViewAddress.setWidth(width / 3);
+        viewHolder.textViewServiceGroup.setWidth(width / 6);
+        viewHolder.textViewPeymayesh.setWidth(width / 6);
+
+        viewHolder.textViewRadif.setWidth(width / 4);
+        viewHolder.textViewTrackNumber.setWidth(width / 4);
+        viewHolder.textViewNotificationMobile.setWidth(width / 4);
+        viewHolder.textViewMoshtarakMobile.setWidth(width / 4);
+        viewHolder.textViewNeighbourBillId.setWidth(width / 4);
 
         viewHolder.textViewName.setGravity(1);
         viewHolder.textViewPeymayesh.setGravity(1);
@@ -94,6 +109,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewHolder.textViewNotificationMobile.setGravity(1);
         viewHolder.textViewMoshtarakMobile.setGravity(1);
         viewHolder.textViewNeighbourBillId.setGravity(1);
+
         size++;
     }
 
@@ -114,30 +130,30 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.textViewName)
         TextView textViewName;
-        @BindView(R.id.textViewPeymayesh)
         TextView textViewPeymayesh;
-        @BindView(R.id.textViewExaminationDay)
         TextView textViewExaminationDay;
-        @BindView(R.id.textViewServiceGroup)
         TextView textViewServiceGroup;
-        @BindView(R.id.textViewAddress)
         TextView textViewAddress;
-        @BindView(R.id.textViewTrackNumber)
         TextView textViewTrackNumber;
-        @BindView(R.id.textViewNotificationMobile)
         TextView textViewNotificationMobile;
-        @BindView(R.id.textViewMoshtarakMobile)
         TextView textViewMoshtarakMobile;
-        @BindView(R.id.textViewNeighbourBillId)
         TextView textViewNeighbourBillId;
-        @BindView(R.id.textViewRadif)
         TextView textViewRadif;
 
+        @SuppressLint("NewApi")
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            textViewName = itemView.findViewById(R.id.textViewName);
+            textViewPeymayesh = itemView.findViewById(R.id.textViewPeymayesh);
+            textViewExaminationDay = itemView.findViewById(R.id.textViewExaminationDay);
+            textViewServiceGroup = itemView.findViewById(R.id.textViewServiceGroup);
+            textViewAddress = itemView.findViewById(R.id.textViewAddress);
+            textViewTrackNumber = itemView.findViewById(R.id.textViewTrackNumber);
+            textViewNotificationMobile = itemView.findViewById(R.id.textViewNotificationMobile);
+            textViewMoshtarakMobile = itemView.findViewById(R.id.textViewMoshtarakMobile);
+            textViewNeighbourBillId = itemView.findViewById(R.id.textViewNeighbourBillId);
+            textViewRadif = itemView.findViewById(R.id.textViewRadif);
         }
     }
 }

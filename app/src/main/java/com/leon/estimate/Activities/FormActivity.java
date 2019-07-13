@@ -1,26 +1,45 @@
 package com.leon.estimate.Activities;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.CalculationInfo;
+import com.leon.estimate.Tables.KarbarDictionary;
+import com.leon.estimate.Tables.NoeVagozariDictionary;
+import com.leon.estimate.Tables.QotrEnsheabDictionary;
+import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.Utils.FontManager;
+import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.IAbfaService;
+import com.leon.estimate.Utils.ICallback;
+import com.leon.estimate.Utils.NetworkHelper;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
 public class FormActivity extends AppCompatActivity {
     @BindView(R.id.editText1)
@@ -79,10 +98,6 @@ public class FormActivity extends AppCompatActivity {
     EditText editText27;
     @BindView(R.id.editText28)
     EditText editText28;
-    @BindView(R.id.editText29)
-    EditText editText29;
-    @BindView(R.id.editText30)
-    EditText editText30;
 
     @BindView(R.id.checkbox1)
     CheckBox checkBox1;
@@ -105,6 +120,10 @@ public class FormActivity extends AppCompatActivity {
     Spinner spinner1;
     @BindView(R.id.spinner2)
     Spinner spinner2;
+    @BindView(R.id.spinner3)
+    Spinner spinner3;
+    @BindView(R.id.spinner4)
+    Spinner spinner4;
 
     @BindView(R.id.button)
     Button button;
@@ -114,12 +133,16 @@ public class FormActivity extends AppCompatActivity {
 
     View view;
     Context context;
+    String trackNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setContentView(R.layout.form_activity);
+        if (getIntent().getExtras() != null) {
+            trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
+        }
         ButterKnife.bind(this);
         initialize();
     }
@@ -129,19 +152,148 @@ public class FormActivity extends AppCompatActivity {
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(constraintLayout);
         setOnEditTextOnFocusChangeListener();
-        initializeSpinner();
+        downloadDetails();
         setOnButtonClickListener();
     }
 
-    void initializeSpinner() {
-        ArrayList<String> arrayListSpinner = new ArrayList<>();
-        arrayListSpinner.add("1");
-        arrayListSpinner.add("2");
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner);
-        spinner1.setAdapter(arrayAdapter);
-        spinner2.setAdapter(arrayAdapter);
+    void downloadDetails() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "header");
+        final IAbfaService getKardex = retrofit.create(IAbfaService.class);
+        Call<CalculationInfo> call = getKardex.getMyWorksDetails(trackNumber);
+        DownloadDetails downloadDetails = new DownloadDetails();
+        HttpClientWrapper.callHttpAsync(call, downloadDetails, context, ProgressType.SHOW.getValue());
     }
+
+    void initializeSpinner(List<KarbarDictionary> karbarDictionaries,
+                           List<NoeVagozariDictionary> noeVagozariDictionaries,
+                           List<QotrEnsheabDictionary> qotrEnsheabDictionaries,
+                           List<TaxfifDictionary> taxfifDictionaries) {
+        List<String> arrayListSpinner1 = new ArrayList<>();
+        List<String> arrayListSpinner2 = new ArrayList<>();
+        List<String> arrayListSpinner3 = new ArrayList<>();
+        List<String> arrayListSpinner4 = new ArrayList<>();
+        int select1 = 0, select2 = 0, select3 = 0, select4 = 0, counter = 0;
+        for (KarbarDictionary karbarDictionary : karbarDictionaries) {
+            arrayListSpinner1.add(karbarDictionary.getTitle());
+            if (karbarDictionary.isSelected()) {
+                select1 = counter;
+            }
+            counter++;
+        }
+        counter = 0;
+        for (NoeVagozariDictionary noeVagozariDictionary : noeVagozariDictionaries) {
+            arrayListSpinner2.add(noeVagozariDictionary.getTitle());
+            if (noeVagozariDictionary.isSelected()) {
+                select2 = counter;
+            }
+            counter++;
+        }
+        counter = 0;
+        for (QotrEnsheabDictionary qotrEnsheabDictionary : qotrEnsheabDictionaries) {
+            arrayListSpinner3.add(qotrEnsheabDictionary.getTitle());
+            if (qotrEnsheabDictionary.isSelected()) {
+                select3 = counter;
+            }
+            counter++;
+        }
+        counter = 0;
+        for (TaxfifDictionary taxfifDictionary : taxfifDictionaries) {
+            arrayListSpinner4.add(taxfifDictionary.getTitle());
+            if (taxfifDictionary.isSelected()) {
+                select4 = counter;
+            }
+            counter++;
+        }
+        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
+            @NotNull
+            @Override
+            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final CheckedTextView textView = view
+                        .findViewById(android.R.id.text1);
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "font/BYekan_3.ttf");
+                textView.setTypeface(typeface);
+                textView.setChecked(true);
+                textView.setTextColor(getResources().getColor(R.color.black));
+                return view;
+            }
+        };
+        ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner2) {
+            @NotNull
+            @Override
+            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final CheckedTextView textView = view
+                        .findViewById(android.R.id.text1);
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "font/BYekan_3.ttf");
+                textView.setTypeface(typeface);
+                textView.setChecked(true);
+                textView.setTextColor(getResources().getColor(R.color.black));
+                return view;
+            }
+        };
+        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner3) {
+            @NotNull
+            @Override
+            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final CheckedTextView textView = view
+                        .findViewById(android.R.id.text1);
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "font/BYekan_3.ttf");
+                textView.setTypeface(typeface);
+                textView.setChecked(true);
+                textView.setTextColor(getResources().getColor(R.color.black));
+                return view;
+            }
+        };
+        ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner4) {
+            @NotNull
+            @Override
+            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final CheckedTextView textView = view
+                        .findViewById(android.R.id.text1);
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "font/BYekan_3.ttf");
+                textView.setTypeface(typeface);
+                textView.setChecked(true);
+                textView.setTextColor(getResources().getColor(R.color.black));
+                return view;
+            }
+        };
+        spinner1.setAdapter(arrayAdapter1);
+        spinner1.setSelection(select1);
+        spinner2.setAdapter(arrayAdapter2);
+        spinner2.setSelection(select2);
+        spinner3.setAdapter(arrayAdapter3);
+        spinner3.setSelection(select3);
+        spinner4.setAdapter(arrayAdapter4);
+        spinner4.setSelection(select4);
+    }
+
+    void setOnEdit1TextOnFocusChangeListener() {
+        editText1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                view = editText2;
+                view.requestFocus();
+            }
+        });
+    }
+
 
     void setOnButtonClickListener() {
         button.setOnClickListener(view -> {
@@ -178,12 +330,10 @@ public class FormActivity extends AppCompatActivity {
         setOnEdit26TextOnFocusChangeListener();
         setOnEdit27TextOnFocusChangeListener();
         setOnEdit28TextOnFocusChangeListener();
-        setOnEdit29TextOnFocusChangeListener();
-        setOnEdit30TextOnFocusChangeListener();
     }
 
-    void setOnEdit1TextOnFocusChangeListener() {
-        editText1.addTextChangedListener(new TextWatcher() {
+    void setOnEdit28TextOnFocusChangeListener() {
+        editText28.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -196,8 +346,8 @@ public class FormActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-//                view = editText2;
-//                view.requestFocus();
+                view = button;
+                view.requestFocus();
             }
         });
     }
@@ -722,63 +872,50 @@ public class FormActivity extends AppCompatActivity {
         });
     }
 
-    void setOnEdit28TextOnFocusChangeListener() {
-        editText28.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText29;
-                view.requestFocus();
-            }
-        });
+    void setEditText(CalculationInfo calculationInfo) {
+        editText1.setText(calculationInfo.getZoneTitle());
+//        editText2.setText(calculationInfo.getZoneTitle());
+        editText3.setText(calculationInfo.getBillId());
+        editText4.setText(calculationInfo.getSifoon100());
+        editText5.setText(calculationInfo.getSifoon125());
+        editText6.setText(calculationInfo.getSifoon150());
+        editText7.setText(calculationInfo.getSifoon200());
+        editText8.setText(calculationInfo.getArzeshMelk());
+        editText9.setText(calculationInfo.getArse());
+        editText10.setText(calculationInfo.getAianMaskooni());
+        editText11.setText(calculationInfo.getAianNonMaskooni());
+        editText12.setText(calculationInfo.getAianKol());
+        editText13.setText(calculationInfo.getTedadMaskooni());
+        editText14.setText(calculationInfo.getTedadTejari());
+        editText15.setText(calculationInfo.getTedadSaier());
+        editText16.setText(calculationInfo.getZarfiatQarardadi());
+        editText17.setText(calculationInfo.getTedadTaxfif());
+        editText18.setText(calculationInfo.getNationalId());
+//        editText19.setText(calculationInfo.getZoneTitle());
+        editText20.setText(calculationInfo.getPostalCode());
+        editText21.setText(calculationInfo.getFirstName());
+        editText22.setText(calculationInfo.getSureName());
+        editText23.setText(calculationInfo.getFatherName());
+        editText24.setText(calculationInfo.getPhoneNumber());
+        editText25.setText(calculationInfo.getMobile());
+        editText26.setText(calculationInfo.getNotificationMobile());
+        editText27.setText(calculationInfo.getDescription());
+        editText28.setText(calculationInfo.getAddress());
     }
 
-    void setOnEdit29TextOnFocusChangeListener() {
-        editText29.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText30;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit30TextOnFocusChangeListener() {
-        editText30.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = button;
-                view.requestFocus();
-            }
-        });
+    class DownloadDetails implements ICallback<CalculationInfo> {
+        @Override
+        public void execute(CalculationInfo calculationsInfo) {
+            initializeSpinner(calculationsInfo.getKarbarDictionary(),
+                    calculationsInfo.getNoeVagozariDictionary(),
+                    calculationsInfo.getQotrEnsheabDictionary(),
+                    calculationsInfo.getTaxfifDictionary());
+            setEditText(calculationsInfo);
+//            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                    .allowMainThreadQueries().build();
+//            DaoCalculateInfo daoCalculateInfo = dataBase.daoCalculateInfo();
+//             address trim
+//            daoCalculateInfo.insertCalculateInfo(calculationsInfo);
+        }
     }
 }

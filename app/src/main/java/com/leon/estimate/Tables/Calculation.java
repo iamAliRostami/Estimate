@@ -1,9 +1,11 @@
 package com.leon.estimate.Tables;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "Calculation", indices = @Index(value = {"examinationId"}, unique = true))
+
 public class Calculation {
     @PrimaryKey(autoGenerate = true)
     int id;
@@ -19,6 +21,7 @@ public class Calculation {
     String radif;
     String serviceGroup;
     String trackNumber;
+    boolean read;
 
     public Calculation(String address, String billId, String examinationDay,
                        String examinationId, boolean isPeymayesh, String moshtarakMobile,
@@ -145,4 +148,11 @@ public class Calculation {
         this.trackNumber = trackNumber;
     }
 
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
 }

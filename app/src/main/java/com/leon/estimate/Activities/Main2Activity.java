@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -59,8 +58,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-import static com.leon.estimate.Tables.MyDatabase.MIGRATION_1_2;
-
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, PermissionsListener, MapboxMap.OnMoveListener {
 
@@ -72,13 +69,12 @@ public class Main2Activity extends AppCompatActivity
     private MapView mapView;
     private List<Point> routeCoordinates;
     DrawerLayout drawer;
-
     Context context;
     View.OnClickListener onClickListener = view -> {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.imageViewForm:
-                intent = new Intent(getApplicationContext(), FormActivity.class);
+                intent = new Intent(getApplicationContext(), ListActivity.class);
                 startActivity(intent);
                 break;
             case R.id.imageViewDownload:
@@ -104,49 +100,23 @@ public class Main2Activity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
         Mapbox.getInstance(this, accessToken);
         setContentView(R.layout.main2_activity);
-        context = this;
-        setImageViewFindByViewId();
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        context = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         drawer = findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
-
-        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .addMigrations(MIGRATION_1_2).build();
-
-
-        MyDatabase dataBase1 = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoCalculation daoCalculation1 = dataBase1.daoCalculateCalculation();
-        Calculation calculation = new Calculation("AS5", "As", "As", "as", true,
-                "As", "As", "as", "AS", "As", "As", "as");
-        daoCalculation1.insertCalculation(calculation);
-
-        MyDatabase dataBase2 = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoCalculation daoCalculation2 = dataBase2.daoCalculateCalculation();
-        Calculation calculation1 = new Calculation("AS6", "As", "As", "as", true,
-                "As", "As", "as", "AS", "As", "As", "as");
-        daoCalculation2.insertCalculation(calculation1);
-
-
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-        List<Calculation> calculations = daoCalculation.fetchCalculate();
-        Log.e("size", String.valueOf(calculations.size()));
-        Log.e("address", String.valueOf(calculations.get(1).getAddress()));
-
-        List<Calculation> calculations1 = daoCalculation.getCalculate("1810308.0");
-        Log.e("size", String.valueOf(calculations1.size()));
-//        Log.e("address", String.valueOf(calculations1.get(0).getAddress()));
+        setImageViewFindByViewId();
+//        Room.databaseBuilder(context.getApplicationContext(), MyDatabase.class, "MyDatabase")
+//                .fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_9_10).build();
     }
 
     @Override
@@ -337,14 +307,11 @@ public class Main2Activity extends AppCompatActivity
     class Download implements ICallback<List<Calculation>> {
         @Override
         public void execute(List<Calculation> calculations) {
-            for (int i = 0; i < calculations.size() - 3; i++) {
-                Calculation calculation = calculations.get(i);
-                Log.e("address", calculation.getAddress());
-                MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                        .allowMainThreadQueries().build();
-                DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-                daoCalculation.insertCalculation(calculation);
-            }
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                    .allowMainThreadQueries().build();
+            DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
+            // address trim
+            daoCalculation.insertAll(calculations);
         }
     }
 }

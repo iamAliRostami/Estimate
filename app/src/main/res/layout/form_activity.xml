@@ -240,17 +240,14 @@
 
                     <Spinner
                         android:id="@+id/spinner1"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
+                        android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="کاربری"
-                        android:textColor="@color/blue4"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/editText5"
+                        android:id="@+id/editText4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -263,7 +260,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText8"
+                        android:id="@+id/editText7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -276,7 +273,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText11"
+                        android:id="@+id/editText10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -289,7 +286,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText14"
+                        android:id="@+id/editText13"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -303,7 +300,7 @@
 
 
                     <EditText
-                        android:id="@+id/editText17"
+                        android:id="@+id/editText16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -324,7 +321,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText20"
+                        android:id="@+id/editText18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -337,7 +334,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText23"
+                        android:id="@+id/editText21"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -350,7 +347,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText26"
+                        android:id="@+id/editText24"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -364,7 +361,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText28"
+                        android:id="@+id/editText26"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -533,14 +530,14 @@
 
                     <Spinner
                         android:id="@+id/spinner2"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText6"
+                        android:id="@+id/editText5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -553,7 +550,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText9"
+                        android:id="@+id/editText8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -562,7 +559,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText12"
+                        android:id="@+id/editText11"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -571,7 +568,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText15"
+                        android:id="@+id/editText14"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -579,13 +576,12 @@
                         android:background="@drawable/border_gray_1"
                         android:gravity="center" />
 
-                    <EditText
-                        android:id="@+id/editText18"
-                        android:layout_width="match_parent"
+                    <Spinner
+                        android:id="@+id/spinner4"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
                         android:gravity="center" />
 
                     <CheckBox
@@ -597,7 +593,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText21"
+                        android:id="@+id/editText19"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -606,7 +602,16 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText24"
+                        android:id="@+id/editText22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center" />
+
+                    <EditText
+                        android:id="@+id/editText25"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -616,15 +621,6 @@
 
                     <EditText
                         android:id="@+id/editText27"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center" />
-
-                    <EditText
-                        android:id="@+id/editText29"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -777,8 +773,16 @@
                         android:gravity="center"
                         android:inputType="number" />
 
+                    <Spinner
+                        android:id="@+id/spinner3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="center" />
+
                     <EditText
-                        android:id="@+id/editText4"
+                        android:id="@+id/editText6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -787,7 +791,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText7"
+                        android:id="@+id/editText9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -796,7 +800,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText10"
+                        android:id="@+id/editText12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -805,7 +809,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText13"
+                        android:id="@+id/editText15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -814,16 +818,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText16"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center" />
-
-                    <EditText
-                        android:id="@+id/editText19"
+                        android:id="@+id/editText17"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -841,7 +836,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText22"
+                        android:id="@+id/editText20"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -850,7 +845,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText25"
+                        android:id="@+id/editText23"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -859,7 +854,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText30"
+                        android:id="@+id/editText28"
                         android:layout_width="match_parent"
                         android:layout_height="122dp"
                         android:layout_gravity="center"
