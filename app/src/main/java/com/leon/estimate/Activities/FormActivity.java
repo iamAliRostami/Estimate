@@ -1,10 +1,9 @@
 package com.leon.estimate.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,18 +11,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.room.Room;
 
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationInfo;
+import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.DaoCalculation;
+import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.KarbarDictionary;
+import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
+import com.leon.estimate.Tables.ServiceDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
@@ -99,22 +105,13 @@ public class FormActivity extends AppCompatActivity {
     @BindView(R.id.editText28)
     EditText editText28;
 
+
     @BindView(R.id.checkbox1)
     CheckBox checkBox1;
     @BindView(R.id.checkbox2)
     CheckBox checkBox2;
     @BindView(R.id.checkbox3)
     CheckBox checkBox3;
-    @BindView(R.id.checkbox4)
-    CheckBox checkBox4;
-    @BindView(R.id.checkbox5)
-    CheckBox checkBox5;
-    @BindView(R.id.checkbox6)
-    CheckBox checkBox6;
-    @BindView(R.id.checkbox7)
-    CheckBox checkBox7;
-    @BindView(R.id.checkbox8)
-    CheckBox checkBox8;
 
     @BindView(R.id.spinner1)
     Spinner spinner1;
@@ -128,9 +125,12 @@ public class FormActivity extends AppCompatActivity {
     @BindView(R.id.button)
     Button button;
 
-    @BindView(R.id.constraintLayout)
+    @BindView(R.id.constraintLayout1)
     ConstraintLayout constraintLayout;
-
+    @BindView(R.id.linearLayout1)
+    LinearLayout linearLayout1;
+    @BindView(R.id.linearLayout2)
+    LinearLayout linearLayout2;
     View view;
     Context context;
     String trackNumber;
@@ -151,9 +151,44 @@ public class FormActivity extends AppCompatActivity {
         context = this;
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(constraintLayout);
-        setOnEditTextOnFocusChangeListener();
         downloadDetails();
         setOnButtonClickListener();
+//        setOnEditTextOnFocusChangeListener();
+    }
+
+    @SuppressLint("NewApi")
+    void initializeCheckBox(List<ServiceDictionary> serviceDictionaries) {
+        LinearLayout linearLayout = new LinearLayout(this);
+        String tag;
+        int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
+        int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
+        int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "font/BYekan_3.ttf");
+
+        for (int i = 0; i < serviceDictionaries.size(); i++) {
+            if (i % 5 == 0) {
+                tag = "linearLayout".concat(String.valueOf(i));
+                linearLayout = new LinearLayout(this);
+                linearLayout.setTag(tag);
+                linearLayout.setGravity(1);
+                linearLayout2.addView(linearLayout);
+            }
+            CheckBox checkBox = new CheckBox(this);
+            checkBox.setTag("checkBox".concat(String.valueOf(i)));
+            checkBox.setGravity(1);
+            checkBox.setText(serviceDictionaries.get(i).getTitle());
+            checkBox.setTextSize(textSize);
+            checkBox.setPadding(padding, padding, padding, padding);
+            checkBox.setTypeface(typeface);
+            checkBox.setTextColor(getColor(R.color.blue4));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(margin, margin, margin, margin);
+            checkBox.setLayoutParams(params);
+            if (serviceDictionaries.get(i).isSelected())
+                checkBox.setChecked(true);
+            linearLayout.addView(checkBox);
+        }
     }
 
     void downloadDetails() {
@@ -274,607 +309,30 @@ public class FormActivity extends AppCompatActivity {
         spinner4.setSelection(select4);
     }
 
-    void setOnEdit1TextOnFocusChangeListener() {
-        editText1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText2;
-                view.requestFocus();
-            }
-        });
-    }
-
-
     void setOnButtonClickListener() {
         button.setOnClickListener(view -> {
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                    .allowMainThreadQueries().build();
+            DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
+            daoCalculation.updateCalculation(true, trackNumber);
 
+
+            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+            daoCalculationUserInput.insertCalculationUserInput();
+
+            CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend()
         });
     }
 
-    void setOnEditTextOnFocusChangeListener() {
-        setOnEdit1TextOnFocusChangeListener();
-        setOnEdit2TextOnFocusChangeListener();
-        setOnEdit3TextOnFocusChangeListener();
-        setOnEdit4TextOnFocusChangeListener();
-        setOnEdit5TextOnFocusChangeListener();
-        setOnEdit6TextOnFocusChangeListener();
-        setOnEdit7TextOnFocusChangeListener();
-        setOnEdit8TextOnFocusChangeListener();
-        setOnEdit9TextOnFocusChangeListener();
-        setOnEdit10TextOnFocusChangeListener();
-        setOnEdit11TextOnFocusChangeListener();
-        setOnEdit12TextOnFocusChangeListener();
-        setOnEdit13TextOnFocusChangeListener();
-        setOnEdit14TextOnFocusChangeListener();
-        setOnEdit15TextOnFocusChangeListener();
-        setOnEdit16TextOnFocusChangeListener();
-        setOnEdit17TextOnFocusChangeListener();
-        setOnEdit18TextOnFocusChangeListener();
-        setOnEdit19TextOnFocusChangeListener();
-        setOnEdit20TextOnFocusChangeListener();
-        setOnEdit21TextOnFocusChangeListener();
-        setOnEdit22TextOnFocusChangeListener();
-        setOnEdit23TextOnFocusChangeListener();
-        setOnEdit24TextOnFocusChangeListener();
-        setOnEdit25TextOnFocusChangeListener();
-        setOnEdit26TextOnFocusChangeListener();
-        setOnEdit27TextOnFocusChangeListener();
-        setOnEdit28TextOnFocusChangeListener();
-    }
-
-    void setOnEdit28TextOnFocusChangeListener() {
-        editText28.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = button;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit2TextOnFocusChangeListener() {
-        editText2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText3;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit3TextOnFocusChangeListener() {
-        editText3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = spinner1;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit4TextOnFocusChangeListener() {
-        editText4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText5;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit5TextOnFocusChangeListener() {
-        editText5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText6;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit6TextOnFocusChangeListener() {
-        editText6.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText7;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit7TextOnFocusChangeListener() {
-        editText7.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText8;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit8TextOnFocusChangeListener() {
-        editText8.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText9;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit9TextOnFocusChangeListener() {
-        editText9.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText10;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit10TextOnFocusChangeListener() {
-        editText10.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText11;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit11TextOnFocusChangeListener() {
-        editText11.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText12;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit12TextOnFocusChangeListener() {
-        editText12.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText13;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit13TextOnFocusChangeListener() {
-        editText13.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText14;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit14TextOnFocusChangeListener() {
-        editText14.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText15;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit15TextOnFocusChangeListener() {
-        editText15.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText16;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit16TextOnFocusChangeListener() {
-        editText16.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText17;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit17TextOnFocusChangeListener() {
-        editText17.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText18;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit18TextOnFocusChangeListener() {
-        editText18.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText19;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit19TextOnFocusChangeListener() {
-        editText19.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = checkBox6;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit20TextOnFocusChangeListener() {
-        editText20.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText21;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit21TextOnFocusChangeListener() {
-        editText21.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText22;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit22TextOnFocusChangeListener() {
-        editText22.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText23;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit23TextOnFocusChangeListener() {
-        editText23.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText24;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit24TextOnFocusChangeListener() {
-        editText24.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText25;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit25TextOnFocusChangeListener() {
-        editText25.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText26;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit26TextOnFocusChangeListener() {
-        editText26.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText27;
-                view.requestFocus();
-            }
-        });
-    }
-
-    void setOnEdit27TextOnFocusChangeListener() {
-        editText27.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                view = editText28;
-                view.requestFocus();
-            }
-        });
+    void setCheckBox(CalculationInfo calculationInfo) {
+        checkBox1.setChecked(calculationInfo.isAdamTaxfifAb());
+        checkBox1.setChecked(calculationInfo.isAdamTaxfifFazelab());
+        checkBox1.setChecked(calculationInfo.isEnsheabQeirDaem());
     }
 
     void setEditText(CalculationInfo calculationInfo) {
         editText1.setText(calculationInfo.getZoneTitle());
-//        editText2.setText(calculationInfo.getZoneTitle());
+        editText2.setText(calculationInfo.getTrackNumber());
         editText3.setText(calculationInfo.getBillId());
         editText4.setText(calculationInfo.getSifoon100());
         editText5.setText(calculationInfo.getSifoon125());
@@ -891,7 +349,7 @@ public class FormActivity extends AppCompatActivity {
         editText16.setText(calculationInfo.getZarfiatQarardadi());
         editText17.setText(calculationInfo.getTedadTaxfif());
         editText18.setText(calculationInfo.getNationalId());
-//        editText19.setText(calculationInfo.getZoneTitle());
+        editText19.setText(calculationInfo.getIdentityCode());
         editText20.setText(calculationInfo.getPostalCode());
         editText21.setText(calculationInfo.getFirstName());
         editText22.setText(calculationInfo.getSureName());
@@ -906,16 +364,13 @@ public class FormActivity extends AppCompatActivity {
     class DownloadDetails implements ICallback<CalculationInfo> {
         @Override
         public void execute(CalculationInfo calculationsInfo) {
+            initializeCheckBox(calculationsInfo.getServiceDictionary());
             initializeSpinner(calculationsInfo.getKarbarDictionary(),
                     calculationsInfo.getNoeVagozariDictionary(),
                     calculationsInfo.getQotrEnsheabDictionary(),
                     calculationsInfo.getTaxfifDictionary());
             setEditText(calculationsInfo);
-//            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-//                    .allowMainThreadQueries().build();
-//            DaoCalculateInfo daoCalculateInfo = dataBase.daoCalculateInfo();
-//             address trim
-//            daoCalculateInfo.insertCalculateInfo(calculationsInfo);
+            setCheckBox(calculationsInfo);
         }
     }
 }

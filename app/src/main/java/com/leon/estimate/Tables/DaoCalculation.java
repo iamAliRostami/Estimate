@@ -15,8 +15,14 @@ public interface DaoCalculation {
     @Query("SELECT * FROM Calculation ORDER BY trackNumber desc")
     List<Calculation> fetchCalculate();
 
+    @Query("SELECT * FROM Calculation WHERE read != 'true' ORDER BY trackNumber desc ")
+    List<Calculation> unreadCalculate();
+
     @Query("SELECT * FROM Calculation WHERE trackNumber =:trackingNumber")
     List<Calculation> getCalculate(String trackingNumber);
+
+    @Query("UPDATE Calculation SET read = :read WHERE trackNumber = :trackNumber")
+    int updateCalculation(boolean read, String trackNumber);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertCalculation(Calculation calculation);

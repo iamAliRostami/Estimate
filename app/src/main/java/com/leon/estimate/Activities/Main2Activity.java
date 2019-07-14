@@ -116,7 +116,7 @@ public class Main2Activity extends AppCompatActivity
         setImageViewFindByViewId();
 //        Room.databaseBuilder(context.getApplicationContext(), MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_9_10).build();
+//                .addMigrations(MyDatabase.MIGRATION_10_11).build();
     }
 
     @Override

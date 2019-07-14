@@ -44,13 +44,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         else
             view = layoutInflater.inflate(R.layout.item_address_2, null);
         ViewHolder holder = new ViewHolder(view);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, FormActivity.class);
-                intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), calculations.get(i).getTrackNumber());
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(context, FormActivity.class);
+            intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), calculations.get(i).getTrackNumber());
+            context.startActivity(intent);
         });
         return holder;
     }

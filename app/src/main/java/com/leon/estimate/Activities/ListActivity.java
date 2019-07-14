@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 
 public class ListActivity extends AppCompatActivity {
     Context context;
-    @BindView(R.id.constraintLayout)
+    @BindView(R.id.constraintLayout1)
     ConstraintLayout constraintLayout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -61,7 +61,7 @@ public class ListActivity extends AppCompatActivity {
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-        calculationList = daoCalculation.fetchCalculate();
+        calculationList = daoCalculation.unreadCalculate();
 
         customAdapter = new CustomAdapter(context, calculationList, width);
         recyclerView.setAdapter(customAdapter);
