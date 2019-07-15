@@ -117,7 +117,7 @@ public class CalculationUserInputSend {
         this.description = description;
     }
 
-    void setselectedServices(CalculationUserInput calculationUserInput) {
+    public void setSelectedServices(CalculationUserInput calculationUserInput) {
         selectedServices = calculationUserInput.selectedServices.split(",");
     }
 

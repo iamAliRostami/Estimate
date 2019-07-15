@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/activity_medium_margin"
             android:layout_marginRight="@dimen/activity_medium_margin"
-            android:layout_marginBottom="@dimen/activity_medium_margin"
+            android:layout_marginBottom="@dimen/activity_mid_margin"
             android:background="@drawable/border_gray_1"
             android:padding="@dimen/activity_mid_padding">
 
@@ -326,23 +326,40 @@
                         android:gravity="center"
                         android:inputType="phone"
                         android:lines="1"
-                        android:maxLength="9"
+                        android:maxLength="8"
                         android:maxLines="1"
                         android:singleLine="true" />
 
-                    <EditText
-                        android:id="@+id/editText26"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLength="9"
-                        android:maxLines="1"
-                        android:singleLine="true" />
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editText26"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_gray_1"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/activity_mid_margin"
+                            android:layout_marginEnd="@dimen/activity_mid_margin"
+                            android:gravity="center"
+                            android:text="09"
+                            android:textSize="@dimen/textSizeMedium" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -597,19 +614,36 @@
                         android:maxLines="1"
                         android:singleLine="true" />
 
-                    <EditText
-                        android:id="@+id/editText25"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLength="9"
-                        android:maxLines="1"
-                        android:singleLine="true" />
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editText25"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_gray_1"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/activity_mid_margin"
+                            android:layout_marginEnd="@dimen/activity_mid_margin"
+                            android:gravity="center"
+                            android:text="09"
+                            android:textSize="@dimen/textSizeMedium" />
+                    </LinearLayout>
 
                     <EditText
                         android:id="@+id/editText27"
@@ -797,7 +831,8 @@
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:background="@drawable/border_gray_1"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:inputType="number" />
 
                     <EditText
                         android:id="@+id/editText12"

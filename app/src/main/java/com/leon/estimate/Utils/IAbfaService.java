@@ -2,6 +2,7 @@ package com.leon.estimate.Utils;
 
 import com.leon.estimate.Tables.Calculation;
 import com.leon.estimate.Tables.CalculationInfo;
+import com.leon.estimate.Tables.CalculationUserInputSend;
 
 import java.util.List;
 
@@ -131,8 +132,7 @@ public interface IAbfaService {
 
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(
-            @Query("deviceId") String deviceId
-    );
+            @Query("deviceId") String deviceId);
 
     @PATCH("/Auth/Account/UpdateDeviceIdAnanymous")
     Call<SimpleMessage> signSerial(
@@ -143,6 +143,10 @@ public interface IAbfaService {
 
     @GET("/MoshtarakinApi/ExaminationManager/GetExaminationDetails/")
     Call<CalculationInfo> getMyWorksDetails(@Query("trackNumber") String trackNumber);
+
+
+    @POST("/MoshtarakinApi/ExaminationManager/SetExaminationInfo")
+    Call<SimpleMessage> setExaminationInfo(@Body CalculationUserInputSend calculationUserInputSend);
 
 }
 

@@ -22,6 +22,7 @@ import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationInfo;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculation;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
@@ -36,6 +37,7 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
 import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.SimpleMessage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -134,6 +136,9 @@ public class FormActivity extends AppCompatActivity {
     View view;
     Context context;
     String trackNumber;
+    CalculationInfo calculationInfo;
+    CalculationUserInput calculationUserInput;
+    ArrayList<CheckBox> checkBoxes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +192,7 @@ public class FormActivity extends AppCompatActivity {
             checkBox.setLayoutParams(params);
             if (serviceDictionaries.get(i).isSelected())
                 checkBox.setChecked(true);
+            checkBoxes.add(checkBox);
             linearLayout.addView(checkBox);
         }
     }
@@ -309,20 +315,208 @@ public class FormActivity extends AppCompatActivity {
         spinner4.setSelection(select4);
     }
 
+    boolean checkIsNoEmpty(EditText editText) {
+        View focusView;
+        if (editText.getText().toString().length() < 1) {
+            focusView = editText;
+            focusView.requestFocus();
+            return true;
+        }
+        return false;
+    }
+
     void setOnButtonClickListener() {
         button.setOnClickListener(view -> {
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                    .allowMainThreadQueries().build();
-            DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-            daoCalculation.updateCalculation(true, trackNumber);
+            boolean cancel = false;
+            View focusView;
+            if (editText3.getText().toString().length() < 6) {
+                focusView = editText3;
+                focusView.requestFocus();
+                cancel = true;
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText4);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText5);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText6);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText7);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText8);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText9);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText10);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText11);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText12);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText13);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText14);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText15);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText16);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText17);
+            }
+            if (!cancel && editText18.getText().toString().length() < 10) {
+                focusView = editText18;
+                focusView.requestFocus();
+                cancel = true;
+            }
+            if (!cancel && editText20.getText().toString().length() < 10) {
+                focusView = editText20;
+                focusView.requestFocus();
+                cancel = true;
+            }
+            if (!cancel && editText24.getText().toString().length() < 8) {
+                focusView = editText14;
+                focusView.requestFocus();
+                cancel = true;
+            }
+            if (!cancel && editText25.getText().toString().length() < 9) {
+                focusView = editText15;
+                focusView.requestFocus();
+                cancel = true;
+            }
+            if (!cancel && editText26.getText().toString().length() < 9) {
+                focusView = editText26;
+                focusView.requestFocus();
+                cancel = true;
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText21);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText22);
+            }
+            if (!cancel) {
+                cancel = checkIsNoEmpty(editText28);
+            }
+            if (!cancel) {
+                MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                        .allowMainThreadQueries().build();
+                DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
+                daoCalculation.updateCalculation(true, trackNumber);
+                sendInfo();
+            }
 
-
-            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-            daoCalculationUserInput.insertCalculationUserInput();
-
-            CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend()
         });
     }
+
+    void saveCalculationUserInput(int selectedSize) {
+    }
+
+    void sendInfo() {
+        String selected = "{";
+        int selectedSize = 0;
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            if (checkBoxes.get(i).isChecked()) {
+                selected = selected.concat(
+                        String.valueOf(calculationInfo.getServiceDictionary().get(i).getId())).concat(",");
+                selectedSize++;
+            }
+        }
+        selected = selected.substring(0, selected.length() - 1).concat("}");
+        calculationUserInput = new CalculationUserInput(calculationInfo.getTrackingId(), Integer.valueOf(editText2.getText().toString()),
+                Integer.valueOf(calculationInfo.getRequestType()), calculationInfo.getParNumber(), editText3.getText().toString(),
+                Integer.valueOf(calculationInfo.getRadif()), Integer.valueOf(calculationInfo.getZoneId()),
+                "09".concat(editText26.getText().toString()), calculationInfo.getKarbarDictionary().get(spinner1.getSelectedItemPosition()).getId(),
+                calculationInfo.getQotrEnsheabDictionary().get(spinner3.getSelectedItemPosition()).getId(),
+                calculationInfo.getNoeVagozariDictionary().get(spinner2.getSelectedItemPosition()).getId(),
+                calculationInfo.getTaxfifDictionary().get(spinner4.getSelectedItemPosition()).getId(),
+                selected, "09".concat(editText25.getText().toString()), editText21.getText().toString(), editText22.getText().toString(),
+                Integer.valueOf(editText9.getText().toString()), Integer.valueOf(editText12.getText().toString()),
+                Integer.valueOf(editText10.getText().toString()), Integer.valueOf(editText11.getText().toString()),
+                Integer.valueOf(editText4.getText().toString()), Integer.valueOf(editText5.getText().toString()),
+                Integer.valueOf(editText6.getText().toString()), Integer.valueOf(editText7.getText().toString()),
+                Integer.valueOf(editText16.getText().toString()), Integer.valueOf(editText8.getText().toString()),
+                Integer.valueOf(editText13.getText().toString()), Integer.valueOf(editText14.getText().toString()),
+                Integer.valueOf(editText15.getText().toString()), Integer.valueOf(editText17.getText().toString()),
+                editText18.getText().toString(), checkBox3.isChecked(), checkBox2.isChecked(),
+                checkBox1.isChecked(), editText28.getText().toString());
+
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
+
+        String[] selectedServices = new String[selectedSize];
+        int j = 0;
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            if (checkBoxes.get(i).isChecked()) {
+                selectedServices[j] = String.valueOf(calculationInfo.getServiceDictionary().get(i).getId());
+                j++;
+            }
+        }
+        CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend(calculationInfo.getTrackingId(),
+                Integer.valueOf(editText2.getText().toString()), Integer.valueOf(calculationInfo.getRequestType()),
+                calculationInfo.getParNumber(), editText3.getText().toString(), Integer.valueOf(calculationInfo.getRadif()),
+                Integer.valueOf(calculationInfo.getZoneId()), "09".concat(editText26.getText().toString()),
+                calculationInfo.getKarbarDictionary().get(spinner1.getSelectedItemPosition()).getId(),
+                calculationInfo.getQotrEnsheabDictionary().get(spinner3.getSelectedItemPosition()).getId(),
+                calculationInfo.getNoeVagozariDictionary().get(spinner2.getSelectedItemPosition()).getId(),
+                calculationInfo.getTaxfifDictionary().get(spinner4.getSelectedItemPosition()).getId(),
+                selectedServices, "09".concat(editText25.getText().toString()), editText21.getText().toString(),
+                editText22.getText().toString(), Integer.valueOf(editText9.getText().toString()),
+                Integer.valueOf(editText12.getText().toString()), Integer.valueOf(editText10.getText().toString()),
+                Integer.valueOf(editText11.getText().toString()), Integer.valueOf(editText4.getText().toString()),
+                Integer.valueOf(editText5.getText().toString()), Integer.valueOf(editText6.getText().toString()),
+                Integer.valueOf(editText7.getText().toString()), Integer.valueOf(editText16.getText().toString()),
+                Integer.valueOf(editText8.getText().toString()), Integer.valueOf(editText13.getText().toString()),
+                Integer.valueOf(editText14.getText().toString()), Integer.valueOf(editText15.getText().toString()),
+                Integer.valueOf(editText17.getText().toString()), editText18.getText().toString(),
+                checkBox3.isChecked(), checkBox2.isChecked(), checkBox1.isChecked(), editText28.getText().toString()
+        );
+
+
+        if (editText27.getText().toString().length() > 0) {
+            calculationUserInput.setDescription(editText27.getText().toString());
+            calculationUserInputSend.setDescription(editText27.getText().toString());
+        }
+        if (editText19.getText().toString().length() > 0) {
+            calculationUserInput.setIdentityCode(editText19.getText().toString());
+            calculationUserInputSend.setIdentityCode(editText19.getText().toString());
+        }
+        if (editText23.getText().toString().length() > 0) {
+            calculationUserInput.setFatherName(editText23.getText().toString());
+            calculationUserInputSend.setFatherName(editText23.getText().toString());
+        }
+        if (editText20.getText().toString().length() > 0) {
+            calculationUserInput.setPostalCode(editText20.getText().toString());
+            calculationUserInputSend.setPostalCode(editText20.getText().toString());
+        }
+        if (editText24.getText().toString().length() > 0) {
+            calculationUserInput.setPhoneNumber(editText24.getText().toString());
+            calculationUserInputSend.setPhoneNumber(editText24.getText().toString());
+        }
+        calculationUserInput.setNeighbourBillId(calculationInfo.getNeighbourBillId());
+        calculationUserInputSend.setNeighbourBillId(calculationInfo.getNeighbourBillId());
+
+        Retrofit retrofit = NetworkHelper.getInstance(true, "header");
+        final IAbfaService setExaminationInfo = retrofit.create(IAbfaService.class);
+        Call<SimpleMessage> call = setExaminationInfo.setExaminationInfo(calculationUserInputSend);
+        SendCalculation sendCalculation = new SendCalculation();
+        HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+    }
+
 
     void setCheckBox(CalculationInfo calculationInfo) {
         checkBox1.setChecked(calculationInfo.isAdamTaxfifAb());
@@ -332,7 +526,9 @@ public class FormActivity extends AppCompatActivity {
 
     void setEditText(CalculationInfo calculationInfo) {
         editText1.setText(calculationInfo.getZoneTitle());
-        editText2.setText(calculationInfo.getTrackNumber());
+        float trackNumber1 = Float.valueOf(calculationInfo.getTrackNumber());
+        int trackNumber2 = (int) trackNumber1;
+        editText2.setText(String.valueOf(trackNumber2));
         editText3.setText(calculationInfo.getBillId());
         editText4.setText(calculationInfo.getSifoon100());
         editText5.setText(calculationInfo.getSifoon125());
@@ -355,10 +551,20 @@ public class FormActivity extends AppCompatActivity {
         editText22.setText(calculationInfo.getSureName());
         editText23.setText(calculationInfo.getFatherName());
         editText24.setText(calculationInfo.getPhoneNumber());
-        editText25.setText(calculationInfo.getMobile());
-        editText26.setText(calculationInfo.getNotificationMobile());
+        editText25.setText(calculationInfo.getMobile().substring(2, calculationInfo.getMobile().length() - 1));
+        editText26.setText(calculationInfo.getNotificationMobile().substring(2, calculationInfo.getMobile().length() - 1));
         editText27.setText(calculationInfo.getDescription());
         editText28.setText(calculationInfo.getAddress());
+    }
+
+    class SendCalculation implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                    .allowMainThreadQueries().build();
+            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+        }
     }
 
     class DownloadDetails implements ICallback<CalculationInfo> {
@@ -371,6 +577,7 @@ public class FormActivity extends AppCompatActivity {
                     calculationsInfo.getTaxfifDictionary());
             setEditText(calculationsInfo);
             setCheckBox(calculationsInfo);
+            calculationInfo = calculationsInfo;
         }
     }
 }

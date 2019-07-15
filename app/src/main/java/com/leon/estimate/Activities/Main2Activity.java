@@ -3,7 +3,6 @@ package com.leon.estimate.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -24,17 +23,16 @@ import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.Calculation;
 import com.leon.estimate.Tables.DaoCalculation;
+import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
 import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.SimpleMessage;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.android.gestures.MoveGestureDetector;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.location.LocationComponent;
@@ -45,10 +43,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -83,8 +77,9 @@ public class Main2Activity extends AppCompatActivity
 //                startActivity(intent);
                 break;
             case R.id.imageViewUpload:
-                intent = new Intent(getApplicationContext(), UploadActivity.class);
-                startActivity(intent);
+                send();
+//                intent = new Intent(getApplicationContext(), UploadActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.imageViewPaper:
                 intent = new Intent(getApplicationContext(), PaperActivity.class);
@@ -137,28 +132,28 @@ public class Main2Activity extends AppCompatActivity
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         Main2Activity.this.mapboxMap = mapboxMap;
-        mapboxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/mapbox/cjerxnqt3cgvp2rmyuxbeqme7"),
-                style -> {
-                    enableLocationComponent(style);
-                    for (int i = 1; i < 4; i++) {
-                        initRouteCoordinates(i);
-                        // Create the LineString from the list of coordinates and then make a GeoJSON
-                        // FeatureCollection so we can add the line to our map as a layer.
-                        style.addSource(new GeoJsonSource("line-source".concat(String.valueOf(i)),
-                                FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(
-                                        LineString.fromLngLats(routeCoordinates)
-                                )})));
-                        // The layer properties for our line. This is where we make the line dotted, set the color, etc.
-                        style.addLayer(new LineLayer("linelayer".concat(String.valueOf(i))
-                                , "line-source".concat(String.valueOf(i))).withProperties(
-                                PropertyFactory.lineDasharray(new Float[]{0.01f, 2f}),
-                                PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
-                                PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
-                                PropertyFactory.lineWidth(5f),
-                                PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
-                        ));
-                    }
-                });
+//        mapboxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/mapbox/cjerxnqt3cgvp2rmyuxbeqme7"),
+//                style -> {
+//                    enableLocationComponent(style);
+//                    for (int i = 1; i < 4; i++) {
+//                        initRouteCoordinates(i);
+//                        // Create the LineString from the list of coordinates and then make a GeoJSON
+//                        // FeatureCollection so we can add the line to our map as a layer.
+//                        style.addSource(new GeoJsonSource("line-source".concat(String.valueOf(i)),
+//                                FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(
+//                                        LineString.fromLngLats(routeCoordinates)
+//                                )})));
+//                        // The layer properties for our line. This is where we make the line dotted, set the color, etc.
+//                        style.addLayer(new LineLayer("linelayer".concat(String.valueOf(i))
+//                                , "line-source".concat(String.valueOf(i))).withProperties(
+//                                PropertyFactory.lineDasharray(new Float[]{0.01f, 2f}),
+//                                PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
+//                                PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
+//                                PropertyFactory.lineWidth(5f),
+//                                PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
+//                        ));
+//                    }
+//                });
     }
 
     @SuppressWarnings({"MissingPermission"})
@@ -296,6 +291,9 @@ public class Main2Activity extends AppCompatActivity
         imageViewForm.setOnClickListener(onClickListener);
     }
 
+    void send() {
+    }
+
     void download() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "header");
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
@@ -312,6 +310,16 @@ public class Main2Activity extends AppCompatActivity
             DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
             // address trim
             daoCalculation.insertAll(calculations);
+        }
+    }
+
+    class SendCalculation implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                    .allowMainThreadQueries().build();
+            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
         }
     }
 }

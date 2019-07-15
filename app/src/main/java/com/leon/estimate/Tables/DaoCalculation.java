@@ -15,7 +15,7 @@ public interface DaoCalculation {
     @Query("SELECT * FROM Calculation ORDER BY trackNumber desc")
     List<Calculation> fetchCalculate();
 
-    @Query("SELECT * FROM Calculation WHERE read != 'true' ORDER BY trackNumber desc ")
+    @Query("SELECT * FROM Calculation WHERE read != '1' ORDER BY trackNumber desc ")
     List<Calculation> unreadCalculate();
 
     @Query("SELECT * FROM Calculation WHERE trackNumber =:trackingNumber")

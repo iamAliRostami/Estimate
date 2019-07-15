@@ -54,17 +54,16 @@ public class CalculationUserInput {
     boolean sent;
 
     public CalculationUserInput(String trackingId, int trackNumber, int requestType,
-                                String parNumber, String billId, int radif, String neighbourBillId,
-                                int zoneId, String notificationMobile, int karbariId,
-                                int qotrEnsheabId, int noeVagozariId, int taxfifId,
-                                String selectedServices, String phoneNumber, String mobile,
-                                String firstName, String sureName, int arse, int aianKol,
-                                int aianMaskooni, int aianTejari, int sifoon100, int sifoon125,
-                                int sifoon150, int sifoon200, int zarfiatQarardadi, int arzeshMelk,
-                                int tedadMaskooni, int tedadTejari, int tedadSaier, int tedadTaxfif,
-                                String nationalId, String identityCode, String fatherName, String postalCode,
-                                boolean ensheabQeireDaem, boolean adamTaxfifAb, boolean adamTaxfifFazelab,
-                                String address, String description) {
+                                String parNumber, String billId, int radif, int zoneId,
+                                String notificationMobile, int karbariId, int qotrEnsheabId,
+                                int noeVagozariId, int taxfifId, String selectedServices,
+                                String mobile, String firstName, String sureName, int arse,
+                                int aianKol, int aianMaskooni, int aianTejari, int sifoon100,
+                                int sifoon125, int sifoon150, int sifoon200, int zarfiatQarardadi,
+                                int arzeshMelk, int tedadMaskooni, int tedadTejari, int tedadSaier,
+                                int tedadTaxfif, String nationalId, boolean ensheabQeireDaem,
+                                boolean adamTaxfifAb, boolean adamTaxfifFazelab,
+                                String address) {
         this.trackingId = trackingId;
         this.trackNumber = trackNumber;
         this.requestType = requestType;
@@ -112,10 +111,34 @@ public class CalculationUserInput {
         this.sent = sent;
     }
 
-    void setselectedServices(CalculationUserInputSend calculationUserInput) {
+    public void setSelectedServices(CalculationUserInputSend calculationUserInput) {
         for (String s : calculationUserInput.selectedServices
         ) {
             selectedServices = selectedServices.concat(s).concat(",");
         }
+    }
+
+    public void setNeighbourBillId(String neighbourBillId) {
+        this.neighbourBillId = neighbourBillId;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setIdentityCode(String identityCode) {
+        this.identityCode = identityCode;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
