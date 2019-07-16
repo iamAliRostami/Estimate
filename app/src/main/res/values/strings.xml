@@ -68,6 +68,8 @@
     <string name="close_app">بستن برنامه</string>
     <string name="call_operator">"لطفا با راهبر سیستم تماس حاصل فرمایید"</string>
     <string name="delete">حذف با موفقیت انجام شد</string>
+    <string name="send">ارسال</string>
+    <string name="receive">دریافت</string>
     <string name="force_close">مجوز ها کامل نیست</string>
     <string name="permission_not_completed">بستن برنامه</string>
 </resources>

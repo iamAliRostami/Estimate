@@ -1,11 +1,13 @@
 package com.leon.estimate.Activities;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,8 @@ public class ListActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.textViewEmpty)
+    TextView textViewEmpty;
     List<Calculation> calculationList;
     CustomAdapter customAdapter;
 
@@ -57,20 +61,36 @@ public class ListActivity extends AppCompatActivity {
         display.getSize(size);
         int width = size.x;
 
-
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
         calculationList = daoCalculation.unreadCalculate();
 
-        customAdapter = new CustomAdapter(context, calculationList, width);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this) {
-            @Override
-            public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
-                                                         @NonNull View child, @NonNull Rect rect, boolean immediate) {
-                return false;
-            }
-        });
+
+        if (calculationList.isEmpty()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            recyclerView.setVisibility(View.GONE);
+            textViewEmpty.setVisibility(View.VISIBLE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            textViewEmpty.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            customAdapter = new CustomAdapter(context, calculationList, width);
+            customAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(customAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this) {
+                @Override
+                public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
+                                                             @NonNull View child, @NonNull Rect rect, boolean immediate) {
+                    return false;
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeRecyclerView();
     }
 }

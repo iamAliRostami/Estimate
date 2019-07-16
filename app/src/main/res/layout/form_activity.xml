@@ -547,6 +547,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center" />
 
@@ -569,6 +573,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
+                        android:inputType="number"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center" />
 
@@ -653,9 +658,8 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="right|top"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:lines="2"
-                        android:maxLines="1"
                         android:singleLine="true" />
                 </LinearLayout>
 
@@ -840,6 +844,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
+                        android:inputType="number"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center" />
 
@@ -862,6 +867,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_medium_margin"
+                        android:inputType="number"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center" />
 
@@ -909,9 +915,8 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="right|top"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:lines="4"
-                        android:maxLines="1"
                         android:singleLine="true" />
 
                     <Button

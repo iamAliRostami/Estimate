@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.room.Room;
 
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationInfo;
@@ -32,6 +33,7 @@ import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.ServiceDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
+import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
@@ -158,7 +160,7 @@ public class FormActivity extends AppCompatActivity {
         fontManager.setFont(constraintLayout);
         downloadDetails();
         setOnButtonClickListener();
-//        setOnEditTextOnFocusChangeListener();
+        setOnEditTextOnFocusChangeListener();
     }
 
     @SuppressLint("NewApi")
@@ -386,13 +388,13 @@ public class FormActivity extends AppCompatActivity {
                 focusView.requestFocus();
                 cancel = true;
             }
-            if (!cancel && editText24.getText().toString().length() < 8) {
-                focusView = editText14;
+            if (!cancel && editText24.getText().toString().length() > 0 && editText24.getText().toString().length() < 8) {
+                focusView = editText24;
                 focusView.requestFocus();
                 cancel = true;
             }
             if (!cancel && editText25.getText().toString().length() < 9) {
-                focusView = editText15;
+                focusView = editText25;
                 focusView.requestFocus();
                 cancel = true;
             }
@@ -419,6 +421,37 @@ public class FormActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    void setOnEditTextOnFocusChangeListener() {
+        editText1.setNextFocusDownId(R.id.editText2);
+        editText2.setNextFocusDownId(R.id.editText3);
+        editText3.setNextFocusDownId(R.id.editText4);
+        editText4.setNextFocusDownId(R.id.editText5);
+        editText5.setNextFocusDownId(R.id.editText6);
+        editText6.setNextFocusDownId(R.id.editText7);
+        editText7.setNextFocusDownId(R.id.editText8);
+        editText8.setNextFocusDownId(R.id.editText9);
+        editText9.setNextFocusDownId(R.id.editText10);
+        editText10.setNextFocusDownId(R.id.editText11);
+        editText11.setNextFocusDownId(R.id.editText12);
+        editText12.setNextFocusDownId(R.id.editText13);
+        editText13.setNextFocusDownId(R.id.editText14);
+        editText14.setNextFocusDownId(R.id.editText15);
+        editText15.setNextFocusDownId(R.id.editText16);
+        editText16.setNextFocusDownId(R.id.editText17);
+        editText17.setNextFocusDownId(R.id.editText18);
+        editText18.setNextFocusDownId(R.id.editText19);
+        editText19.setNextFocusDownId(R.id.editText20);
+        editText20.setNextFocusDownId(R.id.editText21);
+        editText21.setNextFocusDownId(R.id.editText22);
+        editText22.setNextFocusDownId(R.id.editText23);
+        editText23.setNextFocusDownId(R.id.editText24);
+        editText24.setNextFocusDownId(R.id.editText25);
+        editText25.setNextFocusDownId(R.id.editText26);
+        editText26.setNextFocusDownId(R.id.editText27);
+        editText27.setNextFocusDownId(R.id.editText28);
+        editText28.setNextFocusDownId(R.id.button);
     }
 
     void saveCalculationUserInput(int selectedSize) {
@@ -564,6 +597,8 @@ public class FormActivity extends AppCompatActivity {
                     .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+            new CustomDialog(DialogType.GreenRedirect, context, simpleMessage.getMessage(),
+                    getString(R.string.dear_user), getString(R.string.send), getString(R.string.accepted));
         }
     }
 

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             viewHolder.textViewPeymayesh.setText("پیمایش شده");
         else
             viewHolder.textViewPeymayesh.setText("پیمایش نشده");
-        Log.e("send".concat(String.valueOf(i).concat("?")), String.valueOf(calculation.isRead()));
         viewHolder.textViewExaminationDay.setText(calculation.getExaminationDay());
         viewHolder.textViewServiceGroup.setText(calculation.getServiceGroup());
         viewHolder.textViewAddress.setText(calculation.getAddress().trim());

@@ -1,8 +1,10 @@
 package com.leon.estimate.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
+import com.leon.estimate.Activities.ListActivity;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.R;
 
@@ -46,10 +48,9 @@ public class CustomDialog {
                 .setTopColorRes(R.color.green2)
                 .setTopTitleColor(context.getResources().getColor(R.color.white))
                 .setButtonsBackground(R.drawable.border_green_2)
-                .setPositiveButton(ButtonText, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
+                .setPositiveButton(ButtonText, v -> {
+                    Intent intent = new Intent(context, ListActivity.class);
+                    context.startActivity(intent);
                 });
         lovelyStandardDialog.show();
     }
@@ -59,10 +60,7 @@ public class CustomDialog {
                 .setTopTitleColor(context.getResources().getColor(R.color.white))
                 .setButtonsBackground(R.drawable.border_yellow_2)
                 .setTopColorRes(R.color.yellow1)
-                .setPositiveButton(buttonText, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
+                .setPositiveButton(buttonText, v -> {
                 })
                 .show();
     }
@@ -72,12 +70,7 @@ public class CustomDialog {
                 .setTopColorRes(R.color.red1)
                 .setTopTitleColor(context.getResources().getColor(R.color.white))
                 .setButtonsBackground(R.drawable.border_red_2)
-                .setPositiveButton(buttonText, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        lovelyStandardDialog.dismiss();
-                    }
-                })
+                .setPositiveButton(buttonText, v -> lovelyStandardDialog.dismiss())
                 .show();
     }
 
@@ -100,10 +93,7 @@ public class CustomDialog {
                 .setTopTitleColor(context.getResources().getColor(R.color.white))
                 .setTopColorRes(R.color.yellow1)
                 .setButtonsBackground(R.drawable.border_yellow_2)
-                .setPositiveButton(buttonText, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
+                .setPositiveButton(buttonText, v -> {
                 })
                 .show();
     }

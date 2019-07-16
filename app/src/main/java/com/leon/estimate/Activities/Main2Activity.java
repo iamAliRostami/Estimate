@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,12 +20,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
+import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.Calculation;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoCalculation;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
@@ -57,7 +61,7 @@ public class Main2Activity extends AppCompatActivity
 
     ImageView imageViewExit, imageViewDownload, imageViewUpload, imageViewPaper, imageViewForm;
     String accessToken = "pk.eyJ1IjoiaWFtYWxpcm9zdGFtaSIsImEiOiJjanhjbmptcmowMjZnM3BvdnY0YWx4ampxIn0.iv9I6s34q_-k9GqCiz2seg";
-
+    String trackNumber;
     private PermissionsManager permissionsManager;
     private MapboxMap mapboxMap;
     private MapView mapView;
@@ -132,9 +136,9 @@ public class Main2Activity extends AppCompatActivity
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         Main2Activity.this.mapboxMap = mapboxMap;
-//        mapboxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/mapbox/cjerxnqt3cgvp2rmyuxbeqme7"),
-//                style -> {
-//                    enableLocationComponent(style);
+        mapboxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/mapbox/cjerxnqt3cgvp2rmyuxbeqme7"),
+                style -> {
+                    enableLocationComponent(style);
 //                    for (int i = 1; i < 4; i++) {
 //                        initRouteCoordinates(i);
 //                        // Create the LineString from the list of coordinates and then make a GeoJSON
@@ -153,7 +157,7 @@ public class Main2Activity extends AppCompatActivity
 //                                PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
 //                        ));
 //                    }
-//                });
+                });
     }
 
     @SuppressWarnings({"MissingPermission"})
@@ -292,6 +296,11 @@ public class Main2Activity extends AppCompatActivity
     }
 
     void send() {
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+        Log.e("size", String.valueOf(calculationUserInputList.size()));
     }
 
     void download() {
@@ -308,8 +317,10 @@ public class Main2Activity extends AppCompatActivity
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
             DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-            // address trim
             daoCalculation.insertAll(calculations);
+
+            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(calculations.size())).concat(" مسیر بارگیری شد."),
+                    getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
         }
     }
 

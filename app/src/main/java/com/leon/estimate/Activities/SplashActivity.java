@@ -58,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     splashLoaded = true;
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, Main2Activity.class);
                     startActivity(intent);
                     finish();
                 }
