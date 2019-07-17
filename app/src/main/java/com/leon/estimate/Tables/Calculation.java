@@ -41,8 +41,8 @@ public class Calculation {
         this.trackNumber = trackNumber;
     }
 
-    public Calculation() {
-    }
+//    public Calculation() {
+//    }
 
     public int getId() {
         return id;
