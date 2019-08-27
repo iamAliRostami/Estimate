@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class},
         version = 11, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
+
     public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
@@ -58,13 +59,9 @@ public abstract class MyDatabase extends RoomDatabase {
                     ");");
         }
     };
-
     public abstract DaoCalculation daoCalculateCalculation();
-
     public abstract DaoCalculateInfo daoCalculateInfo();
-
     public abstract DaoCalculationUserInput daoCalculationUserInput();
-
     public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
