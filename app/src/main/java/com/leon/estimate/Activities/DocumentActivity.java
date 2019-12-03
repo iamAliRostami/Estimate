@@ -32,6 +32,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.leon.estimate.R;
+import com.leon.estimate.Utils.ScannerConstants;
 
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
@@ -50,7 +51,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import team.clevel.documentscanner.helpers.ScannerConstants;
 import team.clevel.documentscanner.libraries.NativeClass;
 import team.clevel.documentscanner.libraries.PolygonView;
 
@@ -317,12 +317,7 @@ public class DocumentActivity extends AppCompatActivity {
             float y4 = (points.get(3).y) * yRatio;
             return nativeClass.getScannedBitmap(selectedImageBitmap, x1, y1, x2, y2, x3, y3, x4, y4);
         } catch (Exception e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(DocumentActivity.this, ScannerConstants.cropError, Toast.LENGTH_SHORT).show();
-                }
-            });
+            runOnUiThread(() -> Toast.makeText(DocumentActivity.this, ScannerConstants.cropError, Toast.LENGTH_SHORT).show());
             return null;
         }
     }
