@@ -1,10 +1,7 @@
 package com.leon.estimate.Activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContextWrapper;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -55,29 +52,90 @@ import team.clevel.documentscanner.libraries.NativeClass;
 import team.clevel.documentscanner.libraries.PolygonView;
 
 public class DocumentActivity extends AppCompatActivity {
-    private static final int CAMERA_REQUEST = 1888;
-    private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    View.OnClickListener onButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
-            } else {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            }
-        }
-    };
     private FrameLayout holderImageCrop;
     private ImageView ivRotate, ivInvert, ivRebase;
     private ImageView imageView;
     private PolygonView polygonView;
-    private Bitmap selectedImageBitmap, tempBitmapOrginal;
+    private Bitmap selectedImageBitmap, tempBitmapOriginal;
     private Button btnImageCrop, btnClose;
     private NativeClass nativeClass;
     private boolean isInverted;
     private ProgressBar progressBar;
+    //    private View.OnClickListener btnImageEnhanceClick = new View.OnClickListener() {
+//        @SuppressLint("CheckResult")
+//        @Override
+//        public void onClick(View v) {
+//            setProgressBar(true);
+//            Observable.fromCallable(() -> {
+//                ScannerConstants.selectedImageBitmap = getCroppedImage();
+//                if (ScannerConstants.selectedImageBitmap == null)
+//                    return false;
+//                if (ScannerConstants.saveStorage)
+//                    saveToInternalStorage(ScannerConstants.selectedImageBitmap);
+//                return false;
+//            })
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe((result) -> {
+//                        setProgressBar(false);
+//                        if (ScannerConstants.selectedImageBitmap != null) {
+//                            setResult(RESULT_OK);
+//                            finish();
+//                        }
+//                    });
+//        }
+//    };
+//    private View.OnClickListener btnCloseClick = v -> finish();
+//    private View.OnClickListener btnInvertColor = new View.OnClickListener() {
+//        @SuppressLint("CheckResult")
+//        @Override
+//        public void onClick(View v) {
+//            setProgressBar(true);
+//            Observable.fromCallable(() -> {
+//                invertColor();
+//                return false;
+//            })
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe((result) -> {
+//                        setProgressBar(false);
+//                        Bitmap scaledBitmap = scaledBitmap(selectedImageBitmap, holderImageCrop.getWidth(), holderImageCrop.getHeight());
+//                        imageView.setImageBitmap(scaledBitmap);
+//                    });
+//
+//
+//        }
+//    };
+//    private View.OnClickListener onRotateClick = new View.OnClickListener() {
+//        @SuppressLint("CheckResult")
+//        @Override
+//        public void onClick(View v) {
+//            setProgressBar(true);
+//            Observable.fromCallable(() -> {
+//                if (isInverted)
+//                    invertColor();
+//                ScannerConstants.selectedImageBitmap = rotateBitmap(selectedImageBitmap, 90);
+//                return false;
+//            })
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe((result) -> {
+//                        setProgressBar(false);
+//                        initializeElement();
+//                    });
+//        }
+//    };
+//    private View.OnClickListener btnRebase = v -> {
+//        ScannerConstants.selectedImageBitmap = tempBitmapOriginal.copy(tempBitmapOriginal.getConfig(), true);
+//        isInverted = false;
+//        initializeElement();
+//    };
+//
+//    public static Bitmap rotateBitmap(Bitmap source, float angle) {
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(angle);
+//        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+//    }
     private View.OnClickListener btnImageEnhanceClick = new View.OnClickListener() {
         @SuppressLint("CheckResult")
         @Override
@@ -104,6 +162,20 @@ public class DocumentActivity extends AppCompatActivity {
 
         }
     };
+
+    private void setImageRotation() {
+        Bitmap tempBitmap = ScannerConstants.selectedImageBitmap.copy(ScannerConstants.selectedImageBitmap.getConfig(), true);
+        for (int i = 1; i <= 4; i++) {
+            MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
+            if (point2f == null) {
+                tempBitmap = rotateBitmap(tempBitmap, 90 * i);
+            } else {
+                ScannerConstants.selectedImageBitmap = tempBitmap.copy(ScannerConstants.selectedImageBitmap.getConfig(), true);
+                break;
+            }
+        }
+    }
+
     private View.OnClickListener btnCloseClick = v -> finish();
     private View.OnClickListener btnInvertColor = new View.OnClickListener() {
         @SuppressLint("CheckResult")
@@ -145,7 +217,7 @@ public class DocumentActivity extends AppCompatActivity {
         }
     };
     private View.OnClickListener btnRebase = v -> {
-        ScannerConstants.selectedImageBitmap = tempBitmapOrginal.copy(tempBitmapOrginal.getConfig(), true);
+        ScannerConstants.selectedImageBitmap = tempBitmapOriginal.copy(tempBitmapOriginal.getConfig(), true);
         isInverted = false;
         initializeElement();
     };
@@ -162,35 +234,29 @@ public class DocumentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.document_activity);
         ButterKnife.bind(this);
-    }
-
-    private void setImageRotation() {
-        Bitmap tempBitmap = ScannerConstants.selectedImageBitmap.copy(ScannerConstants.selectedImageBitmap.getConfig(), true);
-        for (int i = 1; i <= 4; i++) {
-            MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
-            if (point2f == null) {
-                tempBitmap = rotateBitmap(tempBitmap, 90 * i);
-            } else {
-                ScannerConstants.selectedImageBitmap = tempBitmap.copy(ScannerConstants.selectedImageBitmap.getConfig(), true);
-                break;
-            }
+        isInverted = false;
+        if (ScannerConstants.selectedImageBitmap != null)
+            initializeElement();
+        else {
+            Toast.makeText(this, ScannerConstants.imageError, Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
     private void setProgressBar(boolean isShow) {
-        RelativeLayout rlContainer = findViewById(team.clevel.documentscanner.R.id.rlContainer);
-        setViewInterract(rlContainer, !isShow);
+        RelativeLayout rlContainer = findViewById(R.id.rlContainer);
+        setViewInteract(rlContainer, !isShow);
         if (isShow)
             progressBar.setVisibility(View.VISIBLE);
         else
             progressBar.setVisibility(View.GONE);
     }
 
-    private void setViewInterract(View view, boolean canDo) {
+    private void setViewInteract(View view, boolean canDo) {
         view.setEnabled(canDo);
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                setViewInterract(((ViewGroup) view).getChildAt(i), canDo);
+                setViewInteract(((ViewGroup) view).getChildAt(i), canDo);
             }
         }
     }
@@ -198,17 +264,17 @@ public class DocumentActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
     private void initializeElement() {
         nativeClass = new NativeClass();
-        btnImageCrop = findViewById(team.clevel.documentscanner.R.id.btnImageCrop);
-        btnClose = findViewById(team.clevel.documentscanner.R.id.btnClose);
-        holderImageCrop = findViewById(team.clevel.documentscanner.R.id.holderImageCrop);
-        imageView = findViewById(team.clevel.documentscanner.R.id.imageView);
-        ivRotate = findViewById(team.clevel.documentscanner.R.id.ivRotate);
-        ivInvert = findViewById(team.clevel.documentscanner.R.id.ivInvert);
-        ivRebase = findViewById(team.clevel.documentscanner.R.id.ivRebase);
+        btnImageCrop = findViewById(R.id.btnImageCrop);
+        btnClose = findViewById(R.id.btnClose);
+        holderImageCrop = findViewById(R.id.holderImageCrop);
+        imageView = findViewById(R.id.imageView);
+        ivRotate = findViewById(R.id.ivRotate);
+        ivInvert = findViewById(R.id.ivInvert);
+        ivRebase = findViewById(R.id.ivRebase);
         btnImageCrop.setText(ScannerConstants.cropText);
         btnClose.setText(ScannerConstants.backText);
-        polygonView = findViewById(team.clevel.documentscanner.R.id.polygonView);
-        progressBar = findViewById(team.clevel.documentscanner.R.id.progressBar);
+        polygonView = findViewById(R.id.polygonView);
+        progressBar = findViewById(R.id.progressBar);
         if (progressBar.getIndeterminateDrawable() != null && ScannerConstants.progressColor != null)
             progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(ScannerConstants.progressColor), android.graphics.PorterDuff.Mode.MULTIPLY);
         else if (progressBar.getProgressDrawable() != null && ScannerConstants.progressColor != null)
@@ -236,7 +302,7 @@ public class DocumentActivity extends AppCompatActivity {
     private void initializeCropping() {
 
         selectedImageBitmap = ScannerConstants.selectedImageBitmap;
-        tempBitmapOrginal = selectedImageBitmap.copy(selectedImageBitmap.getConfig(), true);
+        tempBitmapOriginal = selectedImageBitmap.copy(selectedImageBitmap.getConfig(), true);
         ScannerConstants.selectedImageBitmap = null;
 
         Bitmap scaledBitmap = scaledBitmap(selectedImageBitmap, holderImageCrop.getWidth(), holderImageCrop.getHeight());
@@ -249,13 +315,13 @@ public class DocumentActivity extends AppCompatActivity {
             polygonView.setPoints(pointFs);
             polygonView.setVisibility(View.VISIBLE);
 
-            int padding = (int) getResources().getDimension(team.clevel.documentscanner.R.dimen.scanPadding);
+            int padding = (int) getResources().getDimension(R.dimen.scanPadding);
 
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(tempBitmap.getWidth() + 2 * padding, tempBitmap.getHeight() + 2 * padding);
             layoutParams.gravity = Gravity.CENTER;
 
             polygonView.setLayoutParams(layoutParams);
-            polygonView.setPointColor(getResources().getColor(team.clevel.documentscanner.R.color.blue));
+            polygonView.setPointColor(getResources().getColor(R.color.blue));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,7 +339,7 @@ public class DocumentActivity extends AppCompatActivity {
             canvas.drawBitmap(selectedImageBitmap, 0, 0, paint);
             selectedImageBitmap = bmpMonochrome.copy(bmpMonochrome.getConfig(), true);
         } else {
-            selectedImageBitmap = tempBitmapOrginal.copy(tempBitmapOrginal.getConfig(), true);
+            selectedImageBitmap = tempBitmapOriginal.copy(tempBitmapOriginal.getConfig(), true);
         }
         isInverted = !isInverted;
     }

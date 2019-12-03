@@ -3,8 +3,6 @@ package com.leon.estimate.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -44,7 +42,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import team.clevel.documentscanner.ImageCropActivity;
 
 public final class PaperActivity extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888;
@@ -54,8 +51,25 @@ public final class PaperActivity extends AppCompatActivity {
     Button buttonPick;
     @BindView(R.id.imageView1)
     ImageView imageView;
-    String mCurrentPhotoPath, imageFileName;
+    static String imageFileName;
+    String mCurrentPhotoPath;
     boolean replace = false;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.paper_activity);
+        ButterKnife.bind(this);
+        loadImage(imageView);
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            askPermission();
+        } else {
+            setOnClickListener();
+        }
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -63,13 +77,12 @@ public final class PaperActivity extends AppCompatActivity {
             Uri selectedImage = data.getData();
             Bitmap btimap = null;
             try {
-//                StringBuilder stringBuilder = (new StringBuilder()).append("");
                 Uri uri = data.getData();
                 Objects.requireNonNull(uri);
                 InputStream inputStream = this.getContentResolver().openInputStream(Objects.requireNonNull(selectedImage));
                 btimap = BitmapFactory.decodeStream(inputStream);
                 ScannerConstants.selectedImageBitmap = btimap;
-                this.startActivityForResult(new Intent(this, ImageCropActivity.class), IMAGE_CROP_REQUEST);
+                this.startActivityForResult(new Intent(this, DocumentActivity.class), IMAGE_CROP_REQUEST);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,12 +93,12 @@ public final class PaperActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.startActivityForResult(new Intent(this, ImageCropActivity.class), IMAGE_CROP_REQUEST);
+            this.startActivityForResult(new Intent(this, DocumentActivity.class), IMAGE_CROP_REQUEST);
         } else if (requestCode == IMAGE_CROP_REQUEST && resultCode == RESULT_OK) {
             if (ScannerConstants.selectedImageBitmap != null) {
                 imageView.setImageBitmap(ScannerConstants.selectedImageBitmap);
                 buttonPick.setText("تغییر عکس");
-                saveImage(ScannerConstants.selectedImageBitmap);
+                saveTempBitmap(ScannerConstants.selectedImageBitmap);
             } else {
                 Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
             }
@@ -93,53 +106,58 @@ public final class PaperActivity extends AppCompatActivity {
 
     }
 
-    void loadImage(String path, ImageView imageView) {
+    void loadImage(ImageView imageView) {
         try {
-            File f = new File(path, "profile.jpg");
+            File f = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), "AbfaCamera/null.jpg");
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             imageView.setImageBitmap(b);
         } catch (FileNotFoundException e) {
+            Log.e("error", e.getMessage());
             e.printStackTrace();
         }
 
     }
 
-    void saveImage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File myPath = new File(directory, imageFileName);
+    public void saveTempBitmap(Bitmap bitmap) {
+        if (isExternalStorageWritable()) {
+            saveImage(bitmap);
+        } else {
+            Log.e("error", "isExternalStorageWritable");
+        }
+    }
 
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+    @SuppressLint("SimpleDateFormat")
+    void saveImage(Bitmap bitmapImage) {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "AbfaCamera");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return;
             }
         }
+
+        String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File file = new File(mediaStorageDir, imageFileName);
+        if (file.exists()) file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            Log.e("error", Objects.requireNonNull(e.getMessage()));
+            e.printStackTrace();
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.paper_activity);
-        ButterKnife.bind(this);
-        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-        ) {
-            askPermission();
-        } else {
-            setOnClickListener();
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
         }
+        return false;
     }
 
     public final void askPermission() {
@@ -206,10 +224,10 @@ public final class PaperActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"SimpleDateFormat"})
-    private final File createImageFile() throws IOException {
+    private File createImageFile() throws IOException {
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        this.imageFileName = imageFileName;
+        PaperActivity.imageFileName = imageFileName;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         StringBuilder stringBuilder = (new StringBuilder()).append("file:");
