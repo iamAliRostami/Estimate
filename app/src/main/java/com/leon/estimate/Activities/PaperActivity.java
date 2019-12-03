@@ -3,6 +3,8 @@ package com.leon.estimate.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -30,6 +32,9 @@ import com.leon.estimate.Utils.ScannerConstants;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -49,7 +54,8 @@ public final class PaperActivity extends AppCompatActivity {
     Button buttonPick;
     @BindView(R.id.imageView1)
     ImageView imageView;
-    String mCurrentPhotoPath;
+    String mCurrentPhotoPath, imageFileName;
+    boolean replace = false;
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -79,11 +85,46 @@ public final class PaperActivity extends AppCompatActivity {
             if (ScannerConstants.selectedImageBitmap != null) {
                 imageView.setImageBitmap(ScannerConstants.selectedImageBitmap);
                 buttonPick.setText("تغییر عکس");
+                saveImage(ScannerConstants.selectedImageBitmap);
             } else {
                 Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
             }
         }
 
+    }
+
+    void loadImage(String path, ImageView imageView) {
+        try {
+            File f = new File(path, "profile.jpg");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            imageView.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    void saveImage(Bitmap bitmapImage) {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File myPath = new File(directory, imageFileName);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -168,6 +209,7 @@ public final class PaperActivity extends AppCompatActivity {
     private final File createImageFile() throws IOException {
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
+        this.imageFileName = imageFileName;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         StringBuilder stringBuilder = (new StringBuilder()).append("file:");
