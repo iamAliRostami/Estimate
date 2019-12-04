@@ -83,8 +83,6 @@ public class Main2Activity extends AppCompatActivity
             case R.id.imageViewUpload:
 //                send();
 //                intent = new Intent(getApplicationContext(), UploadActivity.class);
-                intent = new Intent(getApplicationContext(), DocumentActivity.class);
-                startActivity(intent);
                 break;
             case R.id.imageViewPaper:
                 intent = new Intent(getApplicationContext(), PaperActivity.class);

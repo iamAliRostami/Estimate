@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public final class PaperActivity extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888;
     private final int GALLERY_REQUEST = 1888;
     private final int IMAGE_CROP_REQUEST = 1234;
+    private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
     @BindView(R.id.button_pick1)
     Button buttonPick;
     @BindView(R.id.imageView1)
@@ -58,6 +60,7 @@ public final class PaperActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setContentView(R.layout.paper_activity);
         ButterKnife.bind(this);
         loadImage(imageView);
@@ -81,24 +84,29 @@ public final class PaperActivity extends AppCompatActivity {
                 Objects.requireNonNull(uri);
                 InputStream inputStream = this.getContentResolver().openInputStream(Objects.requireNonNull(selectedImage));
                 btimap = BitmapFactory.decodeStream(inputStream);
-                ScannerConstants.selectedImageBitmap = btimap;
-                this.startActivityForResult(new Intent(this, DocumentActivity.class), IMAGE_CROP_REQUEST);
+                ScannerConstants.bitmapSelectedImage = btimap;
+                this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             ContentResolver contentResolver = this.getContentResolver();
             try {
-                ScannerConstants.selectedImageBitmap = Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath));
+                ScannerConstants.bitmapSelectedImage = Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.startActivityForResult(new Intent(this, DocumentActivity.class), IMAGE_CROP_REQUEST);
+            this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
         } else if (requestCode == IMAGE_CROP_REQUEST && resultCode == RESULT_OK) {
-            if (ScannerConstants.selectedImageBitmap != null) {
-                imageView.setImageBitmap(ScannerConstants.selectedImageBitmap);
-                buttonPick.setText("تغییر عکس");
-                saveTempBitmap(ScannerConstants.selectedImageBitmap);
+//            ScannerConstants.bitmapSelectedImage = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            this.startActivityForResult(new Intent(this, BrightnessAndContrastActivity.class),
+                    IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
+        } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
+            imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
+            buttonPick.setText("تغییر عکس");
+            saveTempBitmap(ScannerConstants.bitmapSelectedImage);
+            if (ScannerConstants.bitmapSelectedImage != null) {
+                Toast.makeText(this, "انجام شد", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
             }
@@ -131,6 +139,7 @@ public final class PaperActivity extends AppCompatActivity {
     void saveImage(Bitmap bitmapImage) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "AbfaCamera");
+//        File mediaStorageDir = new File(ScannerConstants.fileName, "AbfaCamera");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return;
@@ -138,7 +147,7 @@ public final class PaperActivity extends AppCompatActivity {
         }
 
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + "_" + ".jpg";
         File file = new File(mediaStorageDir, imageFileName);
         if (file.exists()) file.delete();
         try {
@@ -227,6 +236,7 @@ public final class PaperActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
+        ScannerConstants.fileName = imageFileName;
         PaperActivity.imageFileName = imageFileName;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);

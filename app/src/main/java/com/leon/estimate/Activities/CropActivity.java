@@ -51,133 +51,39 @@ import io.reactivex.schedulers.Schedulers;
 import team.clevel.documentscanner.libraries.NativeClass;
 import team.clevel.documentscanner.libraries.PolygonView;
 
-public class DocumentActivity extends AppCompatActivity {
-    private FrameLayout holderImageCrop;
-    private ImageView ivRotate, ivInvert, ivRebase;
-    private ImageView imageView;
+public class CropActivity extends AppCompatActivity {
+    private FrameLayout frameLayoutHolder;
+    private ImageView imageViewRotate, imageViewInvert, imageViewRebase, imageView;
     private PolygonView polygonView;
-    private Bitmap selectedImageBitmap, tempBitmapOriginal;
-    private Button btnImageCrop, btnClose;
+    private Bitmap bitmapSelectedImage, bitmapTempOriginal;
+    private Button buttonCrop, buttonClose;
     private NativeClass nativeClass;
     private boolean isInverted;
     private ProgressBar progressBar;
-    //    private View.OnClickListener btnImageEnhanceClick = new View.OnClickListener() {
-//        @SuppressLint("CheckResult")
-//        @Override
-//        public void onClick(View v) {
-//            setProgressBar(true);
-//            Observable.fromCallable(() -> {
-//                ScannerConstants.selectedImageBitmap = getCroppedImage();
-//                if (ScannerConstants.selectedImageBitmap == null)
-//                    return false;
-//                if (ScannerConstants.saveStorage)
-//                    saveToInternalStorage(ScannerConstants.selectedImageBitmap);
-//                return false;
-//            })
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe((result) -> {
-//                        setProgressBar(false);
-//                        if (ScannerConstants.selectedImageBitmap != null) {
-//                            setResult(RESULT_OK);
-//                            finish();
-//                        }
-//                    });
-//        }
-//    };
-//    private View.OnClickListener btnCloseClick = v -> finish();
-//    private View.OnClickListener btnInvertColor = new View.OnClickListener() {
-//        @SuppressLint("CheckResult")
-//        @Override
-//        public void onClick(View v) {
-//            setProgressBar(true);
-//            Observable.fromCallable(() -> {
-//                invertColor();
-//                return false;
-//            })
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe((result) -> {
-//                        setProgressBar(false);
-//                        Bitmap scaledBitmap = scaledBitmap(selectedImageBitmap, holderImageCrop.getWidth(), holderImageCrop.getHeight());
-//                        imageView.setImageBitmap(scaledBitmap);
-//                    });
-//
-//
-//        }
-//    };
-//    private View.OnClickListener onRotateClick = new View.OnClickListener() {
-//        @SuppressLint("CheckResult")
-//        @Override
-//        public void onClick(View v) {
-//            setProgressBar(true);
-//            Observable.fromCallable(() -> {
-//                if (isInverted)
-//                    invertColor();
-//                ScannerConstants.selectedImageBitmap = rotateBitmap(selectedImageBitmap, 90);
-//                return false;
-//            })
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe((result) -> {
-//                        setProgressBar(false);
-//                        initializeElement();
-//                    });
-//        }
-//    };
-//    private View.OnClickListener btnRebase = v -> {
-//        ScannerConstants.selectedImageBitmap = tempBitmapOriginal.copy(tempBitmapOriginal.getConfig(), true);
-//        isInverted = false;
-//        initializeElement();
-//    };
-//
-//    public static Bitmap rotateBitmap(Bitmap source, float angle) {
-//        Matrix matrix = new Matrix();
-//        matrix.postRotate(angle);
-//        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-//    }
-    private View.OnClickListener btnImageEnhanceClick = new View.OnClickListener() {
-        @SuppressLint("CheckResult")
-        @Override
-        public void onClick(View v) {
-            setProgressBar(true);
-            Observable.fromCallable(() -> {
-                ScannerConstants.selectedImageBitmap = getCroppedImage();
-                if (ScannerConstants.selectedImageBitmap == null)
-                    return false;
-                if (ScannerConstants.saveStorage)
-                    saveToInternalStorage(ScannerConstants.selectedImageBitmap);
+
+    @SuppressLint("CheckResult")
+    private View.OnClickListener onButtonCropClickListener = v -> {
+        setProgressBar(true);
+        Observable.fromCallable(() -> {
+            ScannerConstants.bitmapSelectedImage = getCroppedImage();
+            if (ScannerConstants.bitmapSelectedImage == null)
                 return false;
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe((result) -> {
-                        setProgressBar(false);
-                        if (ScannerConstants.selectedImageBitmap != null) {
-                            setResult(RESULT_OK);
-                            finish();
-                        }
-                    });
-
-
-        }
+            if (ScannerConstants.saveStorage)
+                saveToInternalStorage(ScannerConstants.bitmapSelectedImage);
+            return false;
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((result) -> {
+                    setProgressBar(false);
+                    if (ScannerConstants.bitmapSelectedImage != null) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
     };
-
-    private void setImageRotation() {
-        Bitmap tempBitmap = ScannerConstants.selectedImageBitmap.copy(ScannerConstants.selectedImageBitmap.getConfig(), true);
-        for (int i = 1; i <= 4; i++) {
-            MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
-            if (point2f == null) {
-                tempBitmap = rotateBitmap(tempBitmap, 90 * i);
-            } else {
-                ScannerConstants.selectedImageBitmap = tempBitmap.copy(ScannerConstants.selectedImageBitmap.getConfig(), true);
-                break;
-            }
-        }
-    }
-
-    private View.OnClickListener btnCloseClick = v -> finish();
-    private View.OnClickListener btnInvertColor = new View.OnClickListener() {
+    private View.OnClickListener onButtonCloseClickListener = v -> finish();
+    private View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
         @SuppressLint("CheckResult")
         @Override
         public void onClick(View v) {
@@ -190,14 +96,19 @@ public class DocumentActivity extends AppCompatActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe((result) -> {
                         setProgressBar(false);
-                        Bitmap scaledBitmap = scaledBitmap(selectedImageBitmap, holderImageCrop.getWidth(), holderImageCrop.getHeight());
+                        Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage, frameLayoutHolder.getWidth(), frameLayoutHolder.getHeight());
                         imageView.setImageBitmap(scaledBitmap);
                     });
 
 
         }
     };
-    private View.OnClickListener onRotateClick = new View.OnClickListener() {
+    private View.OnClickListener onImageViewRebase = v -> {
+        ScannerConstants.bitmapSelectedImage = bitmapTempOriginal.copy(bitmapTempOriginal.getConfig(), true);
+        isInverted = false;
+        initializeElement();
+    };
+    private View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
         @SuppressLint("CheckResult")
         @Override
         public void onClick(View v) {
@@ -205,7 +116,7 @@ public class DocumentActivity extends AppCompatActivity {
             Observable.fromCallable(() -> {
                 if (isInverted)
                     invertColor();
-                ScannerConstants.selectedImageBitmap = rotateBitmap(selectedImageBitmap, 90);
+                ScannerConstants.bitmapSelectedImage = rotateBitmap(bitmapSelectedImage, 90);
                 return false;
             })
                     .subscribeOn(Schedulers.io())
@@ -216,12 +127,19 @@ public class DocumentActivity extends AppCompatActivity {
                     });
         }
     };
-    private View.OnClickListener btnRebase = v -> {
-        ScannerConstants.selectedImageBitmap = tempBitmapOriginal.copy(tempBitmapOriginal.getConfig(), true);
-        isInverted = false;
-        initializeElement();
-    };
 
+    private void setImageRotation() {
+        Bitmap tempBitmap = ScannerConstants.bitmapSelectedImage.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
+        for (int i = 1; i <= 4; i++) {
+            MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
+            if (point2f == null) {
+                tempBitmap = rotateBitmap(tempBitmap, 90 * i);
+            } else {
+                ScannerConstants.bitmapSelectedImage = tempBitmap.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
+                break;
+            }
+        }
+    }
     public static Bitmap rotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -232,12 +150,12 @@ public class DocumentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.document_activity);
+        setContentView(R.layout.crop_activity);
         ButterKnife.bind(this);
         isInverted = false;
-        if (ScannerConstants.selectedImageBitmap != null)
+        if (ScannerConstants.bitmapSelectedImage != null) {
             initializeElement();
-        else {
+        } else {
             Toast.makeText(this, ScannerConstants.imageError, Toast.LENGTH_LONG).show();
             finish();
         }
@@ -264,15 +182,15 @@ public class DocumentActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
     private void initializeElement() {
         nativeClass = new NativeClass();
-        btnImageCrop = findViewById(R.id.btnImageCrop);
-        btnClose = findViewById(R.id.btnClose);
-        holderImageCrop = findViewById(R.id.holderImageCrop);
+        buttonCrop = findViewById(R.id.btnImageCrop);
+        buttonClose = findViewById(R.id.btnClose);
+        frameLayoutHolder = findViewById(R.id.holderImageCrop);
         imageView = findViewById(R.id.imageView);
-        ivRotate = findViewById(R.id.ivRotate);
-        ivInvert = findViewById(R.id.ivInvert);
-        ivRebase = findViewById(R.id.ivRebase);
-        btnImageCrop.setText(ScannerConstants.cropText);
-        btnClose.setText(ScannerConstants.backText);
+        imageViewRotate = findViewById(R.id.ivRotate);
+        imageViewInvert = findViewById(R.id.ivInvert);
+        imageViewRebase = findViewById(R.id.ivRebase);
+        buttonCrop.setText(ScannerConstants.cropText);
+        buttonClose.setText(ScannerConstants.backText);
         polygonView = findViewById(R.id.polygonView);
         progressBar = findViewById(R.id.progressBar);
         if (progressBar.getIndeterminateDrawable() != null && ScannerConstants.progressColor != null)
@@ -280,8 +198,8 @@ public class DocumentActivity extends AppCompatActivity {
         else if (progressBar.getProgressDrawable() != null && ScannerConstants.progressColor != null)
             progressBar.getProgressDrawable().setColorFilter(Color.parseColor(ScannerConstants.progressColor), android.graphics.PorterDuff.Mode.MULTIPLY);
         setProgressBar(true);
-        btnImageCrop.setBackgroundColor(Color.parseColor(ScannerConstants.cropColor));
-        btnClose.setBackgroundColor(Color.parseColor(ScannerConstants.backColor));
+//        buttonCrop.setBackgroundColor(Color.parseColor(ScannerConstants.cropColor));
+//        buttonClose.setBackgroundColor(Color.parseColor(ScannerConstants.backColor));
         Observable.fromCallable(() -> {
             setImageRotation();
             return false;
@@ -290,22 +208,22 @@ public class DocumentActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((result) -> {
                     setProgressBar(false);
-                    holderImageCrop.post(this::initializeCropping);
-                    btnImageCrop.setOnClickListener(btnImageEnhanceClick);
-                    btnClose.setOnClickListener(btnCloseClick);
-                    ivRotate.setOnClickListener(onRotateClick);
-                    ivInvert.setOnClickListener(btnInvertColor);
-                    ivRebase.setOnClickListener(btnRebase);
+                    frameLayoutHolder.post(this::initializeCropping);
+                    buttonCrop.setOnClickListener(onButtonCropClickListener);
+                    buttonClose.setOnClickListener(onButtonCloseClickListener);
+                    imageViewRotate.setOnClickListener(onImageViewRotateClick);
+                    imageViewInvert.setOnClickListener(onButtonInvertColorClickListener);
+                    imageViewRebase.setOnClickListener(onImageViewRebase);
                 });
     }
 
     private void initializeCropping() {
 
-        selectedImageBitmap = ScannerConstants.selectedImageBitmap;
-        tempBitmapOriginal = selectedImageBitmap.copy(selectedImageBitmap.getConfig(), true);
-        ScannerConstants.selectedImageBitmap = null;
+        bitmapSelectedImage = ScannerConstants.bitmapSelectedImage;
+        bitmapTempOriginal = bitmapSelectedImage.copy(bitmapSelectedImage.getConfig(), true);
+        ScannerConstants.bitmapSelectedImage = null;
 
-        Bitmap scaledBitmap = scaledBitmap(selectedImageBitmap, holderImageCrop.getWidth(), holderImageCrop.getHeight());
+        Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage, frameLayoutHolder.getWidth(), frameLayoutHolder.getHeight());
         imageView.setImageBitmap(scaledBitmap);
 
         Bitmap tempBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -330,16 +248,16 @@ public class DocumentActivity extends AppCompatActivity {
 
     private void invertColor() {
         if (!isInverted) {
-            Bitmap bmpMonochrome = Bitmap.createBitmap(selectedImageBitmap.getWidth(), selectedImageBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bmpMonochrome = Bitmap.createBitmap(bitmapSelectedImage.getWidth(), bitmapSelectedImage.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bmpMonochrome);
             ColorMatrix ma = new ColorMatrix();
             ma.setSaturation(0);
             Paint paint = new Paint();
             paint.setColorFilter(new ColorMatrixColorFilter(ma));
-            canvas.drawBitmap(selectedImageBitmap, 0, 0, paint);
-            selectedImageBitmap = bmpMonochrome.copy(bmpMonochrome.getConfig(), true);
+            canvas.drawBitmap(bitmapSelectedImage, 0, 0, paint);
+            bitmapSelectedImage = bmpMonochrome.copy(bmpMonochrome.getConfig(), true);
         } else {
-            selectedImageBitmap = tempBitmapOriginal.copy(tempBitmapOriginal.getConfig(), true);
+            bitmapSelectedImage = bitmapTempOriginal.copy(bitmapTempOriginal.getConfig(), true);
         }
         isInverted = !isInverted;
     }
@@ -370,8 +288,8 @@ public class DocumentActivity extends AppCompatActivity {
         try {
             Map<Integer, PointF> points = polygonView.getPoints();
 
-            float xRatio = (float) selectedImageBitmap.getWidth() / imageView.getWidth();
-            float yRatio = (float) selectedImageBitmap.getHeight() / imageView.getHeight();
+            float xRatio = (float) bitmapSelectedImage.getWidth() / imageView.getWidth();
+            float yRatio = (float) bitmapSelectedImage.getHeight() / imageView.getHeight();
 
             float x1 = (points.get(0).x) * xRatio;
             float x2 = (points.get(1).x) * xRatio;
@@ -381,9 +299,9 @@ public class DocumentActivity extends AppCompatActivity {
             float y2 = (points.get(1).y) * yRatio;
             float y3 = (points.get(2).y) * yRatio;
             float y4 = (points.get(3).y) * yRatio;
-            return nativeClass.getScannedBitmap(selectedImageBitmap, x1, y1, x2, y2, x3, y3, x4, y4);
+            return nativeClass.getScannedBitmap(bitmapSelectedImage, x1, y1, x2, y2, x3, y3, x4, y4);
         } catch (Exception e) {
-            runOnUiThread(() -> Toast.makeText(DocumentActivity.this, ScannerConstants.cropError, Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> Toast.makeText(CropActivity.this, ScannerConstants.cropError, Toast.LENGTH_SHORT).show());
             return null;
         }
     }

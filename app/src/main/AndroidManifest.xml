@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.DocumentActivity"></activity>
+        <activity android:name=".Activities.BrightnessAndContrastActivity"></activity>
+        <activity android:name=".Activities.CropActivity" />
         <activity android:name=".Activities.ListActivity" />
         <activity
             android:name=".Activities.SplashActivity"
@@ -38,10 +39,10 @@
         <activity
             android:name=".Activities.Main2Activity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".Activities.FormActivity"
             android:label="@string/form"
