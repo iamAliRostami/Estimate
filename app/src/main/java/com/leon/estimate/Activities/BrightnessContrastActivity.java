@@ -24,7 +24,7 @@ import org.opencv.core.Mat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BrightnessAndContrastActivity extends AppCompatActivity {
+public class BrightnessContrastActivity extends AppCompatActivity {
 
     @BindView(R.id.seekBar_brightness)
     SeekBar seekBarBrightness;
@@ -41,13 +41,12 @@ public class BrightnessAndContrastActivity extends AppCompatActivity {
     @BindView(R.id.button_close)
     Button buttonClose;
     Bitmap bitmapTemp;
+
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             int brightness = progress - 250;
-//            imageView.setColorFilter(getContrastBrightnessFilter(brightness, 1));
-            bitmapTemp = ScannerConstants.bitmapSelectedImage;
-            bitmapTemp = brightnessController(bitmapTemp, brightness);
+            bitmapTemp = brightnessController(ScannerConstants.bitmapSelectedImage, brightness);
             imageView.setImageBitmap(bitmapTemp);
             textViewBrightness.setText("درخشش: ".concat(String.valueOf(brightness)));
         }
@@ -66,9 +65,9 @@ public class BrightnessAndContrastActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             float contrast = (float) (progress) / 10;
-            bitmapTemp = ScannerConstants.bitmapSelectedImage;
-//            bitmapTemp = contrastController(bitmapTemp, contrast, 1/2);
-            bitmapTemp = contrastController(bitmapTemp, contrast, seekBarBrightness.getProgress() - 250);
+//            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast, 7 / 10);
+//            bitmapTemp = contrastController(bitmapTemp, contrast, seekBarBrightness.getProgress() - 250);
+            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast, seekBarBrightness.getProgress() - 250);
             imageView.setImageBitmap(bitmapTemp);
             textViewContrast.setText("کنتراست: ".concat(String.valueOf(contrast)));
 
@@ -83,15 +82,6 @@ public class BrightnessAndContrastActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
-    View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ScannerConstants.bitmapSelectedImage = bitmapTemp;
-            setResult(RESULT_OK);
-            finish();
-        }
-    };
-    View.OnClickListener onClickListenerClose = v -> finish();
 
     public static Bitmap contrastController(Bitmap bitmap, float contrast, float brightness) {
         ColorMatrix colorMatrix = new ColorMatrix(new float[]
@@ -106,6 +96,7 @@ public class BrightnessAndContrastActivity extends AppCompatActivity {
         Paint paint = new Paint();
         paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
         canvas.drawBitmap(bitmap, 0, 0, paint);
+//        canvas.drawBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), paint);
         return ret;
     }
 
@@ -113,10 +104,20 @@ public class BrightnessAndContrastActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.brightness_and_contrast_activity);
+        setContentView(R.layout.brightness_contrast_activity);
         ButterKnife.bind(this);
         initialize();
     }
+
+    View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ScannerConstants.bitmapSelectedImage = bitmapTemp;
+            setResult(RESULT_OK);
+            finish();
+        }
+    };
+    View.OnClickListener onClickListenerClose = v -> finish();
 
     void initialize() {
         seekBarBrightness.setMax(500);
@@ -133,6 +134,7 @@ public class BrightnessAndContrastActivity extends AppCompatActivity {
         buttonAccepted.setOnClickListener(onClickListenerAccepted);
         buttonClose.setOnClickListener(onClickListenerClose);
     }
+
 
     private Bitmap brightnessController(Bitmap bitmap, int value) {
         Mat src = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC1);

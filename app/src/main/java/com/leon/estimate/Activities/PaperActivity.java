@@ -99,7 +99,7 @@ public final class PaperActivity extends AppCompatActivity {
             this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
         } else if (requestCode == IMAGE_CROP_REQUEST && resultCode == RESULT_OK) {
 //            ScannerConstants.bitmapSelectedImage = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            this.startActivityForResult(new Intent(this, BrightnessAndContrastActivity.class),
+            this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
             imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);

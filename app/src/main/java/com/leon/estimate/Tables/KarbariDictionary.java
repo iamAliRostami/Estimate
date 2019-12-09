@@ -1,12 +1,12 @@
 package com.leon.estimate.Tables;
 
-public class KarbarDictionary {
+public class KarbariDictionary {
     int id;
     boolean isDisabled;
     boolean isSelected;
     String title;
 
-    public KarbarDictionary(int id, boolean isDisabled, boolean isSelected, String title) {
+    public KarbariDictionary(int id, boolean isDisabled, boolean isSelected, String title) {
         this.id = id;
         this.isDisabled = isDisabled;
         this.isSelected = isSelected;

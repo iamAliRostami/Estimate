@@ -27,7 +27,7 @@ import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculation;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
-import com.leon.estimate.Tables.KarbarDictionary;
+import com.leon.estimate.Tables.KarbariDictionary;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
@@ -207,7 +207,7 @@ public class FormActivity extends AppCompatActivity {
         HttpClientWrapper.callHttpAsync(call, downloadDetails, context, ProgressType.SHOW.getValue());
     }
 
-    void initializeSpinner(List<KarbarDictionary> karbarDictionaries,
+    void initializeSpinner(List<KarbariDictionary> karbarDictionaries,
                            List<NoeVagozariDictionary> noeVagozariDictionaries,
                            List<QotrEnsheabDictionary> qotrEnsheabDictionaries,
                            List<TaxfifDictionary> taxfifDictionaries) {
@@ -216,9 +216,9 @@ public class FormActivity extends AppCompatActivity {
         List<String> arrayListSpinner3 = new ArrayList<>();
         List<String> arrayListSpinner4 = new ArrayList<>();
         int select1 = 0, select2 = 0, select3 = 0, select4 = 0, counter = 0;
-        for (KarbarDictionary karbarDictionary : karbarDictionaries) {
-            arrayListSpinner1.add(karbarDictionary.getTitle());
-            if (karbarDictionary.isSelected()) {
+        for (KarbariDictionary karbariDictionary : karbarDictionaries) {
+            arrayListSpinner1.add(karbariDictionary.getTitle());
+            if (karbariDictionary.isSelected()) {
                 select1 = counter;
             }
             counter++;
@@ -471,7 +471,7 @@ public class FormActivity extends AppCompatActivity {
         calculationUserInput = new CalculationUserInput(calculationInfo.getTrackingId(), Integer.valueOf(editText2.getText().toString()),
                 Integer.valueOf(calculationInfo.getRequestType()), calculationInfo.getParNumber(), editText3.getText().toString(),
                 Integer.valueOf(calculationInfo.getRadif()), Integer.valueOf(calculationInfo.getZoneId()),
-                "09".concat(editText26.getText().toString()), calculationInfo.getKarbarDictionary().get(spinner1.getSelectedItemPosition()).getId(),
+                "09".concat(editText26.getText().toString()), calculationInfo.getKarbariDictionary().get(spinner1.getSelectedItemPosition()).getId(),
                 calculationInfo.getQotrEnsheabDictionary().get(spinner3.getSelectedItemPosition()).getId(),
                 calculationInfo.getNoeVagozariDictionary().get(spinner2.getSelectedItemPosition()).getId(),
                 calculationInfo.getTaxfifDictionary().get(spinner4.getSelectedItemPosition()).getId(),
@@ -503,7 +503,7 @@ public class FormActivity extends AppCompatActivity {
                 Integer.valueOf(editText2.getText().toString()), Integer.valueOf(calculationInfo.getRequestType()),
                 calculationInfo.getParNumber(), editText3.getText().toString(), Integer.valueOf(calculationInfo.getRadif()),
                 Integer.valueOf(calculationInfo.getZoneId()), "09".concat(editText26.getText().toString()),
-                calculationInfo.getKarbarDictionary().get(spinner1.getSelectedItemPosition()).getId(),
+                calculationInfo.getKarbariDictionary().get(spinner1.getSelectedItemPosition()).getId(),
                 calculationInfo.getQotrEnsheabDictionary().get(spinner3.getSelectedItemPosition()).getId(),
                 calculationInfo.getNoeVagozariDictionary().get(spinner2.getSelectedItemPosition()).getId(),
                 calculationInfo.getTaxfifDictionary().get(spinner4.getSelectedItemPosition()).getId(),
@@ -606,7 +606,7 @@ public class FormActivity extends AppCompatActivity {
         @Override
         public void execute(CalculationInfo calculationsInfo) {
             initializeCheckBox(calculationsInfo.getServiceDictionary());
-            initializeSpinner(calculationsInfo.getKarbarDictionary(),
+            initializeSpinner(calculationsInfo.getKarbariDictionary(),
                     calculationsInfo.getNoeVagozariDictionary(),
                     calculationsInfo.getQotrEnsheabDictionary(),
                     calculationsInfo.getTaxfifDictionary());

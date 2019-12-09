@@ -262,6 +262,7 @@ public class CropActivity extends AppCompatActivity {
         isInverted = !isInverted;
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String saveToInternalStorage(Bitmap bitmapImage) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);

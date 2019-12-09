@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.BrightnessAndContrastActivity"></activity>
+        <activity android:name=".Activities.BrightnessContrastActivity"></activity>
         <activity android:name=".Activities.CropActivity" />
         <activity android:name=".Activities.ListActivity" />
         <activity

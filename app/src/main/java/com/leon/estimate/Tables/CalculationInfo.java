@@ -48,7 +48,7 @@ public class CalculationInfo {
     boolean isEnsheabQeirDaem;
     boolean hasRadif;
 
-    List<KarbarDictionary> karbarDictionary;
+    List<KarbariDictionary> karbariDictionary;
     List<NoeVagozariDictionary> noeVagozariDictionary;
     List<QotrEnsheabDictionary> qotrEnsheabDictionary;
     List<TaxfifDictionary> taxfifDictionary;
@@ -67,7 +67,7 @@ public class CalculationInfo {
                            String nationalId, String identityCode, String fatherName,
                            String postalCode, String address, String description,
                            boolean adamTaxfifAb, boolean adamTaxfifFazelab, boolean isEnsheabQeirDaem,
-                           boolean hasRadif, List<KarbarDictionary> karbarDictionary,
+                           boolean hasRadif, List<KarbariDictionary> karbariDictionary,
                            List<NoeVagozariDictionary> noeVagozariDictionary,
                            List<QotrEnsheabDictionary> qotrEnsheabDictionary,
                            List<TaxfifDictionary> taxfifDictionary, List<ServiceDictionary> serviceDictionary) {
@@ -115,7 +115,7 @@ public class CalculationInfo {
         this.adamTaxfifFazelab = adamTaxfifFazelab;
         this.isEnsheabQeirDaem = isEnsheabQeirDaem;
         this.hasRadif = hasRadif;
-        this.karbarDictionary = karbarDictionary;
+        this.karbariDictionary = karbariDictionary;
         this.noeVagozariDictionary = noeVagozariDictionary;
         this.qotrEnsheabDictionary = qotrEnsheabDictionary;
         this.taxfifDictionary = taxfifDictionary;
@@ -474,12 +474,12 @@ public class CalculationInfo {
         this.hasRadif = hasRadif;
     }
 
-    public List<KarbarDictionary> getKarbarDictionary() {
-        return karbarDictionary;
+    public List<KarbariDictionary> getKarbariDictionary() {
+        return karbariDictionary;
     }
 
-    public void setKarbarDictionary(List<KarbarDictionary> karbarDictionary) {
-        this.karbarDictionary = karbarDictionary;
+    public void setKarbariDictionary(List<KarbariDictionary> karbariDictionary) {
+        this.karbariDictionary = karbariDictionary;
     }
 
     public List<NoeVagozariDictionary> getNoeVagozariDictionary() {
