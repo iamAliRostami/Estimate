@@ -5,10 +5,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class},
-        version = 11, exportSchema = false)
+@Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class, Images.class},
+        version = 12, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-
     public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
@@ -59,9 +58,25 @@ public abstract class MyDatabase extends RoomDatabase {
                     ");");
         }
     };
+
     public abstract DaoCalculation daoCalculateCalculation();
+
     public abstract DaoCalculateInfo daoCalculateInfo();
+
     public abstract DaoCalculationUserInput daoCalculationUserInput();
+
+    public static final Migration MIGRATION_11_12 = new Migration(11, 12) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE Images ( " +
+                    "imageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " +
+                    "address TEXT NOT NULL, " +
+                    "eshterak	TEXT, " +
+                    "imageCode	TEXT" +
+                    ");");
+        }
+    };
+
     public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
@@ -80,5 +95,12 @@ public abstract class MyDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE Calculation RENAME TO CalculationInformation");
         }
     };
+    public static final Migration MIGRATION_12_13 = new Migration(10, 11) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Images ADD Column imageCode");
+        }
+    };
 
+    public abstract DaoImages daoImages();
 }

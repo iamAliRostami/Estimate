@@ -3,6 +3,7 @@ package com.leon.estimate.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,10 +23,14 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.DaoImages;
+import com.leon.estimate.Tables.Images;
+import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.ScannerConstants;
 
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +44,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -56,6 +62,7 @@ public final class PaperActivity extends AppCompatActivity {
     static String imageFileName;
     String mCurrentPhotoPath;
     boolean replace = false;
+    Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public final class PaperActivity extends AppCompatActivity {
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setContentView(R.layout.paper_activity);
         ButterKnife.bind(this);
+        context = this;
         loadImage(imageView);
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -115,9 +123,15 @@ public final class PaperActivity extends AppCompatActivity {
     }
 
     void loadImage(ImageView imageView) {
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoImages daoImages = dataBase.daoImages();
+        List<Images> images = daoImages.getImages();
+
         try {
             File f = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "AbfaCamera/null.jpg");
+                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
+            f = new File(f, images.get(0).getAddress());
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             imageView.setImageBitmap(b);
         } catch (FileNotFoundException e) {
@@ -155,6 +169,12 @@ public final class PaperActivity extends AppCompatActivity {
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
+
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                    .allowMainThreadQueries().build();
+            DaoImages daoImages = dataBase.daoImages();
+            Images images = new Images(imageFileName, "1212", "1212", "1212");
+            daoImages.insertImage(images);
         } catch (Exception e) {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
             e.printStackTrace();

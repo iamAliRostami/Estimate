@@ -47,6 +47,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.scanlibrary.ScanActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -83,6 +84,12 @@ public class Main2Activity extends AppCompatActivity
             case R.id.imageViewUpload:
 //                send();
 //                intent = new Intent(getApplicationContext(), UploadActivity.class);
+                intent = new Intent(this, ScanActivity.class);
+//                intent.putExtra(ScanActivity.EXTRA_BRAND_IMG_RES, R.drawable.ic_crop_white_24dp); // Set image for title icon - optional
+//                intent.putExtra(ScanActivity.EXTRA_TITLE, "Crop Document"); // Set title in action Bar - optional
+//                intent.putExtra(ScanActivity.EXTRA_ACTION_BAR_COLOR, R.color.green1); // Set title color - optional
+//                intent.putExtra(ScanActivity.EXTRA_LANGUAGE, "en"); // Set language - optional
+//                startActivityForResult(intent, 111);
                 break;
             case R.id.imageViewPaper:
                 intent = new Intent(getApplicationContext(), PaperActivity.class);
@@ -112,9 +119,10 @@ public class Main2Activity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
         setImageViewFindByViewId();
-//        Room.databaseBuilder(context.getApplicationContext(), MyDatabase.class, "MyDatabase")
-//                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_10_11).build();
+
+        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .fallbackToDestructiveMigration()
+                .addMigrations(MyDatabase.MIGRATION_11_12).build();
     }
 
     @Override

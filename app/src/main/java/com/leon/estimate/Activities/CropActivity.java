@@ -68,8 +68,8 @@ public class CropActivity extends AppCompatActivity {
             ScannerConstants.bitmapSelectedImage = getCroppedImage();
             if (ScannerConstants.bitmapSelectedImage == null)
                 return false;
-            if (ScannerConstants.saveStorage)
-                saveToInternalStorage(ScannerConstants.bitmapSelectedImage);
+//            if (ScannerConstants.saveStorage)
+//                saveToInternalStorage(ScannerConstants.bitmapSelectedImage);
             return false;
         })
                 .subscribeOn(Schedulers.io())
@@ -268,10 +268,10 @@ public class CropActivity extends AppCompatActivity {
         File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "cropped_" + timeStamp + ".png";
-        File mypath = new File(directory, imageFileName);
+        File myPath = new File(directory, imageFileName);
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(mypath);
+            fos = new FileOutputStream(myPath);
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
         } catch (Exception e) {
             e.printStackTrace();
