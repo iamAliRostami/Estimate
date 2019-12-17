@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hamrahpay_background"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <Button
+        android:id="@+id/hamrahpay_pay_btn"
+        style="@style/Button.Success"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hamrahpay_pay_btn" />
+
+    <Button
+        android:id="@+id/hamrahpay_help_btn"
+        style="@style/Button.Info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hamrahpay_help_btn" />
+
+    <Button
+        android:id="@+id/hamrahpay_support_btn"
+        style="@style/Button.Info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hamrahpay_support_btn" />
+</LinearLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="buttonInfo">#AFB42B</color>
+    <color name="buttonSuccess">#5cb85c</color>
+    <color name="green">#219c21</color>
+    <color name="hamrahpay_background">#FFFFFF</color>
+    <string name="app_name">HamrahPay</string>
+    <string name="hamrahpay_faq">https://hamrahpay.com/help/faq</string>
+    <string name="hamrahpay_help_btn">راهنمای پرداخت</string>
+    <string name="hamrahpay_pay_btn">پرداخت</string>
+    <string name="hamrahpay_secure">صفحه ی مورد نظر دارای گواهینامه SSL معتبر و ایمن میباشد. </string>
+    <string name="hamrahpay_support_btn">پشتیبانی و سوالات متداول</string>
+    <string name="hamrahpay_title">همراه پی</string>
+    <string name="pay">پرداخت</string>
+    <string name="pleaseWait">لطفا چند لحظه صبر نمایید...</string>
+    <string name="security_alert">لطفا مراقب اطلاعات خود باشید . این صفحه امن نیست</string>
+    <string name="shaparak_alert">شما در صفحه ی پرداخت بانک میباشید، آیا مطمئن هستید که میخواهید در حین عملیات صفحه ی پرداخت را ترک نمایید ؟</string>
+    <string name="tedpermission_close">خروج</string>
+    <string name="tedpermission_confirm">تایید دسترسی</string>
+    <string name="tedpermission_setting">تنظیمات</string>
+
+    <style name="Button" parent="Base.Widget.AppCompat.Button">
+        <item name="android:padding">20px</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:drawablePadding">20px</item>
+    </style>
+
+    <style name="Button.Info" parent="Button.Inverse">
+        <item name="android:background">@drawable/selector_button_info</item>
+    </style>
+
+    <style name="Button.Inverse" parent="Button">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="Button.Success" parent="Button.Inverse">
+        <item name="android:background">@drawable/selector_button_success</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+
+
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+
+    </style>
+
+    <style name="customStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>
