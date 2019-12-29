@@ -9,7 +9,7 @@
     tools:context=".Activities.Main2Activity"
     tools:showIn="@layout/app_bar_main2">
 
-    <com.mapbox.mapboxsdk.maps.MapView
+    <org.osmdroid.views.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
