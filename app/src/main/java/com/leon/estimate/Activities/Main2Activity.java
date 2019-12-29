@@ -57,9 +57,13 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -175,8 +179,52 @@ public class Main2Activity extends AppCompatActivity
         mapController.setCenter(startPoint);
         this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
         this.locationOverlay.enableMyLocation();
+
+        test();
+
         mapView.getOverlays().add(locationOverlay);
-        mapView.setOnClickListener(v -> Log.e("Click", "On Map!"));
+        mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) {
+                Log.e("location1", p.toString());
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                Log.e("location2", p.toString());
+                return false;
+            }
+        }));
+    }
+
+    void test() {
+        Polyline line = new Polyline(mapView);
+//        line.setTitle("Central Park, NYC");
+        line.setSubDescription(Polyline.class.getCanonicalName());
+        line.setWidth(20f);
+        List<GeoPoint> pts = new ArrayList<>();
+        //here, we create a polygon, note that you need 5 points in order to make a closed polygon (rectangle)
+
+        pts.add(new GeoPoint(32.70347921245878, 51.71537283422978));
+        pts.add(new GeoPoint(32.704279694809834, 51.71409512700282));
+        pts.add(new GeoPoint(32.70246839703522, 51.71404849535219));
+        pts.add(new GeoPoint(40.768094, -73.949232));
+        pts.add(new GeoPoint(40.796788, -73.949232));
+        line.setPoints(pts);
+        line.setGeodesic(true);
+        line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapView));
+        //Note, the info window will not show if you set the onclick listener
+        //line can also attach click listeners to the line
+        /*
+        line.setOnClickListener(new Polyline.OnClickListener() {
+            @Override
+            public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
+                Toast.makeText(context, "Hello world!", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });*/
+        mapView.getOverlayManager().add(line);
     }
 
     void initialize() {
