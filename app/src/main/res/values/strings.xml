@@ -76,4 +76,29 @@
     <string name="permission_not_completed">بستن برنامه</string>
     <string name="open_camera">بازکردن دوربین</string>
     <string name="pick_an_image">برگزیدن عکس</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_fragment1">Hello blank fragment1</string>
+    <string name="hello_fragment2">Hello blank fragment2</string>
+    <string name="hello_fragment3">Hello blank fragment3</string>
+    <string name="hello_fragment4">Hello blank fragment4</string>
+    <string name="base_information">اطلاعات پایه</string>
+    <string name="final_information">اطلاعات نهایی</string>
+    <string name="map_information">اطلاعات نقشه</string>
+    <string name="information">information</string>
+    <string name="address">نشانی</string>
+    <string name="services">خدمات:</string>
+    <string name="zone">منطقه</string>
+    <string name="user_type">کاربری</string>
+    <string name="sifoon_100">سیفون 100</string>
+    <string name="sifoon_200">سیفون 200</string>
+    <string name="ayan_maskooni">اعیان مسکونی</string>
+    <string name="number_maskooni">تعداد مسکونی</string>
+    <string name="zarfiat_qaradadi">ظرفیت قراردادی</string>
+    <string name="adam_taxfif_ab">عدم تخفیف آب</string>
+    <string name="name">نام</string>
+    <string name="phone">تلفن ثابت</string>
+    <string name="sms_phone">شماره پیامک ها</string>
+    <string name="shomare_peygiri">شماره پیگیری</string>
+    <string name="noe_vagozari">نوع واگذاری</string>
 </resources>

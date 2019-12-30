@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.leon.estimate.Activities.FormActivity">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <androidx.viewpager.widget.PagerTabStrip
+            android:id="@+id/pager_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@drawable/border_blue_1"
+            android:outlineAmbientShadowColor="@color/blue1"
+            android:outlineSpotShadowColor="@color/blue2"
+            android:paddingTop="@dimen/activity_medium_padding"
+            android:paddingBottom="@dimen/activity_medium_padding"
+            tools:targetApi="p" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/view_pager_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_blue_2"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/blue1"
+            app:tabMode="fixed"
+            app:tabRippleColor="@color/blue"
+            app:tabSelectedTextColor="@color/blue4"
+            app:tabTextColor="@color/blue3" />
+    </androidx.viewpager.widget.ViewPager>
+</androidx.constraintlayout.widget.ConstraintLayout>

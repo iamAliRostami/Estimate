@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
-    tools:context=".Activities.Form1Activity">
-
+    tools:context="com.leon.estimate.Fragments.Form1Fragment">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -73,107 +70,7 @@
                         android:layout_gravity="left"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
-                        android:text="منطقه"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="کاربری"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="سیفون 100"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="سیفون 200"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="اعیان مسکونی"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="تعداد مسکونی"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="left"
-                        android:text="ظرفیت قراردادی"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="عدم تخفیف آب"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="کد ملی"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="left"
-                        android:text="نام"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="تلفن ثابت"
+                        android:text="@string/zone"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         android:textStyle="bold" />
@@ -184,9 +81,120 @@
                         android:layout_gravity="left"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
-                        android:text="شماره پیامک ها"
+                        android:text="@string/user_type"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/sifoon_100"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/sifoon_200"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/ayan_maskooni"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/number_maskooni"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:gravity="left"
+                        android:text="@string/zarfiat_qaradadi"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/adam_taxfif_ab"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/nation_number"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:gravity="left"
+                        android:text="@string/name"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/phone"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/sms_phone"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -374,7 +382,7 @@
                         android:layout_gravity="left"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
-                        android:text="شماره پیگیری"
+                        android:text="@string/shomare_peygiri"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         android:textStyle="bold" />
@@ -385,7 +393,7 @@
                         android:layout_gravity="left"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
-                        android:text="نوع واگذاری"
+                        android:text="@string/noe_vagozari"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         android:textStyle="bold" />
@@ -918,8 +926,9 @@
                         android:inputType="textMultiLine"
                         android:lines="4"
                         android:singleLine="true" />
+
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

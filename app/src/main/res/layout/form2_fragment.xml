@@ -1,0 +1,411 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    tools:context="com.leon.estimate.Fragments.Form1Fragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_large_margin"
+            android:layout_marginTop="@dimen/activity_large_margin"
+            android:layout_marginRight="@dimen/activity_large_margin"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_large_margin"
+                android:gravity="center"
+                android:text="@string/services"
+                android:textColor="@color/blue4"
+                android:textSize="@dimen/textSizeLarge"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_medium_margin"
+            android:layout_marginRight="@dimen/activity_medium_margin"
+            android:layout_marginBottom="@dimen/activity_mid_margin"
+            android:background="@drawable/border_gray_1"
+            android:padding="@dimen/activity_mid_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="کد ملی"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:gravity="left"
+                        android:text="نام"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="تلفن ثابت"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/sms_phone"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editText18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editText21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editText24"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editText26"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_gray_1"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/activity_mid_margin"
+                            android:layout_marginEnd="@dimen/activity_mid_margin"
+                            android:gravity="center"
+                            android:text="09"
+                            android:textSize="@dimen/textSizeMedium" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="شماره شناسنامه"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="نام خانوادگی"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="شماره همراه"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="توضیحات"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editText19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editText22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editText25"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_gray_1"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/activity_mid_margin"
+                            android:layout_marginEnd="@dimen/activity_mid_margin"
+                            android:gravity="center"
+                            android:text="09"
+                            android:textSize="@dimen/textSizeMedium" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/editText27"
+                        android:layout_width="match_parent"
+                        android:layout_height="77dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="right|top"
+                        android:inputType="textMultiLine"
+                        android:lines="2"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="کد پستی"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="نام پدر"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left"
+                        android:text="@string/address"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editText20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editText23"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editText28"
+                        android:layout_width="match_parent"
+                        android:layout_height="122dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="right|top"
+                        android:inputType="textMultiLine"
+                        android:lines="4"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>
