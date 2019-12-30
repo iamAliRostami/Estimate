@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = null;
             switch (view.getId()) {
                 case R.id.imageViewForm:
-                    intent = new Intent(getApplicationContext(), FormActivity.class);
+                    intent = new Intent(getApplicationContext(), Form1Activity.class);
                     startActivity(intent);
                     break;
                 case R.id.imageViewDownload:

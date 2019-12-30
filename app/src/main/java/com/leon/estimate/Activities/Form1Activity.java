@@ -51,7 +51,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-public class FormActivity extends AppCompatActivity {
+public class Form1Activity extends AppCompatActivity {
     @BindView(R.id.editText1)
     EditText editText1;
     @BindView(R.id.editText2)
@@ -146,7 +146,7 @@ public class FormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.form_activity);
+        setContentView(R.layout.form1_activity);
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
         }

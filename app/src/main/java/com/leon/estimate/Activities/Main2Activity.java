@@ -86,6 +86,11 @@ public class Main2Activity extends AppCompatActivity
     String trackNumber;
     DrawerLayout drawer;
     Context context;
+    private MapboxMap mapboxMap;
+    private PermissionsManager permissionsManager;
+    private MapView mapView = null;
+    private MyLocationNewOverlay locationOverlay;
+    private List<Point> routeCoordinates;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
         switch (view.getId()) {
@@ -107,11 +112,6 @@ public class Main2Activity extends AppCompatActivity
                 break;
         }
     };
-    private MapboxMap mapboxMap;
-    private MapView mapView = null;
-    private PermissionsManager permissionsManager;
-    private MyLocationNewOverlay locationOverlay;
-    private List<Point> routeCoordinates;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -203,27 +203,24 @@ public class Main2Activity extends AppCompatActivity
 //        line.setTitle("Central Park, NYC");
         line.setSubDescription(Polyline.class.getCanonicalName());
         line.setWidth(20f);
+        line.setColor(R.color.green1);
         List<GeoPoint> pts = new ArrayList<>();
         //here, we create a polygon, note that you need 5 points in order to make a closed polygon (rectangle)
 
         pts.add(new GeoPoint(32.70347921245878, 51.71537283422978));
         pts.add(new GeoPoint(32.704279694809834, 51.71409512700282));
         pts.add(new GeoPoint(32.70246839703522, 51.71404849535219));
-        pts.add(new GeoPoint(40.768094, -73.949232));
-        pts.add(new GeoPoint(40.796788, -73.949232));
+        pts.add(new GeoPoint(32.86055430536678, 51.563165144538516));
+        pts.add(new GeoPoint(32.861076853343896, 51.56335859857319));
         line.setPoints(pts);
         line.setGeodesic(true);
         line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapView));
         //Note, the info window will not show if you set the onclick listener
         //line can also attach click listeners to the line
-        /*
-        line.setOnClickListener(new Polyline.OnClickListener() {
-            @Override
-            public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
-                Toast.makeText(context, "Hello world!", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        });*/
+
+        line.setOnClickListener((polyline, mapView, eventPos) -> {
+            return false;
+        });
         mapView.getOverlayManager().add(line);
     }
 

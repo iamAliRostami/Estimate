@@ -13,6 +13,8 @@
     <string name="paper">مدارک</string>
     <string name="exit">خروج</string>
     <string name="form">فرم</string>
+    <string name="form1">فرم اولیه</string>
+    <string name="form2">فرم ثانویه</string>
     <string name="owner">مالک</string>
     <string name="phone_number">تلفن</string>
     <string name="request_type">نوع تقاضا</string>
