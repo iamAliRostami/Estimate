@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -30,12 +31,14 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,15 +50,16 @@ public class Form3Fragment extends Fragment implements LocationListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public double latitude;
-    public double longitude;
+    private double latitude;
+    private double longitude;
     LocationManager locationManager;
-    String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
+    private String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
     String trackNumber;
-    Context context;
+    private Context context;
     List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
-    int polygonIndex;
-    View findViewById;
+    private int polygonIndex;
+    private int placeIndex;
+    private View findViewById;
     private MapboxMap mapboxMap;
     private MapView mapView = null;
     private MyLocationNewOverlay locationOverlay;
@@ -127,10 +131,36 @@ public class Form3Fragment extends Fragment implements LocationListener {
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
+                addPlace(p);
                 Log.e("location2", p.toString());
                 return false;
             }
         }));
+    }
+
+    private void addPlace(GeoPoint p) {
+        GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
+        Marker startMarker = new Marker(mapView);
+        startMarker.setPosition(startPoint);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+//        mapView.getOverlays().add(startMarker);
+
+        if (placeIndex != 0) {//TODO crash on paging...
+            mapView.getOverlayManager().remove(placeIndex);
+        }
+        mapView.getOverlayManager().add(startMarker);
+        placeIndex = mapView.getOverlays().size() - 1;
+    }
+
+    private Bitmap convertMapToBitmap() {
+        mapView.setDrawingCacheEnabled(true);
+        return mapView.getDrawingCache(true);
+    }
+
+    private byte[] convertBitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        return bos.toByteArray();
     }
 
     private void createPolygon(GeoPoint geoPoint) {

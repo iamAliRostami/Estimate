@@ -126,7 +126,7 @@ public class Form1Activity extends AppCompatActivity {
     @BindView(R.id.spinner4)
     Spinner spinner4;
 
-    @BindView(R.id.button)
+    //    @BindView(R.id.button)
     Button button;
 
     @BindView(R.id.constraintLayout1)
@@ -159,7 +159,7 @@ public class Form1Activity extends AppCompatActivity {
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(constraintLayout);
         downloadDetails();
-        setOnButtonClickListener();
+//        setOnButtonClickListener();
         setOnEditTextOnFocusChangeListener();
     }
 
@@ -451,7 +451,7 @@ public class Form1Activity extends AppCompatActivity {
         editText25.setNextFocusDownId(R.id.editText26);
         editText26.setNextFocusDownId(R.id.editText27);
         editText27.setNextFocusDownId(R.id.editText28);
-        editText28.setNextFocusDownId(R.id.button);
+//        editText28.setNextFocusDownId(R.id.button);
     }
 
     void saveCalculationUserInput(int selectedSize) {
