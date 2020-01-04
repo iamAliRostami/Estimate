@@ -8,15 +8,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.leon.estimate.Fragments.Form1Fragment;
-import com.leon.estimate.Fragments.Form2Fragment;
-import com.leon.estimate.Fragments.Form3Fragment;
-import com.leon.estimate.Fragments.Form4Fragment;
+import com.leon.estimate.Fragments.MapFragment;
 import com.leon.estimate.R;
 
 import org.jetbrains.annotations.NotNull;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
-    private static int NUM_ITEMS = 4;
+    private static int NUM_ITEMS = 2;
     Context context;
 
     public MyPagerAdapter(FragmentManager fragmentManager, Context context) {
@@ -37,11 +35,11 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 0: // Fragment # 0 - This will show FirstFragment
                 return Form1Fragment.newInstance("0", "Page # 1");
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return Form2Fragment.newInstance("1", "Page # 2");
+                return MapFragment.newInstance("1", "Page # 2");
             case 2: // Fragment # 1 - This will show SecondFragment
-                return Form3Fragment.newInstance("2", "Page # 3");
+//                return Form2Fragment.newInstance("2", "Page # 3");
             case 3: // Fragment # 1 - This will show SecondFragment
-                return Form4Fragment.newInstance("4", "Page # 4");
+//                return Form4Fragment.newInstance("4", "Page # 4");
             default:
                 return null;
         }
@@ -54,11 +52,11 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return context.getString(R.string.base_information);
             case 1:
-                return context.getString(R.string.final_information);
-            case 2:
                 return context.getString(R.string.map_information);
+            case 2:
+//                return context.getString(R.string.final_information);
             case 3:
-                return context.getString(R.string.information);
+//                return context.getString(R.string.information);
             default:
                 return null;
         }

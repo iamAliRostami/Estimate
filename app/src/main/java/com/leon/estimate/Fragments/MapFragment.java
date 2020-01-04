@@ -15,11 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.leon.estimate.R;
+import com.leon.estimate.Utils.FontManager;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
@@ -43,10 +45,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import butterknife.BindView;
+
 import static android.content.Context.LOCATION_SERVICE;
 
 
-public class Form3Fragment extends Fragment implements LocationListener {
+public class MapFragment extends Fragment implements LocationListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -54,9 +58,8 @@ public class Form3Fragment extends Fragment implements LocationListener {
     private double longitude;
     LocationManager locationManager;
     private String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
-    String trackNumber;
-    private Context context;
     List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
+    String trackNumber;
     private int polygonIndex;
     private int placeIndex;
     private View findViewById;
@@ -66,13 +69,16 @@ public class Form3Fragment extends Fragment implements LocationListener {
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     private String mParam1;
     private String mParam2;
+    @BindView(R.id.frameLayout)
+    FrameLayout frameLayout;
+    private Context context;
 
-    public Form3Fragment() {
+    public MapFragment() {
 
     }
 
-    public static Form3Fragment newInstance(String param1, String param2) {
-        Form3Fragment fragment = new Form3Fragment();
+    public static MapFragment newInstance(String param1, String param2) {
+        MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,8 +98,18 @@ public class Form3Fragment extends Fragment implements LocationListener {
         Mapbox.getInstance(context, accessToken);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        findViewById = inflater.inflate(R.layout.map_fragment, container, false);
+        initialize();
+        return findViewById;
+    }
+
     private void initialize() {
         initializeMap();
+        FontManager fontManager = new FontManager(context);
+        fontManager.setFont(frameLayout);
     }
 
     @SuppressLint("MissingPermission")
@@ -233,13 +249,6 @@ public class Form3Fragment extends Fragment implements LocationListener {
         return bestLocation;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        findViewById = inflater.inflate(R.layout.form3_fragment, container, false);
-        initialize();
-        return findViewById;
-    }
 
     @Override
     public void onAttach(@NotNull Context context) {

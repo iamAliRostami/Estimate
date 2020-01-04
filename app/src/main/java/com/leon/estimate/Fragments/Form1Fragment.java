@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.fragment.app.Fragment;
 
 import com.leon.estimate.R;
+import com.leon.estimate.Utils.FontManager;
 
 import org.jetbrains.annotations.NotNull;
+
+import butterknife.BindView;
 
 
 public class Form1Fragment extends Fragment {
@@ -20,7 +24,10 @@ public class Form1Fragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
+    @BindView(R.id.frameLayout)
+    FrameLayout frameLayout;
+    private View findViewById;
+    private Context context;
     public Form1Fragment() {
 
     }
@@ -46,7 +53,14 @@ public class Form1Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.form1_fragment, container, false);
+        findViewById = inflater.inflate(R.layout.form1_fragment, container, false);
+        initialize();
+        return findViewById;
+    }
+
+    private void initialize() {
+        FontManager fontManager = new FontManager(context);
+        fontManager.setFont(frameLayout);
     }
 
     @Override

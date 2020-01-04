@@ -5,8 +5,8 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class, Images.class},
-        version = 12, exportSchema = false)
+@Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
+        Images.class, MapScreen.class}, version = 13, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
     public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
         @Override
@@ -65,18 +65,6 @@ public abstract class MyDatabase extends RoomDatabase {
 
     public abstract DaoCalculationUserInput daoCalculationUserInput();
 
-    public static final Migration MIGRATION_11_12 = new Migration(11, 12) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE Images ( " +
-                    "imageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " +
-                    "address TEXT NOT NULL, " +
-                    "eshterak	TEXT, " +
-                    "imageCode	TEXT" +
-                    ");");
-        }
-    };
-
     public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
@@ -95,12 +83,21 @@ public abstract class MyDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE Calculation RENAME TO CalculationInformation");
         }
     };
-    public static final Migration MIGRATION_12_13 = new Migration(10, 11) {
+    public static final Migration MIGRATION_12_13 = new Migration(12, 13) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE Images ADD Column imageCode");
+            database.execSQL("CREATE TABLE MapScreen (" +
+                    "id INTEGER," +
+                    "bilId TEXT, " +
+                    "bitmap BLOB, " +
+                    "PRIMARY KEY(id)" +
+                    ")");
+
         }
     };
 
     public abstract DaoImages daoImages();
+
+    public abstract DaoMapScreen daoMapScreen();
+
 }
