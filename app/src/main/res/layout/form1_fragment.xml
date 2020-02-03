@@ -209,6 +209,27 @@
                         android:textStyle="bold" />
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:gravity="left"
+                        android:text="شماره پروانه"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:gravity="left"
+                        android:text="شماره پلاک ثبتی"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -264,7 +285,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText7"
+                        android:id="@+id/editText6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -277,7 +298,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText9"
+                        android:id="@+id/editText8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -305,7 +326,7 @@
 
 
                     <EditText
-                        android:id="@+id/editText13"
+                        android:id="@+id/editText12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -319,7 +340,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText15"
+                        android:id="@+id/editText14"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -332,7 +353,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText17"
+                        android:id="@+id/editText16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -354,7 +375,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText16"
+                        android:id="@+id/editText17"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -367,6 +388,33 @@
                         android:maxLines="1"
                         android:singleLine="true" />
 
+                    <EditText
+                        android:id="@+id/editText18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/editText20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:singleLine="true" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -507,6 +555,16 @@
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="left"
+                        android:text="تاریخ صدور پروانه"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -545,19 +603,6 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                    <EditText
                         android:id="@+id/editText5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -569,9 +614,8 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true" />
-
                     <EditText
-                        android:id="@+id/editText12"
+                        android:id="@+id/editText7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -583,8 +627,9 @@
                         android:maxLines="1"
                         android:singleLine="true" />
 
+
                     <EditText
-                        android:id="@+id/editText11"
+                        android:id="@+id/editText9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -595,9 +640,22 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true" />
+                    <EditText
+                        android:id="@+id/editText11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
 
                     <EditText
-                        android:id="@+id/editText14"
+                        android:id="@+id/editText13"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -607,7 +665,7 @@
                         android:inputType="number" />
 
                     <EditText
-                        android:id="@+id/editText8"
+                        android:id="@+id/editText15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -643,6 +701,19 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="center" />
 
+                    <EditText
+                        android:id="@+id/editText19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:singleLine="true" />
                 </LinearLayout>
 
             </LinearLayout>
