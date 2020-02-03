@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -102,6 +103,7 @@ public class MapFragment extends Fragment implements LocationListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         findViewById = inflater.inflate(R.layout.map_fragment, container, false);
+        ButterKnife.bind(this, findViewById);
         initialize();
         return findViewById;
     }

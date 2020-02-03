@@ -71,7 +71,7 @@ public final class PaperActivity extends AppCompatActivity {
         setContentView(R.layout.paper_activity);
         ButterKnife.bind(this);
         context = this;
-        loadImage(imageView);
+//        loadImage(imageView);
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED

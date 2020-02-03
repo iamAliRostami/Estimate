@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
+    android:id="@+id/frameLayout"
     tools:context="com.leon.estimate.Fragments.Form1Fragment">
 
     <LinearLayout
@@ -370,7 +371,8 @@
                         android:weightSum="3">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_margin="@dimen/activity_medium_margin"
@@ -402,7 +404,8 @@
                         android:weightSum="3">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_margin="@dimen/activity_medium_margin"

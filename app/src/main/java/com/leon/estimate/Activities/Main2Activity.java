@@ -4,6 +4,7 @@ package com.leon.estimate.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -39,7 +40,6 @@ import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.Calculation;
-import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoCalculation;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.MyDatabase;
@@ -102,6 +102,7 @@ public class Main2Activity extends AppCompatActivity
                 download();
                 break;
             case R.id.imageViewUpload:
+                send();
                 break;
             case R.id.imageViewPaper:
                 intent = new Intent(getApplicationContext(), PaperActivity.class);
@@ -180,7 +181,7 @@ public class Main2Activity extends AppCompatActivity
         this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
         this.locationOverlay.enableMyLocation();
 
-        test();
+//        test();
 
         mapView.getOverlays().add(locationOverlay);
         mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
@@ -303,11 +304,34 @@ public class Main2Activity extends AppCompatActivity
     }
 
     void send() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
-        Log.e("size", String.valueOf(calculationUserInputList.size()));
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage(context.getString(R.string.upload));
+        dialog.setTitle(context.getString(R.string.loading_connecting));
+        dialog.show();
+        new Thread() {
+            public void run() {
+                try {
+                    sleep(5000);
+                } catch (Exception ignored) {
+                }
+
+                new Thread() {
+                    public void run() {
+                        // Dismiss the Dialog
+                    }
+                }.start();
+                runOnUiThread(() -> {
+                    dialog.dismiss();
+                    new CustomDialog(DialogType.Green, context, "بارگذاری با موفقیت انجام شد",
+                            getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+                });
+            }
+        }.start();
+//        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                .allowMainThreadQueries().build();
+//        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+//        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+//        Log.e("size", String.valueOf(calculationUserInputList.size()));
     }
 
     @Override

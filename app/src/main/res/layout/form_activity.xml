@@ -13,17 +13,17 @@
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
 
-        <androidx.viewpager.widget.PagerTabStrip
-            android:id="@+id/pager_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@drawable/border_blue_1"
-            android:outlineAmbientShadowColor="@color/blue1"
-            android:outlineSpotShadowColor="@color/blue2"
-            android:paddingTop="@dimen/activity_medium_padding"
-            android:paddingBottom="@dimen/activity_medium_padding"
-            tools:targetApi="p" />
+        <!--        <androidx.viewpager.widget.PagerTabStrip-->
+        <!--            android:id="@+id/pager_header"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="top"-->
+        <!--            android:background="@drawable/border_blue_1"-->
+        <!--            android:outlineAmbientShadowColor="@color/blue1"-->
+        <!--            android:outlineSpotShadowColor="@color/blue2"-->
+        <!--            android:paddingTop="@dimen/activity_medium_padding"-->
+        <!--            android:paddingBottom="@dimen/activity_medium_padding"-->
+        <!--            tools:targetApi="p" />-->
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/view_pager_tab"

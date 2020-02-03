@@ -15,6 +15,7 @@ import com.leon.estimate.Utils.FontManager;
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class Form1Fragment extends Fragment {
@@ -28,6 +29,7 @@ public class Form1Fragment extends Fragment {
     FrameLayout frameLayout;
     private View findViewById;
     private Context context;
+
     public Form1Fragment() {
 
     }
@@ -48,12 +50,14 @@ public class Form1Fragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         findViewById = inflater.inflate(R.layout.form1_fragment, container, false);
+        ButterKnife.bind(this, findViewById);
         initialize();
         return findViewById;
     }

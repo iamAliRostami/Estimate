@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.leon.estimate.Activities.Form1Activity;
+import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.Calculation;
@@ -45,7 +45,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             view = layoutInflater.inflate(R.layout.item_address_2, null);
         ViewHolder holder = new ViewHolder(view);
         holder.itemView.setOnClickListener(view1 -> {
-            Intent intent = new Intent(context, Form1Activity.class);
+//            Intent intent = new Intent(context, Form1Activity.class);
+            Intent intent = new Intent(context, FormActivity.class);
             intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), calculations.get(i).getTrackNumber());
             context.startActivity(intent);
         });
