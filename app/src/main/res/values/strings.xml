@@ -92,6 +92,8 @@
     <string name="user_type">کاربری</string>
     <string name="sifoon_100">سیفون 100</string>
     <string name="sifoon_200">سیفون 200</string>
+    <string name="sifoon_125">سیفون 125</string>
+    <string name="sifoon_150">سیفون 150</string>
     <string name="ayan_maskooni">اعیان مسکونی</string>
     <string name="number_maskooni">تعداد مسکونی</string>
     <string name="zarfiat_qaradadi">ظرفیت قراردادی</string>
@@ -104,4 +106,5 @@
     <string name="arse_kol">عرصه کل</string>
     <string name="bill_id">شناسه قبض</string>
     <string name="other_number">تعداد سایر</string>
+    <string name="postal_code">کد پستی</string>
 </resources>

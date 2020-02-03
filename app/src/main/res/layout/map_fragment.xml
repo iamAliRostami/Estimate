@@ -1,9 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/frameLayout"
     android:layoutDirection="rtl"
     tools:context="com.leon.estimate.Fragments.Form1Fragment">
 
@@ -120,18 +120,17 @@
                                 android:layout_gravity="left"
                                 android:layout_margin="@dimen/activity_medium_margin"
                                 android:gravity="left"
-                                android:text="تلفن ثابت"
+                                android:text="شماره اشتراک"
                                 android:textColor="@color/blue4"
                                 android:textSize="@dimen/textSizeLarge"
                                 android:textStyle="bold" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:layout_margin="@dimen/activity_medium_margin"
                                 android:gravity="left"
-                                android:text="کد پستی"
+                                android:text="تلفن ثابت"
                                 android:textColor="@color/blue4"
                                 android:textSize="@dimen/textSizeLarge"
                                 android:textStyle="bold" />
@@ -186,6 +185,19 @@
                                 android:singleLine="true" />
 
                             <EditText
+                                android:id="@+id/editText29"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:background="@drawable/border_gray_1"
+                                android:gravity="center"
+                                android:inputType="phone"
+                                android:lines="1"
+                                android:maxLength="8"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+                            <EditText
                                 android:id="@+id/editText20"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -196,19 +208,6 @@
                                 android:inputType="number"
                                 android:lines="1"
                                 android:maxLength="10"
-                                android:maxLines="1"
-                                android:singleLine="true" />
-
-                            <EditText
-                                android:id="@+id/editText23"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="@dimen/activity_medium_margin"
-                                android:background="@drawable/border_gray_1"
-                                android:gravity="center"
-                                android:inputType="text"
-                                android:lines="1"
                                 android:maxLines="1"
                                 android:singleLine="true" />
 
@@ -247,11 +246,21 @@
                                 android:layout_gravity="left"
                                 android:layout_margin="@dimen/activity_medium_margin"
                                 android:gravity="left"
-                                android:text="@string/sms_phone"
+                                android:text="@string/postal_code"
                                 android:textColor="@color/blue4"
                                 android:textSize="@dimen/textSizeLarge"
                                 android:textStyle="bold" />
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:gravity="left"
+                                android:text="شماره ردیف"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -328,6 +337,18 @@
                                     android:textSize="@dimen/textSizeMedium" />
                             </LinearLayout>
 
+                            <EditText
+                                android:id="@+id/editText23"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:background="@drawable/border_gray_1"
+                                android:gravity="center"
+                                android:inputType="text"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:singleLine="true" />
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -372,10 +393,10 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="0.5"
                             android:gravity="left"
                             android:text="@string/address"
                             android:textColor="@color/blue4"
@@ -405,10 +426,10 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="0.5"
                             android:gravity="left"
                             android:text="توضیحات"
                             android:textColor="@color/blue4"
