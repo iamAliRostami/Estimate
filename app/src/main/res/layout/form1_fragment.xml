@@ -466,6 +466,7 @@
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -488,7 +489,6 @@
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         android:textStyle="bold" />
-
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -550,6 +550,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
                         android:text="انشعاب غیردائم"
                         android:textColor="@color/blue4"
@@ -560,6 +561,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
+                        android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
                         android:text="تاریخ صدور پروانه"
                         android:textColor="@color/blue4"
@@ -614,6 +616,7 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true" />
+
                     <EditText
                         android:id="@+id/editText7"
                         android:layout_width="match_parent"
@@ -640,6 +643,7 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true" />
+
                     <EditText
                         android:id="@+id/editText11"
                         android:layout_width="match_parent"
