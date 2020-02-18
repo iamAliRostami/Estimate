@@ -1,20 +1,17 @@
 package com.leon.estimate.Activities;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.leon.estimate.R;
@@ -65,31 +62,26 @@ public class MainActivity extends AppCompatActivity implements
         mapView.getMapAsync(this);
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = null;
-            switch (view.getId()) {
-                case R.id.imageViewForm:
-                    intent = new Intent(getApplicationContext(), Form1Activity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewDownload:
-                    intent = new Intent(getApplicationContext(), DownloadActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewUpload:
-                    intent = new Intent(getApplicationContext(), UploadActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewPaper:
-                    intent = new Intent(getApplicationContext(), PaperActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.imageViewExit:
-                    finishAffinity();
-                    break;
-            }
+    View.OnClickListener onClickListener = view -> {
+        Intent intent = null;
+        switch (view.getId()) {
+            case R.id.imageViewForm:
+                intent = new Intent(getApplicationContext(), Form1Activity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewDownload:
+                intent = new Intent(getApplicationContext(), DownloadActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewUpload:
+                break;
+            case R.id.imageViewPaper:
+                intent = new Intent(getApplicationContext(), TakeOtherPhotoActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.imageViewExit:
+                finishAffinity();
+                break;
         }
     };
 
@@ -97,30 +89,25 @@ public class MainActivity extends AppCompatActivity implements
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MainActivity.this.mapboxMap = mapboxMap;
         mapboxMap.setStyle(new Style.Builder().fromUrl("mapbox://styles/mapbox/cjerxnqt3cgvp2rmyuxbeqme7"),
-                new Style.OnStyleLoaded() {
-                    @TargetApi(Build.VERSION_CODES.KITKAT)
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onStyleLoaded(@NonNull final Style style) {
-                        enableLocationComponent(style);
-                        for (int i = 1; i < 4; i++) {
-                            initRouteCoordinates(i);
-                            // Create the LineString from the list of coordinates and then make a GeoJSON
-                            // FeatureCollection so we can add the line to our map as a layer.
-                            style.addSource(new GeoJsonSource("line-source".concat(String.valueOf(i)),
-                                    FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(
-                                            LineString.fromLngLats(routeCoordinates)
-                                    )})));
-                            // The layer properties for our line. This is where we make the line dotted, set the color, etc.
-                            style.addLayer(new LineLayer("linelayer".concat(String.valueOf(i))
-                                    , "line-source".concat(String.valueOf(i))).withProperties(
-                                    PropertyFactory.lineDasharray(new Float[]{0.01f, 2f}),
-                                    PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
-                                    PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
-                                    PropertyFactory.lineWidth(5f),
-                                    PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
-                            ));
-                        }
+                style -> {
+                    enableLocationComponent(style);
+                    for (int i = 1; i < 4; i++) {
+                        initRouteCoordinates(i);
+                        // Create the LineString from the list of coordinates and then make a GeoJSON
+                        // FeatureCollection so we can add the line to our map as a layer.
+                        style.addSource(new GeoJsonSource("line-source".concat(String.valueOf(i)),
+                                FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(
+                                        LineString.fromLngLats(routeCoordinates)
+                                )})));
+                        // The layer properties for our line. This is where we make the line dotted, set the color, etc.
+                        style.addLayer(new LineLayer("linelayer".concat(String.valueOf(i))
+                                , "line-source".concat(String.valueOf(i))).withProperties(
+                                PropertyFactory.lineDasharray(new Float[]{0.01f, 2f}),
+                                PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
+                                PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
+                                PropertyFactory.lineWidth(5f),
+                                PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
+                        ));
                     }
                 });
     }

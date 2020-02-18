@@ -50,7 +50,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public final class PaperActivity extends AppCompatActivity {
+public final class TakeOtherPhotoActivity extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888;
     private final int GALLERY_REQUEST = 1888;
     private final int IMAGE_CROP_REQUEST = 1234;
@@ -68,10 +68,10 @@ public final class PaperActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.paper_activity);
+        setContentView(R.layout.take_other_photo_activity);
         ButterKnife.bind(this);
         context = this;
-//        loadImage(imageView);
+//        loadImage(imageView1);
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -106,7 +106,7 @@ public final class PaperActivity extends AppCompatActivity {
             }
             this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
         } else if (requestCode == IMAGE_CROP_REQUEST && resultCode == RESULT_OK) {
-//            ScannerConstants.bitmapSelectedImage = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+//            ScannerConstants.bitmapSelectedImage = ((BitmapDrawable) imageView1.getDrawable()).getBitmap();
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
@@ -217,7 +217,7 @@ public final class PaperActivity extends AppCompatActivity {
 
     public final void setOnClickListener() {
         buttonPick.setOnClickListener(it -> {
-            Builder builder = new Builder(PaperActivity.this);
+            Builder builder = new Builder(TakeOtherPhotoActivity.this);
             builder.setTitle("Carbon");
             builder.setMessage("تصویر را از کجا انتخاب میکنید؟");
             builder.setPositiveButton("گالری", (dialog, which) -> {
@@ -229,10 +229,10 @@ public final class PaperActivity extends AppCompatActivity {
             builder.setNegativeButton("دوربین", (dialog, which) -> {
                 dialog.dismiss();
                 Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-                if (cameraIntent.resolveActivity(PaperActivity.this.getPackageManager()) != null) {
+                if (cameraIntent.resolveActivity(TakeOtherPhotoActivity.this.getPackageManager()) != null) {
                     File photoFile = null;
                     try {
-                        photoFile = PaperActivity.this.createImageFile();
+                        photoFile = TakeOtherPhotoActivity.this.createImageFile();
                     } catch (IOException e) {
                         Log.e("Main", "IOException");
                     }
@@ -257,7 +257,7 @@ public final class PaperActivity extends AppCompatActivity {
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         ScannerConstants.fileName = imageFileName;
-        PaperActivity.imageFileName = imageFileName;
+        TakeOtherPhotoActivity.imageFileName = imageFileName;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         StringBuilder stringBuilder = (new StringBuilder()).append("file:");

@@ -35,18 +35,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Activities.DocumentActivity"></activity>
         <activity
             android:name=".Activities.FormActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
             android:name=".Activities.Form2Activity"
             android:label="@string/form2"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden">
-
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity android:name=".Activities.BrightnessContrastActivity" />
         <activity android:name=".Activities.CropActivity" />
         <activity android:name=".Activities.ListActivity" />
@@ -78,11 +76,8 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".Activities.PaperActivity"
+            android:name=".Activities.TakeOtherPhotoActivity"
             android:label="@string/paper" />
-        <activity
-            android:name=".Activities.UploadActivity"
-            android:label="@string/upload" />
         <activity
             android:name=".Activities.DownloadActivity"
             android:label="@string/downloadDetails" />

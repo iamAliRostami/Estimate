@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/constraintLayout"
     tools:context="com.leon.estimate.Activities.FormActivity">
 
     <androidx.viewpager.widget.ViewPager
@@ -36,5 +36,18 @@
             app:tabRippleColor="@color/blue"
             app:tabSelectedTextColor="@color/blue4"
             app:tabTextColor="@color/blue3" />
+
     </androidx.viewpager.widget.ViewPager>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_medium_margin"
+        android:background="@drawable/border_blue_1"
+        android:padding="@dimen/activity_medium_padding"
+        android:text="بعدی"
+        android:textStyle="bold" />
+</RelativeLayout>

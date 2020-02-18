@@ -19,6 +19,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main2" />
+    <include layout="@layout/main2_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

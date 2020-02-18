@@ -1,12 +1,14 @@
 package com.leon.estimate.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
@@ -24,8 +26,10 @@ public class FormActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
-    @BindView(R.id.constraintLayout)
-    ConstraintLayout constraintLayout;
+    @BindView(R.id.relativeLayout)
+    RelativeLayout relativeLayout;
+    @BindView(R.id.button_next)
+    Button buttonNext;
     Context context;
 
     @Override
@@ -47,7 +51,11 @@ public class FormActivity extends AppCompatActivity {
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context);
         viewPager.setAdapter(adapterViewPager);
         FontManager fontManager = new FontManager(getApplicationContext());
-        fontManager.setFont(constraintLayout);
+        fontManager.setFont(relativeLayout);
+        buttonNext.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
+            startActivity(intent);
+        });
     }
 
 

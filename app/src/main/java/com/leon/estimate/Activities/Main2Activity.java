@@ -105,7 +105,7 @@ public class Main2Activity extends AppCompatActivity
                 send();
                 break;
             case R.id.imageViewPaper:
-                intent = new Intent(getApplicationContext(), PaperActivity.class);
+                intent = new Intent(getApplicationContext(), TakeOtherPhotoActivity.class);
                 startActivity(intent);
                 break;
             case R.id.imageViewExit:
@@ -181,8 +181,8 @@ public class Main2Activity extends AppCompatActivity
         this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
         this.locationOverlay.enableMyLocation();
 
-//        test();
-
+        test();
+        initRouteCoordinates(2);
         mapView.getOverlays().add(locationOverlay);
         mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
@@ -251,7 +251,7 @@ public class Main2Activity extends AppCompatActivity
         double latitude = location.getLatitude();
         routeCoordinates = new ArrayList<>();
         routeCoordinates.add(Point.fromLngLat(longitude, latitude));
-        routeCoordinates.add(Point.fromLngLat(longitude + i * 10, latitude + i * 10));
+        routeCoordinates.add(Point.fromLngLat(longitude + i, latitude + i));
     }
 
     void setImageViewFindByViewId() {
