@@ -6,7 +6,7 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
-        Images.class, MapScreen.class}, version = 13, exportSchema = false)
+        Images.class, MapScreen.class}, version = 14, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
     public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
         @Override
@@ -71,10 +71,10 @@ public abstract class MyDatabase extends RoomDatabase {
             database.execSQL("DROP TABLE Calculation");
         }
     };
-    public static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+    public static final Migration MIGRATION_13_14 = new Migration(13, 14) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE Calculation ADD COLUMN read INTEGER ");
+            database.execSQL("ALTER TABLE Images ADD COLUMN peygiri TEXT ");
         }
     };
     public static final Migration MIGRATION_9_10 = new Migration(9, 10) {

@@ -11,13 +11,15 @@ public class Images {
     String address;
     String billId;
     String eshterak;
+    String peygiri;
     String imageCode;
 
-    public Images(String address, String billId, String eshterak, String imageCode) {
+    public Images(String address, String imageCode, String peygiri, String billId, String eshterak) {
         this.address = address;
         this.billId = billId;
         this.eshterak = eshterak;
         this.imageCode = imageCode;
+        this.peygiri = peygiri;
     }
 
     public String getImageCode() {
@@ -58,5 +60,13 @@ public class Images {
 
     public void setEshterak(String eshterak) {
         this.eshterak = eshterak;
+    }
+
+    public String getPeygiri() {
+        return peygiri;
+    }
+
+    public void setPeygiri(String peygiri) {
+        this.peygiri = peygiri;
     }
 }

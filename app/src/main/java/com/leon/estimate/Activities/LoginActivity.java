@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
     @SuppressLint("HardwareIds")
     void attemptLogin() {
         deviceId = Build.SERIAL;
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance(false, "");
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
         Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(new LoginInfo(deviceId, username, password));
         LoginFeedBack loginFeedBack = new LoginFeedBack();

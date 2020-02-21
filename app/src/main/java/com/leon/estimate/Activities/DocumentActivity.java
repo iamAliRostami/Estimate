@@ -53,6 +53,12 @@ import butterknife.ButterKnife;
 public class DocumentActivity extends AppCompatActivity {
 
     static String imageFileName;
+    private final int image1 = 1;
+    private final int image2 = 2;
+    private final int image3 = 3;
+    private final int image4 = 4;
+    private final int image5 = 5;
+    private final int image6 = 6;
     private final int CAMERA_REQUEST = 1888;
     private final int GALLERY_REQUEST = 1888;
     private final int IMAGE_CROP_REQUEST = 1234;
@@ -82,8 +88,12 @@ public class DocumentActivity extends AppCompatActivity {
     @BindView(R.id.button_pick6)
     Button buttonPick6;
     String mCurrentPhotoPath;
-    boolean replace = false;
     Context context;
+    boolean replace = false;
+    int imageCode;
+
+    ImageView[] imageViews;//=new ImageView{imageView1, imageView2, imageView3, imageView4, imageView5, imageView6};
+    Button[] buttonPicks;//= {buttonPick1, buttonPick2, buttonPick3, buttonPick4, buttonPick5, buttonPick6};
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -91,10 +101,8 @@ public class DocumentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setContentView(R.layout.document_activity);
-
         ButterKnife.bind(this);
         context = this;
-//        loadImage(imageView1);
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -105,8 +113,102 @@ public class DocumentActivity extends AppCompatActivity {
         }
     }
 
+    View.OnClickListener onClickListener = v -> {
+        Log.e("ID", String.valueOf(v.getId()));
+        switch (v.getId()) {
+            case R.id.button_pick1:
+            case R.id.imageView1:
+                imageCode = image1;
+                break;
+            case R.id.button_pick2:
+            case R.id.imageView2:
+                imageCode = image2;
+                break;
+            case R.id.button_pick3:
+            case R.id.imageView3:
+                imageCode = image3;
+                break;
+            case R.id.button_pick4:
+            case R.id.imageView4:
+                imageCode = image4;
+                break;
+            case R.id.button_pick5:
+            case R.id.imageView5:
+                imageCode = image5;
+                break;
+            case R.id.button_pick6:
+            case R.id.imageView6:
+                imageCode = image6;
+                break;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(DocumentActivity.this);
+        builder.setTitle("Carbon");
+        builder.setMessage("تصویر را از کجا انتخاب میکنید؟");
+        builder.setPositiveButton("گالری", (dialog, which) -> {
+            dialog.dismiss();
+            Intent intent = new Intent("android.intent.action.PICK");
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_REQUEST);
+        });
+        builder.setNegativeButton("دوربین", (dialog, which) -> {
+            dialog.dismiss();
+            Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+            if (cameraIntent.resolveActivity(DocumentActivity.this.getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = DocumentActivity.this.createImageFile();
+                } catch (IOException e) {
+                    Log.e("Main", "IOException");
+                }
+                if (photoFile != null) {
+                    StrictMode.VmPolicy.Builder builder1 = new StrictMode.VmPolicy.Builder();
+                    StrictMode.setVmPolicy(builder1.build());
+                    cameraIntent.putExtra("output", Uri.fromFile(photoFile));
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
+            }
+
+        });
+        builder.setNeutralButton("", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    };
+
     void initialize() {
-        setOnClickListener();
+        initializeButtons();
+        initializeImageViews();
+        loadImage();
+    }
+
+    void initializeButtons() {
+        buttonPick1.setOnClickListener(onClickListener);
+        buttonPick2.setOnClickListener(onClickListener);
+        buttonPick3.setOnClickListener(onClickListener);
+        buttonPick4.setOnClickListener(onClickListener);
+        buttonPick5.setOnClickListener(onClickListener);
+        buttonPick6.setOnClickListener(onClickListener);
+        buttonPicks = new Button[6];
+        buttonPicks[0] = buttonPick1;
+        buttonPicks[1] = buttonPick2;
+        buttonPicks[2] = buttonPick3;
+        buttonPicks[3] = buttonPick4;
+        buttonPicks[4] = buttonPick5;
+        buttonPicks[5] = buttonPick6;
+    }
+
+    void initializeImageViews() {
+        imageView1.setOnClickListener(onClickListener);
+        imageView2.setOnClickListener(onClickListener);
+        imageView3.setOnClickListener(onClickListener);
+        imageView4.setOnClickListener(onClickListener);
+        imageView5.setOnClickListener(onClickListener);
+        imageView6.setOnClickListener(onClickListener);
+        imageViews = new ImageView[6];
+        imageViews[0] = imageView1;
+        imageViews[1] = imageView2;
+        imageViews[2] = imageView3;
+        imageViews[3] = imageView4;
+        imageViews[4] = imageView5;
+        imageViews[5] = imageView6;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -137,8 +239,8 @@ public class DocumentActivity extends AppCompatActivity {
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
-            imageView1.setImageBitmap(ScannerConstants.bitmapSelectedImage);
-            buttonPick1.setText("تغییر عکس");
+            imageViews[imageCode - 1].setImageBitmap(ScannerConstants.bitmapSelectedImage);
+            buttonPicks[imageCode - 1].setText("تغییر مدرک ".concat(String.valueOf(imageCode)));
             saveTempBitmap(ScannerConstants.bitmapSelectedImage);
             if (ScannerConstants.bitmapSelectedImage != null) {
                 Toast.makeText(this, "انجام شد", Toast.LENGTH_SHORT).show();
@@ -146,25 +248,6 @@ public class DocumentActivity extends AppCompatActivity {
                 Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
             }
         }
-
-    }
-
-    void loadImage(ImageView imageView) {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoImages daoImages = dataBase.daoImages();
-        List<Images> images = daoImages.getImages();
-
-        try {
-            File f = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
-            f = new File(f, images.get(0).getAddress());
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            imageView.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void saveTempBitmap(Bitmap bitmap) {
@@ -173,6 +256,32 @@ public class DocumentActivity extends AppCompatActivity {
         } else {
             Log.e("error", "isExternalStorageWritable");
         }
+    }
+
+    void loadImage() {
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoImages daoImages = dataBase.daoImages();
+//        List<Images> images = daoImages.getImages();
+        for (int i = 1; i <= 6; i++) {
+            List<Images> images = daoImages.getImagesByImageCode(String.valueOf(i));
+            if (images.size() > 0)
+                try {
+                    File f = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES), "AbfaCamera");
+                    f = new File(f, images.get(images.size() - 1).getAddress());
+                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                    imageViews[i - 1].setImageBitmap(b);
+                    buttonPicks[i - 1].setText("تغییر مدرک ".concat(String.valueOf(i)));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -185,7 +294,6 @@ public class DocumentActivity extends AppCompatActivity {
                 return;
             }
         }
-
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_" + ".jpg";
         File file = new File(mediaStorageDir, imageFileName);
@@ -199,7 +307,8 @@ public class DocumentActivity extends AppCompatActivity {
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
             DaoImages daoImages = dataBase.daoImages();
-            Images images = new Images(imageFileName, "1212", "1212", "1212");
+            Images images = new Images(imageFileName, String.valueOf(imageCode), "peygiri",
+                    "", "");
             daoImages.insertImage(images);
         } catch (Exception e) {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
@@ -207,17 +316,12 @@ public class DocumentActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
     public final void askPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                initialize();
                 Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
+                initialize();
             }
 
             @Override
@@ -239,49 +343,12 @@ public class DocumentActivity extends AppCompatActivity {
                 ).check();
     }
 
-    public final void setOnClickListener() {
-        buttonPick1.setOnClickListener(it -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(DocumentActivity.this);
-            builder.setTitle("Carbon");
-            builder.setMessage("تصویر را از کجا انتخاب میکنید؟");
-            builder.setPositiveButton("گالری", (dialog, which) -> {
-                dialog.dismiss();
-                Intent intent = new Intent("android.intent.action.PICK");
-                intent.setType("image/*");
-                this.startActivityForResult(intent, GALLERY_REQUEST);
-            });
-            builder.setNegativeButton("دوربین", (dialog, which) -> {
-                dialog.dismiss();
-                Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-                if (cameraIntent.resolveActivity(DocumentActivity.this.getPackageManager()) != null) {
-                    File photoFile = null;
-                    try {
-                        photoFile = DocumentActivity.this.createImageFile();
-                    } catch (IOException e) {
-                        Log.e("Main", "IOException");
-                    }
-                    if (photoFile != null) {
-                        StrictMode.VmPolicy.Builder builder1 = new StrictMode.VmPolicy.Builder();
-                        StrictMode.setVmPolicy(builder1.build());
-                        cameraIntent.putExtra("output", Uri.fromFile(photoFile));
-                        this.startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                    }
-                }
-
-            });
-            builder.setNeutralButton("", (dialog, which) -> dialog.dismiss());
-            builder.create().show();
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
-        });
-    }
-
     @SuppressLint({"SimpleDateFormat"})
     private File createImageFile() throws IOException {
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         ScannerConstants.fileName = imageFileName;
-        TakeOtherPhotoActivity.imageFileName = imageFileName;
+        DocumentActivity.imageFileName = imageFileName;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         StringBuilder stringBuilder = (new StringBuilder()).append("file:");

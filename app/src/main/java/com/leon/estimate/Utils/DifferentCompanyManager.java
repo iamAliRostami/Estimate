@@ -99,8 +99,7 @@ public class DifferentCompanyManager {
             case TOWNS_WEST:
                 return "http://217.66.195.75/";
             case ESF:
-//                return "http://37.191.92.130/";
-                return "http://172.18.12.14:100/";
+                return "http://37.191.92.130/";
             case DEBUG:
                 return "http://192.168.43.185:45458/";
             default:
@@ -132,7 +131,7 @@ public class DifferentCompanyManager {
             case TOWNS_WEST:
                 return "http://172.28.5.40/";
             case ESF:
-                return "http://172.18.12.122/";
+                return "http://172.18.12.14:100/";
             default:
                 throw new UnsupportedOperationException();
         }

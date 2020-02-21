@@ -71,16 +71,21 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
         setContentView(R.layout.take_other_photo_activity);
         ButterKnife.bind(this);
         context = this;
-//        loadImage(imageView1);
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         ) {
             askPermission();
         } else {
-            setOnClickListener();
+            initialize();
         }
     }
+
+    void initialize() {
+//        loadImage(imageView1);
+        setOnClickListener();
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,7 +178,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
             DaoImages daoImages = dataBase.daoImages();
-            Images images = new Images(imageFileName, "1212", "1212", "1212");
+            Images images = new Images(imageFileName, "", "1212", "1212", "1212");
             daoImages.insertImage(images);
         } catch (Exception e) {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
@@ -183,10 +188,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
 
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     public final void askPermission() {
@@ -194,6 +196,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
                 Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
+                initialize();
             }
 
             @Override
