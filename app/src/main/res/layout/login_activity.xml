@@ -21,7 +21,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="?attr/colorPrimaryDark"></LinearLayout>
+            android:background="?attr/colorPrimaryDark" />
     </LinearLayout>
 
     <ImageView
@@ -30,7 +30,8 @@
         android:layout_height="200dp"
         android:layout_marginTop="210dp"
         android:foregroundGravity="center"
-        android:src="@drawable/img_profile" />
+        android:src="@drawable/img_profile"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="12dp"
-            android:src="@drawable/img_bg_logo" />
+            android:src="@drawable/img_bg_logo"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
@@ -135,7 +137,8 @@
                 android:id="@+id/imageViewUsername"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/img_user" />
+                android:src="@drawable/img_user"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
         <LinearLayout
@@ -150,7 +153,7 @@
 
             <EditText
                 android:id="@+id/editTextPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/border_1"
@@ -166,7 +169,8 @@
                 android:id="@+id/imageViewPassword"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/img_password" />
+                android:src="@drawable/img_password"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
     </LinearLayout>

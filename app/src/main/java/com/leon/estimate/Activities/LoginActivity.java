@@ -115,9 +115,18 @@ public class LoginActivity extends AppCompatActivity {
         setButtonOnLongClickListener();
     }
 
-
     @SuppressLint("HardwareIds")
     void attemptLogin() {
+        deviceId = Build.SERIAL;
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
+        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(new LoginInfo(deviceId, username, password));
+        LoginFeedBack loginFeedBack = new LoginFeedBack();
+        HttpClientWrapper.callHttpAsync(call, loginFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
+    }
+
+    @SuppressLint("HardwareIds")
+    void attemptSerial() {
         deviceId = Build.SERIAL;
         Retrofit retrofit;
         if (DifferentCompanyManager.getActiveCompanyName() == CompanyNames.DEBUG) {
@@ -133,16 +142,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             retrofit = NetworkHelper.getInstance(true, "");
         }
-        final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
-        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(new LoginInfo(deviceId, username, password));
-        LoginFeedBack loginFeedBack = new LoginFeedBack();
-        HttpClientWrapper.callHttpAsync(call, loginFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
-    }
-
-    @SuppressLint("HardwareIds")
-    void attemptSerial() {
-        deviceId = Build.SERIAL;
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService serial = retrofit.create(IAbfaService.class);
         Call<SimpleMessage> call = serial.signSerial(new LoginInfo(deviceId, username, password));
         SignSerialFeedBack signSerialFeedBack = new SignSerialFeedBack();
