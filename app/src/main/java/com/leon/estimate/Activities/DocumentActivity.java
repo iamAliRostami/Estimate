@@ -101,21 +101,25 @@ public class DocumentActivity extends AppCompatActivity {
         ) {
             askPermission();
         } else {
-            setOnClickListener();
+            initialize();
         }
+    }
+
+    void initialize() {
+        setOnClickListener();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
-            Bitmap btimap = null;
+            Bitmap bitmap;
             try {
                 Uri uri = data.getData();
                 Objects.requireNonNull(uri);
                 InputStream inputStream = this.getContentResolver().openInputStream(Objects.requireNonNull(selectedImage));
-                btimap = BitmapFactory.decodeStream(inputStream);
-                ScannerConstants.bitmapSelectedImage = btimap;
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                ScannerConstants.bitmapSelectedImage = bitmap;
                 this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -158,7 +162,6 @@ public class DocumentActivity extends AppCompatActivity {
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             imageView.setImageBitmap(b);
         } catch (FileNotFoundException e) {
-            Log.e("error", e.getMessage());
             e.printStackTrace();
         }
 
@@ -206,16 +209,14 @@ public class DocumentActivity extends AppCompatActivity {
 
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     public final void askPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
+                initialize();
                 Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
             }
 
