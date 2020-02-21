@@ -55,7 +55,7 @@
         </RelativeLayout>
 
         <FrameLayout
-            android:id="@+id/frameLayout"
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -93,6 +93,15 @@
             android:weightSum="2">
 
             <Button
+                android:id="@+id/btnClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_large_margin"
+                android:layout_weight="1"
+                android:background="@drawable/border_red_2"
+                android:textSize="@dimen/textSizeLarge" />
+            <Button
                 android:id="@+id/btnImageCrop"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -102,15 +111,6 @@
                 android:background="@drawable/border_green_2"
                 android:textSize="@dimen/textSizeLarge" />
 
-            <Button
-                android:id="@+id/btnClose"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_large_margin"
-                android:layout_weight="1"
-                android:background="@drawable/border_red_2"
-                android:textSize="@dimen/textSizeLarge" />
         </LinearLayout>
     </LinearLayout>
 

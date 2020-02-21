@@ -15,15 +15,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.FontManager;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -64,14 +65,15 @@ public class MapFragment extends Fragment implements LocationListener {
     private int polygonIndex;
     private int placeIndex;
     private View findViewById;
-    private MapboxMap mapboxMap;
     private MapView mapView = null;
     private MyLocationNewOverlay locationOverlay;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     private String mParam1;
     private String mParam2;
-    @BindView(R.id.frameLayout)
-    FrameLayout frameLayout;
+    @BindView(R.id.relativeLayout)
+    RelativeLayout relativeLayout;
+    @BindView(R.id.button_next)
+    Button buttonNext;
     private Context context;
 
     public MapFragment() {
@@ -111,7 +113,12 @@ public class MapFragment extends Fragment implements LocationListener {
     private void initialize() {
         initializeMap();
         FontManager fontManager = new FontManager(context);
-        fontManager.setFont(frameLayout);
+        fontManager.setFont(relativeLayout);
+        buttonNext.setOnClickListener(v -> {
+            mapView.setDrawingCacheEnabled(true);
+            Bitmap bitmap = mapView.getDrawingCache(true);
+            ((FormActivity) getActivity()).nextPage(bitmap);
+        });
     }
 
     @SuppressLint("MissingPermission")

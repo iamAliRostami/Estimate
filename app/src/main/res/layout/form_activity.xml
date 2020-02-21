@@ -39,15 +39,4 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-    <Button
-        android:id="@+id/button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_medium_margin"
-        android:background="@drawable/border_blue_1"
-        android:padding="@dimen/activity_medium_padding"
-        android:text="بعدی"
-        android:textStyle="bold" />
 </RelativeLayout>

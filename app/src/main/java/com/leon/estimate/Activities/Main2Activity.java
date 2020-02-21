@@ -126,9 +126,9 @@ public class Main2Activity extends AppCompatActivity
             setContentView(R.layout.main2_activity);
             initialize();
         }
-        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .fallbackToDestructiveMigration()
-                .addMigrations(MyDatabase.MIGRATION_13_14).build();
+//        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                .fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_13_14).build();
     }
 
     void initialize() {

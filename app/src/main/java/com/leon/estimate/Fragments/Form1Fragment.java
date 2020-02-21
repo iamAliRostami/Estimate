@@ -1,14 +1,18 @@
 package com.leon.estimate.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import androidx.fragment.app.Fragment;
 
+import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.FontManager;
 
@@ -25,8 +29,12 @@ public class Form1Fragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    @BindView(R.id.frameLayout)
-    FrameLayout frameLayout;
+    @BindView(R.id.relativeLayout)
+    RelativeLayout relativeLayout;
+    @BindView(R.id.button_next)
+    Button buttonNext;
+    @BindView(R.id.editText19)
+    EditText editText19;
     private View findViewById;
     private Context context;
 
@@ -64,7 +72,19 @@ public class Form1Fragment extends Fragment {
 
     private void initialize() {
         FontManager fontManager = new FontManager(context);
-        fontManager.setFont(frameLayout);
+        fontManager.setFont(relativeLayout);
+        buttonNext.setOnClickListener(v -> ((FormActivity) getActivity()).nextPage(null));
+    }
+
+    private void sendData() {
+        //INTENT OBJ
+        Intent i = new Intent(getActivity().getBaseContext(), FormActivity.class);
+        i.putExtra("SENDER_KEY", "name");
+        i.putExtra("NAME_KEY", "slm");
+        getActivity().startActivity(i);
+    }
+
+    public interface test {
     }
 
     @Override

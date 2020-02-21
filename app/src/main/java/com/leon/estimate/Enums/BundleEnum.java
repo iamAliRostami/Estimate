@@ -18,7 +18,8 @@ public enum BundleEnum {
     COUNTER_STATE_POSITION("counterStatePosition"),
     COUNTER_STATE_CODE("counterStatePosition"),
     NUMBER("counterStateCode"),
-    CURRENT_PAGE("number");
+    CURRENT_PAGE("number"),
+    IMAGE_BITMAP("image_bitmap");
 
     private final String value;
 

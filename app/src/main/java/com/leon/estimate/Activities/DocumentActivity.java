@@ -27,6 +27,7 @@ import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.Images;
@@ -59,6 +60,7 @@ public class DocumentActivity extends AppCompatActivity {
     private final int image4 = 4;
     private final int image5 = 5;
     private final int image6 = 6;
+    private final int image7 = 7;
     private final int CAMERA_REQUEST = 1888;
     private final int GALLERY_REQUEST = 1888;
     private final int IMAGE_CROP_REQUEST = 1234;
@@ -87,11 +89,13 @@ public class DocumentActivity extends AppCompatActivity {
     ImageView imageView6;
     @BindView(R.id.button_pick6)
     Button buttonPick6;
+    @BindView(R.id.imageView7)
+    ImageView imageView7;
     String mCurrentPhotoPath;
     Context context;
     boolean replace = false;
     int imageCode;
-
+    Bitmap bitmap;
     ImageView[] imageViews;//=new ImageView{imageView1, imageView2, imageView3, imageView4, imageView5, imageView6};
     Button[] buttonPicks;//= {buttonPick1, buttonPick2, buttonPick3, buttonPick4, buttonPick5, buttonPick6};
 
@@ -109,6 +113,8 @@ public class DocumentActivity extends AppCompatActivity {
         ) {
             askPermission();
         } else {
+            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             initialize();
         }
     }
@@ -202,6 +208,9 @@ public class DocumentActivity extends AppCompatActivity {
         imageView4.setOnClickListener(onClickListener);
         imageView5.setOnClickListener(onClickListener);
         imageView6.setOnClickListener(onClickListener);
+        imageView7.setImageBitmap(bitmap);
+        imageCode = image7;
+        saveImage(bitmap);
         imageViews = new ImageView[6];
         imageViews[0] = imageView1;
         imageViews[1] = imageView2;

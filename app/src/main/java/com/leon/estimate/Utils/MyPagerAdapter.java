@@ -67,4 +67,5 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public int getItemPosition(@NonNull Object object) {
         return super.getItemPosition(object);
     }
+
 }
