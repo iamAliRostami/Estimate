@@ -1,6 +1,5 @@
 package com.leon.estimate.Activities;
 
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -52,7 +51,6 @@ import com.leon.estimate.Utils.SimpleMessage;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -79,14 +77,12 @@ public class Main2Activity extends AppCompatActivity
     public double latitude;
     public double longitude;
     LocationManager locationManager;
-    //    String accessToken = "pk.eyJ1IjoiaWFtYWxpcm9zdGFtaSIsImEiOiJjanhjbmptcmowMjZnM3BvdnY0YWx4ampxIn0.iv9I6s34q_-k9GqCiz2seg";
     String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
     int REQUEST_LOCATION_CODE = 1236;
     ImageView imageViewExit, imageViewDownload, imageViewUpload, imageViewPaper, imageViewForm;
     String trackNumber;
     DrawerLayout drawer;
     Context context;
-    private MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
     private MapView mapView = null;
     private MyLocationNewOverlay locationOverlay;
@@ -128,12 +124,22 @@ public class Main2Activity extends AppCompatActivity
             Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
             Mapbox.getInstance(this, accessToken);
             setContentView(R.layout.main2_activity);
-            GpsEnabled();
             initialize();
         }
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_11_12).build();
+    }
+
+    void initialize() {
+        initializeMap();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        drawer = findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
+        setImageViewFindByViewId();
     }
 
     private Location getLastKnownLocation() {
@@ -158,45 +164,62 @@ public class Main2Activity extends AppCompatActivity
 
     @SuppressLint("MissingPermission")
     void initializeMap() {
-        mapView = findViewById(R.id.mapView);
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setBuiltInZoomControls(true);
-        mapView.setMultiTouchControls(true);
-        IMapController mapController = mapView.getController();
-        mapController.setZoom(19.5);
-
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
-        Location location = getLastKnownLocation();
-        if (location != null) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+//        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            new AlertDialog.Builder(context)
+//                    .setTitle("R.string.gps_not_found_title")  // GPS not found
+//                    .setMessage("R.string.gps_not_found_message") // Want to enable?
+//                    .setPositiveButton("R.string.yes", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+//                        }
+//                    })
+//                    .setNegativeButton("R.string.no", (dialog, which) -> forceClose(context))
+//                    .show();
+//        }
+        if (!GpsEnabled()) {
+            initialize();
         } else {
-            locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-        }
-        GeoPoint startPoint = new GeoPoint(latitude, longitude);
+            mapView = findViewById(R.id.mapView);
+            mapView.setTileSource(TileSourceFactory.MAPNIK);
+            mapView.setBuiltInZoomControls(true);
+            mapView.setMultiTouchControls(true);
+            IMapController mapController = mapView.getController();
+            mapController.setZoom(19.5);
+
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
+            Location location = getLastKnownLocation();
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            } else {
+                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+            }
+            GeoPoint startPoint = new GeoPoint(latitude, longitude);
 //        startPoint = new GeoPoint(48.8583, 2.2944);
-        mapController.setCenter(startPoint);
-        this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
-        this.locationOverlay.enableMyLocation();
+            mapController.setCenter(startPoint);
+            this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+            this.locationOverlay.enableMyLocation();
 
-        test();
-        initRouteCoordinates(2);
-        mapView.getOverlays().add(locationOverlay);
-        mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
-            @Override
-            public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Log.e("location1", p.toString());
-                return false;
-            }
+//        test();
+            initRouteCoordinates(2);
+            mapView.getOverlays().add(locationOverlay);
+            mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
+                @Override
+                public boolean singleTapConfirmedHelper(GeoPoint p) {
+                    Log.e("location1", p.toString());
+                    return false;
+                }
 
-            @Override
-            public boolean longPressHelper(GeoPoint p) {
-                Log.e("location2", p.toString());
-                return false;
-            }
-        }));
+                @Override
+                public boolean longPressHelper(GeoPoint p) {
+                    Log.e("location2", p.toString());
+                    return false;
+                }
+            }));
+        }
     }
 
     void test() {
@@ -225,17 +248,6 @@ public class Main2Activity extends AppCompatActivity
         mapView.getOverlayManager().add(line);
     }
 
-    void initialize() {
-        initializeMap();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        drawer = findViewById(R.id.drawer_layout);
-        drawer.openDrawer(GravityCompat.START);
-        setImageViewFindByViewId();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -246,12 +258,18 @@ public class Main2Activity extends AppCompatActivity
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         assert lm != null;
         @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        assert location != null;
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
+        double longitude = 0;
+        double latitude = 0;
+        if (location != null) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+        }
         routeCoordinates = new ArrayList<>();
         routeCoordinates.add(Point.fromLngLat(longitude, latitude));
-        routeCoordinates.add(Point.fromLngLat(longitude + i, latitude + i));
+        routeCoordinates.add(Point.fromLngLat(longitude + longitude / 1000, latitude + longitude / 1000));
+//        routeCoordinates.add(Point.fromLngLat(longitude - longitude/1000, latitude + longitude/1000));
+//        routeCoordinates.add(Point.fromLngLat(longitude - longitude/1000, latitude - longitude/1000));
+//        routeCoordinates.add(Point.fromLngLat(longitude + longitude/1000, latitude - longitude/1000));
     }
 
     void setImageViewFindByViewId() {
@@ -300,7 +318,6 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     public void onProviderDisabled(String provider) {
-
     }
 
     void send() {
@@ -389,8 +406,8 @@ public class Main2Activity extends AppCompatActivity
     private boolean GpsEnabled() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = LocationManagerCompat.isLocationEnabled(Objects.requireNonNull(locationManager));
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         if (!enabled) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setCancelable(false);
             alertDialog.setTitle("تنظیمات جی پی اس");
             alertDialog.setMessage("مکان یابی شما غیر فعال است، آیا مایلید به قسمت تنظیمات مکان یابی منتقل شوید؟");

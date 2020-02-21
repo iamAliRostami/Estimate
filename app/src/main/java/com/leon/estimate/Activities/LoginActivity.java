@@ -2,10 +2,13 @@ package com.leon.estimate.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -18,7 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.location.LocationManagerCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,7 +36,6 @@ import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
-import com.leon.estimate.Utils.ConnectingManager;
 import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.DifferentCompanyManager;
@@ -45,6 +49,7 @@ import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,9 +81,8 @@ public class LoginActivity extends AppCompatActivity {
     ImageView imageViewUsername;
     @BindView(R.id.imageViewPassword)
     ImageView imageViewPassword;
-
+    int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
-    private ConnectingManager connectingManager;
     private FontManager fontManager;
     private String username, password, deviceId;
     private View viewFocus;
@@ -94,9 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void initialize() {
-        manage_M_permissions();
         context = this;
-        connectingManager = new ConnectingManager(getApplicationContext());
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(relativeLayout);
@@ -111,6 +113,134 @@ public class LoginActivity extends AppCompatActivity {
         setImageViewOnClickListener();
         setButtonOnClickListener();
         setButtonOnLongClickListener();
+    }
+
+
+    @SuppressLint("HardwareIds")
+    void attemptLogin() {
+        deviceId = Build.SERIAL;
+        Retrofit retrofit;
+        if (DifferentCompanyManager.getActiveCompanyName() == CompanyNames.DEBUG) {
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+            String baseUrl = "http://81.90.148.25/";
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .client(NetworkHelper.getHttpClient(""))
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+        } else {
+            retrofit = NetworkHelper.getInstance(true, "");
+        }
+        final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
+        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(new LoginInfo(deviceId, username, password));
+        LoginFeedBack loginFeedBack = new LoginFeedBack();
+        HttpClientWrapper.callHttpAsync(call, loginFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
+    }
+
+    @SuppressLint("HardwareIds")
+    void attemptSerial() {
+        deviceId = Build.SERIAL;
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService serial = retrofit.create(IAbfaService.class);
+        Call<SimpleMessage> call = serial.signSerial(new LoginInfo(deviceId, username, password));
+        SignSerialFeedBack signSerialFeedBack = new SignSerialFeedBack();
+        HttpClientWrapper.callHttpAsync(call, signSerialFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initialize();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        imageViewPerson.setImageDrawable(null);
+        imageViewPassword.setImageDrawable(null);
+        imageViewLogo.setImageDrawable(null);
+        imageViewUsername.setImageDrawable(null);
+        System.gc();
+        Runtime.getRuntime().gc();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        context = null;
+        System.gc();
+        Runtime.getRuntime().gc();
+    }
+
+    class SignSerialFeedBack
+            implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            Toast.makeText(context, simpleMessage.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void askPermission() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                forceClose();
+            }
+        };
+
+        new TedPermission(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleMessage("جهت استفاده بهتر از برنامه مجوز های پیشنهادی را قبول فرمایید")
+                .setDeniedMessage("در صورت رد این مجوز قادر با استفاده از این دستگاه نخواهید بود" + "\n" +
+                        "لطفا با فشار دادن دکمه" + " " + "اعطای دسترسی" + " " + "و سپس در بخش " + " دسترسی ها" + " " + " با این مجوز هاموافقت نمایید")
+                .setGotoSettingButtonText("اعطای دسترسی")
+                .setPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ).check();
+    }
+
+    private void GpsEnabled() {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean enabled = LocationManagerCompat.isLocationEnabled(Objects.requireNonNull(locationManager));
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        if (!enabled) {
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle(R.string.setting_gps);
+            alertDialog.setMessage(R.string.gps_question);
+            alertDialog.setPositiveButton(R.string.setting_, (dialog, which) -> {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, REQUEST_LOCATION_CODE);
+            });
+            alertDialog.setNegativeButton(R.string.permission_not_completed, (dialog, which) -> finishAffinity());
+            alertDialog.show();
+        } else askPermission();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        GpsEnabled();
+    }
+
+    private void forceClose() {
+        new CustomDialog(DialogType.Red, getApplicationContext(),
+                getApplicationContext().getString(R.string.permission_not_completed),
+                getApplicationContext().getString(R.string.dear_user),
+                getApplicationContext().getString(R.string.call_operator),
+                getApplicationContext().getString(R.string.force_close));
+        finishAffinity();
     }
 
     private void setEditTextUsernameChangedListener() {
@@ -178,15 +308,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setImageViewOnClickListener() {
-        imageViewPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
-                    editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
-                else
-                    editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                fontManager.setFont(relativeLayout);
-            }
+        imageViewPassword.setOnClickListener(view -> {
+            if (editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
+                editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+            else
+                editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            fontManager.setFont(relativeLayout);
         });
     }
 
@@ -208,13 +335,7 @@ public class LoginActivity extends AppCompatActivity {
                 cancel = true;
             }
             if (!cancel) {
-//                username = DifferentCompanyManager.getPrefixName(CompanyNames.TSW) + username;
-                if (username.equals("1") && password.equals("1")) {
-                    Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
-                    startActivity(intent);
-                    finish();
-                }
-//                    attemptLogin();
+                attemptLogin();
             }
         });
     }
@@ -237,77 +358,11 @@ public class LoginActivity extends AppCompatActivity {
                 cancel = true;
             }
             if (!cancel) {
-//                username = DifferentCompanyManager.getPrefixName(CompanyNames.TSW) + username;
-                attemptSerial();
+//                attemptSerial();
+                GpsEnabled();
             }
             return false;
         });
-    }
-
-    @SuppressLint("HardwareIds")
-    void attemptLogin() {
-        deviceId = Build.SERIAL;
-        Retrofit retrofit;
-        if (DifferentCompanyManager.getActiveCompanyName() == CompanyNames.DEBUG) {
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-            String baseUrl = "http://81.90.148.25/";
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .client(NetworkHelper.getHttpClient(""))
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-        } else {
-            retrofit = NetworkHelper.getInstance(true, "");
-        }
-        final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
-        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(new LoginInfo(deviceId, username, password));
-        LoginFeedBack loginFeedBack = new LoginFeedBack();
-        HttpClientWrapper.callHttpAsync(call, loginFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
-    }
-
-    void attemptSerial() {
-        deviceId = Build.SERIAL;
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
-        final IAbfaService serial = retrofit.create(IAbfaService.class);
-        Call<SimpleMessage> call = serial.signSerial(new LoginInfo(deviceId, username, password));
-        SignSerialFeedBack signSerialFeedBack = new SignSerialFeedBack();
-        HttpClientWrapper.callHttpAsync(call, signSerialFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initialize();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        imageViewPerson.setImageDrawable(null);
-        imageViewPassword.setImageDrawable(null);
-        imageViewLogo.setImageDrawable(null);
-        imageViewUsername.setImageDrawable(null);
-        System.gc();
-        Runtime.getRuntime().gc();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        context = null;
-        System.gc();
-        Runtime.getRuntime().gc();
-    }
-
-    class SignSerialFeedBack
-            implements ICallback<SimpleMessage> {
-        @Override
-        public void execute(SimpleMessage simpleMessage) {
-            Toast.makeText(context, simpleMessage.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     class LoginFeedBack
@@ -324,44 +379,9 @@ public class LoginActivity extends AppCompatActivity {
                 sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME.getValue(), username);
                 sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
                 sharedPreferenceManager.putData(SharedReferenceKeys.REFRESH_TOKEN.getValue(), loginFeedBack.getRefresh_token());
-                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
-                startActivity(intent);
-                finish();
+                GpsEnabled();
             }
         }
     }
 
-
-    public void manage_M_permissions() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                forceClose();
-            }
-        };
-
-        new TedPermission(this)
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("جهت استفاده بهتر از برنامه مجوز های پیشنهادی را قبول فرمایید")
-                .setDeniedMessage("در صورت رد این مجوز قادر با استفاده از این دستگاه نخواهید بود" + "\n" +
-                        "لطفا با فشار دادن دکمه" + " " + "اعطای دسترسی" + " " + "و سپس در بخش " + " دسترسی ها" + " " + " با این مجوز هاموافقت نمایید")
-                .setGotoSettingButtonText("اعطای دسترسی")
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
-                .check();
-    }
-
-    private void forceClose() {
-        new CustomDialog(DialogType.Red, getApplicationContext(),
-                getApplicationContext().getString(R.string.permission_not_completed),
-                getApplicationContext().getString(R.string.dear_user),
-                getApplicationContext().getString(R.string.call_operator),
-                getApplicationContext().getString(R.string.force_close));
-        finishAffinity();
-    }
 }

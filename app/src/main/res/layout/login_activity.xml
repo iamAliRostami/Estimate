@@ -126,7 +126,8 @@
                 android:background="@drawable/border_1"
                 android:gravity="center"
                 android:hint="@string/username"
-                android:inputType="number"
+                android:inputType="text"
+                android:text="appExam"
                 android:lines="1"
                 android:padding="@dimen/activity_medium_padding" />
 
@@ -155,7 +156,8 @@
                 android:background="@drawable/border_1"
                 android:gravity="center"
                 android:hint="@string/password"
-                android:inputType="numberPassword"
+                android:inputType="textPassword"
+                android:text="123456"
                 android:lines="1"
                 android:padding="@dimen/activity_medium_padding" />
 
