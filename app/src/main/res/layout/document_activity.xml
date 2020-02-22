@@ -200,6 +200,8 @@
             </LinearLayout>
 
             <ImageView
+                android:layout_margin="@dimen/activity_large_margin"
+                android:background="@drawable/border_2"
                 android:id="@+id/imageView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

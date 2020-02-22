@@ -37,16 +37,20 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
+import com.leon.estimate.Enums.SharedReferenceKeys;
+import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.Calculation;
-import com.leon.estimate.Tables.DaoCalculation;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
+import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
 import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.geojson.Point;
@@ -126,9 +130,15 @@ public class Main2Activity extends AppCompatActivity
             setContentView(R.layout.main2_activity);
             initialize();
         }
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
+        Log.e("size", String.valueOf(examinerDuties.size()));
+//
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_13_14).build();
+//                .addMigrations(MyDatabase.MIGRATION_14_15).build();
     }
 
     void initialize() {
@@ -291,9 +301,11 @@ public class Main2Activity extends AppCompatActivity
     }
 
     void download() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "header");
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(false, token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
-        Call<List<Calculation>> call = getKardex.getMyWorks();
+        Call<Input> call = getKardex.getMyWorks();
         Download download = new Download();
         HttpClientWrapper.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
     }
@@ -429,14 +441,25 @@ public class Main2Activity extends AppCompatActivity
         startActivity(intent);
     }
 
-    class Download implements ICallback<List<Calculation>> {
+    class Download implements ICallback<Input> {
         @Override
-        public void execute(List<Calculation> calculations) {
+        public void execute(Input input) {
+//            ArrayList<RequestDictionary> object = input.getExaminerDuties().get(0).getRequestDictionary();
+//            Gson gson = new Gson();
+//            String json = gson.toJson(object);
+//            Log.e("json", json);
+
+//            Gson gson1=new GsonBuilder().create();
+//            List<RequestDictionary> list= Arrays.asList(gson1.fromJson(json,RequestDictionary[].class));
+//            Log.e("json1", String.valueOf(list.size()));
+
+            Log.e("size", String.valueOf(input.getExaminerDuties().size()));
+
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
-            DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-            daoCalculation.insertAll(calculations);
-            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(calculations.size())).concat(" مسیر بارگیری شد."),
+            DaoExaminerDuties examinerDuties = dataBase.daoExaminerDuties();
+            examinerDuties.insertAll(input.getExaminerDuties());
+            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
                     getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
         }
     }

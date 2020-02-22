@@ -1,10 +1,8 @@
 package com.leon.estimate.Utils;
 
-import com.leon.estimate.Tables.Calculation;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInputSend;
-
-import java.util.List;
+import com.leon.estimate.Tables.Input;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -138,8 +136,8 @@ public interface IAbfaService {
     Call<SimpleMessage> signSerial(
             @Body LoginInfo logininfo);
 
-    @GET("/MoshtarakinApi/ExaminationManager/GetMyWorksTest")
-    Call<List<Calculation>> getMyWorks();
+    @GET("/MoshtarakinApi/ExaminationManager/GetMyWorks")
+    Call<Input> getMyWorks();
 
     @GET("/MoshtarakinApi/ExaminationManager/GetExaminationDetails/")
     Call<CalculationInfo> getMyWorksDetails(@Query("trackNumber") String trackNumber);

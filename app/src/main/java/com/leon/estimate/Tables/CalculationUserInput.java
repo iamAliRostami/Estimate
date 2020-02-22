@@ -7,16 +7,17 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "CalculationUserInput", indices = @Index(value = {"trackNumber"}, unique = true))
 
 public class CalculationUserInput {
+    public int karbariId;
+    public int radif;
     public String trackingId;
     public int trackNumber;
+    String examinationId;
     public int requestType;
     public String parNumber;
     public String billId;
-    public int radif;
     public String neighbourBillId;
     public int zoneId;
     public String notificationMobile;
-    public int karbariId;
     public int qotrEnsheabId;
     public int noeVagozariId;
     public int taxfifId;

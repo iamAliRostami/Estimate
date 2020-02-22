@@ -1,15 +1,11 @@
 package com.leon.estimate.Utils;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Leon on 12/17/2017.
  */
 
 public class LoginFeedBack {
-    @SerializedName("access_token")
     String access_token;
-    @SerializedName("refresh_token")
     String refresh_token;
 
     public LoginFeedBack(String access_token, String refresh_token) {

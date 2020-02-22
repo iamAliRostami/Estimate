@@ -1,16 +1,32 @@
 package com.leon.estimate.Tables;
 
-public class TaxfifDictionary {
-    int id;
-    boolean isDisabled;
-    boolean isSelected;
-    String title;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
-    public TaxfifDictionary(int id, boolean isDisabled, boolean isSelected, String title) {
+@Entity(tableName = "TaxfifDictionary", indices = @Index(value = {"id"}, unique = true))
+public class TaxfifDictionary {
+    @PrimaryKey
+    int id;
+    String title;
+    boolean isSelected;
+    boolean isDisabled;
+    boolean hasSms;
+
+    public TaxfifDictionary(int id, String title, boolean isSelected, boolean isDisabled, boolean hasSms) {
         this.id = id;
-        this.isDisabled = isDisabled;
-        this.isSelected = isSelected;
         this.title = title;
+        this.isSelected = isSelected;
+        this.isDisabled = isDisabled;
+        this.hasSms = hasSms;
+    }
+
+    public boolean isHasSms() {
+        return hasSms;
+    }
+
+    public void setHasSms(boolean hasSms) {
+        this.hasSms = hasSms;
     }
 
     public int getId() {

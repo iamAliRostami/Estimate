@@ -4,8 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "QotrEnsheabDictionary", indices = @Index(value = {"id"}, unique = true))
-public class QotrEnsheabDictionary {
+@Entity(tableName = "RequestDictionary", indices = @Index(value = {"id"}, unique = true))
+public class RequestDictionary {
     @PrimaryKey
     int id;
     String title;
@@ -13,7 +13,7 @@ public class QotrEnsheabDictionary {
     boolean isDisabled;
     boolean hasSms;
 
-    public QotrEnsheabDictionary(int id, String title, boolean isSelected, boolean isDisabled, boolean hasSms) {
+    public RequestDictionary(int id, String title, boolean isSelected, boolean isDisabled, boolean hasSms) {
         this.id = id;
         this.title = title;
         this.isSelected = isSelected;
@@ -60,4 +60,5 @@ public class QotrEnsheabDictionary {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }
