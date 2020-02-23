@@ -159,7 +159,7 @@
                                 android:singleLine="true" />
 
                             <EditText
-                                android:id="@+id/editText21"
+                                android:id="@+id/editTextShenasname"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -200,7 +200,7 @@
                                 android:singleLine="true" />
 
                             <EditText
-                                android:id="@+id/editText23"
+                                android:id="@+id/editTextName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

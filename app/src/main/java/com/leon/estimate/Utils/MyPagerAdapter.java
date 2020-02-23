@@ -36,9 +36,9 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                return Form1Fragment.newInstance("0", "Page # 1");
+                return Form1Fragment.newInstance(examinerDuties, "Page # 1");
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return MapFragment.newInstance("1", "Page # 2");
+                return MapFragment.newInstance(examinerDuties, "Page # 2");
             case 2: // Fragment # 1 - This will show SecondFragment
 //                return Form2Fragment.newInstance("2", "Page # 3");
             case 3: // Fragment # 1 - This will show SecondFragment

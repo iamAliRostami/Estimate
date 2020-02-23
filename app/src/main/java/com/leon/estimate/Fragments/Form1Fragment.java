@@ -153,10 +153,8 @@ public class Form1Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-
             Gson gson = new GsonBuilder().create();
             examinerDuties = Arrays.asList(gson.fromJson(mParam1, ExaminerDuties[].class)).get(0);
-
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();

@@ -16,13 +16,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Utils.FontManager;
 import com.mapbox.mapboxsdk.Mapbox;
 
@@ -43,6 +47,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,20 +75,50 @@ public class MapFragment extends Fragment implements LocationListener {
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     private String mParam1;
     private String mParam2;
+
     @BindView(R.id.relativeLayout)
     RelativeLayout relativeLayout;
     @BindView(R.id.button_next)
     Button buttonNext;
+
+    @BindView(R.id.editTextNationNumber)
+    EditText editTextNationNumber;
+    @BindView(R.id.editTextShenasname)
+    EditText editTextShenasname;
+
+    @BindView(R.id.editTextName)
+    EditText editTextName;
+    @BindView(R.id.editTextFamily)
+    EditText editTextFamily;
+    @BindView(R.id.editTextPostalCode)
+    EditText editTextPostalCode;
+    @BindView(R.id.editTextRadif)
+    EditText editTextRadif;
+    @BindView(R.id.editTextPhone)
+    EditText editTextPhone;
+    @BindView(R.id.editTextMobile)
+    EditText editTextMobile;
+    @BindView(R.id.editTextAdress)
+    EditText editTextAdress;
+    @BindView(R.id.editText26)
+    EditText editText26;
+    @BindView(R.id.editTextDescription)
+    EditText editTextDescription;
+
     private Context context;
+    ExaminerDuties examinerDuties;
 
     public MapFragment() {
 
     }
 
-    public static MapFragment newInstance(String param1, String param2) {
+    public static MapFragment newInstance(ExaminerDuties examinerDuties, String param2) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(examinerDuties);
+        args.putString(ARG_PARAM1, json);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -94,6 +129,8 @@ public class MapFragment extends Fragment implements LocationListener {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
+            Gson gson = new GsonBuilder().create();
+            examinerDuties = Arrays.asList(gson.fromJson(mParam1, ExaminerDuties[].class)).get(0);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();

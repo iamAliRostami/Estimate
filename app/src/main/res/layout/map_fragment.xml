@@ -144,7 +144,7 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:id="@+id/editText20"
+                                android:id="@+id/editTextNationNumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -158,7 +158,7 @@
                                 android:singleLine="true" />
 
                             <EditText
-                                android:id="@+id/editText23"
+                                android:id="@+id/editTextName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -198,7 +198,7 @@
                                 android:maxLines="1"
                                 android:singleLine="true" />
                             <EditText
-                                android:id="@+id/editText28"
+                                android:id="@+id/editTextPhone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -281,7 +281,7 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:id="@+id/editText21"
+                                android:id="@+id/editTextShenasname"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -294,7 +294,7 @@
                                 android:singleLine="true" />
 
                             <EditText
-                                android:id="@+id/editText22"
+                                android:id="@+id/editTextFamily"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -312,7 +312,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/editText25"
+                                    android:id="@+id/editTextPostalCode"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -338,7 +338,7 @@
                             </LinearLayout>
 
                             <EditText
-                                android:id="@+id/editText27"
+                                android:id="@+id/editTextRadif"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -355,7 +355,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/editText29"
+                                    android:id="@+id/editTextMobile"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -404,7 +404,7 @@
                             android:textStyle="bold" />
 
                         <EditText
-                            android:id="@+id/editText30"
+                            android:id="@+id/editTextAdress"
                             android:layout_width="0dp"
                             android:layout_height="122dp"
                             android:layout_gravity="center"
@@ -437,7 +437,7 @@
                             android:textStyle="bold" />
 
                         <EditText
-                            android:id="@+id/editText31"
+                            android:id="@+id/editTextDescription"
                             android:layout_width="0dp"
                             android:layout_height="77dp"
                             android:layout_gravity="center"
