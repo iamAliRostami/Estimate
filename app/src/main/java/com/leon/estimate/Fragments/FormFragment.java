@@ -23,6 +23,7 @@ import androidx.room.Room;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
+import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
@@ -49,12 +50,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class Form1Fragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "requests";
+public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
     private String mParam2;
     @BindView(R.id.editTextZoneTitle)
     EditText editTextZoneTitle;
@@ -118,30 +116,29 @@ public class Form1Fragment extends Fragment {
     CheckBox checkBox3;
     private View findViewById;
     private Context context;
-    ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
     private Typeface typeface;
     private MyDatabase dataBase;
-    List<KarbariDictionary> karbariDictionaries;
-    List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
-    List<NoeVagozariDictionary> noeVagozariDictionaries;
-    List<TaxfifDictionary> taxfifDictionaries;
+    private List<KarbariDictionary> karbariDictionaries;
+    private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
+    private List<NoeVagozariDictionary> noeVagozariDictionaries;
+    private List<TaxfifDictionary> taxfifDictionaries;
+    private List<ServiceDictionary> serviceDictionaries;
+    private List<RequestDictionary> requestDictionaries;
+    private ExaminerDuties examinerDuties;
 
-    List<ServiceDictionary> serviceDictionaries;
-    List<RequestDictionary> requestDictionaries;
 
-    ExaminerDuties examinerDuties;
-
-    public Form1Fragment() {
+    public FormFragment() {
 
     }
 
-    public static Form1Fragment newInstance(ExaminerDuties examinerDuties, String param2) {
-        Form1Fragment fragment = new Form1Fragment();
+    public static FormFragment newInstance(ExaminerDuties examinerDuties, String param2) {
+        FormFragment fragment = new FormFragment();
         Bundle args = new Bundle();
 
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
-        args.putString(ARG_PARAM1, json);
+        args.putString(BundleEnum.REQUEST.getValue(), json);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -151,9 +148,9 @@ public class Form1Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            String json = getArguments().getString(BundleEnum.REQUEST.getValue());
             Gson gson = new GsonBuilder().create();
-            examinerDuties = gson.fromJson(mParam1, ExaminerDuties.class);
+            examinerDuties = gson.fromJson(json, ExaminerDuties.class);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();
@@ -388,6 +385,7 @@ public class Form1Fragment extends Fragment {
         i.putExtra("NAME_KEY", "slm");
         getActivity().startActivity(i);
     }
+
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);

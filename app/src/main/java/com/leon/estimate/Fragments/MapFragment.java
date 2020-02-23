@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
+import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Utils.FontManager;
@@ -45,7 +46,6 @@ import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,13 +57,10 @@ import static android.content.Context.LOCATION_SERVICE;
 
 
 public class MapFragment extends Fragment implements LocationListener {
-
-    private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private double latitude;
     private double longitude;
-    LocationManager locationManager;
-    private String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
+    private LocationManager locationManager;
     List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
     String trackNumber;
     private int polygonIndex;
@@ -72,8 +69,6 @@ public class MapFragment extends Fragment implements LocationListener {
     private MapView mapView = null;
     private MyLocationNewOverlay locationOverlay;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-    private String mParam1;
-    private String mParam2;
 
     @BindView(R.id.relativeLayout)
     RelativeLayout relativeLayout;
@@ -106,7 +101,7 @@ public class MapFragment extends Fragment implements LocationListener {
     EditText editTextFatherName;
 
     private Context context;
-    ExaminerDuties examinerDuties;
+    private ExaminerDuties examinerDuties;
 
     public MapFragment() {
 
@@ -118,7 +113,7 @@ public class MapFragment extends Fragment implements LocationListener {
 
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
-        args.putString(ARG_PARAM1, json);
+        args.putString(BundleEnum.REQUEST.getValue(), json);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -128,13 +123,14 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            String json = getArguments().getString(BundleEnum.REQUEST.getValue());
             Gson gson = new GsonBuilder().create();
-            examinerDuties = gson.fromJson(mParam1, ExaminerDuties.class);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            examinerDuties = gson.fromJson(json, ExaminerDuties.class);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+        String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
         Mapbox.getInstance(context, accessToken);
     }
 
@@ -152,9 +148,9 @@ public class MapFragment extends Fragment implements LocationListener {
         FontManager fontManager = new FontManager(context);
         fontManager.setFont(relativeLayout);
         buttonNext.setOnClickListener(v -> {
-            mapView.setDrawingCacheEnabled(true);
-            Bitmap bitmap = mapView.getDrawingCache(true);
-            ((FormActivity) getActivity()).nextPage(bitmap);
+//            mapView.setDrawingCacheEnabled(true);
+//            Bitmap bitmap = mapView.getDrawingCache(true);
+            ((FormActivity) getActivity()).nextPage(convertMapToBitmap());
         });
         initializeField();
     }
@@ -221,7 +217,6 @@ public class MapFragment extends Fragment implements LocationListener {
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 //        mapView.getOverlays().add(startMarker);
-
         if (placeIndex != 0) {//TODO crash on paging...
             mapView.getOverlayManager().remove(placeIndex);
         }
@@ -232,12 +227,6 @@ public class MapFragment extends Fragment implements LocationListener {
     private Bitmap convertMapToBitmap() {
         mapView.setDrawingCacheEnabled(true);
         return mapView.getDrawingCache(true);
-    }
-
-    private byte[] convertBitmapToByte(Bitmap bitmap) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        return bos.toByteArray();
     }
 
     private void createPolygon(GeoPoint geoPoint) {
@@ -252,7 +241,6 @@ public class MapFragment extends Fragment implements LocationListener {
         pts.add(pts.get(0));
         polygonPoint.add(geoPoint);
 
-
         line.setPoints(pts);
         line.setGeodesic(true);
         line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapView));
@@ -265,6 +253,27 @@ public class MapFragment extends Fragment implements LocationListener {
 
         mapView.getOverlayManager().add(line);
         polygonIndex = mapView.getOverlays().size() - 1;
+    }
+
+
+    private Location getLastKnownLocation() {
+        Location l = null;
+        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(LOCATION_SERVICE);
+        assert mLocationManager != null;
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                l = mLocationManager.getLastKnownLocation(provider);
+            }
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 
     @Override
@@ -289,27 +298,6 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
-
-    private Location getLastKnownLocation() {
-        Location l = null;
-        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(LOCATION_SERVICE);
-        assert mLocationManager != null;
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                l = mLocationManager.getLastKnownLocation(provider);
-            }
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                bestLocation = l;
-            }
-        }
-        return bestLocation;
-    }
-
 
     @Override
     public void onAttach(@NotNull Context context) {

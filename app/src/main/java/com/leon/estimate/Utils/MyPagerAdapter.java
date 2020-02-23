@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.leon.estimate.Fragments.Form1Fragment;
+import com.leon.estimate.Fragments.FormFragment;
 import com.leon.estimate.Fragments.MapFragment;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
@@ -36,7 +36,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                return Form1Fragment.newInstance(examinerDuties, "Page # 1");
+                return FormFragment.newInstance(examinerDuties, "Page # 1");
             case 1: // Fragment # 0 - This will show FirstFragment different title
                 return MapFragment.newInstance(examinerDuties, "Page # 2");
             case 2: // Fragment # 1 - This will show SecondFragment

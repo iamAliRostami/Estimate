@@ -76,12 +76,18 @@ public class FormActivity extends AppCompatActivity {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         else {
             Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] bytes = byteArrayOutputStream.toByteArray();
-            intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bytes);
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+//            byte[] bytes = byteArrayOutputStream.toByteArray();
+            intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), convertBitmapToByte(bitmap));
             context.startActivity(intent);
         }
+    }
+
+    private byte[] convertBitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        return bos.toByteArray();
     }
 
     @Override

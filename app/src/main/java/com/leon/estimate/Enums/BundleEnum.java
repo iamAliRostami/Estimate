@@ -20,6 +20,7 @@ public enum BundleEnum {
     NUMBER("counterStateCode"),
     CURRENT_PAGE("number"),
     IMAGE_BITMAP("image_bitmap"),
+    REQUEST("request"),
     SERVICES("services");
 
     private final String value;
