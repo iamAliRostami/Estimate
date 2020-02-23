@@ -1,5 +1,6 @@
 package com.leon.estimate.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -22,6 +25,8 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
+import com.leon.estimate.Tables.DaoRequestDictionary;
+import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.KarbariDictionary;
 import com.leon.estimate.Tables.MyDatabase;
@@ -48,6 +53,46 @@ public class Form1Fragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+    @BindView(R.id.editText1)
+    EditText editText1;
+    @BindView(R.id.editText2)
+    EditText editText2;
+    @BindView(R.id.editText3)
+    EditText editText3;
+    @BindView(R.id.editText4)
+    EditText editText4;
+    @BindView(R.id.editText5)
+    EditText editText5;
+    @BindView(R.id.editText6)
+    EditText editText6;
+    @BindView(R.id.editText7)
+    EditText editText7;
+    @BindView(R.id.editText8)
+    EditText editText8;
+    @BindView(R.id.editText9)
+    EditText editText9;
+    @BindView(R.id.editText10)
+    EditText editText10;
+    @BindView(R.id.editText11)
+    EditText editText11;
+    @BindView(R.id.editText12)
+    EditText editText12;
+    @BindView(R.id.editText13)
+    EditText editText13;
+    @BindView(R.id.editText14)
+    EditText editText14;
+    @BindView(R.id.editText15)
+    EditText editText15;
+    @BindView(R.id.editText16)
+    EditText editText16;
+    @BindView(R.id.editText17)
+    EditText editText17;
+    @BindView(R.id.editText18)
+    EditText editText18;
+    @BindView(R.id.editText19)
+    EditText editText19;
+    @BindView(R.id.linearLayout2)
+    LinearLayout linearLayout2;
     @BindView(R.id.spinner1)
     Spinner spinner1;
     @BindView(R.id.spinner2)
@@ -60,13 +105,11 @@ public class Form1Fragment extends Fragment {
     RelativeLayout relativeLayout;
     @BindView(R.id.button_next)
     Button buttonNext;
-    @BindView(R.id.editText19)
-    EditText editText19;
     private View findViewById;
     private Context context;
-    Typeface typeface;
-    MyDatabase dataBase;
-
+    ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+    private Typeface typeface;
+    private MyDatabase dataBase;
     List<KarbariDictionary> karbariDictionaries;
     List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     List<NoeVagozariDictionary> noeVagozariDictionaries;
@@ -115,18 +158,17 @@ public class Form1Fragment extends Fragment {
         initializeSpinner();
     }
 
-
-    void initializeSpinner() {
+    private void initializeSpinner() {
         dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         initializeNoeVagozariSpinner();
         initializeKarbariSpinner();
         initializeQotrEnsheabSpinner();
         initializeTaxfifSpinner();
-        initializeServices();
+        initializeServicesCheckBox();
     }
 
-    void initializeKarbariSpinner() {
+    private void initializeKarbariSpinner() {
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         karbariDictionaries = daoKarbariDictionary.getKarbariDictionary();
         List<String> arrayListSpinner1 = new ArrayList<>();
@@ -155,7 +197,7 @@ public class Form1Fragment extends Fragment {
         spinner1.setSelection(select);
     }
 
-    void initializeTaxfifSpinner() {
+    private void initializeTaxfifSpinner() {
         DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
         taxfifDictionaries = daoTaxfifDictionary.getTaxfifDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
@@ -184,7 +226,7 @@ public class Form1Fragment extends Fragment {
         spinner4.setSelection(select);
     }
 
-    void initializeNoeVagozariSpinner() {
+    private void initializeNoeVagozariSpinner() {
         DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
         noeVagozariDictionaries = daoNoeVagozariDictionary.getNoeVagozariDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
@@ -213,7 +255,7 @@ public class Form1Fragment extends Fragment {
         spinner2.setSelection(select);
     }
 
-    void initializeQotrEnsheabSpinner() {
+    private void initializeQotrEnsheabSpinner() {
         DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
         qotrEnsheabDictionaries = daoQotrEnsheabDictionary.getQotrEnsheabDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
@@ -242,7 +284,55 @@ public class Form1Fragment extends Fragment {
         spinner3.setSelection(select);
     }
 
-    void initializeServices() {
+    @SuppressLint("NewApi")
+    private void initializeServicesCheckBox() {
+        DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+        serviceDictionaries = daoServiceDictionary.getServiceDictionaries();
+
+        DaoRequestDictionary daoRequestDictionary = dataBase.daoRequestDictionary();
+        requestDictionaries = daoRequestDictionary.getRequestDictionaries();
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        String tag;
+        int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
+        int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
+        int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
+
+        for (int i = 0; i < serviceDictionaries.size(); i++) {
+            if (i % 5 == 0) {
+                tag = "linearLayout".concat(String.valueOf(i));
+                linearLayout = new LinearLayout(context);
+                linearLayout.setTag(tag);
+                linearLayout.setGravity(1);
+                linearLayout2.addView(linearLayout);
+            }
+            CheckBox checkBox = new CheckBox(context);
+            checkBox.setTag("checkBox".concat(String.valueOf(i)));
+            checkBox.setGravity(1);
+            checkBox.setText(serviceDictionaries.get(i).getTitle());
+            checkBox.setTextSize(textSize);
+            checkBox.setPadding(padding, padding, padding, padding);
+            checkBox.setTypeface(typeface);
+            checkBox.setTextColor(context.getColor(R.color.blue4));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(margin, margin, margin, margin);
+            checkBox.setLayoutParams(params);
+            if (serviceDictionaries.get(i).isSelected())
+                checkBox.setChecked(true);
+            checkBoxes.add(checkBox);
+            linearLayout.addView(checkBox);
+        }
+    }
+
+    boolean checkIsNoEmpty(EditText editText) {
+        View focusView;
+        if (editText.getText().toString().length() < 1) {
+            focusView = editText;
+            focusView.requestFocus();
+            return true;
+        }
+        return false;
     }
 
     private void sendData() {

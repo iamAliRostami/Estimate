@@ -8,64 +8,95 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class, RequestDictionary.class,
-        Images.class, MapScreen.class}, version = 17, exportSchema = false)
+        Images.class, MapScreen.class}, version = 18, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
+    public static final Migration MIGRATION_10_11 = new Migration(17, 18) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE \"RequestDictionary\" (\n" +
-                    "\t\"id\"\tINTEGER,\n" +
-                    "\t\"title\"\tTEXT,\n" +
-                    "\t\"isSelected\"\tINTEGER,\n" +
-                    "\t\"isDisabled\"\tINTEGER,\n" +
-                    "\t\"hasSms\"\tINTEGER,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");");
-//            database.execSQL("CREATE TABLE CalculationUserInput ( " +
-//                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                    "trackingId  TEXT, " +
-//                    "trackNumber  INTEGER,  " +
-//                    "requestType  INTEGER,  " +
-//                    "parNumber  TEXT,  " +
-//                    "billId  TEXT,  " +
-//                    "radif  INTEGER,  " +
-//                    "neighbourBillId  TEXT,  " +
-//                    "zoneId  INTEGER,  " +
-//                    "notificationMobile  TEXT,  " +
-//                    "karbariId  INTEGER,  " +
-//                    "qotrEnsheabId  INTEGER,  " +
-//                    "noeVagozariId  INTEGER,  " +
-//                    "taxfifId  INTEGER,  " +
-//                    "selectedServices  TEXT,  " +
-//                    "phoneNumber  TEXT,  " +
-//                    "mobile  TEXT,  " +
-//                    "firstName  INTEGER,  " +
-//                    "sureName  TEXT,  " +
-//                    "arse  INTEGER,  " +
-//                    "aianKol  INTEGER,  " +
-//                    "aianMaskooni  INTEGER,  " +
-//                    "aianTejari  INTEGER,  " +
-//                    "sifoon100  INTEGER,  " +
-//                    "sifoon125  INTEGER,  " +
-//                    "sifoon150  INTEGER,  " +
-//                    "  sifoon200  INTEGER,  " +
-//                    "  zarfiatQarardadi  INTEGER,  " +
-//                    "  arzeshMelk  INTEGER,  " +
-//                    "  tedadMaskooni  INTEGER,  " +
-//                    "  tedadTejari  INTEGER,  " +
-//                    "  tedadSaier  INTEGER,  " +
-//                    "  tedadTaxfif  INTEGER,  " +
-//                    "  nationalId  TEXT,  " +
-//                    "  identityCode  TEXT,  " +
-//                    "  fatherName  TEXT,  " +
-//                    "  postalCode  TEXT,  " +
-//                    "  ensheabQeireDaem  INTEGER,  " +
-//                    "  adamTaxfifAb  INTEGER,  " +
-//                    "  adamTaxfifFazelab  INTEGER,  " +
-//                    "  address  INTEGER,  " +
-//                    "  description  INTEGER,  " +
-//                    "  sent  INTEGER  " +
+//            database.execSQL("CREATE TABLE \"RequestDictionary\" (\n" +
+//                    "\t\"id\"\tINTEGER,\n" +
+//                    "\t\"title\"\tTEXT,\n" +
+//                    "\t\"isSelected\"\tINTEGER,\n" +
+//                    "\t\"isDisabled\"\tINTEGER,\n" +
+//                    "\t\"hasSms\"\tINTEGER,\n" +
+//                    "\tPRIMARY KEY(\"id\")\n" +
 //                    ");");
+            database.execSQL("CREATE TABLE \"my_table_copy\" (\n" +
+                    "\t\"id\"\tINTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "\t\"examinationId\"\tTEXT,\n" +
+                    "\t\"karbariId\"\tTEXT,\n" +
+                    "\t\"radif\"\tTEXT,\n" +
+                    "\t\"trackNumber\"\tTEXT UNIQUE,\n" +
+                    "\t\"billId\"\tINTEGER,\n" +
+                    "\t\"examinationDay\"\tTEXT,\n" +
+                    "\t\"nameAndFamily\"\tTEXT,\n" +
+                    "\t\"moshtarakMobile\"\tTEXT,\n" +
+                    "\t\"notificationMobile\"\tTEXT,\n" +
+                    "\t\"serviceGroup\"\tTEXT,\n" +
+                    "\t\"address\"\tTEXT,\n" +
+                    "\t\"neighbourBillId\"\tTEXT,\n" +
+                    "\t\"isPeymayesh\"\tINTEGER,\n" +
+                    "\t\"trackingId\"\tTEXT,\n" +
+                    "\t\"requestType\"\tTEXT,\n" +
+                    "\t\"parNumber\"\tTEXT,\n" +
+                    "\t\"zoneId\"\tTEXT,\n" +
+                    "\t\"callerId\"\tTEXT,\n" +
+                    "\t\"zoneTitle\"\tTEXT,\n" +
+                    "\t\"isNewEnsheab\"\tINTEGER,\n" +
+                    "\t\"phoneNumber\"\tTEXT,\n" +
+                    "\t\"mobile\"\tTEXT,\n" +
+                    "\t\"firstName\"\tTEXT,\n" +
+                    "\t\"sureName\"\tTEXT,\n" +
+                    "\t\"hasFazelab\"\tINTEGER,\n" +
+                    "\t\"fazelabInstallDate\"\tTEXT,\n" +
+                    "\t\"isFinished\"\tINTEGER,\n" +
+                    "\t\"eshterak\"\tTEXT,\n" +
+                    "\t\"arse\"\tINTEGER,\n" +
+                    "\t\"aianKol\"\tINTEGER,\n" +
+                    "\t\"aianMaskooni\"\tINTEGER,\n" +
+                    "\t\"aianNonMaskooni\"\tINTEGER,\n" +
+                    "\t\"qotrEnsheabId\"\tINTEGER,\n" +
+                    "\t\"sifoon100\"\tINTEGER,\n" +
+                    "\t\"sifoon125\"\tINTEGER,\n" +
+                    "\t\"sifoon150\"\tINTEGER,\n" +
+                    "\t\"sifoon200\"\tINTEGER,\n" +
+                    "\t\"zarfiatQarardadi\"\tINTEGER,\n" +
+                    "\t\"arzeshMelk\"\tINTEGER,\n" +
+                    "\t\"tedadMaskooni\"\tINTEGER,\n" +
+                    "\t\"tedadTejari\"\tINTEGER,\n" +
+                    "\t\"tedadSaier\"\tINTEGER,\n" +
+                    "\t\"taxfifId\"\tINTEGER,\n" +
+                    "\t\"tedadTaxfif\"\tINTEGER,\n" +
+                    "\t\"nationalId\"\tTEXT,\n" +
+                    "\t\"identityCode\"\tTEXT,\n" +
+                    "\t\"fatherName\"\tTEXT,\n" +
+                    "\t\"postalCode\"\tTEXT,\n" +
+                    "\t\"description\"\tTEXT,\n" +
+                    "\t\"adamTaxfifAb\"\tINTEGER,\n" +
+                    "\t\"adamTaxfifFazelab\"\tINTEGER,\n" +
+                    "\t\"isEnsheabQeirDaem\"\tINTEGER,\n" +
+                    "\t\"hasRadif\"\tINTEGER,\n" +
+                    "\t\"requestDictionaryString\"\tTEXT,\n" +
+                    "\tPRIMARY KEY(\"trackNumber\")\n" +
+                    ");");
+            database.execSQL("DROP TABLE ExaminerDuties;\n");
+            database.execSQL("ALTER TABLE my_table_copy RENAME TO ExaminerDuties;");
+        }
+    };
+
+    public static final Migration MIGRATION_17_18 = new Migration(17, 18) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE my_table_copy( \n" +
+                    "    id INTEGER, \n" +
+                    "    lang INTEGER,\n" +
+                    "    data TEXT,\n" +
+                    "    PRIMARY KEY (id, lang)\n" +
+                    ");\n");
+//            database.execSQL("INSERT INTO my_table_copy (id, lang, data)\n" +
+//                    "   SELECT id, lang, data FROM my_table;\n");
+            database.execSQL("DROP TABLE my_table;\n");
+            database.execSQL("ALTER TABLE my_table_copy RENAME TO my_table;");
         }
     };
 

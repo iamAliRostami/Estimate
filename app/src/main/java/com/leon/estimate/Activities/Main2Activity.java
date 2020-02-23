@@ -141,10 +141,10 @@ public class Main2Activity extends AppCompatActivity
 //        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
 //        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
 //        Log.e("size", String.valueOf(examinerDuties.size()));
-//
+
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_14_15).build();
+//                .addMigrations(MyDatabase.MIGRATION_10_11).build();
     }
 
     void initialize() {

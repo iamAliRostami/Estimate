@@ -11,10 +11,10 @@ import java.util.ArrayList;
 public class ExaminerDuties {
     @PrimaryKey(autoGenerate = true)
     int id;
+    String trackNumber;
     String examinationId;
     String karbariId;
     String radif;
-    String trackNumber;
     String billId;
     String examinationDay;
     String nameAndFamily;
@@ -67,14 +67,6 @@ public class ExaminerDuties {
     String requestDictionaryString;
     @Ignore
     ArrayList<RequestDictionary> requestDictionary;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getExaminationId() {
         return examinationId;
