@@ -98,11 +98,11 @@ public class Form1Activity extends AppCompatActivity {
     EditText editText22;
     @BindView(R.id.editTextName)
     EditText editText23;
-    @BindView(R.id.editText24)
+    @BindView(R.id.editTextFatherName)
     EditText editText24;
     @BindView(R.id.editText25)
     EditText editText25;
-    @BindView(R.id.editText26)
+    @BindView(R.id.editTextEshterak)
     EditText editText26;
     @BindView(R.id.editText27)
     EditText editText27;
@@ -446,9 +446,9 @@ public class Form1Activity extends AppCompatActivity {
         editText20.setNextFocusDownId(R.id.editTextShenasname);
         editText21.setNextFocusDownId(R.id.editText22);
         editText22.setNextFocusDownId(R.id.editTextName);
-        editText23.setNextFocusDownId(R.id.editText24);
+        editText23.setNextFocusDownId(R.id.editTextFatherName);
         editText24.setNextFocusDownId(R.id.editText25);
-        editText25.setNextFocusDownId(R.id.editText26);
+        editText25.setNextFocusDownId(R.id.editTextEshterak);
         editText26.setNextFocusDownId(R.id.editText27);
         editText27.setNextFocusDownId(R.id.editText28);
 //        editText28.setNextFocusDownId(R.id.button);

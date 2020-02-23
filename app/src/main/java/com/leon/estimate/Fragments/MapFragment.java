@@ -85,7 +85,6 @@ public class MapFragment extends Fragment implements LocationListener {
     EditText editTextNationNumber;
     @BindView(R.id.editTextShenasname)
     EditText editTextShenasname;
-
     @BindView(R.id.editTextName)
     EditText editTextName;
     @BindView(R.id.editTextFamily)
@@ -98,12 +97,14 @@ public class MapFragment extends Fragment implements LocationListener {
     EditText editTextPhone;
     @BindView(R.id.editTextMobile)
     EditText editTextMobile;
-    @BindView(R.id.editTextAdress)
-    EditText editTextAdress;
-    @BindView(R.id.editText26)
+    @BindView(R.id.editTextAddress)
+    EditText editTextAddress;
+    @BindView(R.id.editTextEshterak)
     EditText editText26;
     @BindView(R.id.editTextDescription)
     EditText editTextDescription;
+    @BindView(R.id.editTextFatherName)
+    EditText editTextFatherName;
 
     private Context context;
     ExaminerDuties examinerDuties;
@@ -156,6 +157,21 @@ public class MapFragment extends Fragment implements LocationListener {
             Bitmap bitmap = mapView.getDrawingCache(true);
             ((FormActivity) getActivity()).nextPage(bitmap);
         });
+        initializeField();
+    }
+
+    private void initializeField() {
+        editTextAddress.setText(examinerDuties.getAddress());
+        editTextName.setText(examinerDuties.getFirstName());
+        editTextFamily.setText(examinerDuties.getSureName());
+        editTextNationNumber.setText(examinerDuties.getNationalId());
+        editTextFatherName.setText(examinerDuties.getFatherName());
+        editTextDescription.setText(examinerDuties.getDescription());
+        editTextPhone.setText(examinerDuties.getPhoneNumber());
+        editTextMobile.setText(examinerDuties.getMobile());
+        editText26.setText(examinerDuties.getEshterak());
+        editTextPostalCode.setText(examinerDuties.getPostalCode());
+        editTextRadif.setText(examinerDuties.getRadif());
     }
 
     @SuppressLint("MissingPermission")
