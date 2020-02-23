@@ -47,7 +47,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -131,7 +130,7 @@ public class MapFragment extends Fragment implements LocationListener {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             Gson gson = new GsonBuilder().create();
-            examinerDuties = Arrays.asList(gson.fromJson(mParam1, ExaminerDuties[].class)).get(0);
+            examinerDuties = gson.fromJson(mParam1, ExaminerDuties.class);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();

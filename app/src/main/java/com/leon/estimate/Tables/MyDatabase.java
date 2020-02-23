@@ -8,9 +8,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class, RequestDictionary.class,
-        Images.class, MapScreen.class}, version = 18, exportSchema = false)
+        Images.class, MapScreen.class}, version = 19, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_10_11 = new Migration(17, 18) {
+    public static final Migration MIGRATION_10_11 = new Migration(18, 19) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
 //            database.execSQL("CREATE TABLE \"RequestDictionary\" (\n" +
@@ -132,7 +132,7 @@ public abstract class MyDatabase extends RoomDatabase {
                     "\t\"examinationId\"\tTEXT,\n" +
                     "\t\"karbariId\"\tTEXT,\n" +
                     "\t\"radif\"\tTEXT,\n" +
-                    "\t\"trackNumber\"\tNUMERIC,\n" +
+                    "\t\"trackNumber\"\tNUMERIC PRIMARY KEY ,\n" +
                     "\t\"billId\"\tTEXT,\n" +
                     "\t\"examinationDay\"\tTEXT,\n" +
                     "\t\"nameAndFamily\"\tTEXT,\n" +

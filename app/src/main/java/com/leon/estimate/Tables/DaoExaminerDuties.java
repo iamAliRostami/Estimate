@@ -14,7 +14,7 @@ public interface DaoExaminerDuties {
     List<ExaminerDuties> getExaminerDuties();
 
     //    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ExaminerDuties> values);
 
     @Query("SELECT * FROM ExaminerDuties WHERE isPeymayesh != '1' ORDER BY trackNumber desc ")

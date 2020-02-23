@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
-@Entity(tableName = "ExaminerDuties", indices = @Index(value = {"id"}, unique = true))
+@Entity(tableName = "ExaminerDuties", indices = @Index(value = {"trackNumber", "id"}, unique = true))
 public class ExaminerDuties {
     @PrimaryKey(autoGenerate = true)
     int id;

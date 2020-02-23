@@ -43,7 +43,6 @@ import com.leon.estimate.Utils.FontManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -154,7 +153,7 @@ public class Form1Fragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             Gson gson = new GsonBuilder().create();
-            examinerDuties = Arrays.asList(gson.fromJson(mParam1, ExaminerDuties[].class)).get(0);
+            examinerDuties = gson.fromJson(mParam1, ExaminerDuties.class);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();
@@ -308,20 +307,20 @@ public class Form1Fragment extends Fragment {
         editTextZoneTitle.setText(examinerDuties.getZoneTitle());
         editTextTrackNumber.setText(examinerDuties.getTrackNumber());
         editTextBillId.setText(examinerDuties.getBillId());
-        editTextSifoon100.setText(examinerDuties.getSifoon100());
-        editTextSifoon125.setText(examinerDuties.getSifoon125());
-        editTextSifoon150.setText(examinerDuties.getSifoon150());
-        editTextSifoon200.setText(examinerDuties.getSifoon200());
-        editTextArese.setText(examinerDuties.getArse());
-        editTextAianKol.setText(examinerDuties.getAianKol());
-        editTextAianMaskooni.setText(examinerDuties.getAianMaskooni());
-        editTextAianNonMaskooni.setText(examinerDuties.getAianNonMaskooni());
-        editTextTedadMaskooni.setText(examinerDuties.getTedadMaskooni());
-        editTextTedadTejari.setText(examinerDuties.getTedadTejari());
-        editTextTedadSaier.setText(examinerDuties.getTedadSaier());
-        editTextArzeshMelk.setText(examinerDuties.getArzeshMelk());
-        editTextTedadTakhfif.setText(examinerDuties.getTedadTaxfif());
-        editTextZarfiatQaradadi.setText(examinerDuties.getZarfiatQarardadi());
+        editTextSifoon100.setText(String.valueOf(examinerDuties.getSifoon100()));
+        editTextSifoon125.setText(String.valueOf(examinerDuties.getSifoon125()));
+        editTextSifoon150.setText(String.valueOf(examinerDuties.getSifoon150()));
+        editTextSifoon200.setText(String.valueOf(examinerDuties.getSifoon200()));
+        editTextArese.setText(String.valueOf(examinerDuties.getArse()));
+        editTextAianKol.setText(String.valueOf(examinerDuties.getAianKol()));
+        editTextAianMaskooni.setText(String.valueOf(examinerDuties.getAianMaskooni()));
+        editTextAianNonMaskooni.setText(String.valueOf(examinerDuties.getAianNonMaskooni()));
+        editTextTedadMaskooni.setText(String.valueOf(examinerDuties.getTedadMaskooni()));
+        editTextTedadTejari.setText(String.valueOf(examinerDuties.getTedadTejari()));
+        editTextTedadSaier.setText(String.valueOf(examinerDuties.getTedadSaier()));
+        editTextArzeshMelk.setText(String.valueOf(examinerDuties.getArzeshMelk()));
+        editTextTedadTakhfif.setText(String.valueOf(examinerDuties.getTedadTaxfif()));
+        editTextZarfiatQaradadi.setText(String.valueOf(examinerDuties.getZarfiatQarardadi()));
         editTextPariNumber.setText(examinerDuties.getParNumber());
         editText19.setText(examinerDuties.getExaminationDay());
         editText20.setText(examinerDuties.getPostalCode());
