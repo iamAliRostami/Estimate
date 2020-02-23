@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.Calculation;
-import com.leon.estimate.Tables.DaoCalculation;
+import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.CustomAdapter;
+import com.leon.estimate.Utils.CustomAdapter1;
 import com.leon.estimate.Utils.FontManager;
 
 import java.util.List;
@@ -36,8 +36,8 @@ public class ListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView(R.id.textViewEmpty)
     TextView textViewEmpty;
-    List<Calculation> calculationList;
-    CustomAdapter customAdapter;
+    List<ExaminerDuties> examinerDuties;
+    CustomAdapter1 customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,13 @@ public class ListActivity extends AppCompatActivity {
 
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
-        DaoCalculation daoCalculation = dataBase.daoCalculateCalculation();
-        calculationList = daoCalculation.unreadCalculate();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        examinerDuties = daoExaminerDuties.unreadExaminerDuties();
 
+//        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+//        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
 
-        if (calculationList.isEmpty()) {
+        if (this.examinerDuties.isEmpty()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             recyclerView.setVisibility(View.GONE);
             textViewEmpty.setVisibility(View.VISIBLE);
@@ -75,7 +77,7 @@ public class ListActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             textViewEmpty.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            customAdapter = new CustomAdapter(context, calculationList, width);
+            customAdapter = new CustomAdapter1(context, this.examinerDuties, width);
             customAdapter.notifyDataSetChanged();
             recyclerView.setAdapter(customAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this) {

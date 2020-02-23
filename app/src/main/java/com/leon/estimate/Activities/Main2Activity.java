@@ -33,6 +33,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.DialogType;
@@ -42,6 +43,11 @@ import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.DaoKarbariDictionary;
+import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
+import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
+import com.leon.estimate.Tables.DaoServiceDictionary;
+import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
@@ -130,11 +136,11 @@ public class Main2Activity extends AppCompatActivity
             setContentView(R.layout.main2_activity);
             initialize();
         }
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
-        Log.e("size", String.valueOf(examinerDuties.size()));
+//        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                .allowMainThreadQueries().build();
+//        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+//        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
+//        Log.e("size", String.valueOf(examinerDuties.size()));
 //
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
@@ -214,7 +220,7 @@ public class Main2Activity extends AppCompatActivity
             this.locationOverlay.enableMyLocation();
 
 //        test();
-            initRouteCoordinates(2);
+            initRouteCoordinates();
             mapView.getOverlays().add(locationOverlay);
             mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
                 @Override
@@ -264,7 +270,7 @@ public class Main2Activity extends AppCompatActivity
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void initRouteCoordinates(int i) {
+    private void initRouteCoordinates() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         assert lm != null;
         @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -300,15 +306,6 @@ public class Main2Activity extends AppCompatActivity
         imageViewForm.setOnClickListener(onClickListener);
     }
 
-    void download() {
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
-        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
-        final IAbfaService getKardex = retrofit.create(IAbfaService.class);
-        Call<Input> call = getKardex.getMyWorks();
-        Download download = new Download();
-        HttpClientWrapper.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
-    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -332,36 +329,6 @@ public class Main2Activity extends AppCompatActivity
     public void onProviderDisabled(String provider) {
     }
 
-    void send() {
-        final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage(context.getString(R.string.upload));
-        dialog.setTitle(context.getString(R.string.loading_connecting));
-        dialog.show();
-        new Thread() {
-            public void run() {
-                try {
-                    sleep(5000);
-                } catch (Exception ignored) {
-                }
-
-                new Thread() {
-                    public void run() {
-                        // Dismiss the Dialog
-                    }
-                }.start();
-                runOnUiThread(() -> {
-                    dialog.dismiss();
-                    new CustomDialog(DialogType.Green, context, "بارگذاری با موفقیت انجام شد",
-                            getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-                });
-            }
-        }.start();
-//        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-//                .allowMainThreadQueries().build();
-//        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-//        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
-//        Log.e("size", String.valueOf(calculationUserInputList.size()));
-    }
 
     @Override
     public void onBackPressed() {
@@ -441,24 +408,86 @@ public class Main2Activity extends AppCompatActivity
         startActivity(intent);
     }
 
+    void download() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        final IAbfaService getKardex = retrofit.create(IAbfaService.class);
+        Call<Input> call = getKardex.getMyWorks();
+        Download download = new Download();
+        HttpClientWrapper.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
+    }
+
+    void send() {
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage(context.getString(R.string.upload));
+        dialog.setTitle(context.getString(R.string.loading_connecting));
+        dialog.show();
+        new Thread() {
+            public void run() {
+                try {
+                    sleep(5000);
+                } catch (Exception ignored) {
+                }
+
+                new Thread() {
+                    public void run() {
+                        // Dismiss the Dialog
+                    }
+                }.start();
+                runOnUiThread(() -> {
+                    dialog.dismiss();
+                    new CustomDialog(DialogType.Green, context, "بارگذاری با موفقیت انجام شد",
+                            getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+                });
+            }
+        }.start();
+//        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                .allowMainThreadQueries().build();
+//        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+//        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+//        Log.e("size", String.valueOf(calculationUserInputList.size()));
+    }
+
     class Download implements ICallback<Input> {
         @Override
         public void execute(Input input) {
+//            Log.e("size", String.valueOf(input.getExaminerDuties().size()));
 //            ArrayList<RequestDictionary> object = input.getExaminerDuties().get(0).getRequestDictionary();
 //            Gson gson = new Gson();
 //            String json = gson.toJson(object);
 //            Log.e("json", json);
 
-//            Gson gson1=new GsonBuilder().create();
-//            List<RequestDictionary> list= Arrays.asList(gson1.fromJson(json,RequestDictionary[].class));
-//            Log.e("json1", String.valueOf(list.size()));
-
-            Log.e("size", String.valueOf(input.getExaminerDuties().size()));
-
+            List<ExaminerDuties> examinerDuties = input.getExaminerDuties();
+            for (int i = 0; i < examinerDuties.size(); i++) {
+                Gson gson = new Gson();
+                examinerDuties.get(i).setRequestDictionaryString(
+                        gson.toJson(examinerDuties.get(i).getRequestDictionary()));
+            }
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
-            DaoExaminerDuties examinerDuties = dataBase.daoExaminerDuties();
-            examinerDuties.insertAll(input.getExaminerDuties());
+            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+            daoExaminerDuties.insertAll(examinerDuties);
+
+            DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+            daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+//
+            DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+            daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+
+            DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+            daoServiceDictionary.insertAll(input.getServiceDictionary());
+
+            DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+            daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+
+            Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
+            DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+            daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+
+//            DaoQotrSifoonDictionary daoQotrSifoonDictionary = dataBase.daoQotrSifoonDictionary();
+//            daoQotrSifoonDictionary.insertAll(input.getQotrSifoonDictionary());
+
             new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
                     getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
         }

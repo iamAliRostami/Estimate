@@ -12,18 +12,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Fragments.Form1Fragment;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.DaoMapScreen;
-import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.MyPagerAdapter;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +37,8 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
     @BindView(R.id.relativeLayout)
     RelativeLayout relativeLayout;
     Context context;
+    String trackNumber, json;
+    List<RequestDictionary> requestDictionaries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +47,15 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
         setContentView(R.layout.form_activity);
         ButterKnife.bind(this);
         context = this;
+        if (getIntent().getExtras() != null) {
+            trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
+            json = getIntent().getExtras().getString(BundleEnum.SERVICES.getValue());
+            Gson gson1 = new GsonBuilder().create();
+            requestDictionaries = Arrays.asList(gson1.fromJson(json, RequestDictionary[].class));
+        }
         initialize();
 
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoMapScreen daoMapScreen = dataBase.daoMapScreen();
-        Log.e("Size", String.valueOf(daoMapScreen.getMapScreen().size()));
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -59,7 +66,6 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(relativeLayout);
     }
-
 
     public void nextPage(Bitmap bitmap) {
         if (viewPager.getCurrentItem() == 0)
