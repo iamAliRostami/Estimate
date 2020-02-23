@@ -19,4 +19,9 @@ public interface DaoExaminerDuties {
 
     @Query("SELECT * FROM ExaminerDuties WHERE isPeymayesh != '1' ORDER BY trackNumber desc ")
     List<ExaminerDuties> unreadExaminerDuties();
+
+
+    @Query("SELECT * FROM ExaminerDuties WHERE isPeymayesh != '1' AND trackNumber=:trackNumber ORDER BY trackNumber desc ")
+//    List<ExaminerDuties> unreadExaminerDutiesByTrackNumber(String trackNumber);
+    ExaminerDuties unreadExaminerDutiesByTrackNumber(String trackNumber);
 }

@@ -52,41 +52,41 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 public class Form1Activity extends AppCompatActivity {
-    @BindView(R.id.editText1)
+    @BindView(R.id.editTextZoneTitle)
     EditText editText1;
-    @BindView(R.id.editText2)
+    @BindView(R.id.editTextTrackNumber)
     EditText editText2;
-    @BindView(R.id.editText3)
+    @BindView(R.id.editTextBillId)
     EditText editText3;
-    @BindView(R.id.editText4)
+    @BindView(R.id.editTextSifoon100)
     EditText editText4;
-    @BindView(R.id.editText5)
+    @BindView(R.id.editTextSifoon125)
     EditText editText5;
-    @BindView(R.id.editText6)
+    @BindView(R.id.editTextSifoon150)
     EditText editText6;
-    @BindView(R.id.editText7)
+    @BindView(R.id.editTextSifoon200)
     EditText editText7;
-    @BindView(R.id.editText8)
+    @BindView(R.id.editTextArese)
     EditText editText8;
-    @BindView(R.id.editText9)
+    @BindView(R.id.editTextAianKol)
     EditText editText9;
-    @BindView(R.id.editText10)
+    @BindView(R.id.editTextAianMaskooni)
     EditText editText10;
-    @BindView(R.id.editText11)
+    @BindView(R.id.editTextAianNonMaskooni)
     EditText editText11;
-    @BindView(R.id.editText12)
+    @BindView(R.id.editTextTedadMaskooni)
     EditText editText12;
-    @BindView(R.id.editText13)
+    @BindView(R.id.editTextTedadTejari)
     EditText editText13;
-    @BindView(R.id.editText14)
+    @BindView(R.id.editTextTedadSaier)
     EditText editText14;
-    @BindView(R.id.editText15)
+    @BindView(R.id.editTextArzeshMelk)
     EditText editText15;
-    @BindView(R.id.editText16)
+    @BindView(R.id.editTextTedadTakhfif)
     EditText editText16;
-    @BindView(R.id.editText17)
+    @BindView(R.id.editTextZarfiatQaradadi)
     EditText editText17;
-    @BindView(R.id.editText18)
+    @BindView(R.id.editTextPariNumber)
     EditText editText18;
     @BindView(R.id.editText19)
     EditText editText19;
@@ -424,23 +424,23 @@ public class Form1Activity extends AppCompatActivity {
     }
 
     void setOnEditTextOnFocusChangeListener() {
-        editText1.setNextFocusDownId(R.id.editText2);
-        editText2.setNextFocusDownId(R.id.editText3);
-        editText3.setNextFocusDownId(R.id.editText4);
-        editText4.setNextFocusDownId(R.id.editText5);
-        editText5.setNextFocusDownId(R.id.editText6);
-        editText6.setNextFocusDownId(R.id.editText7);
-        editText7.setNextFocusDownId(R.id.editText8);
-        editText8.setNextFocusDownId(R.id.editText9);
-        editText9.setNextFocusDownId(R.id.editText10);
-        editText10.setNextFocusDownId(R.id.editText11);
-        editText11.setNextFocusDownId(R.id.editText12);
-        editText12.setNextFocusDownId(R.id.editText13);
-        editText13.setNextFocusDownId(R.id.editText14);
-        editText14.setNextFocusDownId(R.id.editText15);
-        editText15.setNextFocusDownId(R.id.editText16);
-        editText16.setNextFocusDownId(R.id.editText17);
-        editText17.setNextFocusDownId(R.id.editText18);
+        editText1.setNextFocusDownId(R.id.editTextTrackNumber);
+        editText2.setNextFocusDownId(R.id.editTextBillId);
+        editText3.setNextFocusDownId(R.id.editTextSifoon100);
+        editText4.setNextFocusDownId(R.id.editTextSifoon125);
+        editText5.setNextFocusDownId(R.id.editTextSifoon150);
+        editText6.setNextFocusDownId(R.id.editTextSifoon200);
+        editText7.setNextFocusDownId(R.id.editTextArese);
+        editText8.setNextFocusDownId(R.id.editTextAianKol);
+        editText9.setNextFocusDownId(R.id.editTextAianMaskooni);
+        editText10.setNextFocusDownId(R.id.editTextAianNonMaskooni);
+        editText11.setNextFocusDownId(R.id.editTextTedadMaskooni);
+        editText12.setNextFocusDownId(R.id.editTextTedadTejari);
+        editText13.setNextFocusDownId(R.id.editTextTedadSaier);
+        editText14.setNextFocusDownId(R.id.editTextArzeshMelk);
+        editText15.setNextFocusDownId(R.id.editTextTedadTakhfif);
+        editText16.setNextFocusDownId(R.id.editTextZarfiatQaradadi);
+        editText17.setNextFocusDownId(R.id.editTextPariNumber);
         editText18.setNextFocusDownId(R.id.editText19);
         editText19.setNextFocusDownId(R.id.editText20);
         editText20.setNextFocusDownId(R.id.editText21);

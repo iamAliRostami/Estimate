@@ -10,16 +10,19 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.leon.estimate.Fragments.Form1Fragment;
 import com.leon.estimate.Fragments.MapFragment;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.ExaminerDuties;
 
 import org.jetbrains.annotations.NotNull;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private static int NUM_ITEMS = 2;
+    ExaminerDuties examinerDuties;
     Context context;
 
-    public MyPagerAdapter(FragmentManager fragmentManager, Context context) {
+    public MyPagerAdapter(FragmentManager fragmentManager, Context context, ExaminerDuties examinerDuties) {
         super(fragmentManager);
         this.context = context;
+        this.examinerDuties = examinerDuties;
     }
 
     @Override

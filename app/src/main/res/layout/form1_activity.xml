@@ -196,7 +196,7 @@
                     android:orientation="vertical">
 
                     <EditText
-                        android:id="@+id/editText1"
+                        android:id="@+id/editTextZoneTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -216,7 +216,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/editText4"
+                        android:id="@+id/editTextSifoon100"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -229,7 +229,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText7"
+                        android:id="@+id/editTextSifoon200"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -242,7 +242,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText10"
+                        android:id="@+id/editTextAianMaskooni"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -255,7 +255,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText13"
+                        android:id="@+id/editTextTedadTejari"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -269,7 +269,7 @@
 
 
                     <EditText
-                        android:id="@+id/editText16"
+                        android:id="@+id/editTextTedadTakhfif"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -290,7 +290,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText18"
+                        android:id="@+id/editTextPariNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -508,7 +508,7 @@
                     android:orientation="vertical">
 
                     <EditText
-                        android:id="@+id/editText2"
+                        android:id="@+id/editTextTrackNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -529,7 +529,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText5"
+                        android:id="@+id/editTextSifoon125"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -542,7 +542,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText8"
+                        android:id="@+id/editTextArese"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -555,7 +555,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText11"
+                        android:id="@+id/editTextAianNonMaskooni"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -568,7 +568,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText14"
+                        android:id="@+id/editTextTedadSaier"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -798,7 +798,7 @@
                     android:orientation="vertical">
 
                     <EditText
-                        android:id="@+id/editText3"
+                        android:id="@+id/editTextBillId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -816,7 +816,7 @@
                         android:gravity="center" />
 
                     <EditText
-                        android:id="@+id/editText6"
+                        android:id="@+id/editTextSifoon150"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -829,7 +829,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText9"
+                        android:id="@+id/editTextAianKol"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -839,7 +839,7 @@
                         android:inputType="number" />
 
                     <EditText
-                        android:id="@+id/editText12"
+                        android:id="@+id/editTextTedadMaskooni"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -849,7 +849,7 @@
                         android:inputType="number" />
 
                     <EditText
-                        android:id="@+id/editText15"
+                        android:id="@+id/editTextArzeshMelk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -862,7 +862,7 @@
                         android:singleLine="true" />
 
                     <EditText
-                        android:id="@+id/editText17"
+                        android:id="@+id/editTextZarfiatQaradadi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

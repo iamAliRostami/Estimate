@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
@@ -28,6 +30,7 @@ import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
 import com.leon.estimate.Tables.DaoRequestDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
+import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.KarbariDictionary;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
@@ -40,6 +43,7 @@ import com.leon.estimate.Utils.FontManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,44 +57,46 @@ public class Form1Fragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    @BindView(R.id.editText1)
-    EditText editText1;
-    @BindView(R.id.editText2)
-    EditText editText2;
-    @BindView(R.id.editText3)
-    EditText editText3;
-    @BindView(R.id.editText4)
-    EditText editText4;
-    @BindView(R.id.editText5)
-    EditText editText5;
-    @BindView(R.id.editText6)
-    EditText editText6;
-    @BindView(R.id.editText7)
-    EditText editText7;
-    @BindView(R.id.editText8)
-    EditText editText8;
-    @BindView(R.id.editText9)
-    EditText editText9;
-    @BindView(R.id.editText10)
-    EditText editText10;
-    @BindView(R.id.editText11)
-    EditText editText11;
-    @BindView(R.id.editText12)
-    EditText editText12;
-    @BindView(R.id.editText13)
-    EditText editText13;
-    @BindView(R.id.editText14)
-    EditText editText14;
-    @BindView(R.id.editText15)
-    EditText editText15;
-    @BindView(R.id.editText16)
-    EditText editText16;
-    @BindView(R.id.editText17)
-    EditText editText17;
-    @BindView(R.id.editText18)
-    EditText editText18;
+    @BindView(R.id.editTextZoneTitle)
+    EditText editTextZoneTitle;
+    @BindView(R.id.editTextTrackNumber)
+    EditText editTextTrackNumber;
+    @BindView(R.id.editTextBillId)
+    EditText editTextBillId;
+    @BindView(R.id.editTextSifoon100)
+    EditText editTextSifoon100;
+    @BindView(R.id.editTextSifoon125)
+    EditText editTextSifoon125;
+    @BindView(R.id.editTextSifoon150)
+    EditText editTextSifoon150;
+    @BindView(R.id.editTextSifoon200)
+    EditText editTextSifoon200;
+    @BindView(R.id.editTextArese)
+    EditText editTextArese;
+    @BindView(R.id.editTextAianKol)
+    EditText editTextAianKol;
+    @BindView(R.id.editTextAianMaskooni)
+    EditText editTextAianMaskooni;
+    @BindView(R.id.editTextAianNonMaskooni)
+    EditText editTextAianNonMaskooni;
+    @BindView(R.id.editTextTedadMaskooni)
+    EditText editTextTedadMaskooni;
+    @BindView(R.id.editTextTedadTejari)
+    EditText editTextTedadTejari;
+    @BindView(R.id.editTextTedadSaier)
+    EditText editTextTedadSaier;
+    @BindView(R.id.editTextArzeshMelk)
+    EditText editTextArzeshMelk;
+    @BindView(R.id.editTextTedadTakhfif)
+    EditText editTextTedadTakhfif;
+    @BindView(R.id.editTextZarfiatQaradadi)
+    EditText editTextZarfiatQaradadi;
+    @BindView(R.id.editTextPariNumber)
+    EditText editTextPariNumber;
     @BindView(R.id.editText19)
     EditText editText19;
+    @BindView(R.id.editText20)
+    EditText editText20;
     @BindView(R.id.linearLayout2)
     LinearLayout linearLayout2;
     @BindView(R.id.spinner1)
@@ -105,6 +111,12 @@ public class Form1Fragment extends Fragment {
     RelativeLayout relativeLayout;
     @BindView(R.id.button_next)
     Button buttonNext;
+    @BindView(R.id.checkbox1)
+    CheckBox checkBox1;
+    @BindView(R.id.checkbox2)
+    CheckBox checkBox2;
+    @BindView(R.id.checkbox3)
+    CheckBox checkBox3;
     private View findViewById;
     private Context context;
     ArrayList<CheckBox> checkBoxes = new ArrayList<>();
@@ -118,14 +130,19 @@ public class Form1Fragment extends Fragment {
     List<ServiceDictionary> serviceDictionaries;
     List<RequestDictionary> requestDictionaries;
 
+    ExaminerDuties examinerDuties;
+
     public Form1Fragment() {
 
     }
 
-    public static Form1Fragment newInstance(String param1, String param2) {
+    public static Form1Fragment newInstance(ExaminerDuties examinerDuties, String param2) {
         Form1Fragment fragment = new Form1Fragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(examinerDuties);
+        args.putString(ARG_PARAM1, json);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -136,6 +153,10 @@ public class Form1Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
+
+            Gson gson = new GsonBuilder().create();
+            examinerDuties = Arrays.asList(gson.fromJson(mParam1, ExaminerDuties[].class)).get(0);
+
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();
@@ -166,6 +187,7 @@ public class Form1Fragment extends Fragment {
         initializeQotrEnsheabSpinner();
         initializeTaxfifSpinner();
         initializeServicesCheckBox();
+        initializeField();
     }
 
     private void initializeKarbariSpinner() {
@@ -282,6 +304,33 @@ public class Form1Fragment extends Fragment {
         };
         spinner3.setAdapter(arrayAdapter);
         spinner3.setSelection(select);
+    }
+
+    private void initializeField() {
+        editTextZoneTitle.setText(examinerDuties.getZoneTitle());
+        editTextTrackNumber.setText(examinerDuties.getTrackNumber());
+        editTextBillId.setText(examinerDuties.getBillId());
+        editTextSifoon100.setText(examinerDuties.getSifoon100());
+        editTextSifoon125.setText(examinerDuties.getSifoon125());
+        editTextSifoon150.setText(examinerDuties.getSifoon150());
+        editTextSifoon200.setText(examinerDuties.getSifoon200());
+        editTextArese.setText(examinerDuties.getArse());
+        editTextAianKol.setText(examinerDuties.getAianKol());
+        editTextAianMaskooni.setText(examinerDuties.getAianMaskooni());
+        editTextAianNonMaskooni.setText(examinerDuties.getAianNonMaskooni());
+        editTextTedadMaskooni.setText(examinerDuties.getTedadMaskooni());
+        editTextTedadTejari.setText(examinerDuties.getTedadTejari());
+        editTextTedadSaier.setText(examinerDuties.getTedadSaier());
+        editTextArzeshMelk.setText(examinerDuties.getArzeshMelk());
+        editTextTedadTakhfif.setText(examinerDuties.getTedadTaxfif());
+        editTextZarfiatQaradadi.setText(examinerDuties.getZarfiatQarardadi());
+        editTextPariNumber.setText(examinerDuties.getParNumber());
+        editText19.setText(examinerDuties.getExaminationDay());
+        editText20.setText(examinerDuties.getPostalCode());
+
+        checkBox1.setChecked(examinerDuties.isAdamTaxfifAb());
+        checkBox2.setChecked(examinerDuties.isAdamTaxfifFazelab());
+        checkBox3.setChecked(examinerDuties.isEnsheabQeirDaem());
     }
 
     @SuppressLint("NewApi")

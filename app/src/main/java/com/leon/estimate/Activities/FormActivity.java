@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.Gson;
@@ -19,6 +20,9 @@ import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Fragments.Form1Fragment;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.MyPagerAdapter;
@@ -39,6 +43,7 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
     Context context;
     String trackNumber, json;
     List<RequestDictionary> requestDictionaries;
+    ExaminerDuties examinerDuties;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,12 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
 
     @SuppressLint("ClickableViewAccessibility")
     void initialize() {
-        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context);
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
+
+        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context, examinerDuties);
         viewPager.setAdapter(adapterViewPager);
         viewPager.setOnTouchListener((v, event) -> true);
         FontManager fontManager = new FontManager(getApplicationContext());
