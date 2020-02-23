@@ -388,10 +388,6 @@ public class Form1Fragment extends Fragment {
         i.putExtra("NAME_KEY", "slm");
         getActivity().startActivity(i);
     }
-
-    public interface test {
-    }
-
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);

@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -18,7 +16,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Fragments.Form1Fragment;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
@@ -34,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FormActivity extends AppCompatActivity implements Form1Fragment.test {
+public class FormActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -55,12 +52,10 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             json = getIntent().getExtras().getString(BundleEnum.SERVICES.getValue());
-            Gson gson1 = new GsonBuilder().create();
-            requestDictionaries = Arrays.asList(gson1.fromJson(json, RequestDictionary[].class));
+            Gson gson = new GsonBuilder().create();
+            requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
         }
         initialize();
-
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -69,7 +64,6 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
                 .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
-
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context, examinerDuties);
         viewPager.setAdapter(adapterViewPager);
         viewPager.setOnTouchListener((v, event) -> true);
@@ -93,16 +87,5 @@ public class FormActivity extends AppCompatActivity implements Form1Fragment.tes
     @Override
     protected void onResume() {
         super.onResume();
-        final String sender = this.getIntent().getExtras().getString("SENDER_KEY");
-        if (sender != null) {
-            this.receiveData();
-            Toast.makeText(this, "Received", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void receiveData() {
-        Intent i = getIntent();
-        String name = i.getStringExtra("NAME_KEY");
-        Log.e("log", name);
     }
 }
