@@ -60,6 +60,9 @@ public class CalculationUserInput {
     public String description;
     boolean sent;
 
+    public CalculationUserInput() {
+    }
+
     public CalculationUserInput(String trackingId, String trackNumber, int requestType,
                                 String parNumber, String billId, String radif, int zoneId,
                                 String notificationMobile, int karbariId, int qotrEnsheabId,

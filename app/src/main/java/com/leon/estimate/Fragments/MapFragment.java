@@ -27,6 +27,7 @@ import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Utils.FontManager;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -102,9 +103,9 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private Context context;
     private ExaminerDuties examinerDuties;
+    private CalculationUserInput calculationUserInput;
 
     public MapFragment() {
-
     }
 
     public static MapFragment newInstance(ExaminerDuties examinerDuties, String param2) {
@@ -150,7 +151,20 @@ public class MapFragment extends Fragment implements LocationListener {
 //            mapView.setDrawingCacheEnabled(true);
 //            Bitmap bitmap = mapView.getDrawingCache(true);
 //            ((FormActivity) getActivity()).nextPage(bitmap);
-            ((FormActivity) getActivity()).nextPage(convertMapToBitmap());
+            if (prepareForm()) {
+                calculationUserInput = new CalculationUserInput();
+                calculationUserInput.nationalId = editTextNationNumber.getText().toString();
+                calculationUserInput.firstName = editTextName.getText().toString();
+                calculationUserInput.sureName = editTextFamily.getText().toString();
+                calculationUserInput.fatherName = editTextFatherName.getText().toString();
+                calculationUserInput.postalCode = editTextPostalCode.getText().toString();
+                calculationUserInput.radif = editTextRadif.getText().toString();
+                calculationUserInput.phoneNumber = editTextPhone.getText().toString();
+                calculationUserInput.mobile = editTextMobile.getText().toString();
+                calculationUserInput.address = editTextAddress.getText().toString();
+                calculationUserInput.description = editTextDescription.getText().toString();
+                ((FormActivity) getActivity()).nextPage(convertMapToBitmap(), calculationUserInput);
+            }
         });
         initializeField();
     }
@@ -159,6 +173,51 @@ public class MapFragment extends Fragment implements LocationListener {
         mapView.setDrawingCacheEnabled(true);
         return mapView.getDrawingCache(true);
     }
+
+    private boolean prepareForm() {
+        return checkIsNoEmpty(editTextShenasname)
+                && checkIsNoEmpty(editTextName)
+                && checkIsNoEmpty(editTextFamily)
+                && checkIsNoEmpty(editTextFatherName)
+                && checkIsNoEmpty(editText26)
+                && checkIsNoEmpty(editTextRadif)
+                && checkIsNoEmpty(editTextAddress)
+                && checkOtherIsNoEmpty()
+                ;
+    }
+
+    private boolean checkIsNoEmpty(EditText editText) {
+        View focusView;
+        if (editText.getText().toString().length() < 1) {
+            focusView = editText;
+            focusView.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkOtherIsNoEmpty() {
+        View focusView;
+        if (editTextNationNumber.getText().toString().length() < 10) {
+            focusView = editTextNationNumber;
+            focusView.requestFocus();
+            return false;
+        } else if (editTextPostalCode.getText().toString().length() < 10) {
+            focusView = editTextPostalCode;
+            focusView.requestFocus();
+            return false;
+        } else if (editTextPhone.getText().toString().length() < 8) {
+            focusView = editTextPhone;
+            focusView.requestFocus();
+            return false;
+        } else if (editTextMobile.getText().toString().length() < 9) {
+            focusView = editTextMobile;
+            focusView.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
     private void initializeField() {
         editTextAddress.setText(examinerDuties.getAddress());
         editTextName.setText(examinerDuties.getFirstName());

@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
@@ -134,7 +135,6 @@ public class FormFragment extends Fragment {
     public static FormFragment newInstance(ExaminerDuties examinerDuties, String param2) {
         FormFragment fragment = new FormFragment();
         Bundle args = new Bundle();
-
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
         args.putString(BundleEnum.REQUEST.getValue(), json);
@@ -168,8 +168,64 @@ public class FormFragment extends Fragment {
         FontManager fontManager = new FontManager(context);
         fontManager.setFont(relativeLayout);
         typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
-        buttonNext.setOnClickListener(v -> ((FormActivity) getActivity()).nextPage(null));
         initializeSpinner();
+        buttonNext.setOnClickListener(v -> {
+            if (prepareForm()) {
+                CalculationUserInput calculationUserInput = new CalculationUserInput();
+                calculationUserInput.trackNumber = editTextTrackNumber.getText().toString();
+                calculationUserInput.billId = editTextBillId.getText().toString();
+                calculationUserInput.sifoon100 = Integer.valueOf(editTextSifoon100.getText().toString());
+                calculationUserInput.sifoon125 = Integer.valueOf(editTextSifoon125.getText().toString());
+                calculationUserInput.sifoon150 = Integer.valueOf(editTextSifoon150.getText().toString());
+                calculationUserInput.sifoon200 = Integer.valueOf(editTextSifoon200.getText().toString());
+                calculationUserInput.arse = Integer.valueOf(editTextArese.getText().toString());
+                calculationUserInput.aianKol = Integer.valueOf(editTextAianKol.getText().toString());
+                calculationUserInput.aianMaskooni = Integer.valueOf(editTextAianMaskooni.getText().toString());
+                calculationUserInput.aianTejari = Integer.valueOf(editTextAianNonMaskooni.getText().toString());
+                calculationUserInput.tedadMaskooni = Integer.valueOf(editTextTedadMaskooni.getText().toString());
+                calculationUserInput.tedadTejari = Integer.valueOf(editTextTedadTejari.getText().toString());
+                calculationUserInput.tedadSaier = Integer.valueOf(editTextTedadSaier.getText().toString());
+                calculationUserInput.arzeshMelk = Integer.valueOf(editTextArzeshMelk.getText().toString());
+                calculationUserInput.tedadTaxfif = Integer.valueOf(editTextTedadTakhfif.getText().toString());
+                calculationUserInput.zarfiatQarardadi = Integer.valueOf(editTextZarfiatQaradadi.getText().toString());
+                calculationUserInput.parNumber = editTextPariNumber.getText().toString();
+                ((FormActivity) getActivity()).nextPage(null, calculationUserInput);
+            }
+        });
+    }
+
+    private boolean prepareForm() {
+        return checkIsNoEmpty(editTextZoneTitle)
+                && checkIsNoEmpty(editTextTrackNumber)
+                && checkIsNoEmpty(editTextBillId)
+                && checkIsNoEmpty(editTextSifoon100)
+                && checkIsNoEmpty(editTextSifoon125)
+                && checkIsNoEmpty(editTextSifoon150)
+                && checkIsNoEmpty(editTextSifoon200)
+                && checkIsNoEmpty(editTextArese)
+                && checkIsNoEmpty(editTextAianKol)
+                && checkIsNoEmpty(editTextAianMaskooni)
+                && checkIsNoEmpty(editTextAianNonMaskooni)
+                && checkIsNoEmpty(editTextTedadMaskooni)
+                && checkIsNoEmpty(editTextTedadTejari)
+                && checkIsNoEmpty(editTextTedadSaier)
+                && checkIsNoEmpty(editTextArzeshMelk)
+                && checkIsNoEmpty(editTextTedadTakhfif)
+                && checkIsNoEmpty(editTextZarfiatQaradadi)
+                && checkIsNoEmpty(editTextPariNumber)
+                && checkIsNoEmpty(editText19)
+                && checkIsNoEmpty(editText20)
+                ;
+    }
+
+    boolean checkIsNoEmpty(EditText editText) {
+        View focusView;
+        if (editText.getText().toString().length() < 1) {
+            focusView = editText;
+            focusView.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     private void initializeSpinner() {
@@ -368,15 +424,6 @@ public class FormFragment extends Fragment {
         }
     }
 
-    boolean checkIsNoEmpty(EditText editText) {
-        View focusView;
-        if (editText.getText().toString().length() < 1) {
-            focusView = editText;
-            focusView.requestFocus();
-            return true;
-        }
-        return false;
-    }
 
     private void sendData() {
         //INTENT OBJ

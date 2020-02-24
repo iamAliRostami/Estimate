@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
@@ -44,6 +45,7 @@ public class FormActivity extends AppCompatActivity {
     ExaminerDuties examinerDutiesTemp;
     MyDatabase dataBase;
     DaoExaminerDuties daoExaminerDuties;
+    CalculationUserInput calculationUserInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +76,12 @@ public class FormActivity extends AppCompatActivity {
         fontManager.setFont(relativeLayout);
     }
 
-    public void nextPage(Bitmap bitmap) {
+    public void nextPage(Bitmap bitmap, CalculationUserInput calculationUserInput) {
+        this.calculationUserInput = calculationUserInput;
         if (viewPager.getCurrentItem() == 0)
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         else {
+//            Log.e("address", calculationUserInput.address);
             Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
 //            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 //            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
