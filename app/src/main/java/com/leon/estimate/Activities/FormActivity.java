@@ -57,6 +57,7 @@ public class FormActivity extends AppCompatActivity {
     MyDatabase dataBase;
     DaoExaminerDuties daoExaminerDuties;
     CalculationUserInput calculationUserInput;
+    CalculationUserInput calculationUserInputTemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +89,11 @@ public class FormActivity extends AppCompatActivity {
     }
 
     public void nextPage(Bitmap bitmap, CalculationUserInput calculationUserInput) {
-        this.calculationUserInput = calculationUserInput;
-        if (viewPager.getCurrentItem() == 0)
+        if (viewPager.getCurrentItem() == 0) {
+            this.calculationUserInput = calculationUserInput;
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-        else {
+        } else {
+            this.calculationUserInputTemp = calculationUserInput;
             prepareToSend();
             Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
 //            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -120,7 +122,8 @@ public class FormActivity extends AppCompatActivity {
 
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
+//        Retrofit retrofit = NetworkHelper.getInstance(false, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
+        Retrofit retrofit = NetworkHelper.getInstance(false, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         SendCalculation sendCalculation = new SendCalculation();
         Call<SimpleMessage> call = abfaService.SetExaminationInfo(calculationUserInput);
@@ -129,6 +132,17 @@ public class FormActivity extends AppCompatActivity {
 
     void fillCalculationUserInput() {
         //TODO SELECTED SERVICE
+        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+        calculationUserInput.firstName = calculationUserInputTemp.firstName;
+        calculationUserInput.sureName = calculationUserInputTemp.sureName;
+        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
+        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+        calculationUserInput.radif = calculationUserInputTemp.radif;
+        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+        calculationUserInput.address = calculationUserInputTemp.address;
+        calculationUserInput.description = calculationUserInputTemp.description;
+
         calculationUserInput.trackingId = examinerDuties.getTrackingId();
         calculationUserInput.requestType = Integer.valueOf(examinerDuties.getRequestType());
         calculationUserInput.parNumber = examinerDuties.getParNumber();
@@ -137,7 +151,6 @@ public class FormActivity extends AppCompatActivity {
         calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
         calculationUserInput.nationalId = examinerDuties.getNationalId();
         calculationUserInput.identityCode = examinerDuties.getIdentityCode();
-
     }
 
     class SendCalculation implements ICallback<SimpleMessage> {

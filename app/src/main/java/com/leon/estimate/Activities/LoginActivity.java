@@ -358,7 +358,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (!cancel) {
 //                attemptSerial();
-                GpsEnabled();
+//                GpsEnabled();
             }
             return false;
         });
@@ -382,5 +382,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
 }

@@ -545,9 +545,9 @@ public class Form1Activity extends AppCompatActivity {
 
         Retrofit retrofit = NetworkHelper.getInstance(true, "header");
         final IAbfaService setExaminationInfo = retrofit.create(IAbfaService.class);
-        Call<SimpleMessage> call = setExaminationInfo.setExaminationInfo(calculationUserInputSend);
+//        Call<SimpleMessage> call = setExaminationInfo.setExaminationInfo(calculationUserInputSend);
         SendCalculation sendCalculation = new SendCalculation();
-        HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+//        HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
     }
 
 

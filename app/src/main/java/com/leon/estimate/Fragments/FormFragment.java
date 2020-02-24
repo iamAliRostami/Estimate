@@ -210,6 +210,13 @@ public class FormFragment extends Fragment {
     }
 
     private CalculationUserInput prepareServices(CalculationUserInput calculationUserInput) {
+        for (ServiceDictionary serviceDictionary : serviceDictionaries) {
+            RequestDictionary requestDictionary = new RequestDictionary(
+                    serviceDictionary.getId(), serviceDictionary.getTitle(),
+                    serviceDictionary.isSelected(), serviceDictionary.isDisabled(),
+                    serviceDictionary.isHasSms());
+            requestDictionaries.add(requestDictionary);
+        }
         for (int i = 0; i < checkBoxes.size(); i++) {
             requestDictionaries.get(i).setSelected(checkBoxes.get(i).isSelected());
         }
@@ -420,10 +427,10 @@ public class FormFragment extends Fragment {
         int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
         int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
         int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
-        for (int i = 0; i < requestDictionaries.size(); i++) {
+        for (int i = 0; i < serviceDictionaries.size(); i++) {
             CheckBox checkBox = new CheckBox(context);
             checkBox.setGravity(1);
-            checkBox.setText(requestDictionaries.get(i).getTitle());
+            checkBox.setText(serviceDictionaries.get(i).getTitle());
             checkBox.setTextSize(textSize);
             checkBox.setTypeface(typeface);
             checkBox.setTextColor(context.getColor(R.color.blue4));
@@ -432,7 +439,7 @@ public class FormFragment extends Fragment {
             params.setMargins(margin, margin, margin, margin);
 //            checkBox.setLayoutParams(params);
 //            checkBox.setPadding(padding, padding, padding, padding);
-            if (requestDictionaries.get(i).isSelected())
+            if (serviceDictionaries.get(i).isSelected())
                 checkBox.setChecked(true);
             checkBoxes.add(checkBox);
             linearLayout.addView(checkBox);
@@ -442,7 +449,7 @@ public class FormFragment extends Fragment {
                 linearLayout.setGravity(1);
                 linearLayout2.addView(linearLayout);
                 linearLayout = new LinearLayout(context);
-            } else if (i == requestDictionaries.size() - 1) {
+            } else if (i == serviceDictionaries.size() - 1) {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);

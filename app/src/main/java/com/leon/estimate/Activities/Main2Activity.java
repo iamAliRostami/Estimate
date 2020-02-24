@@ -3,7 +3,6 @@ package com.leon.estimate.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,6 +42,7 @@ import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
@@ -485,7 +485,8 @@ public class Main2Activity extends AppCompatActivity
     void download() {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
+//        Retrofit retrofit = NetworkHelper.getInstance(false, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
+        Retrofit retrofit = NetworkHelper.getInstance(false, token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         Download download = new Download();
@@ -493,33 +494,43 @@ public class Main2Activity extends AppCompatActivity
     }
 
     void send() {
-        final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage(context.getString(R.string.upload));
-        dialog.setTitle(context.getString(R.string.loading_connecting));
-        dialog.show();
-        new Thread() {
-            public void run() {
-                try {
-                    sleep(5000);
-                } catch (Exception ignored) {
-                }
+//        final ProgressDialog dialog = new ProgressDialog(context);
+//        dialog.setMessage(context.getString(R.string.upload));
+//        dialog.setTitle(context.getString(R.string.loading_connecting));
+//        dialog.show();
+//        new Thread() {
+//            public void run() {
+//                try {
+//                    sleep(5000);
+//                } catch (Exception ignored) {
+//                }
+//
+//                new Thread() {
+//                    public void run() {
+//                        // Dismiss the Dialog
+//                    }
+//                }.start();
+//                runOnUiThread(() -> {
+//                    dialog.dismiss();
+//                    new CustomDialog(DialogType.Green, context, "بارگذاری با موفقیت انجام شد",
+//                            getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+//                });
+//            }
+//        }.start();
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.
+                getCalculationUserInput();
 
-                new Thread() {
-                    public void run() {
-                        // Dismiss the Dialog
-                    }
-                }.start();
-                runOnUiThread(() -> {
-                    dialog.dismiss();
-                    new CustomDialog(DialogType.Green, context, "بارگذاری با موفقیت انجام شد",
-                            getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-                });
-            }
-        }.start();
-//        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-//                .allowMainThreadQueries().build();
-//        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-//        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+        SendCalculation sendCalculation = new SendCalculation();
+        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputList);
+        HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+
 //        Log.e("size", String.valueOf(calculationUserInputList.size()));
     }
 
