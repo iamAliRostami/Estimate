@@ -13,7 +13,7 @@ public class ExaminerDuties {
     int id;
     String trackNumber;
     String examinationId;
-    String karbariId;
+    int karbariId;
     String radif;
     String billId;
     String examinationDay;
@@ -76,11 +76,11 @@ public class ExaminerDuties {
         this.examinationId = examinationId;
     }
 
-    public String getKarbariId() {
+    public int getKarbariId() {
         return karbariId;
     }
 
-    public void setKarbariId(String karbariId) {
+    public void setKarbariId(int karbariId) {
         this.karbariId = karbariId;
     }
 

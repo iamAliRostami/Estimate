@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface DaoServiceDictionary {
 
-    @Query("SELECT * FROM ServiceDictionary")
+    @Query("SELECT * FROM ServiceDictionary Order By id")
     List<ServiceDictionary> getServiceDictionaries();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

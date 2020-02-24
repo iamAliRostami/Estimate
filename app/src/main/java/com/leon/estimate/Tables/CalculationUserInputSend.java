@@ -164,7 +164,7 @@ public class CalculationUserInputSend {
     }
 
     public void setSelectedServices(CalculationUserInput calculationUserInput) {
-        selectedServices = calculationUserInput.selectedServices.split(",");
+        selectedServices = calculationUserInput.selectedServicesString.split(",");
     }
 
 }

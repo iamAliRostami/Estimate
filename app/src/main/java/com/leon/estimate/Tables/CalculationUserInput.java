@@ -1,33 +1,40 @@
 package com.leon.estimate.Tables;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.ArrayList;
 
 @Entity(tableName = "CalculationUserInput", indices = @Index(value = {"trackNumber"}, unique = true))
 
 public class CalculationUserInput {
-    public int karbariId;
-    public int radif;
+    public String trackNumber;
     public String trackingId;
-    public int trackNumber;
-    String examinationId;
+    public String radif;
     public int requestType;
     public String parNumber;
     public String billId;
+    public int karbariId;
     public String neighbourBillId;
     public int zoneId;
     public String notificationMobile;
+    public String selectedServicesString;
     public int qotrEnsheabId;
     public int noeVagozariId;
     public int taxfifId;
-    public String selectedServices;
+    //
+    public int arse;
+    @PrimaryKey(autoGenerate = true)
+    int id;
     //
     public String phoneNumber;
     public String mobile;
     public String firstName;
     public String sureName;
-    public int arse;
+    @Ignore
+    ArrayList<RequestDictionary> selectedServices;
     public int aianKol;
     public int aianMaskooni;
     public int aianTejari;
@@ -35,6 +42,7 @@ public class CalculationUserInput {
     public int sifoon125;
     public int sifoon150;
     public int sifoon200;
+
     public int zarfiatQarardadi;
     public int arzeshMelk;
     public int tedadMaskooni;
@@ -50,14 +58,12 @@ public class CalculationUserInput {
     public boolean adamTaxfifFazelab;
     public String address;
     public String description;
-    @PrimaryKey(autoGenerate = true)
-    int id;
     boolean sent;
 
-    public CalculationUserInput(String trackingId, int trackNumber, int requestType,
-                                String parNumber, String billId, int radif, int zoneId,
+    public CalculationUserInput(String trackingId, String trackNumber, int requestType,
+                                String parNumber, String billId, String radif, int zoneId,
                                 String notificationMobile, int karbariId, int qotrEnsheabId,
-                                int noeVagozariId, int taxfifId, String selectedServices,
+                                int noeVagozariId, int taxfifId, String selectedServicesString,
                                 String mobile, String firstName, String sureName, int arse,
                                 int aianKol, int aianMaskooni, int aianTejari, int sifoon100,
                                 int sifoon125, int sifoon150, int sifoon200, int zarfiatQarardadi,
@@ -78,7 +84,7 @@ public class CalculationUserInput {
         this.qotrEnsheabId = qotrEnsheabId;
         this.noeVagozariId = noeVagozariId;
         this.taxfifId = taxfifId;
-        this.selectedServices = selectedServices;
+        this.selectedServicesString = selectedServicesString;
         this.phoneNumber = phoneNumber;
         this.mobile = mobile;
         this.firstName = firstName;
@@ -112,10 +118,10 @@ public class CalculationUserInput {
         this.sent = sent;
     }
 
-    public void setSelectedServices(CalculationUserInputSend calculationUserInput) {
+    public void setSelectedServicesString(CalculationUserInputSend calculationUserInput) {
         for (String s : calculationUserInput.selectedServices
         ) {
-            selectedServices = selectedServices.concat(s).concat(",");
+            selectedServicesString = selectedServicesString.concat(s).concat(",");
         }
     }
 

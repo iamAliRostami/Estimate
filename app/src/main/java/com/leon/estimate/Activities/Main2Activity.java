@@ -151,10 +151,10 @@ public class Main2Activity extends AppCompatActivity
         Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .fallbackToDestructiveMigration()
                 .addMigrations(MyDatabase.MIGRATION_10_11).build();
+        readData();
     }
 
     void initialize() {
-        readData();
         initializeMap();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -184,12 +184,12 @@ public class Main2Activity extends AppCompatActivity
             Log.e("Error", e.getMessage());
             //You'll need to add proper error handling here
         }
-        Log.e("file", String.valueOf(text));
+        Log.e("file", String.valueOf(text.substring(text.indexOf("serviceDictionary"))));
 
         String json = text.toString();
         Gson gson = new GsonBuilder().create();
         Input input = gson.fromJson(json, Input.class);
-        Log.e("input", String.valueOf(input.getExaminerDuties().size()));
+        Log.e("input", String.valueOf(input.getServiceDictionary().size()));
 
         List<ExaminerDuties> examinerDuties = input.getExaminerDuties();
         for (int i = 0; i < examinerDuties.size(); i++) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -210,7 +211,7 @@ public class FormFragment extends Fragment {
             }
         };
         spinner1.setAdapter(arrayAdapter);
-        spinner1.setSelection(select);
+        spinner1.setSelection(examinerDuties.getKarbariId());
     }
 
     private void initializeTaxfifSpinner() {
@@ -239,7 +240,7 @@ public class FormFragment extends Fragment {
             }
         };
         spinner4.setAdapter(arrayAdapter);
-        spinner4.setSelection(select);
+        spinner4.setSelection(examinerDuties.getTaxfifId());
     }
 
     private void initializeNoeVagozariSpinner() {
@@ -297,7 +298,7 @@ public class FormFragment extends Fragment {
             }
         };
         spinner3.setAdapter(arrayAdapter);
-        spinner3.setSelection(select);
+        spinner3.setSelection(examinerDuties.getQotrEnsheabId());
     }
 
     private void initializeField() {
@@ -331,40 +332,48 @@ public class FormFragment extends Fragment {
     private void initializeServicesCheckBox() {
         DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
         serviceDictionaries = daoServiceDictionary.getServiceDictionaries();
-
         DaoRequestDictionary daoRequestDictionary = dataBase.daoRequestDictionary();
         requestDictionaries = daoRequestDictionary.getRequestDictionaries();
 
+        Log.e("size services", String.valueOf(serviceDictionaries.size()));
         LinearLayout linearLayout = new LinearLayout(context);
         String tag;
         int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
         int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
         int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
-
         for (int i = 0; i < serviceDictionaries.size(); i++) {
-            if (i % 3 == 0) {
-                tag = "linearLayout".concat(String.valueOf(i));
-                linearLayout = new LinearLayout(context);
-                linearLayout.setTag(tag);
-                linearLayout.setGravity(1);
-                linearLayout2.addView(linearLayout);
-            }
+            Log.e("index", String.valueOf(i));
             CheckBox checkBox = new CheckBox(context);
             checkBox.setTag("checkBox".concat(String.valueOf(i)));
             checkBox.setGravity(1);
             checkBox.setText(serviceDictionaries.get(i).getTitle());
+            Log.e("Service:", serviceDictionaries.get(i).getTitle());
             checkBox.setTextSize(textSize);
-            checkBox.setPadding(padding, padding, padding, padding);
             checkBox.setTypeface(typeface);
             checkBox.setTextColor(context.getColor(R.color.blue4));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(margin, margin, margin, margin);
-            checkBox.setLayoutParams(params);
+//            checkBox.setLayoutParams(params);
+//            checkBox.setPadding(padding, padding, padding, padding);
             if (serviceDictionaries.get(i).isSelected())
                 checkBox.setChecked(true);
             checkBoxes.add(checkBox);
             linearLayout.addView(checkBox);
+            if (i % 3 == 2) {
+                tag = "linearLayout".concat(String.valueOf(i));
+                Log.e("size", tag);
+                linearLayout.setTag(tag);
+                linearLayout.setGravity(1);
+                linearLayout2.addView(linearLayout);
+                linearLayout = new LinearLayout(context);
+            } else if (i == serviceDictionaries.size() - 1) {
+                tag = "linearLayout".concat(String.valueOf(i));
+                Log.e("size", tag);
+                linearLayout.setTag(tag);
+                linearLayout.setGravity(1);
+                linearLayout2.addView(linearLayout);
+            }
         }
     }
 

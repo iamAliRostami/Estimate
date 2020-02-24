@@ -468,9 +468,9 @@ public class Form1Activity extends AppCompatActivity {
             }
         }
         selected = selected.substring(0, selected.length() - 1).concat("}");
-        calculationUserInput = new CalculationUserInput(calculationInfo.getTrackingId(), Integer.valueOf(editText2.getText().toString()),
+        calculationUserInput = new CalculationUserInput(calculationInfo.getTrackingId(), editText2.getText().toString(),
                 Integer.valueOf(calculationInfo.getRequestType()), calculationInfo.getParNumber(), editText3.getText().toString(),
-                Integer.valueOf(calculationInfo.getRadif()), Integer.valueOf(calculationInfo.getZoneId()),
+                calculationInfo.getRadif(), Integer.valueOf(calculationInfo.getZoneId()),
                 "09".concat(editText26.getText().toString()), calculationInfo.getKarbariDictionary().get(spinner1.getSelectedItemPosition()).getId(),
                 calculationInfo.getQotrEnsheabDictionary().get(spinner3.getSelectedItemPosition()).getId(),
                 calculationInfo.getNoeVagozariDictionary().get(spinner2.getSelectedItemPosition()).getId(),

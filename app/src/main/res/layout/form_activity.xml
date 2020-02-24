@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
@@ -25,17 +24,17 @@
         <!--            android:paddingBottom="@dimen/activity_medium_padding"-->
         <!--            tools:targetApi="p" />-->
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/view_pager_tab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_blue_2"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/blue1"
-            app:tabMode="fixed"
-            app:tabRippleColor="@color/blue"
-            app:tabSelectedTextColor="@color/blue4"
-            app:tabTextColor="@color/blue3" />
+        <!--        <com.google.android.material.tabs.TabLayout-->
+        <!--            android:id="@+id/view_pager_tab"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/border_blue_2"-->
+        <!--            app:tabGravity="fill"-->
+        <!--            app:tabIndicatorColor="@color/blue1"-->
+        <!--            app:tabMode="fixed"-->
+        <!--            app:tabRippleColor="@color/blue"-->
+        <!--            app:tabSelectedTextColor="@color/blue4"-->
+        <!--            app:tabTextColor="@color/blue3" />-->
 
     </androidx.viewpager.widget.ViewPager>
 
