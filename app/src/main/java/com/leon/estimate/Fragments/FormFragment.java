@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,27 +172,51 @@ public class FormFragment extends Fragment {
         initializeSpinner();
         buttonNext.setOnClickListener(v -> {
             if (prepareForm()) {
-                CalculationUserInput calculationUserInput = new CalculationUserInput();
-                calculationUserInput.trackNumber = editTextTrackNumber.getText().toString();
-                calculationUserInput.billId = editTextBillId.getText().toString();
-                calculationUserInput.sifoon100 = Integer.valueOf(editTextSifoon100.getText().toString());
-                calculationUserInput.sifoon125 = Integer.valueOf(editTextSifoon125.getText().toString());
-                calculationUserInput.sifoon150 = Integer.valueOf(editTextSifoon150.getText().toString());
-                calculationUserInput.sifoon200 = Integer.valueOf(editTextSifoon200.getText().toString());
-                calculationUserInput.arse = Integer.valueOf(editTextArese.getText().toString());
-                calculationUserInput.aianKol = Integer.valueOf(editTextAianKol.getText().toString());
-                calculationUserInput.aianMaskooni = Integer.valueOf(editTextAianMaskooni.getText().toString());
-                calculationUserInput.aianTejari = Integer.valueOf(editTextAianNonMaskooni.getText().toString());
-                calculationUserInput.tedadMaskooni = Integer.valueOf(editTextTedadMaskooni.getText().toString());
-                calculationUserInput.tedadTejari = Integer.valueOf(editTextTedadTejari.getText().toString());
-                calculationUserInput.tedadSaier = Integer.valueOf(editTextTedadSaier.getText().toString());
-                calculationUserInput.arzeshMelk = Integer.valueOf(editTextArzeshMelk.getText().toString());
-                calculationUserInput.tedadTaxfif = Integer.valueOf(editTextTedadTakhfif.getText().toString());
-                calculationUserInput.zarfiatQarardadi = Integer.valueOf(editTextZarfiatQaradadi.getText().toString());
-                calculationUserInput.parNumber = editTextPariNumber.getText().toString();
+                CalculationUserInput calculationUserInput = prepareField();
+                prepareServices(calculationUserInput);
+                Log.e("services", calculationUserInput.selectedServicesString);
                 ((FormActivity) getActivity()).nextPage(null, calculationUserInput);
             }
         });
+    }
+
+    private CalculationUserInput prepareField() {
+        CalculationUserInput calculationUserInput = new CalculationUserInput();
+        calculationUserInput.trackNumber = editTextTrackNumber.getText().toString();
+        calculationUserInput.billId = editTextBillId.getText().toString();
+        calculationUserInput.sifoon100 = Integer.valueOf(editTextSifoon100.getText().toString());
+        calculationUserInput.sifoon125 = Integer.valueOf(editTextSifoon125.getText().toString());
+        calculationUserInput.sifoon150 = Integer.valueOf(editTextSifoon150.getText().toString());
+        calculationUserInput.sifoon200 = Integer.valueOf(editTextSifoon200.getText().toString());
+        calculationUserInput.arse = Integer.valueOf(editTextArese.getText().toString());
+        calculationUserInput.aianKol = Integer.valueOf(editTextAianKol.getText().toString());
+        calculationUserInput.aianMaskooni = Integer.valueOf(editTextAianMaskooni.getText().toString());
+        calculationUserInput.aianTejari = Integer.valueOf(editTextAianNonMaskooni.getText().toString());
+        calculationUserInput.tedadMaskooni = Integer.valueOf(editTextTedadMaskooni.getText().toString());
+        calculationUserInput.tedadTejari = Integer.valueOf(editTextTedadTejari.getText().toString());
+        calculationUserInput.tedadSaier = Integer.valueOf(editTextTedadSaier.getText().toString());
+        calculationUserInput.arzeshMelk = Integer.valueOf(editTextArzeshMelk.getText().toString());
+        calculationUserInput.tedadTaxfif = Integer.valueOf(editTextTedadTakhfif.getText().toString());
+        calculationUserInput.zarfiatQarardadi = Integer.valueOf(editTextZarfiatQaradadi.getText().toString());
+        calculationUserInput.parNumber = editTextPariNumber.getText().toString();
+        calculationUserInput.karbariId = karbariDictionaries.get(spinner1.getSelectedItemPosition()).getId();
+        calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(spinner2.getSelectedItemPosition()).getId();
+        calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(spinner3.getSelectedItemPosition()).getId();
+        calculationUserInput.taxfifId = taxfifDictionaries.get(spinner4.getSelectedItemPosition()).getId();
+        calculationUserInput.adamTaxfifAb = checkBox1.isChecked();
+        calculationUserInput.adamTaxfifFazelab = checkBox2.isChecked();
+        calculationUserInput.ensheabQeireDaem = checkBox3.isChecked();
+        return calculationUserInput;
+    }
+
+    private CalculationUserInput prepareServices(CalculationUserInput calculationUserInput) {
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            requestDictionaries.get(i).setSelected(checkBoxes.get(i).isSelected());
+        }
+        calculationUserInput.selectedServices = requestDictionaries;
+        Gson gson = new GsonBuilder().create();
+        calculationUserInput.selectedServicesString = gson.toJson(requestDictionaries);
+        return calculationUserInput;
     }
 
     private boolean prepareForm() {
@@ -386,17 +411,19 @@ public class FormFragment extends Fragment {
     private void initializeServicesCheckBox() {
         DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
         serviceDictionaries = daoServiceDictionary.getServiceDictionaries();
+
         DaoRequestDictionary daoRequestDictionary = dataBase.daoRequestDictionary();
         requestDictionaries = daoRequestDictionary.getRequestDictionaries();
+
         LinearLayout linearLayout = new LinearLayout(context);
         String tag;
         int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
         int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
         int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
-        for (int i = 0; i < serviceDictionaries.size(); i++) {
+        for (int i = 0; i < requestDictionaries.size(); i++) {
             CheckBox checkBox = new CheckBox(context);
             checkBox.setGravity(1);
-            checkBox.setText(serviceDictionaries.get(i).getTitle());
+            checkBox.setText(requestDictionaries.get(i).getTitle());
             checkBox.setTextSize(textSize);
             checkBox.setTypeface(typeface);
             checkBox.setTextColor(context.getColor(R.color.blue4));
@@ -405,7 +432,7 @@ public class FormFragment extends Fragment {
             params.setMargins(margin, margin, margin, margin);
 //            checkBox.setLayoutParams(params);
 //            checkBox.setPadding(padding, padding, padding, padding);
-            if (serviceDictionaries.get(i).isSelected())
+            if (requestDictionaries.get(i).isSelected())
                 checkBox.setChecked(true);
             checkBoxes.add(checkBox);
             linearLayout.addView(checkBox);
@@ -415,7 +442,7 @@ public class FormFragment extends Fragment {
                 linearLayout.setGravity(1);
                 linearLayout2.addView(linearLayout);
                 linearLayout = new LinearLayout(context);
-            } else if (i == serviceDictionaries.size() - 1) {
+            } else if (i == requestDictionaries.size() - 1) {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);

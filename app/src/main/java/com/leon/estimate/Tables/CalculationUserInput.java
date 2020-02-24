@@ -5,7 +5,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity(tableName = "CalculationUserInput", indices = @Index(value = {"trackNumber"}, unique = true))
 
@@ -34,7 +34,7 @@ public class CalculationUserInput {
     public String firstName;
     public String sureName;
     @Ignore
-    ArrayList<RequestDictionary> selectedServices;
+    public List<RequestDictionary> selectedServices;
     public int aianKol;
     public int aianMaskooni;
     public int aianTejari;

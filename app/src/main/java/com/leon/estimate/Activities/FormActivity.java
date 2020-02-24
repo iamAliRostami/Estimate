@@ -54,7 +54,6 @@ public class FormActivity extends AppCompatActivity {
     String trackNumber, json;
     List<RequestDictionary> requestDictionaries;
     ExaminerDuties examinerDuties;
-    ExaminerDuties examinerDutiesTemp;
     MyDatabase dataBase;
     DaoExaminerDuties daoExaminerDuties;
     CalculationUserInput calculationUserInput;
@@ -115,6 +114,7 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void prepareToSend() {
+        fillCalculationUserInput();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
 
@@ -125,6 +125,19 @@ public class FormActivity extends AppCompatActivity {
         SendCalculation sendCalculation = new SendCalculation();
         Call<SimpleMessage> call = abfaService.SetExaminationInfo(calculationUserInput);
         HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+    }
+
+    void fillCalculationUserInput() {
+        //TODO SELECTED SERVICE
+        calculationUserInput.trackingId = examinerDuties.getTrackingId();
+        calculationUserInput.requestType = Integer.valueOf(examinerDuties.getRequestType());
+        calculationUserInput.parNumber = examinerDuties.getParNumber();
+        calculationUserInput.billId = examinerDuties.getBillId();
+        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
+        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
+        calculationUserInput.nationalId = examinerDuties.getNationalId();
+        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
+
     }
 
     class SendCalculation implements ICallback<SimpleMessage> {
