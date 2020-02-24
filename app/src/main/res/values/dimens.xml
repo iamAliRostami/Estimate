@@ -13,6 +13,7 @@
     <dimen name="activity_large_margin">30dp</dimen>
     <dimen name="activity_large_padding">80dp</dimen>
 
+    <dimen name="textSizeHuge">30sp</dimen>
     <dimen name="textSizeLarge">23sp</dimen>
     <dimen name="textSizeMedium">20sp</dimen>
     <dimen name="textSizeSmall">15sp</dimen>

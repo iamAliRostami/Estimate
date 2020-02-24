@@ -159,7 +159,7 @@ public class FormFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        findViewById = inflater.inflate(R.layout.form1_fragment, container, false);
+        findViewById = inflater.inflate(R.layout.form_fragment, container, false);
         ButterKnife.bind(this, findViewById);
         initialize();
         return findViewById;
@@ -342,7 +342,7 @@ public class FormFragment extends Fragment {
         int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
 
         for (int i = 0; i < serviceDictionaries.size(); i++) {
-            if (i % 5 == 0) {
+            if (i % 3 == 0) {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout = new LinearLayout(context);
                 linearLayout.setTag(tag);

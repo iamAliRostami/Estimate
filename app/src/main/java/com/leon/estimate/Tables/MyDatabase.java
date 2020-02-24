@@ -8,9 +8,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class, RequestDictionary.class,
-        Images.class, MapScreen.class}, version = 19, exportSchema = false)
+        Images.class, MapScreen.class}, version = 20, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_10_11 = new Migration(18, 19) {
+    public static final Migration MIGRATION_10_11 = new Migration(19, 20) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
 //            database.execSQL("CREATE TABLE \"RequestDictionary\" (\n" +
@@ -22,11 +22,11 @@ public abstract class MyDatabase extends RoomDatabase {
 //                    "\tPRIMARY KEY(\"id\")\n" +
 //                    ");");
             database.execSQL("CREATE TABLE \"my_table_copy\" (\n" +
-                    "\t\"id\"\tINTEGER PRIMARY KEY AUTOINCREMENT," +
+//                    "\t\"id\"\tINTEGER PRIMARY KEY AUTOINCREMENT," +
                     "\t\"examinationId\"\tTEXT,\n" +
                     "\t\"karbariId\"\tTEXT,\n" +
                     "\t\"radif\"\tTEXT,\n" +
-                    "\t\"trackNumber\"\tTEXT UNIQUE,\n" +
+                    "\t\"trackNumber\"\tTEXT PRIMARY KEY UNIQUE,\n" +
                     "\t\"billId\"\tINTEGER,\n" +
                     "\t\"examinationDay\"\tTEXT,\n" +
                     "\t\"nameAndFamily\"\tTEXT,\n" +

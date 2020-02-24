@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -34,6 +35,7 @@ import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.DialogType;
@@ -75,6 +77,10 @@ import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -148,6 +154,7 @@ public class Main2Activity extends AppCompatActivity
     }
 
     void initialize() {
+        readData();
         initializeMap();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -156,6 +163,73 @@ public class Main2Activity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
         setImageViewFindByViewId();
+    }
+
+    public void readData() {
+        File sdcard = Environment.getExternalStorageDirectory();
+        //Get the text file
+        File file = new File(sdcard, "json.txt");
+        //Read text from file
+        StringBuilder text = new StringBuilder();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        } catch (IOException e) {
+            Log.e("Error", e.getMessage());
+            //You'll need to add proper error handling here
+        }
+        Log.e("file", String.valueOf(text));
+
+        String json = text.toString();
+        Gson gson = new GsonBuilder().create();
+        Input input = gson.fromJson(json, Input.class);
+        Log.e("input", String.valueOf(input.getExaminerDuties().size()));
+
+        List<ExaminerDuties> examinerDuties = input.getExaminerDuties();
+        for (int i = 0; i < examinerDuties.size(); i++) {
+            Gson gson1 = new Gson();
+            examinerDuties.get(i).setRequestDictionaryString(
+                    gson1.toJson(examinerDuties.get(i).getRequestDictionary()));
+        }
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        List<ExaminerDuties> examinerDutiesTemp = daoExaminerDuties.getExaminerDuties();
+        for (int i = 0; i < examinerDuties.size(); i++) {
+            ExaminerDuties examinerDuties1 = examinerDuties.get(i);
+            for (int j = 0; j < examinerDutiesTemp.size(); j++) {
+                ExaminerDuties examinerDuties2 = examinerDutiesTemp.get(j);
+                if (examinerDuties1.getTrackNumber().equals(examinerDuties2.getTrackNumber())) {
+                    examinerDuties.remove(i);
+                    j = examinerDutiesTemp.size();
+                    i--;
+                }
+            }
+        }
+        daoExaminerDuties.insertAll(examinerDuties);
+
+        DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+        daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+//
+        DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+        daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+
+        DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+        daoServiceDictionary.insertAll(input.getServiceDictionary());
+
+        DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+        daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+
+        Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
+        DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+        daoKarbariDictionary.insertAll(input.getKarbariDictionary());
     }
 
     private Location getLastKnownLocation() {
@@ -411,7 +485,7 @@ public class Main2Activity extends AppCompatActivity
     void download() {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        Retrofit retrofit = NetworkHelper.getInstance(true, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         Download download = new Download();
@@ -452,12 +526,6 @@ public class Main2Activity extends AppCompatActivity
     class Download implements ICallback<Input> {
         @Override
         public void execute(Input input) {
-//            Log.e("size", String.valueOf(input.getExaminerDuties().size()));
-//            ArrayList<RequestDictionary> object = input.getExaminerDuties().get(0).getRequestDictionary();
-//            Gson gson = new Gson();
-//            String json = gson.toJson(object);
-//            Log.e("json", json);
-
             List<ExaminerDuties> examinerDuties = input.getExaminerDuties();
             for (int i = 0; i < examinerDuties.size(); i++) {
                 Gson gson = new Gson();
@@ -466,12 +534,27 @@ public class Main2Activity extends AppCompatActivity
             }
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
+//            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+//            daoExaminerDuties.insertAll(examinerDuties);
+
             DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+            List<ExaminerDuties> examinerDutiesTemp = daoExaminerDuties.getExaminerDuties();
+            for (int i = 0; i < examinerDuties.size(); i++) {
+                ExaminerDuties examinerDuties1 = examinerDuties.get(i);
+                for (int j = 0; j < examinerDutiesTemp.size(); j++) {
+                    ExaminerDuties examinerDuties2 = examinerDutiesTemp.get(j);
+                    if (examinerDuties1.getTrackNumber().equals(examinerDuties2.getTrackNumber())) {
+                        examinerDuties.remove(i);
+                        j = examinerDutiesTemp.size();
+                        i--;
+                    }
+                }
+            }
             daoExaminerDuties.insertAll(examinerDuties);
 
             DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
             daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-//
+
             DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
             daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
 
