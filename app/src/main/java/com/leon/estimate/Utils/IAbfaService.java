@@ -1,6 +1,7 @@
 package com.leon.estimate.Utils;
 
 import com.leon.estimate.Tables.CalculationInfo;
+import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.Input;
 
@@ -146,5 +147,8 @@ public interface IAbfaService {
     @POST("/MoshtarakinApi/ExaminationManager/SetExaminationInfo")
     Call<SimpleMessage> setExaminationInfo(@Body CalculationUserInputSend calculationUserInputSend);
 
+    @POST("/MoshtarakinApi/ExaminationManager/SetExaminationInfo")
+    Call<SimpleMessage> SetExaminationInfo(
+            @Body CalculationUserInput calculationUserInput);
 }
 
