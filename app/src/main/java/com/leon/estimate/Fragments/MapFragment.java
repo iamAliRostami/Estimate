@@ -110,7 +110,6 @@ public class MapFragment extends Fragment implements LocationListener {
     public static MapFragment newInstance(ExaminerDuties examinerDuties, String param2) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
         args.putString(BundleEnum.REQUEST.getValue(), json);
@@ -150,11 +149,16 @@ public class MapFragment extends Fragment implements LocationListener {
         buttonNext.setOnClickListener(v -> {
 //            mapView.setDrawingCacheEnabled(true);
 //            Bitmap bitmap = mapView.getDrawingCache(true);
+//            ((FormActivity) getActivity()).nextPage(bitmap);
             ((FormActivity) getActivity()).nextPage(convertMapToBitmap());
         });
         initializeField();
     }
 
+    private Bitmap convertMapToBitmap() {
+        mapView.setDrawingCacheEnabled(true);
+        return mapView.getDrawingCache(true);
+    }
     private void initializeField() {
         editTextAddress.setText(examinerDuties.getAddress());
         editTextName.setText(examinerDuties.getFirstName());
@@ -224,10 +228,6 @@ public class MapFragment extends Fragment implements LocationListener {
         placeIndex = mapView.getOverlays().size() - 1;
     }
 
-    private Bitmap convertMapToBitmap() {
-        mapView.setDrawingCacheEnabled(true);
-        return mapView.getDrawingCache(true);
-    }
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(mapView);

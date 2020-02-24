@@ -41,6 +41,9 @@ public class FormActivity extends AppCompatActivity {
     String trackNumber, json;
     List<RequestDictionary> requestDictionaries;
     ExaminerDuties examinerDuties;
+    ExaminerDuties examinerDutiesTemp;
+    MyDatabase dataBase;
+    DaoExaminerDuties daoExaminerDuties;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +63,9 @@ public class FormActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     void initialize() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        daoExaminerDuties = dataBase.daoExaminerDuties();
         examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context, examinerDuties);
         viewPager.setAdapter(adapterViewPager);

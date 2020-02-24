@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +126,6 @@ public class FormFragment extends Fragment {
     private List<ServiceDictionary> serviceDictionaries;
     private List<RequestDictionary> requestDictionaries;
     private ExaminerDuties examinerDuties;
-
 
     public FormFragment() {
 
@@ -334,20 +332,15 @@ public class FormFragment extends Fragment {
         serviceDictionaries = daoServiceDictionary.getServiceDictionaries();
         DaoRequestDictionary daoRequestDictionary = dataBase.daoRequestDictionary();
         requestDictionaries = daoRequestDictionary.getRequestDictionaries();
-
-        Log.e("size services", String.valueOf(serviceDictionaries.size()));
         LinearLayout linearLayout = new LinearLayout(context);
         String tag;
         int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
         int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
         int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
         for (int i = 0; i < serviceDictionaries.size(); i++) {
-            Log.e("index", String.valueOf(i));
             CheckBox checkBox = new CheckBox(context);
-            checkBox.setTag("checkBox".concat(String.valueOf(i)));
             checkBox.setGravity(1);
             checkBox.setText(serviceDictionaries.get(i).getTitle());
-            Log.e("Service:", serviceDictionaries.get(i).getTitle());
             checkBox.setTextSize(textSize);
             checkBox.setTypeface(typeface);
             checkBox.setTextColor(context.getColor(R.color.blue4));
@@ -362,14 +355,12 @@ public class FormFragment extends Fragment {
             linearLayout.addView(checkBox);
             if (i % 3 == 2) {
                 tag = "linearLayout".concat(String.valueOf(i));
-                Log.e("size", tag);
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);
                 linearLayout2.addView(linearLayout);
                 linearLayout = new LinearLayout(context);
             } else if (i == serviceDictionaries.size() - 1) {
                 tag = "linearLayout".concat(String.valueOf(i));
-                Log.e("size", tag);
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);
                 linearLayout2.addView(linearLayout);
