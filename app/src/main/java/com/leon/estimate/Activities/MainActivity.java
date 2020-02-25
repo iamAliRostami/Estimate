@@ -88,7 +88,7 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
-public class Main2Activity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
     public double latitude;
     public double longitude;
@@ -139,7 +139,7 @@ public class Main2Activity extends AppCompatActivity
         } else {
             Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
             Mapbox.getInstance(this, accessToken);
-            setContentView(R.layout.main2_activity);
+            setContentView(R.layout.main_activity);
             initialize();
         }
 //        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")

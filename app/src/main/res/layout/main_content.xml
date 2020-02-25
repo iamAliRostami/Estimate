@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Activities.Main2Activity"
-    tools:showIn="@layout/main2_app_bar">
+    tools:context=".Activities.MainActivity"
+    tools:showIn="@layout/main_app_bar">
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapView"
