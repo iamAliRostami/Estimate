@@ -358,7 +358,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (!cancel) {
 //                attemptSerial();
-//                GpsEnabled();
+                GpsEnabled();
             }
             return false;
         });
