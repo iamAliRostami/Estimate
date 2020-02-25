@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -32,6 +33,7 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.ScannerConstants;
 
 import org.jetbrains.annotations.Nullable;
@@ -91,6 +93,8 @@ public class DocumentActivity extends AppCompatActivity {
     Button buttonPick6;
     @BindView(R.id.imageView7)
     ImageView imageView7;
+    @BindView(R.id.constraintLayout)
+    ConstraintLayout constraintLayout;
     String mCurrentPhotoPath;
     Context context;
     boolean replace = false;
@@ -180,6 +184,8 @@ public class DocumentActivity extends AppCompatActivity {
     };
 
     void initialize() {
+        FontManager fontManager = new FontManager(getApplicationContext());
+        fontManager.setFont(constraintLayout);
         initializeButtons();
         initializeImageViews();
         loadImage();
