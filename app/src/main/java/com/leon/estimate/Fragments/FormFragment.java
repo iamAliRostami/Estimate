@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
@@ -43,6 +44,8 @@ import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.ServiceDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.Utils.FontManager;
+import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
+import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -93,7 +96,7 @@ public class FormFragment extends Fragment {
     @BindView(R.id.editTextPariNumber)
     EditText editTextPariNumber;
     @BindView(R.id.editText19)
-    EditText editText19;
+    TextView editText19;
     @BindView(R.id.editText20)
     EditText editText20;
     @BindView(R.id.linearLayout2)
@@ -179,6 +182,34 @@ public class FormFragment extends Fragment {
                 ((FormActivity) getActivity()).nextPage(null, calculationUserInput);
             }
         });
+        editText19.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(context);
+//            datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Range);
+            datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Single);
+            datePickerDialog.setDisableDaysAgo(false);
+//                datePickerDialog.setEnableTimePicker(true);
+//                datePickerDialog.setShowGregorianDate(true);
+            datePickerDialog.setTextSizeTitle(10.0f);
+            datePickerDialog.setTextSizeWeek(12.0f);
+            datePickerDialog.setTextSizeDate(14.0f);
+            datePickerDialog.setCanceledOnTouchOutside(true);
+            datePickerDialog.setOnSingleDateSelectedListener(new DatePickerDialog.OnSingleDateSelectedListener() {
+                @Override
+                public void onSingleDateSelected(com.sardari.daterangepicker.utils.PersianCalendar date) {
+                    Log.e("date1", date.getPersianShortDate());
+                    editText19.setText(date.getPersianShortDate());
+                }
+            });
+            datePickerDialog.setOnRangeDateSelectedListener(new DatePickerDialog.OnRangeDateSelectedListener() {
+                @Override
+                public void onRangeDateSelected(com.sardari.daterangepicker.utils.PersianCalendar startDate, com.sardari.daterangepicker.utils.PersianCalendar endDate) {
+
+//                    editText19.setText(startDate.getPersianShortDate());
+                }
+            });
+
+            datePickerDialog.showDialog();
+        });
     }
 
     private CalculationUserInput prepareField() {
@@ -246,8 +277,8 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(editTextTedadTakhfif)
                 && checkIsNoEmpty(editTextZarfiatQaradadi)
                 && checkIsNoEmpty(editTextPariNumber)
-                && checkIsNoEmpty(editText19)
                 && checkIsNoEmpty(editText20)
+                && editText19.getText().length() < 1
                 ;
     }
 

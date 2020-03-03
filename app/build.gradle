@@ -109,5 +109,5 @@ dependencies {
     implementation 'com.github.mayuce:AndroidDocumentScanner:1.4'
     implementation project(':openCVLibrary')
 //    implementation project(':persiandatepicker')
-//    implementation 'ir.smartlab.persiandatepicker:persiandatepicker:1.0.0'
+    implementation 'com.github.ali-sardari:PersianRangeDatePicker:1.2.1'
 }

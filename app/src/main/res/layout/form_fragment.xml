@@ -10,18 +10,18 @@
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="5"
         android:orientation="vertical"
+        android:weightSum="5"
         tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/activity_medium_margin"
-            android:gravity="center"
             android:layout_marginRight="@dimen/activity_medium_margin"
             android:layout_weight="2"
             android:background="@drawable/border_gray_1"
+            android:gravity="center"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
 
@@ -51,12 +51,12 @@
         </LinearLayout>
 
         <ScrollView
-            android:layout_height="0dp"
             android:layout_width="match_parent"
-            android:layout_weight="3"
+            android:layout_height="0dp"
             android:layout_marginLeft="@dimen/activity_medium_margin"
             android:layout_marginRight="@dimen/activity_medium_margin"
             android:layout_marginBottom="@dimen/activity_mid_margin"
+            android:layout_weight="3"
             android:background="@drawable/border_gray_1"
             android:padding="@dimen/activity_mid_padding">
 
@@ -608,7 +608,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_marginBottom="@dimen/activity_medium_margin"
                         android:gravity="center" />
 
                     <EditText
@@ -616,7 +616,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_marginBottom="@dimen/activity_medium_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -716,10 +716,7 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="center" />
 
-                    <!--                    <ir.smartlab.persindatepicker.PersianDatePicker-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content" />-->
-                    <EditText
+                    <TextView
                         android:id="@+id/editText19"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -729,16 +726,14 @@
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
-                        android:maxLength="8"
+                        android:editable="false"
                         android:maxLines="1"
+                        android:maxLength="10"
                         android:singleLine="true" />
                 </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
-
     <Button
         android:id="@+id/button_next"
         android:layout_width="wrap_content"
