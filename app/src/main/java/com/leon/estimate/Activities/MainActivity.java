@@ -43,6 +43,7 @@ import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
+import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
@@ -486,7 +487,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
 //        Retrofit retrofit = NetworkHelper.getInstance(false, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         Download download = new Download();
@@ -494,43 +495,32 @@ public class MainActivity extends AppCompatActivity
     }
 
     void send() {
-//        final ProgressDialog dialog = new ProgressDialog(context);
-//        dialog.setMessage(context.getString(R.string.upload));
-//        dialog.setTitle(context.getString(R.string.loading_connecting));
-//        dialog.show();
-//        new Thread() {
-//            public void run() {
-//                try {
-//                    sleep(5000);
-//                } catch (Exception ignored) {
-//                }
-//
-//                new Thread() {
-//                    public void run() {
-//                        // Dismiss the Dialog
-//                    }
-//                }.start();
-//                runOnUiThread(() -> {
-//                    dialog.dismiss();
-//                    new CustomDialog(DialogType.Green, context, "بارگذاری با موفقیت انجام شد",
-//                            getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-//                });
-//            }
-//        }.start();
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.
                 getCalculationUserInput();
-
+        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+        for (int i = 0; i < calculationUserInputList.size(); i++) {
+            Log.e("Sent", String.valueOf(calculationUserInputList.get(i).isSent()));
+            CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend(calculationUserInputList.get(i));
+            calculationUserInputSends.add(calculationUserInputSend);
+//            String json = calculationUserInputList.get(i).selectedServicesString;
+//            Gson gson = new GsonBuilder().create();
+//            RequestDictionary[] requestDictionaries = gson.fromJson(json, RequestDictionary[].class);
+//            for (int j = 0; j < requestDictionaries.length; j++) {
+//                if (requestDictionaries[j].isSelected()) {
+//                    calculationUserInputList.get(i).selectedServices.add(requestDictionaries[j].getId());
+//                }
+//            }
+        }
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         SendCalculation sendCalculation = new SendCalculation();
-        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputList);
+        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
         HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
-
 //        Log.e("size", String.valueOf(calculationUserInputList.size()));
     }
 

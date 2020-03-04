@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface DaoCalculationUserInput {
 
-    @Query("SELECT * FROM CalculationUserInput WHERE sent != '1' ORDER BY trackNumber desc")
+    @Query("SELECT * FROM CalculationUserInput WHERE sent != 1 ORDER BY trackNumber desc")
     List<CalculationUserInput> getCalculationUserInput();
 
     @Query("SELECT * FROM CalculationUserInput WHERE trackNumber =:trackingNumber")

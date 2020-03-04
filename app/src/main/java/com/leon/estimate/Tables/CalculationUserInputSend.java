@@ -1,12 +1,21 @@
 package com.leon.estimate.Tables;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 public class CalculationUserInputSend {
     public String trackingId;
-    public int trackNumber;
+    public String trackNumber;
     public int requestType;
     public String parNumber;
     public String billId;
-    public int radif;
+    public String radif;
     public String neighbourBillId;
     public int zoneId;
     public String notificationMobile;
@@ -14,7 +23,7 @@ public class CalculationUserInputSend {
     public int qotrEnsheabId;
     public int noeVagozariId;
     public int taxfifId;
-    public String[] selectedServices;
+    public ArrayList<Integer> selectedServices;
     //
     public String phoneNumber;
     public String mobile;
@@ -46,10 +55,10 @@ public class CalculationUserInputSend {
     public String address;
     public String description;
 
-    public CalculationUserInputSend(String trackingId, int trackNumber, int requestType,
-                                    String parNumber, String billId, int radif, int zoneId,
+    public CalculationUserInputSend(String trackingId, String trackNumber, int requestType,
+                                    String parNumber, String billId, String radif, int zoneId,
                                     String notificationMobile, int karbariId, int qotrEnsheabId,
-                                    int noeVagozariId, int taxfifId, String[] selectedServices,
+                                    int noeVagozariId, int taxfifId, ArrayList<Integer> selectedServices,
                                     String mobile, String firstName, String sureName, int arse,
                                     int aianKol, int aianMaskooni, int aianTejari, int sifoon100,
                                     int sifoon125, int sifoon150, int sifoon200, int zarfiatQarardadi,
@@ -93,8 +102,8 @@ public class CalculationUserInputSend {
         this.address = address;
     }
 
-    public CalculationUserInputSend(String trackingId, int trackNumber, int requestType,
-                                    String parNumber, String billId, int radif, int zoneId,
+    public CalculationUserInputSend(String trackingId, String trackNumber, int requestType,
+                                    String parNumber, String billId, String radif, int zoneId,
                                     String notificationMobile, int karbariId, int qotrEnsheabId,
                                     int noeVagozariId, int taxfifId, String mobile, String firstName,
                                     String sureName, int arse, int aianKol, int aianMaskooni,
@@ -163,8 +172,61 @@ public class CalculationUserInputSend {
         this.description = description;
     }
 
+    public CalculationUserInputSend(CalculationUserInput calculationUserInput) {
+        this.trackingId = calculationUserInput.trackingId;
+        this.trackNumber = calculationUserInput.trackNumber;
+        this.requestType = calculationUserInput.requestType;
+        this.parNumber = calculationUserInput.parNumber;
+        this.billId = calculationUserInput.billId;
+        this.radif = calculationUserInput.radif;
+        this.zoneId = calculationUserInput.zoneId;
+        this.notificationMobile = calculationUserInput.notificationMobile;
+        this.karbariId = calculationUserInput.karbariId;
+        this.qotrEnsheabId = calculationUserInput.qotrEnsheabId;
+        this.noeVagozariId = calculationUserInput.noeVagozariId;
+        this.taxfifId = calculationUserInput.taxfifId;
+        this.mobile = calculationUserInput.mobile;
+        this.firstName = calculationUserInput.firstName;
+        this.sureName = calculationUserInput.sureName;
+        this.arse = calculationUserInput.arse;
+        this.aianKol = calculationUserInput.aianKol;
+        this.aianMaskooni = calculationUserInput.aianMaskooni;
+        this.aianTejari = calculationUserInput.aianTejari;
+        this.sifoon100 = calculationUserInput.sifoon100;
+        this.sifoon125 = calculationUserInput.sifoon125;
+        this.sifoon150 = calculationUserInput.sifoon150;
+        this.sifoon200 = calculationUserInput.sifoon200;
+        this.zarfiatQarardadi = calculationUserInput.zarfiatQarardadi;
+        this.arzeshMelk = calculationUserInput.arzeshMelk;
+        this.tedadMaskooni = calculationUserInput.tedadMaskooni;
+        this.tedadTejari = calculationUserInput.tedadTejari;
+        this.tedadSaier = calculationUserInput.tedadSaier;
+        this.tedadTaxfif = calculationUserInput.tedadTaxfif;
+        this.nationalId = calculationUserInput.nationalId;
+        this.ensheabQeireDaem = calculationUserInput.ensheabQeireDaem;
+        this.adamTaxfifAb = calculationUserInput.adamTaxfifAb;
+        this.adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
+        this.address = calculationUserInput.address;
+        setSelectedServices(calculationUserInput);
+    }
+
     public void setSelectedServices(CalculationUserInput calculationUserInput) {
-        selectedServices = calculationUserInput.selectedServicesString.split(",");
+        String json = calculationUserInput.selectedServicesString;
+//        Log.e("selectedServices", json);
+        Gson gson = new GsonBuilder().create();
+        Type userListType = new TypeToken<ArrayList<RequestDictionary>>() {
+        }.getType();
+        ArrayList<RequestDictionary> requestDictionaries1 = gson.fromJson(json, userListType);
+//        Log.e("size", String.valueOf(requestDictionaries1.size()));
+//        selectedServices.add(66);
+        selectedServices = new ArrayList<>();
+        for (RequestDictionary requestDictionary : requestDictionaries1) {
+            selectedServices.add(requestDictionary.getId());
+            if (requestDictionary.isSelected()) {
+                Log.e("Id", String.valueOf(requestDictionary.getId()));
+                selectedServices.add(requestDictionary.getId());
+            }
+        }
     }
 
 }

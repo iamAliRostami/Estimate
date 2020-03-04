@@ -34,7 +34,10 @@ public class CalculationUserInput {
     public String firstName;
     public String sureName;
     @Ignore
-    public List<RequestDictionary> selectedServices;
+    public List<RequestDictionary> selectedServicesObject;
+
+    @Ignore
+    public List<Integer> selectedServices;
     public int aianKol;
     public int aianMaskooni;
     public int aianTejari;
@@ -59,6 +62,10 @@ public class CalculationUserInput {
     public String address;
     public String description;
     boolean sent;
+
+    public boolean isSent() {
+        return sent;
+    }
 
     public CalculationUserInput() {
     }
@@ -122,9 +129,9 @@ public class CalculationUserInput {
     }
 
     public void setSelectedServicesString(CalculationUserInputSend calculationUserInput) {
-        for (String s : calculationUserInput.selectedServices
+        for (int s : calculationUserInput.selectedServices
         ) {
-            selectedServicesString = selectedServicesString.concat(s).concat(",");
+            selectedServicesString = selectedServicesString.concat(String.valueOf(s)).concat(",");
         }
     }
 

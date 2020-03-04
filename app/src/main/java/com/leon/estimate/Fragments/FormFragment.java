@@ -252,7 +252,7 @@ public class FormFragment extends Fragment {
         for (int i = 0; i < checkBoxes.size(); i++) {
             requestDictionaries.get(i).setSelected(checkBoxes.get(i).isSelected());
         }
-        calculationUserInput.selectedServices = requestDictionaries;
+        calculationUserInput.selectedServicesObject = requestDictionaries;
         Gson gson = new GsonBuilder().create();
         calculationUserInput.selectedServicesString = gson.toJson(requestDictionaries);
         return calculationUserInput;
@@ -278,7 +278,7 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(editTextZarfiatQaradadi)
                 && checkIsNoEmpty(editTextPariNumber)
                 && checkIsNoEmpty(editText20)
-                && editText19.getText().length() < 1
+                && editText19.getText().length() > 0
                 ;
     }
 
