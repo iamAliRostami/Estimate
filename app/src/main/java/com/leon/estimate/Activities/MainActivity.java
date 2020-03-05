@@ -102,8 +102,7 @@ public class MainActivity extends AppCompatActivity
     Context context;
     private PermissionsManager permissionsManager;
     private MapView mapView = null;
-    private MyLocationNewOverlay locationOverlay;
-    private List<Point> routeCoordinates;
+    List<CalculationUserInput> calculationUserInputList;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
         switch (view.getId()) {
@@ -143,12 +142,6 @@ public class MainActivity extends AppCompatActivity
             setContentView(R.layout.main_activity);
             initialize();
         }
-//        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-//                .allowMainThreadQueries().build();
-//        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-//        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
-//        Log.e("size", String.valueOf(examinerDuties.size()));
-
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_10_11).build();
@@ -168,30 +161,21 @@ public class MainActivity extends AppCompatActivity
 
     public void readData() {
         File sdcard = Environment.getExternalStorageDirectory();
-        //Get the text file
         File file = new File(sdcard, "json.txt");
-        //Read text from file
         StringBuilder text = new StringBuilder();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-
             while ((line = br.readLine()) != null) {
                 text.append(line);
                 text.append('\n');
             }
             br.close();
-        } catch (IOException e) {
-            Log.e("Error", e.getMessage());
-            //You'll need to add proper error handling here
+        } catch (IOException ignored) {
         }
-        Log.e("file", String.valueOf(text.substring(text.indexOf("serviceDictionary"))));
-
         String json = text.toString();
         Gson gson = new GsonBuilder().create();
         Input input = gson.fromJson(json, Input.class);
-        Log.e("input", String.valueOf(input.getServiceDictionary().size()));
-
         List<ExaminerDuties> examinerDuties = input.getExaminerDuties();
         for (int i = 0; i < examinerDuties.size(); i++) {
             Gson gson1 = new Gson();
@@ -200,7 +184,6 @@ public class MainActivity extends AppCompatActivity
         }
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
-
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         List<ExaminerDuties> examinerDutiesTemp = daoExaminerDuties.getExaminerDuties();
         for (int i = 0; i < examinerDuties.size(); i++) {
@@ -215,20 +198,14 @@ public class MainActivity extends AppCompatActivity
             }
         }
         daoExaminerDuties.insertAll(examinerDuties);
-
         DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
         daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-//
         DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
         daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-
         DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
         daoServiceDictionary.insertAll(input.getServiceDictionary());
-
         DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
         daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-
-        Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         daoKarbariDictionary.insertAll(input.getKarbariDictionary());
     }
@@ -255,19 +232,6 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressLint("MissingPermission")
     void initializeMap() {
-//        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            new AlertDialog.Builder(context)
-//                    .setTitle("R.string.gps_not_found_title")  // GPS not found
-//                    .setMessage("R.string.gps_not_found_message") // Want to enable?
-//                    .setPositiveButton("R.string.yes", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//                        }
-//                    })
-//                    .setNegativeButton("R.string.no", (dialog, which) -> forceClose(context))
-//                    .show();
-//        }
         if (!GpsEnabled()) {
             initialize();
         } else {
@@ -291,8 +255,8 @@ public class MainActivity extends AppCompatActivity
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
 //        startPoint = new GeoPoint(48.8583, 2.2944);
             mapController.setCenter(startPoint);
-            this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
-            this.locationOverlay.enableMyLocation();
+            MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+            locationOverlay.enableMyLocation();
 
 //        test();
             initRouteCoordinates();
@@ -355,7 +319,7 @@ public class MainActivity extends AppCompatActivity
             longitude = location.getLongitude();
             latitude = location.getLatitude();
         }
-        routeCoordinates = new ArrayList<>();
+        List<Point> routeCoordinates = new ArrayList<>();
         routeCoordinates.add(Point.fromLngLat(longitude, latitude));
         routeCoordinates.add(Point.fromLngLat(longitude + longitude / 1000, latitude + longitude / 1000));
 //        routeCoordinates.add(Point.fromLngLat(longitude - longitude/1000, latitude + longitude/1000));
@@ -498,21 +462,11 @@ public class MainActivity extends AppCompatActivity
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-        List<CalculationUserInput> calculationUserInputList = daoCalculationUserInput.
-                getCalculationUserInput();
+        calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
         for (int i = 0; i < calculationUserInputList.size(); i++) {
-            Log.e("Sent", String.valueOf(calculationUserInputList.get(i).isSent()));
             CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend(calculationUserInputList.get(i));
             calculationUserInputSends.add(calculationUserInputSend);
-//            String json = calculationUserInputList.get(i).selectedServicesString;
-//            Gson gson = new GsonBuilder().create();
-//            RequestDictionary[] requestDictionaries = gson.fromJson(json, RequestDictionary[].class);
-//            for (int j = 0; j < requestDictionaries.length; j++) {
-//                if (requestDictionaries[j].isSelected()) {
-//                    calculationUserInputList.get(i).selectedServices.add(requestDictionaries[j].getId());
-//                }
-//            }
         }
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
@@ -583,7 +537,10 @@ public class MainActivity extends AppCompatActivity
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+            for (CalculationUserInput calculationUserInput : calculationUserInputList) {
+                trackNumber = calculationUserInput.trackNumber;
+                daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+            }
         }
     }
 }

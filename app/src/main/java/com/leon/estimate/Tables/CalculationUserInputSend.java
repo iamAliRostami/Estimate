@@ -1,7 +1,5 @@
 package com.leon.estimate.Tables;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -210,20 +208,16 @@ public class CalculationUserInputSend {
         setSelectedServices(calculationUserInput);
     }
 
-    public void setSelectedServices(CalculationUserInput calculationUserInput) {
+    private void setSelectedServices(CalculationUserInput calculationUserInput) {
         String json = calculationUserInput.selectedServicesString;
-//        Log.e("selectedServices", json);
         Gson gson = new GsonBuilder().create();
         Type userListType = new TypeToken<ArrayList<RequestDictionary>>() {
         }.getType();
         ArrayList<RequestDictionary> requestDictionaries1 = gson.fromJson(json, userListType);
-//        Log.e("size", String.valueOf(requestDictionaries1.size()));
-//        selectedServices.add(66);
         selectedServices = new ArrayList<>();
         for (RequestDictionary requestDictionary : requestDictionaries1) {
             selectedServices.add(requestDictionary.getId());
             if (requestDictionary.isSelected()) {
-                Log.e("Id", String.valueOf(requestDictionary.getId()));
                 selectedServices.add(requestDictionary.getId());
             }
         }

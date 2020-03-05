@@ -716,7 +716,7 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="center" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/editText19"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -724,7 +724,7 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="none"
                         android:lines="1"
                         android:editable="false"
                         android:maxLines="1"

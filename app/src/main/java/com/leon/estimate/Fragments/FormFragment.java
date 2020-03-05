@@ -3,7 +3,6 @@ package com.leon.estimate.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
@@ -96,7 +94,7 @@ public class FormFragment extends Fragment {
     @BindView(R.id.editTextPariNumber)
     EditText editTextPariNumber;
     @BindView(R.id.editText19)
-    TextView editText19;
+    EditText editText19;
     @BindView(R.id.editText20)
     EditText editText20;
     @BindView(R.id.linearLayout2)
@@ -174,6 +172,11 @@ public class FormFragment extends Fragment {
         fontManager.setFont(relativeLayout);
         typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
         initializeSpinner();
+        setOnButtonNextClickListener();
+        setOnEditText19ClickListener();
+    }
+
+    void setOnButtonNextClickListener() {
         buttonNext.setOnClickListener(v -> {
             if (prepareForm()) {
                 CalculationUserInput calculationUserInput = prepareField();
@@ -182,32 +185,18 @@ public class FormFragment extends Fragment {
                 ((FormActivity) getActivity()).nextPage(null, calculationUserInput);
             }
         });
+    }
+
+    void setOnEditText19ClickListener() {
         editText19.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(context);
-//            datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Range);
             datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Single);
             datePickerDialog.setDisableDaysAgo(false);
-//                datePickerDialog.setEnableTimePicker(true);
-//                datePickerDialog.setShowGregorianDate(true);
             datePickerDialog.setTextSizeTitle(10.0f);
             datePickerDialog.setTextSizeWeek(12.0f);
             datePickerDialog.setTextSizeDate(14.0f);
             datePickerDialog.setCanceledOnTouchOutside(true);
-            datePickerDialog.setOnSingleDateSelectedListener(new DatePickerDialog.OnSingleDateSelectedListener() {
-                @Override
-                public void onSingleDateSelected(com.sardari.daterangepicker.utils.PersianCalendar date) {
-                    Log.e("date1", date.getPersianShortDate());
-                    editText19.setText(date.getPersianShortDate());
-                }
-            });
-            datePickerDialog.setOnRangeDateSelectedListener(new DatePickerDialog.OnRangeDateSelectedListener() {
-                @Override
-                public void onRangeDateSelected(com.sardari.daterangepicker.utils.PersianCalendar startDate, com.sardari.daterangepicker.utils.PersianCalendar endDate) {
-
-//                    editText19.setText(startDate.getPersianShortDate());
-                }
-            });
-
+            datePickerDialog.setOnSingleDateSelectedListener(date -> editText19.setText(date.getPersianShortDate()));
             datePickerDialog.showDialog();
         });
     }
@@ -278,7 +267,8 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(editTextZarfiatQaradadi)
                 && checkIsNoEmpty(editTextPariNumber)
                 && checkIsNoEmpty(editText20)
-                && editText19.getText().length() > 0
+                && checkIsNoEmpty(editText19)
+//                && editText19.getText().length() > 0
                 ;
     }
 
@@ -488,15 +478,6 @@ public class FormFragment extends Fragment {
                 linearLayout2.addView(linearLayout);
             }
         }
-    }
-
-
-    private void sendData() {
-        //INTENT OBJ
-        Intent i = new Intent(getActivity().getBaseContext(), FormActivity.class);
-        i.putExtra("SENDER_KEY", "name");
-        i.putExtra("NAME_KEY", "slm");
-        getActivity().startActivity(i);
     }
 
     @Override
