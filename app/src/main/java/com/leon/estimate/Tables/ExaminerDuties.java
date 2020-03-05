@@ -68,6 +68,53 @@ public class ExaminerDuties {
     @Ignore
     ArrayList<RequestDictionary> requestDictionary;
 
+    public ExaminerDuties updateExaminerDuties(CalculationUserInput calculationUserInput) {
+        trackNumber = calculationUserInput.trackNumber;
+        karbariId = calculationUserInput.karbariId;
+        radif = calculationUserInput.radif;
+        billId = calculationUserInput.billId;
+        nameAndFamily = calculationUserInput.firstName.trim().concat(" ".concat(calculationUserInput.sureName.trim()));
+        notificationMobile = calculationUserInput.notificationMobile;
+//        serviceGroup = calculationUserInput.selectedServicesString;
+        address = calculationUserInput.address;
+        neighbourBillId = calculationUserInput.neighbourBillId;
+        isPeymayesh = true;
+        trackingId = calculationUserInput.trackingId;
+        requestType = String.valueOf(calculationUserInput.requestType);
+        parNumber = calculationUserInput.parNumber;
+        zoneId = String.valueOf(calculationUserInput.zoneId);
+        phoneNumber = calculationUserInput.phoneNumber;
+        mobile = calculationUserInput.mobile;
+        firstName = calculationUserInput.firstName;
+        sureName = calculationUserInput.sureName;
+        arse = calculationUserInput.arse;
+        aianKol = calculationUserInput.aianKol;
+        aianMaskooni = calculationUserInput.aianMaskooni;
+        aianNonMaskooni = calculationUserInput.aianTejari;
+        qotrEnsheabId = calculationUserInput.qotrEnsheabId;
+        sifoon100 = calculationUserInput.sifoon100;
+        sifoon125 = calculationUserInput.sifoon125;
+        sifoon150 = calculationUserInput.sifoon150;
+        sifoon200 = calculationUserInput.sifoon200;
+        zarfiatQarardadi = calculationUserInput.zarfiatQarardadi;
+        arzeshMelk = calculationUserInput.arzeshMelk;
+        tedadMaskooni = calculationUserInput.tedadMaskooni;
+        tedadTejari = calculationUserInput.tedadTejari;
+        tedadSaier = calculationUserInput.tedadSaier;
+        taxfifId = calculationUserInput.taxfifId;
+        tedadTaxfif = calculationUserInput.tedadTaxfif;
+        nationalId = calculationUserInput.nationalId;
+        identityCode = calculationUserInput.identityCode;
+        fatherName = calculationUserInput.fatherName;
+        postalCode = calculationUserInput.postalCode;
+        description = calculationUserInput.description;
+        adamTaxfifAb = calculationUserInput.adamTaxfifAb;
+        adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
+        isEnsheabQeirDaem = calculationUserInput.ensheabQeireDaem;
+        requestDictionaryString = calculationUserInput.selectedServicesString;
+        return this;
+    }
+
     public String getExaminationId() {
         return examinationId;
     }
@@ -507,4 +554,5 @@ public class ExaminerDuties {
     public void setRequestDictionary(ArrayList<RequestDictionary> requestDictionary) {
         this.requestDictionary = requestDictionary;
     }
+
 }

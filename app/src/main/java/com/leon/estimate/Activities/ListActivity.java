@@ -64,11 +64,8 @@ public class ListActivity extends AppCompatActivity {
         MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        examinerDuties = daoExaminerDuties.unreadExaminerDuties();
-
-//        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-//        List<ExaminerDuties> examinerDuties = daoExaminerDuties.getExaminerDuties();
-
+//        examinerDuties = daoExaminerDuties.unreadExaminerDuties();
+        examinerDuties = daoExaminerDuties.ExaminerDuties();
         if (this.examinerDuties.isEmpty()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             recyclerView.setVisibility(View.GONE);

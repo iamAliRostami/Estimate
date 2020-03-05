@@ -24,6 +24,9 @@ public interface DaoCalculationUserInput {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertCalculationUserInput(CalculationUserInput calculationUserInput);
 
+    @Query("DELETE FROM CalculationUserInput WHERE trackNumber = :trackNumber")
+    void deleteByTrackNumber(String trackNumber);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(List<CalculationUserInput> values);
 

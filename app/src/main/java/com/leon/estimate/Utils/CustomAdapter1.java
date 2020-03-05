@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,27 +46,34 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
             view = layoutInflater.inflate(R.layout.item_address_2, null);
         ViewHolder holder = new ViewHolder(view);
 
-
         holder.itemView.setOnClickListener(view1 -> {
-//            Intent intent = new Intent(context, Form1Activity.class);
-            Intent intent = new Intent(context, FormActivity.class);
-            intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.get(i).getTrackNumber());
-            intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.get(i).getRequestDictionaryString());
-            context.startActivity(intent);
+            if (examinerDuties.get(i).isPeymayesh()) {
+                Toast.makeText(context, "این مسیر پیمایش شده است.", Toast.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent(context, FormActivity.class);
+                intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.get(i).getTrackNumber());
+                intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.get(i).getRequestDictionaryString());
+                context.startActivity(intent);
+            }
         });
         return holder;
     }
 
 
+    @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         ExaminerDuties examinerDuties = this.examinerDuties.get(i);
 
         viewHolder.textViewName.setText(examinerDuties.getNameAndFamily());
-        if (examinerDuties.isPeymayesh())
+        if (examinerDuties.isPeymayesh()) {
             viewHolder.textViewPeymayesh.setText("پیمایش شده");
-        else
+            viewHolder.textViewPeymayesh.setBackground(context.getDrawable(R.drawable.border_green_2));
+
+        } else {
             viewHolder.textViewPeymayesh.setText("پیمایش نشده");
+            viewHolder.textViewPeymayesh.setBackground(context.getDrawable(R.drawable.border_red_2));
+        }
         viewHolder.textViewExaminationDay.setText(examinerDuties.getExaminationDay());
         viewHolder.textViewServiceGroup.setText(examinerDuties.getServiceGroup());
         viewHolder.textViewAddress.setText(examinerDuties.getAddress().trim());

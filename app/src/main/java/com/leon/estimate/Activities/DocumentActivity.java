@@ -371,5 +371,13 @@ public class DocumentActivity extends AppCompatActivity {
         this.mCurrentPhotoPath = stringBuilder.append(image.getAbsolutePath()).toString();
         return image;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
 

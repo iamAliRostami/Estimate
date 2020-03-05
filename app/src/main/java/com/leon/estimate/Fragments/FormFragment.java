@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,7 +180,7 @@ public class FormFragment extends Fragment {
             if (prepareForm()) {
                 CalculationUserInput calculationUserInput = prepareField();
                 prepareServices(calculationUserInput);
-                Log.e("services", calculationUserInput.selectedServicesString);
+//                Log.e("services", calculationUserInput.selectedServicesString);
                 ((FormActivity) getActivity()).nextPage(null, calculationUserInput);
             }
         });

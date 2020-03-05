@@ -463,19 +463,22 @@ public class MainActivity extends AppCompatActivity
                 .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
-        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-        for (int i = 0; i < calculationUserInputList.size(); i++) {
-            CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend(calculationUserInputList.get(i));
-            calculationUserInputSends.add(calculationUserInputSend);
-        }
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
-        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
-        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-        SendCalculation sendCalculation = new SendCalculation();
-        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-        HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
-//        Log.e("size", String.valueOf(calculationUserInputList.size()));
+        if (calculationUserInputList.size() > 0) {
+            ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+            for (int i = 0; i < calculationUserInputList.size(); i++) {
+                CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend(calculationUserInputList.get(i));
+                calculationUserInputSends.add(calculationUserInputSend);
+            }
+            SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+            String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+            Retrofit retrofit = NetworkHelper.getInstance(true, token);
+            final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+            SendCalculation sendCalculation = new SendCalculation();
+            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
+            HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+
+        } else
+            Toast.makeText(getApplicationContext(), "مسیری برای تخلیه وجود ندارد", Toast.LENGTH_LONG).show();
     }
 
     class Download implements ICallback<Input> {
