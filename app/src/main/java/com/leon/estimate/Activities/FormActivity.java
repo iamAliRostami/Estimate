@@ -16,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.ProgressType;
+import com.leon.estimate.Enums.ErrorHandlerType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
@@ -102,6 +102,7 @@ public class FormActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
             intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), convertBitmapToByte(bitmap));
             context.startActivity(intent);
+            finish();
         }
     }
 
@@ -132,7 +133,7 @@ public class FormActivity extends AppCompatActivity {
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
         calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-        HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+        HttpClientWrapper.callHttpAsync(call, sendCalculation, ErrorHandlerType.ordinary);
     }
 
     void updateExamination() {

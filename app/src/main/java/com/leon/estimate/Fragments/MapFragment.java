@@ -227,7 +227,7 @@ public class MapFragment extends Fragment implements LocationListener {
         editTextDescription.setText(examinerDuties.getDescription());
         editTextPhone.setText(examinerDuties.getPhoneNumber());
         editTextMobile.setText(examinerDuties.getMobile());
-        editText26.setText(examinerDuties.getEshterak());
+        editText26.setText(examinerDuties.getEshterak().trim());
         editTextPostalCode.setText(examinerDuties.getPostalCode());
         editTextRadif.setText(examinerDuties.getRadif());
     }

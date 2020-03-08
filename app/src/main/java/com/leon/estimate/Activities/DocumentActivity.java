@@ -375,8 +375,8 @@ public class DocumentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+//        startActivity(intent);
         finish();
     }
 }

@@ -4,8 +4,6 @@ package com.leon.estimate.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ErrorHandlerType;
@@ -91,8 +89,9 @@ final public class HttpClientWrapper {
         });
     }
 
-    public static <T> void callHttpAsync(Call<T> call, final ICallback callback, final Context context, final ErrorHandlerType errorHandlerType) {
+    public static <T> void callHttpAsync(Call<T> call, final ICallback callback, final ErrorHandlerType errorHandlerType) {
         final String[] error = new String[1];
+//        Context context = MyApplication.getContext();
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(Call<T> call, Response<T> response) {
@@ -103,38 +102,34 @@ final public class HttpClientWrapper {
                     } else {
                         try {
                             JSONObject jsonObject = new JSONObject(response.errorBody().string());
-                            error[0] = jsonObject.getString(context.getString(R.string.message));
+//                            error[0] = jsonObject.getString(context.getString(R.string.message));
                         } catch (Exception e) {
-                            CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
-                            error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
+//                            CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
+//                            error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
                         }
-                        Toast.makeText(context, error[0], Toast.LENGTH_SHORT).show();
-                        Log.e("Error", error[0]);
+//                        Toast.makeText(context, error[0], Toast.LENGTH_SHORT).show();
+//                        Log.e("Error", error[0]);
                     }
                 } catch (Exception e) {
 
                     try {
-                        JSONObject jsonObject = new JSONObject(response.errorBody().string());
-                        error[0] = jsonObject.getString(context.getString(R.string.message));
+//                        JSONObject jsonObject = new JSONObject(response.errorBody().string());
+//                        error[0] = jsonObject.getString(context.getString(R.string.message));
                     } catch (Exception e1) {
-                        CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
-                        error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
+//                        CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
+//                        error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
                     }
-                    Toast.makeText(context, error[0], Toast.LENGTH_SHORT).show();
-                    Log.e("Error", error[0]);
+//                    Toast.makeText(context, error[0], Toast.LENGTH_SHORT).show();
+//                    Log.e("Error", error[0]);
                 }
             }
 
             @Override
             public void onFailure(Call<T> call, Throwable t) {
-                CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
-                error[0] = customErrorHandling.getErrorMessageTotal(t);
-                Toast.makeText(context, error[0], Toast.LENGTH_SHORT).show();
-                Log.e("Error", error[0]);
-//                Activity activity = (Activity) context;
-//                if (!activity.isFinishing()) {
-//
-//                }
+//                CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
+//                error[0] = customErrorHandling.getErrorMessageTotal(t);
+//                Log.e("Error", error[0]);
+//                Toast.makeText(context, error[0], Toast.LENGTH_SHORT).show();
             }
         });
     }
