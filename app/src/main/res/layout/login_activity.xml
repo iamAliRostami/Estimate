@@ -129,10 +129,9 @@
                 android:gravity="center"
                 android:hint="@string/username"
                 android:inputType="text"
-                android:text="appExam"
                 android:lines="1"
                 android:padding="@dimen/activity_medium_padding" />
-
+            <!--            android:text="appExam"-->
             <ImageView
                 android:id="@+id/imageViewUsername"
                 android:layout_width="50dp"
@@ -160,10 +159,9 @@
                 android:gravity="center"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:text="123456"
                 android:lines="1"
                 android:padding="@dimen/activity_medium_padding" />
-
+            <!--                android:text="123456"-->
 
             <ImageView
                 android:id="@+id/imageViewPassword"
