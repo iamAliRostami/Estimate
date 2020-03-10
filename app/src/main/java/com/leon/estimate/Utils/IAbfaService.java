@@ -139,7 +139,7 @@ public interface IAbfaService {
     Call<SimpleMessage> signSerial(
             @Body LoginInfo logininfo);
 
-    @GET("/MoshtarakinApi/ExaminationManager/GetMyWorksI")
+    @GET("/MoshtarakinApi/ExaminationManager/GetMyWorks")
     Call<Input> getMyWorks();
 
     @GET("/MoshtarakinApi/ExaminationManager/GetExaminationDetails/")
