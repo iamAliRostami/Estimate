@@ -31,7 +31,7 @@ public class CustomErrorHandling extends Exception {
     public static APIError parseError(Response<?> response) {
         try {
             Converter<ResponseBody, APIError> converter =
-                    NetworkHelper.getInstance(true, "")
+                    NetworkHelper.getInstance(false, "")
                             .responseBodyConverter(APIError.class, new Annotation[0]);
             APIError error;
             error = converter.convert(response.errorBody());

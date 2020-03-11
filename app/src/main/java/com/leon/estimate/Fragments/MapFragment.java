@@ -36,7 +36,9 @@ import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.TileSourcePolicy;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -235,7 +237,17 @@ public class MapFragment extends Fragment implements LocationListener {
     @SuppressLint("MissingPermission")
     private void initializeMap() {
         mapView = findViewById.findViewById(R.id.mapView);
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
+                0, 19, 256, ".png", new String[]{
+                "https://172.18.12.242:80"}, "© OpenStreetMap contributors",
+                new TileSourcePolicy(2,
+                        TileSourcePolicy.FLAG_NO_BULK
+                                | TileSourcePolicy.FLAG_NO_PREVENTIVE
+                                | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
+                                | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
+                ));
+//        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setTileSource(CUSTOM);
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
         IMapController mapController = mapView.getController();

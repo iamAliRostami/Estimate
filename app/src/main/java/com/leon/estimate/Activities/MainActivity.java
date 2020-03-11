@@ -68,11 +68,11 @@ import com.mapbox.mapboxsdk.Mapbox;
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.events.MapEventsReceiver;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.TileSourcePolicy;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -102,6 +102,15 @@ public class MainActivity extends AppCompatActivity
     Context context;
     private PermissionsManager permissionsManager;
     private MapView mapView = null;
+    public static final OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
+            0, 19, 256, ".png", new String[]{
+            "https://172.18.12.242:80"}, "© OpenStreetMap contributors",
+            new TileSourcePolicy(2,
+                    TileSourcePolicy.FLAG_NO_BULK
+                            | TileSourcePolicy.FLAG_NO_PREVENTIVE
+                            | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
+                            | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
+            ));
     List<CalculationUserInput> calculationUserInputList;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
@@ -236,7 +245,9 @@ public class MainActivity extends AppCompatActivity
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-            mapView.setTileSource(TileSourceFactory.MAPNIK);
+//            mapView.setTileSource(TileSourceFactory.MAPNIK);
+            mapView.setTileSource(CUSTOM);
+//            mapView.setUseDataConnection();
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
@@ -253,27 +264,12 @@ public class MainActivity extends AppCompatActivity
                 locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
-//        startPoint = new GeoPoint(48.8583, 2.2944);
             mapController.setCenter(startPoint);
             MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
             locationOverlay.enableMyLocation();
-
 //        test();
             initRouteCoordinates();
             mapView.getOverlays().add(locationOverlay);
-            mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
-                @Override
-                public boolean singleTapConfirmedHelper(GeoPoint p) {
-                    Log.e("location1", p.toString());
-                    return false;
-                }
-
-                @Override
-                public boolean longPressHelper(GeoPoint p) {
-                    Log.e("location2", p.toString());
-                    return false;
-                }
-            }));
         }
     }
 

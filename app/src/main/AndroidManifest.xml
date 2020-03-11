@@ -39,14 +39,16 @@
         <activity
             android:name=".Activities.FormActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:ignore="LockedOrientationActivity"></activity>
         <activity android:name=".Activities.BrightnessContrastActivity" />
         <activity android:name=".Activities.CropActivity" />
         <activity android:name=".Activities.ListActivity" />
         <activity
             android:name=".Activities.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,11 +59,12 @@
             android:name=".Activities.LoginActivity"
             android:label="@string/login"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Activities.TakeOtherPhotoActivity"
             android:label="@string/paper" />
