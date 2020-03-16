@@ -1,5 +1,6 @@
 package com.leon.estimate.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -55,6 +56,7 @@ public class ListActivity extends AppCompatActivity {
         initializeRecyclerView();
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     void initializeRecyclerView() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
