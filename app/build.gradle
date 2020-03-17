@@ -84,6 +84,7 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.1.0'
 
     implementation 'org.osmdroid:osmdroid-android:6.1.4@aar'
+//    implementation 'org.osmdroid:osmdroid-android:6.1-SNAPSHOT:debug@aar'
     implementation 'com.yarolegovich:lovely-dialog:1.0.7'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
@@ -91,9 +92,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
-    implementation 'com.jakewharton:butterknife:10.2.0'
-    implementation 'com.jakewharton:butterknife-compiler:10.2.0'
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.0"
+    //noinspection AnnotationProcessorOnCompilePath
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    //noinspection AnnotationProcessorOnCompilePath
+    implementation 'com.jakewharton:butterknife-compiler:10.2.1'
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.1"
     implementation 'com.yarolegovich:lovely-dialog:1.0.7'
     implementation 'com.google.code.gson:gson:2.8.6'
 

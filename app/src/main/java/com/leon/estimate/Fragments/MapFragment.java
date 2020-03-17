@@ -102,7 +102,15 @@ public class MapFragment extends Fragment implements LocationListener {
     EditText editTextDescription;
     @BindView(R.id.editTextFatherName)
     EditText editTextFatherName;
-
+    private OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
+            0, 19, 256, ".png", new String[]{
+            "https://172.18.12.242:80"}, "© OpenStreetMap contributors",
+            new TileSourcePolicy(2,
+                    TileSourcePolicy.FLAG_NO_BULK
+                            | TileSourcePolicy.FLAG_NO_PREVENTIVE
+                            | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
+                            | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
+            ));
     private Context context;
     private ExaminerDuties examinerDuties;
     private CalculationUserInput calculationUserInput;
@@ -237,15 +245,7 @@ public class MapFragment extends Fragment implements LocationListener {
     @SuppressLint("MissingPermission")
     private void initializeMap() {
         mapView = findViewById.findViewById(R.id.mapView);
-        OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
-                0, 19, 256, ".png", new String[]{
-                "https://172.18.12.242:80"}, "© OpenStreetMap contributors",
-                new TileSourcePolicy(2,
-                        TileSourcePolicy.FLAG_NO_BULK
-                                | TileSourcePolicy.FLAG_NO_PREVENTIVE
-                                | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
-                                | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
-                ));
+
 //        mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setTileSource(CUSTOM);
         mapView.setBuiltInZoomControls(true);
