@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +21,8 @@ public class SplashActivity extends AppCompatActivity {
     ImageView imageViewSplash;
     @BindView(R.id.shimmer_view_container)
     ShimmerFrameLayout container;
+    @BindView(R.id.textViewVersion)
+    TextView textViewVersion;
     private boolean splashLoaded = false;
 
     @Override

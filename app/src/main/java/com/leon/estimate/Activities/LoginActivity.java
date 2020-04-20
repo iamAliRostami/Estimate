@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.leon.estimate.BuildConfig;
 import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ErrorHandlerType;
@@ -81,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
     ImageView imageViewUsername;
     @BindView(R.id.imageViewPassword)
     ImageView imageViewPassword;
+    @BindView(R.id.textViewVersion)
+    TextView textViewVersion;
     int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
     private FontManager fontManager;
@@ -99,7 +102,10 @@ public class LoginActivity extends AppCompatActivity {
 
     void initialize() {
         context = this;
-        sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        textViewVersion.setText(getString(R.string.copy_right).concat("  ").
+                concat(getString(R.string.version).concat(" ").concat(BuildConfig.VERSION_NAME)));
+        sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
+                SharedReferenceNames.ACCOUNT.getValue());
         fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(relativeLayout);
         imageViewPassword.setImageResource(R.drawable.img_password);

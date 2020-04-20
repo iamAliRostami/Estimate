@@ -37,6 +37,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -55,6 +56,7 @@ import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.CustomDialog;
+import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
@@ -63,7 +65,6 @@ import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.Mapbox;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -102,9 +103,21 @@ public class MainActivity extends AppCompatActivity
     Context context;
     private PermissionsManager permissionsManager;
     private MapView mapView = null;
-    public static final OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
+    public static final OnlineTileSourceBase CUSTOM = new XYTileSource("test",
             0, 19, 256, ".png", new String[]{
-            "https://172.18.12.242:80"}, "© OpenStreetMap contributors",
+            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP),
+//            "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/",
+//            "http://s3.amazonaws.com/info.aaronland.tiles.shapetiles/",
+//            "http://s3.amazonaws.com/com.modestmaps.bluemarble",
+//            "http://otile1.mqcdn.com/tiles/1.0.0/map/",
+//            "http://otile2.mqcdn.com/tiles/1.0.0/map/",
+//            "http://otile3.mqcdn.com/tiles/1.0.0/map/",
+//            "http://otile4.mqcdn.com/tiles/1.0.0/map/",
+//            "https://www.openstreetmap.org",
+//            "http://openfiremap.org/hytiles/",
+//            "http://overlay.openstreetmap.nl/openfietskaart-rcn/"
+    },
+            "© OpenStreetMap contributors",
             new TileSourcePolicy(2,
                     TileSourcePolicy.FLAG_NO_BULK
                             | TileSourcePolicy.FLAG_NO_PREVENTIVE
@@ -147,7 +160,7 @@ public class MainActivity extends AppCompatActivity
             askPermission();
         } else {
             Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-            Mapbox.getInstance(this, accessToken);
+//            Mapbox.getInstance(this, accessToken);
             setContentView(R.layout.main_activity);
             initialize();
         }
@@ -245,9 +258,32 @@ public class MainActivity extends AppCompatActivity
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-//            mapView.setTileSource(TileSourceFactory.MAPNIK);
             mapView.setTileSource(CUSTOM);
-//            mapView.setUseDataConnection();
+//            mapView.setTileSource(TileSourceFactory.MAPNIK);
+            String[] urlArray = {
+                    "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/",
+                    "http://mt3.google.com/vt/v=w2.97"
+            };
+//            mapView.setTileSource(new XYTileSource("MapQuest" , 16 , 18 , 256 ,".png" , new String[] {"http://otile1.mqcdn.com/tiles/1.0.0/map/",
+//                    "http://otile2.mqcdn.com/tiles/1.0.0/map/",
+//                    "http://otile3.mqcdn.com/tiles/1.0.0/map/",
+//                    "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
+//            mapView.setTileSource(new OnlineTileSourceBase("ARCGisOnline", 0,
+//                    18, 256, ".png", urlArray) {
+//                @Override
+//                public String getTileURLString(long pMapTileIndex) {
+//                    String mImageFilenameEnding = ".png";
+//
+//                    return getBaseUrl() +
+//                            "&x=" + MapTileIndex.getX(pMapTileIndex) +
+//                            "&y=" + MapTileIndex.getY(pMapTileIndex) +
+//                            "&z=" + MapTileIndex.getZoom(pMapTileIndex);
+////                    return getBaseUrl() + MapTileIndex.getZoom(pMapTileIndex) + "/"
+////                            + MapTileIndex.getY(pMapTileIndex) + "/" + MapTileIndex.getX(pMapTileIndex)
+////                            + mImageFilenameEnding;
+//                }
+//            });
+//            mapView.setUseDataConnection(false);
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
@@ -263,12 +299,15 @@ public class MainActivity extends AppCompatActivity
             } else {
                 locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
+//            E/long: 51.7134364        E/lat: 32.7031978
+            Log.e("long", String.valueOf(longitude));
+            Log.e("lat", String.valueOf(latitude));
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
             mapController.setCenter(startPoint);
             MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
             locationOverlay.enableMyLocation();
-//        test();
-            initRouteCoordinates();
+//            test();
+//            initRouteCoordinates();
             mapView.getOverlays().add(locationOverlay);
         }
     }

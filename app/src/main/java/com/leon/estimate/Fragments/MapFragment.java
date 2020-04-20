@@ -26,9 +26,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.FontManager;
 import com.mapbox.mapboxsdk.Mapbox;
 
@@ -104,7 +106,8 @@ public class MapFragment extends Fragment implements LocationListener {
     EditText editTextFatherName;
     private OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
             0, 19, 256, ".png", new String[]{
-            "https://172.18.12.242:80"}, "© OpenStreetMap contributors",
+            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP),
+    }, "© OpenStreetMap contributors",
             new TileSourcePolicy(2,
                     TileSourcePolicy.FLAG_NO_BULK
                             | TileSourcePolicy.FLAG_NO_PREVENTIVE

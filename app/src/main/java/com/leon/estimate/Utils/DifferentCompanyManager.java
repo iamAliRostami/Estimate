@@ -102,6 +102,8 @@ public class DifferentCompanyManager {
                 return "http://37.191.92.130/";
             case DEBUG:
                 return "http://192.168.43.185:45458/";
+            case ESF_MAP:
+                return "https://172.18.12.242:80";
             default:
                 throw new UnsupportedOperationException();
         }

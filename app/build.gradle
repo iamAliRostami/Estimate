@@ -21,7 +21,7 @@ android {
         config {
             keyAlias 'ali_angel'
             keyPassword 'kaka019930'
-            storeFile file('D:/app/keys/MyFourthKey.jks')
+            storeFile file('F:/android/app/keys/MyFourthKey.jks')
             storePassword 'kaka019930'
         }
     }
@@ -33,7 +33,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -113,4 +113,7 @@ dependencies {
     implementation project(':openCVLibrary')
 //    implementation project(':persiandatepicker')
     implementation 'com.github.ali-sardari:PersianRangeDatePicker:1.2.1'
+
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
 }
