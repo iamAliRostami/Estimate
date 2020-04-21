@@ -103,7 +103,7 @@ public class DifferentCompanyManager {
             case DEBUG:
                 return "http://192.168.43.185:45458/";
             case ESF_MAP:
-                return "https://172.18.12.242:80";
+                return "https://172.18.12.242/osm_tiles";
             default:
                 throw new UnsupportedOperationException();
         }
@@ -133,7 +133,7 @@ public class DifferentCompanyManager {
             case TOWNS_WEST:
                 return "http://172.28.5.40/";
             case ESF:
-                return "http://172.18.12.14:100/";
+                return "http://172.18.12.242/osm_tiles/";
             default:
                 throw new UnsupportedOperationException();
         }

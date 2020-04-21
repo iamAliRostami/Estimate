@@ -103,27 +103,7 @@ public class MainActivity extends AppCompatActivity
     Context context;
     private PermissionsManager permissionsManager;
     private MapView mapView = null;
-    public static final OnlineTileSourceBase CUSTOM = new XYTileSource("test",
-            0, 19, 256, ".png", new String[]{
-            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP),
-//            "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/",
-//            "http://s3.amazonaws.com/info.aaronland.tiles.shapetiles/",
-//            "http://s3.amazonaws.com/com.modestmaps.bluemarble",
-//            "http://otile1.mqcdn.com/tiles/1.0.0/map/",
-//            "http://otile2.mqcdn.com/tiles/1.0.0/map/",
-//            "http://otile3.mqcdn.com/tiles/1.0.0/map/",
-//            "http://otile4.mqcdn.com/tiles/1.0.0/map/",
-//            "https://www.openstreetmap.org",
-//            "http://openfiremap.org/hytiles/",
-//            "http://overlay.openstreetmap.nl/openfietskaart-rcn/"
-    },
-            "© OpenStreetMap contributors",
-            new TileSourcePolicy(2,
-                    TileSourcePolicy.FLAG_NO_BULK
-                            | TileSourcePolicy.FLAG_NO_PREVENTIVE
-                            | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
-                            | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
-            ));
+
     List<CalculationUserInput> calculationUserInputList;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
@@ -148,27 +128,19 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        context = this;
-        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            askPermission();
-        } else {
-            Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-//            Mapbox.getInstance(this, accessToken);
-            setContentView(R.layout.main_activity);
-            initialize();
-        }
-//        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-//                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_10_11).build();
-//        readData();
-    }
+    OnlineTileSourceBase CUSTOM = new XYTileSource("test",
+            0, 19, 256, ".png", new String[]{
+//            "https://maps.wikimedia.org//osm-intl/",
+            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP)
+//            "http://172.18.12.242/osm_tiles/"
+    },
+            "© OpenStreetMap contributors",
+            new TileSourcePolicy(2,
+                    TileSourcePolicy.FLAG_NO_BULK
+                            | TileSourcePolicy.FLAG_NO_PREVENTIVE
+                            | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
+                            | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
+            ));
 
     void initialize() {
         initializeMap();
@@ -252,6 +224,28 @@ public class MainActivity extends AppCompatActivity
         return bestLocation;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        context = this;
+        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            askPermission();
+        } else {
+            Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+//            Mapbox.getInstance(this, accessToken);
+            setContentView(R.layout.main_activity);
+            initialize();
+        }
+//        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                .fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_10_11).build();
+        readData();
+    }
+
     @SuppressLint("MissingPermission")
     void initializeMap() {
         if (!GpsEnabled()) {
@@ -260,30 +254,7 @@ public class MainActivity extends AppCompatActivity
             mapView = findViewById(R.id.mapView);
             mapView.setTileSource(CUSTOM);
 //            mapView.setTileSource(TileSourceFactory.MAPNIK);
-            String[] urlArray = {
-                    "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/",
-                    "http://mt3.google.com/vt/v=w2.97"
-            };
-//            mapView.setTileSource(new XYTileSource("MapQuest" , 16 , 18 , 256 ,".png" , new String[] {"http://otile1.mqcdn.com/tiles/1.0.0/map/",
-//                    "http://otile2.mqcdn.com/tiles/1.0.0/map/",
-//                    "http://otile3.mqcdn.com/tiles/1.0.0/map/",
-//                    "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
-//            mapView.setTileSource(new OnlineTileSourceBase("ARCGisOnline", 0,
-//                    18, 256, ".png", urlArray) {
-//                @Override
-//                public String getTileURLString(long pMapTileIndex) {
-//                    String mImageFilenameEnding = ".png";
-//
-//                    return getBaseUrl() +
-//                            "&x=" + MapTileIndex.getX(pMapTileIndex) +
-//                            "&y=" + MapTileIndex.getY(pMapTileIndex) +
-//                            "&z=" + MapTileIndex.getZoom(pMapTileIndex);
-////                    return getBaseUrl() + MapTileIndex.getZoom(pMapTileIndex) + "/"
-////                            + MapTileIndex.getY(pMapTileIndex) + "/" + MapTileIndex.getX(pMapTileIndex)
-////                            + mImageFilenameEnding;
-//                }
-//            });
-//            mapView.setUseDataConnection(false);
+
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();

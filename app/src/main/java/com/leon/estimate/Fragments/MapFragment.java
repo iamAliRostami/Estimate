@@ -104,10 +104,13 @@ public class MapFragment extends Fragment implements LocationListener {
     EditText editTextDescription;
     @BindView(R.id.editTextFatherName)
     EditText editTextFatherName;
-    private OnlineTileSourceBase CUSTOM = new XYTileSource("Mapnik",
+    private OnlineTileSourceBase CUSTOM = new XYTileSource("test",
             0, 19, 256, ".png", new String[]{
-            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP),
-    }, "© OpenStreetMap contributors",
+//            "https://maps.wikimedia.org//osm-intl/",
+            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP)
+//            "http://172.18.12.242/osm_tiles/"
+    },
+            "© OpenStreetMap contributors",
             new TileSourcePolicy(2,
                     TileSourcePolicy.FLAG_NO_BULK
                             | TileSourcePolicy.FLAG_NO_PREVENTIVE

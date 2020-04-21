@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.leon.estimate.Enums.DialogType;
@@ -48,6 +49,7 @@ final public class HttpClientWrapper {
                 public void onResponse(Call<T> call, Response<T> response) {
                     try {
                         if (response.isSuccessful()) {
+                            Log.e("responseCode1", String.valueOf(response.code()));
                             T responseT = response.body();
                             callback.execute(responseT);
                             dialog.dismiss();
@@ -56,6 +58,7 @@ final public class HttpClientWrapper {
                                 JSONObject jsonObject = new JSONObject(response.errorBody().string());
                                 error[0] = jsonObject.getString(context.getString(R.string.message));
                             } catch (Exception e) {
+                                Log.e("responseCode2", String.valueOf(response.code()));
                                 CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
                                 error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
                             }
@@ -69,6 +72,7 @@ final public class HttpClientWrapper {
                             JSONObject jsonObject = new JSONObject(response.errorBody().string());
                             error[0] = jsonObject.getString(context.getString(R.string.message));
                         } catch (Exception e1) {
+                            Log.e("responseCode3", String.valueOf(response.code()));
                             CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
                             error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
                         }
@@ -81,6 +85,8 @@ final public class HttpClientWrapper {
                 @Override
                 public void onFailure(Call<T> call, Throwable t) {
                     Activity activity = (Activity) context;
+                    Log.e("error", t.getMessage());
+                    Log.e("error", t.toString());
                     if (!activity.isFinishing()) {
                         CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
                         error[0] = customErrorHandling.getErrorMessageTotal(t);
