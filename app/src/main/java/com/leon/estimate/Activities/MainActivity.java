@@ -498,8 +498,6 @@ public class MainActivity extends AppCompatActivity
             }
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
-//            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-//            daoExaminerDuties.insertAll(examinerDuties);
 
             DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
             List<ExaminerDuties> examinerDutiesTemp = daoExaminerDuties.getExaminerDuties();
@@ -531,9 +529,6 @@ public class MainActivity extends AppCompatActivity
             Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
             DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
             daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-
-//            DaoQotrSifoonDictionary daoQotrSifoonDictionary = dataBase.daoQotrSifoonDictionary();
-//            daoQotrSifoonDictionary.insertAll(input.getQotrSifoonDictionary());
 
             new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
                     getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));

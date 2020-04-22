@@ -251,7 +251,6 @@ public class MapFragment extends Fragment implements LocationListener {
     @SuppressLint("MissingPermission")
     private void initializeMap() {
         mapView = findViewById.findViewById(R.id.mapView);
-
 //        mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setTileSource(CUSTOM);
         mapView.setBuiltInZoomControls(true);
@@ -304,7 +303,6 @@ public class MapFragment extends Fragment implements LocationListener {
         mapView.getOverlayManager().add(startMarker);
         placeIndex = mapView.getOverlays().size() - 1;
     }
-
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(mapView);
