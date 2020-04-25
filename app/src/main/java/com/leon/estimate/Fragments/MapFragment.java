@@ -32,7 +32,6 @@ import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.FontManager;
-import com.mapbox.mapboxsdk.Mapbox;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -147,7 +146,7 @@ public class MapFragment extends Fragment implements LocationListener {
         context = getActivity();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
-        Mapbox.getInstance(context, accessToken);
+//        Mapbox.getInstance(context, accessToken);
     }
 
     @Override

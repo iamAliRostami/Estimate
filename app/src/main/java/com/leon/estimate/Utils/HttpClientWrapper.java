@@ -49,16 +49,20 @@ final public class HttpClientWrapper {
                 public void onResponse(Call<T> call, Response<T> response) {
                     try {
                         if (response.isSuccessful()) {
-                            Log.e("responseCode1", String.valueOf(response.code()));
-                            T responseT = response.body();
-                            callback.execute(responseT);
-                            dialog.dismiss();
+                            if (response.code() == 204) {
+                                new CustomDialog(DialogType.Green, context, "ارزیابی جدید برای شما وجود ندارد.",
+                                        context.getString(R.string.dear_user), context.getString(R.string.receive), context.getString(R.string.accepted));
+                                dialog.cancel();
+                            } else {
+                                T responseT = response.body();
+                                callback.execute(responseT);
+                                dialog.dismiss();
+                            }
                         } else {
                             try {
                                 JSONObject jsonObject = new JSONObject(response.errorBody().string());
                                 error[0] = jsonObject.getString(context.getString(R.string.message));
                             } catch (Exception e) {
-                                Log.e("responseCode2", String.valueOf(response.code()));
                                 CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
                                 error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
                             }
@@ -72,7 +76,6 @@ final public class HttpClientWrapper {
                             JSONObject jsonObject = new JSONObject(response.errorBody().string());
                             error[0] = jsonObject.getString(context.getString(R.string.message));
                         } catch (Exception e1) {
-                            Log.e("responseCode3", String.valueOf(response.code()));
                             CustomErrorHandling customErrorHandling = new CustomErrorHandling(context);
                             error[0] = customErrorHandling.getErrorMessage(response.code(), errorHandlerType);
                         }
