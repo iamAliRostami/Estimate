@@ -1,6 +1,7 @@
 package com.leon.estimate.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -58,6 +59,11 @@ public class ListActivity extends AppCompatActivity {
 
     @SuppressLint("SourceLockedOrientationActivity")
     void initializeRecyclerView() {
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage(context.getString(R.string.loading_getting_info));
+        dialog.setTitle(context.getString(R.string.loading_connecting));
+        dialog.setCancelable(false);
+        dialog.show();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -87,6 +93,7 @@ public class ListActivity extends AppCompatActivity {
                 }
             });
         }
+        dialog.dismiss();
     }
 
     @Override

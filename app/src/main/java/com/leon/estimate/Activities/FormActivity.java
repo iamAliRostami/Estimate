@@ -1,6 +1,7 @@
 package com.leon.estimate.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -78,6 +79,12 @@ public class FormActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     void initialize() {
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage(context.getString(R.string.loading_getting_info));
+        dialog.setTitle(context.getString(R.string.loading_connecting));
+        dialog.setCancelable(false);
+        dialog.show();
+
         calculationUserInput = new CalculationUserInput();
         calculationUserInputTemp = new CalculationUserInput();
         dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
@@ -90,6 +97,7 @@ public class FormActivity extends AppCompatActivity {
         viewPager.setOnTouchListener((v, event) -> true);
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(relativeLayout);
+        dialog.dismiss();
     }
 
     public void nextPage(Bitmap bitmap, CalculationUserInput calculationUserInput) {

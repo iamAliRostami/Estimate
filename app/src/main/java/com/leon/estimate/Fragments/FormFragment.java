@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,6 @@ import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
-import com.leon.estimate.Tables.DaoRequestDictionary;
-import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.KarbariDictionary;
@@ -38,7 +37,6 @@ import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.RequestDictionary;
-import com.leon.estimate.Tables.ServiceDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.Utils.FontManager;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
@@ -47,6 +45,7 @@ import com.sardari.daterangepicker.dialog.DatePickerDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -125,7 +124,7 @@ public class FormFragment extends Fragment {
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    private List<ServiceDictionary> serviceDictionaries;
+    //    private List<ServiceDictionary> serviceDictionaries;
     private List<RequestDictionary> requestDictionaries;
     private ExaminerDuties examinerDuties;
 //    PersianCalendar persianCalendar = new PersianCalendar();
@@ -230,13 +229,13 @@ public class FormFragment extends Fragment {
     }
 
     private CalculationUserInput prepareServices(CalculationUserInput calculationUserInput) {
-        for (ServiceDictionary serviceDictionary : serviceDictionaries) {
-            RequestDictionary requestDictionary = new RequestDictionary(
-                    serviceDictionary.getId(), serviceDictionary.getTitle(),
-                    serviceDictionary.isSelected(), serviceDictionary.isDisabled(),
-                    serviceDictionary.isHasSms());
-            requestDictionaries.add(requestDictionary);
-        }
+//        for (ServiceDictionary serviceDictionary : serviceDictionaries) {
+//            RequestDictionary requestDictionary = new RequestDictionary(
+//                    serviceDictionary.getId(), serviceDictionary.getTitle(),
+//                    serviceDictionary.isSelected(), serviceDictionary.isDisabled(),
+//                    serviceDictionary.isHasSms());
+//            requestDictionaries.add(requestDictionary);
+//        }
         for (int i = 0; i < checkBoxes.size(); i++) {
             requestDictionaries.get(i).setSelected(checkBoxes.get(i).isSelected());
         }
@@ -434,25 +433,74 @@ public class FormFragment extends Fragment {
         checkBox2.setChecked(examinerDuties.isAdamTaxfifFazelab());
         checkBox3.setChecked(examinerDuties.isEnsheabQeirDaem());
     }
+//
+//    @SuppressLint("NewApi")
+//    private void initializeServicesCheckBox() {
+//        DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+//        serviceDictionaries = daoServiceDictionary.getServiceDictionaries();
+//
+//        DaoRequestDictionary daoRequestDictionary = dataBase.daoRequestDictionary();
+//        requestDictionaries = daoRequestDictionary.getRequestDictionaries();
+//
+//        LinearLayout linearLayout = new LinearLayout(context);
+//        String tag;
+//        int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
+//        int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
+////        int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
+//        int textSize = 20;
+//
+//        Log.e("checkBoxes.size ", String.valueOf(serviceDictionaries.size()));
+//        for (int i = 0; i < serviceDictionaries.size(); i++) {
+//            CheckBox checkBox = new CheckBox(context);
+////            checkBox.setGravity(1);
+//            checkBox.setText(serviceDictionaries.get(i).getTitle());
+//            checkBox.setTextSize(textSize);
+//            Log.e("text ", serviceDictionaries.get(i).getTitle());
+//            checkBox.setTypeface(typeface);
+//            checkBox.setTextColor(context.getColor(R.color.blue4));
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//            params.setMargins(margin, margin, margin, margin);
+////            checkBox.setLayoutParams(params);
+////            checkBox.setPadding(padding, padding, padding, padding);
+//            if (serviceDictionaries.get(i).isSelected())
+//                checkBox.setChecked(true);
+//            checkBoxes.add(checkBox);
+//            linearLayout.addView(checkBox);
+//            if (i % 2 == 1) {
+//                tag = "linearLayout".concat(String.valueOf(i));
+//                linearLayout.setTag(tag);
+//                linearLayout.setGravity(1);
+//                linearLayout2.addView(linearLayout);
+//                linearLayout = new LinearLayout(context);
+//            } else if (i == serviceDictionaries.size() - 1) {
+//                tag = "linearLayout".concat(String.valueOf(i));
+//                linearLayout.setTag(tag);
+//                linearLayout.setGravity(1);
+//                linearLayout2.addView(linearLayout);
+//            }
+//        }
+//    }
+
 
     @SuppressLint("NewApi")
     private void initializeServicesCheckBox() {
-        DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-        serviceDictionaries = daoServiceDictionary.getServiceDictionaries();
-
-        DaoRequestDictionary daoRequestDictionary = dataBase.daoRequestDictionary();
-        requestDictionaries = daoRequestDictionary.getRequestDictionaries();
+        Gson gson = new GsonBuilder().create();
+        requestDictionaries = Arrays.asList(gson.fromJson(examinerDuties.getRequestDictionaryString(), RequestDictionary[].class));
 
         LinearLayout linearLayout = new LinearLayout(context);
         String tag;
         int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
         int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
-        int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
-        for (int i = 0; i < serviceDictionaries.size(); i++) {
+//        int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
+        int textSize = 20;
+
+        for (int i = 0; i < requestDictionaries.size(); i++) {
             CheckBox checkBox = new CheckBox(context);
-            checkBox.setGravity(1);
-            checkBox.setText(serviceDictionaries.get(i).getTitle());
+//            checkBox.setGravity(1);
+            checkBox.setText(requestDictionaries.get(i).getTitle());
             checkBox.setTextSize(textSize);
+            Log.e("text ", requestDictionaries.get(i).getTitle());
             checkBox.setTypeface(typeface);
             checkBox.setTextColor(context.getColor(R.color.blue4));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -460,17 +508,17 @@ public class FormFragment extends Fragment {
             params.setMargins(margin, margin, margin, margin);
 //            checkBox.setLayoutParams(params);
 //            checkBox.setPadding(padding, padding, padding, padding);
-            if (serviceDictionaries.get(i).isSelected())
+            if (requestDictionaries.get(i).isSelected())
                 checkBox.setChecked(true);
             checkBoxes.add(checkBox);
             linearLayout.addView(checkBox);
-            if (i % 3 == 2) {
+            if (i % 2 == 1) {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);
                 linearLayout2.addView(linearLayout);
                 linearLayout = new LinearLayout(context);
-            } else if (i == serviceDictionaries.size() - 1) {
+            } else if (i == requestDictionaries.size() - 1) {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);

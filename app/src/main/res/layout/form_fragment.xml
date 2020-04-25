@@ -17,8 +17,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/activity_medium_margin"
-            android:layout_marginRight="@dimen/activity_medium_margin"
+            android:layout_marginLeft="@dimen/activity_mid_margin"
+            android:layout_marginRight="@dimen/activity_mid_margin"
             android:layout_weight="2"
             android:background="@drawable/border_gray_1"
             android:gravity="center"
@@ -53,8 +53,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/activity_medium_margin"
-            android:layout_marginRight="@dimen/activity_medium_margin"
             android:layout_marginBottom="@dimen/activity_mid_margin"
             android:layout_weight="3"
             android:background="@drawable/border_gray_1"
@@ -63,8 +61,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_large_margin"
-                android:layout_marginRight="@dimen/activity_large_margin"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2">
@@ -78,11 +74,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/zone"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -90,11 +86,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/user_type"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -102,11 +98,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/bill_id"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -114,11 +110,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/sifoon_100"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -126,11 +122,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/sifoon_150"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -138,11 +134,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/arse_kol"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -150,11 +146,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/ayan_maskooni"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -162,11 +158,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/number_maskooni"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -178,7 +174,7 @@
                         android:gravity="left"
                         android:text="@string/other_number"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
                         tools:ignore="RtlHardcoded" />
 
@@ -186,33 +182,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/taxfif_number"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/adam_taxfif_ab"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="@string/zarfiat_qaradadi"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
 
@@ -220,22 +216,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="شماره پروانه"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_margin="@dimen/activity_medium_margin_"
                         android:gravity="left"
                         android:text="شماره پلاک ثبتی"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -250,7 +246,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:lines="1"
@@ -262,7 +258,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:textStyle="bold" />
 
                     <EditText
@@ -270,7 +266,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -283,7 +279,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -296,7 +292,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -309,7 +305,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -323,7 +319,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -337,7 +333,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -351,7 +347,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="text"
@@ -364,7 +360,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="phone"
@@ -378,7 +374,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <EditText
@@ -386,7 +382,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -400,7 +396,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="phone"
@@ -414,7 +410,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -437,10 +433,8 @@
                         android:gravity="left"
                         android:text="@string/shomare_peygiri"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
-
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -449,7 +443,7 @@
                         android:gravity="left"
                         android:text="@string/noe_vagozari"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -460,7 +454,7 @@
                         android:gravity="left"
                         android:text="قطر انشعاب"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -471,7 +465,7 @@
                         android:gravity="left"
                         android:text="@string/sifoon_125"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -482,7 +476,7 @@
                         android:gravity="left"
                         android:text="@string/sifoon_200"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
 
@@ -494,7 +488,7 @@
                         android:gravity="left"
                         android:text="اعیان کل"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -505,7 +499,7 @@
                         android:gravity="left"
                         android:text="اعیان غیرمسکونی"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -516,7 +510,7 @@
                         android:gravity="left"
                         android:text="تعداد تجاری"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
 
@@ -524,11 +518,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
                         android:text="ارزش منطقه"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -539,7 +533,7 @@
                         android:gravity="left"
                         android:text="نوع تخفیف"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -550,7 +544,7 @@
                         android:gravity="left"
                         android:text="عدم تخفیف فاضلاب"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -561,7 +555,7 @@
                         android:gravity="left"
                         android:text="انشعاب غیردائم"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -572,7 +566,7 @@
                         android:gravity="left"
                         android:text="تاریخ صدور پروانه"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -587,7 +581,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -600,7 +594,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <Spinner
@@ -608,7 +602,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/activity_medium_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <EditText
@@ -616,7 +610,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/activity_medium_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -629,7 +623,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -643,7 +637,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -656,7 +650,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -670,7 +664,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -684,7 +678,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
@@ -697,7 +691,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <CheckBox
@@ -705,7 +699,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <CheckBox
@@ -713,7 +707,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <EditText
@@ -721,7 +715,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="none"
@@ -740,7 +734,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_medium_margin"
+        android:layout_margin="@dimen/activity_mid_margin"
         android:background="@drawable/border_blue_1"
         android:padding="@dimen/activity_medium_padding"
         android:text="بعدی"
