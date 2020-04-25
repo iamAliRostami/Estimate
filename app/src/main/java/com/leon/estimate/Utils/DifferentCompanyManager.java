@@ -133,6 +133,8 @@ public class DifferentCompanyManager {
             case TOWNS_WEST:
                 return "http://172.28.5.40/";
             case ESF:
+                return "172.18.12.121";
+            case ESF_MAP:
                 return "http://172.18.12.242/osm_tiles/";
             default:
                 throw new UnsupportedOperationException();
