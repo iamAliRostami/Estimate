@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">37.191.92.130</domain>
+        <domain includeSubdomains="true">172.18.12.242</domain>
+        <domain includeSubdomains="true">https://www.abfaesfahan.ir</domain>
+        <domain includeSubdomains="true">https://webservice.aspsms.com</domain>
+        <domain includeSubdomains="true">webservice.aspsms.com</domain>
+    </domain-config>
+</network-security-config>
