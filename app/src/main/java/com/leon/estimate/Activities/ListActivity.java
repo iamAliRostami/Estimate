@@ -40,7 +40,7 @@ public class ListActivity extends AppCompatActivity {
     TextView textViewEmpty;
     List<ExaminerDuties> examinerDuties;
     CustomAdapter1 customAdapter;
-
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,15 +54,15 @@ public class ListActivity extends AppCompatActivity {
         context = this;
         FontManager fontManager = new FontManager(getApplicationContext());
         fontManager.setFont(constraintLayout);
+        dialog = new ProgressDialog(context);
+        dialog.setMessage(context.getString(R.string.loading_getting_info));
+        dialog.setTitle(context.getString(R.string.loading_connecting));
+        dialog.setCancelable(false);
         initializeRecyclerView();
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
     void initializeRecyclerView() {
-        final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage(context.getString(R.string.loading_getting_info));
-        dialog.setTitle(context.getString(R.string.loading_connecting));
-        dialog.setCancelable(false);
         dialog.show();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();

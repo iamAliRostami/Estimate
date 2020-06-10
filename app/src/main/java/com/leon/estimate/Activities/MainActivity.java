@@ -37,7 +37,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -56,7 +55,6 @@ import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.CustomDialog;
-import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
@@ -128,11 +126,11 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    OnlineTileSourceBase CUSTOM = new XYTileSource("test",
+    OnlineTileSourceBase CUSTOM = new XYTileSource("MapQuest",
             0, 19, 256, ".png", new String[]{
 //            "https://maps.wikimedia.org//osm-intl/",
-            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP)
-//            "http://172.18.12.242/osm_tiles/"
+//            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP)
+            "http://172.18.12.242/osm_tiles/"
     },
             "© OpenStreetMap contributors",
             new TileSourcePolicy(2,
@@ -236,6 +234,7 @@ public class MainActivity extends AppCompatActivity
             askPermission();
         } else {
             Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+//            Configuration.getInstance().getOsmdroidBasePath();
 //            Mapbox.getInstance(this, accessToken);
             setContentView(R.layout.main_activity);
             initialize();
@@ -253,7 +252,28 @@ public class MainActivity extends AppCompatActivity
         } else {
             mapView = findViewById(R.id.mapView);
             mapView.setTileSource(CUSTOM);
+//            mapView.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, "",
+//                    new String[] { "http://basemap.nationalmap.gov/ArcGIS/rest/services/USGSTopo/MapServer/tile/" }) {
+//                @Override
+//                public String getTileURLString(long pMapTileIndex) {
+//                    return getBaseUrl()
+//                            + MapTileIndex.getZoom(pMapTileIndex)
+//                            + "/" + MapTileIndex.getY(pMapTileIndex)
+//                            + "/" + MapTileIndex.getX(pMapTileIndex)
+//                            + mImageFilenameEnding;
+//                }
+//            });
 //            mapView.setTileSource(TileSourceFactory.MAPNIK);
+
+//            mapView.setTileSource(new XYTileSource("MAPNIK",
+//                    0, 18, 256, ".jpg", new String[]{
+//                    "http://a.tile.openstreetmap.org/",
+//                    "http://b.tile.openstreetmap.org/",
+//                    "http://c.tile.openstreetmap.org/"}));
+//            mapView.setBuiltInZoomControls(true);
+//            mapView.setMultiTouchControls(true);
+//            mapView.setUseDataConnection(false); //optional, but a good way to prevent loading from the network and test your zip loading.
+
 
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);

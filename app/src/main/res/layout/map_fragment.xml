@@ -56,7 +56,7 @@
                                 android:gravity="left"
                                 android:text="کد ملی"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -67,7 +67,7 @@
                                 android:gravity="left"
                                 android:text="نام"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -78,7 +78,7 @@
                                 android:gravity="left"
                                 android:text="نام پدر"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -89,7 +89,7 @@
                                 android:gravity="left"
                                 android:text="شماره اشتراک"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -100,7 +100,7 @@
                                 android:gravity="left"
                                 android:text="تلفن ثابت"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -116,7 +116,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:layout_margin="@dimen/activity_mid_margin"
                                 android:background="@drawable/border_gray_1"
                                 android:gravity="center"
                                 android:inputType="number"
@@ -130,7 +130,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:layout_margin="@dimen/activity_mid_margin"
                                 android:background="@drawable/border_gray_1"
                                 android:gravity="center"
                                 android:inputType="text"
@@ -143,7 +143,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:layout_margin="@dimen/activity_mid_margin"
                                 android:background="@drawable/border_gray_1"
                                 android:gravity="center"
                                 android:inputType="text"
@@ -174,7 +174,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_margin="@dimen/activity_medium_margin"
+                                    android:layout_margin="@dimen/activity_mid_margin"
                                     android:layout_weight="1"
                                     android:background="@drawable/border_gray_1"
                                     android:gravity="center"
@@ -209,7 +209,7 @@
                                 android:gravity="left"
                                 android:text="شماره شناسنامه"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -220,7 +220,7 @@
                                 android:gravity="left"
                                 android:text="نام خانوادگی"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -231,7 +231,7 @@
                                 android:gravity="left"
                                 android:text="@string/postal_code"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -242,7 +242,7 @@
                                 android:gravity="left"
                                 android:text="شماره ردیف"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -253,7 +253,7 @@
                                 android:gravity="left"
                                 android:text="شماره همراه"
                                 android:textColor="@color/blue4"
-                                android:textSize="@dimen/textSizeLarge"
+                                android:textSize="@dimen/textSizeMedium"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -269,7 +269,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:layout_margin="@dimen/activity_mid_margin"
                                 android:background="@drawable/border_gray_1"
                                 android:gravity="center"
                                 android:inputType="number"
@@ -309,7 +309,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:layout_margin="@dimen/activity_mid_margin"
                                 android:background="@drawable/border_gray_1"
                                 android:gravity="center"
                                 android:inputType="text"
@@ -327,7 +327,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_margin="@dimen/activity_medium_margin"
+                                    android:layout_margin="@dimen/activity_mid_margin"
                                     android:layout_weight="1"
                                     android:background="@drawable/border_gray_1"
                                     android:gravity="center"
@@ -368,7 +368,7 @@
                             android:gravity="left"
                             android:text="@string/address"
                             android:textColor="@color/blue4"
-                            android:textSize="@dimen/textSizeLarge"
+                            android:textSize="@dimen/textSizeMedium"
                             android:textStyle="bold" />
 
                         <EditText
@@ -401,7 +401,7 @@
                             android:gravity="left"
                             android:text="توضیحات"
                             android:textColor="@color/blue4"
-                            android:textSize="@dimen/textSizeLarge"
+                            android:textSize="@dimen/textSizeMedium"
                             android:textStyle="bold" />
 
                         <EditText
