@@ -1,1 +1,2 @@
+include ':osmbonuspack_6.6.0'
 include ':app', ':openCVLibrary', ':persiandatepicker'
