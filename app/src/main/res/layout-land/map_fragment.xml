@@ -1,10 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
-    android:id="@+id/relativeLayout"
     tools:context="com.leon.estimate.Fragments.FormFragment">
 
     <LinearLayout
@@ -372,10 +371,10 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="0.5"
                             android:gravity="left"
                             android:text="@string/address"
                             android:textColor="@color/blue4"
@@ -405,10 +404,10 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="0.5"
                             android:gravity="left"
                             android:text="توضیحات"
                             android:textColor="@color/blue4"
@@ -436,10 +435,10 @@
             android:id="@+id/mapView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            mapbox:mapbox_cameraTargetLat="40.73581"
-            mapbox:mapbox_cameraTargetLng="-73.99155"
-            mapbox:mapbox_cameraZoom="11" />
+            android:layout_weight="1" />
+        <!--            mapbox:mapbox_cameraTargetLat="40.73581"-->
+        <!--            mapbox:mapbox_cameraTargetLng="-73.99155"-->
+        <!--            mapbox:mapbox_cameraZoom="11" />-->
     </LinearLayout>
 
 </FrameLayout>
