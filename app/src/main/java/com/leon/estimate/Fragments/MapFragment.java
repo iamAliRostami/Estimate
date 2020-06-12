@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,9 @@ import com.leon.estimate.Utils.FontManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
@@ -245,6 +249,23 @@ public class MapFragment extends Fragment implements LocationListener {
         editText26.setText(examinerDuties.getEshterak().trim());
         editTextPostalCode.setText(examinerDuties.getPostalCode());
         editTextRadif.setText(examinerDuties.getRadif());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    public void addRouteOverlay(GeoPoint startPoint, GeoPoint endPoint) {
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
+        RoadManager roadManager = new OSRMRoadManager(context);
+        ArrayList<GeoPoint> wayPoints = new ArrayList<>();
+        wayPoints.add(startPoint);
+        wayPoints.add(endPoint);
+        Road road = roadManager.getRoad(wayPoints);
+        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+        mapView.getOverlays().add(roadOverlay);
+        mapView.invalidate();
     }
 
     @SuppressLint("MissingPermission")
