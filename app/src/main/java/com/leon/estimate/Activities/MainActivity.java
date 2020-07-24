@@ -68,6 +68,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException ignored) {
         }
         String json = text.toString();
+        Log.e("json", json);
         Gson gson = new GsonBuilder().create();
         Input input = gson.fromJson(json, Input.class);
         List<ExaminerDuties> examinerDuties = input.getExaminerDuties();
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_10_11).build();
-//        readData();
+        readData();
     }
 
     @SuppressLint("MissingPermission")
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-            mapView.setTileSource(CUSTOM);
+//            mapView.setTileSource(CUSTOM);
 //            mapView.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, "",
 //                    new String[] { "http://basemap.nationalmap.gov/ArcGIS/rest/services/USGSTopo/MapServer/tile/" }) {
 //                @Override
@@ -263,7 +265,7 @@ public class MainActivity extends AppCompatActivity
 //                            + mImageFilenameEnding;
 //                }
 //            });
-//            mapView.setTileSource(TileSourceFactory.MAPNIK);
+            mapView.setTileSource(TileSourceFactory.MAPNIK);
 
 //            mapView.setTileSource(new XYTileSource("MAPNIK",
 //                    0, 18, 256, ".jpg", new String[]{
