@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.leon.estimate.Activities.ListActivity;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.R;
+import com.leon.estimate.activities.ListActivity;
 
 
 /**

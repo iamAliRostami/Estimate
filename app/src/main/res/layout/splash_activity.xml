@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/img_background"
-    tools:context=".Activities.SplashActivity">
+    tools:context=".activities.SplashActivity">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_container"
@@ -25,36 +25,7 @@
             android:layout_gravity="center"
             android:foregroundGravity="center_horizontal|center_vertical"
             android:scaleType="centerInside"
-            android:src="@drawable/img_splash" />
+            android:src="@drawable/img_splash"
+            tools:ignore="ContentDescription" />
     </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:foregroundGravity="center"
-        android:gravity="center_horizontal"
-        android:visibility="gone"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/textViewVersion"
-            android:text="1.1.0.1"
-            android:textColor="@color/orange2" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/gray2"
-            android:gravity="center"
-            android:text="@string/copy_right"
-            android:textColor="@color/white" />
-    </LinearLayout>
 </RelativeLayout>

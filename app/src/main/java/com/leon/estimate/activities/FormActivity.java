@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.room.Room;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,7 +26,6 @@ import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
-import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
@@ -36,23 +33,18 @@ import com.leon.estimate.Utils.MyPagerAdapter;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+import com.leon.estimate.databinding.FormActivityBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
 public class FormActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
-    @BindView(R.id.view_pager)
-    ViewPager viewPager;
-    @BindView(R.id.relativeLayout)
-    RelativeLayout relativeLayout;
     Context context;
     String trackNumber, json;
     List<RequestDictionary> requestDictionaries;
@@ -60,13 +52,14 @@ public class FormActivity extends AppCompatActivity {
     MyDatabase dataBase;
     DaoExaminerDuties daoExaminerDuties;
     CalculationUserInput calculationUserInput, calculationUserInputTemp;
+    FormActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.form_activity);
-        ButterKnife.bind(this);
+        binding = FormActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         context = this;
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
@@ -93,17 +86,15 @@ public class FormActivity extends AppCompatActivity {
 //        examinerDuties = daoExaminerDuties.examinerDutiesByTrackNumber(trackNumber);
         examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context, examinerDuties);
-        viewPager.setAdapter(adapterViewPager);
-        viewPager.setOnTouchListener((v, event) -> true);
-        FontManager fontManager = new FontManager(getApplicationContext());
-        fontManager.setFont(relativeLayout);
+        binding.viewPager.setAdapter(adapterViewPager);
+        binding.viewPager.setOnTouchListener((v, event) -> true);
         dialog.dismiss();
     }
 
     public void nextPage(Bitmap bitmap, CalculationUserInput calculationUserInput) {
-        if (viewPager.getCurrentItem() == 0) {
+        if (binding.viewPager.getCurrentItem() == 0) {
             this.calculationUserInput = calculationUserInput;
-            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
         } else {
             this.calculationUserInputTemp = calculationUserInput;
             prepareToSend();

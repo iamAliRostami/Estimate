@@ -1,4 +1,4 @@
-package com.leon.estimate.Fragments;
+package com.leon.estimate.fragments;
 
 
 import android.annotation.SuppressLint;
@@ -10,20 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
@@ -38,7 +34,8 @@ import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
-import com.leon.estimate.Utils.FontManager;
+import com.leon.estimate.activities.FormActivity;
+import com.leon.estimate.databinding.FormFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
@@ -48,74 +45,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam2;
-    @BindView(R.id.editTextZoneTitle)
-    EditText editTextZoneTitle;
-    @BindView(R.id.editTextTrackNumber)
-    EditText editTextTrackNumber;
-    @BindView(R.id.editTextBillId)
-    EditText editTextBillId;
-    @BindView(R.id.editTextSifoon100)
-    EditText editTextSifoon100;
-    @BindView(R.id.editTextSifoon125)
-    EditText editTextSifoon125;
-    @BindView(R.id.editTextSifoon150)
-    EditText editTextSifoon150;
-    @BindView(R.id.editTextSifoon200)
-    EditText editTextSifoon200;
-    @BindView(R.id.editTextArese)
-    EditText editTextArese;
-    @BindView(R.id.editTextAianKol)
-    EditText editTextAianKol;
-    @BindView(R.id.editTextAianMaskooni)
-    EditText editTextAianMaskooni;
-    @BindView(R.id.editTextAianNonMaskooni)
-    EditText editTextAianNonMaskooni;
-    @BindView(R.id.editTextTedadMaskooni)
-    EditText editTextTedadMaskooni;
-    @BindView(R.id.editTextTedadTejari)
-    EditText editTextTedadTejari;
-    @BindView(R.id.editTextTedadSaier)
-    EditText editTextTedadSaier;
-    @BindView(R.id.editTextArzeshMelk)
-    EditText editTextArzeshMelk;
-    @BindView(R.id.editTextTedadTakhfif)
-    EditText editTextTedadTakhfif;
-    @BindView(R.id.editTextZarfiatQaradadi)
-    EditText editTextZarfiatQaradadi;
-    @BindView(R.id.editTextPariNumber)
-    EditText editTextPariNumber;
-    @BindView(R.id.editText19)
-    EditText editText19;
-    @BindView(R.id.editText20)
-    EditText editText20;
-    @BindView(R.id.linearLayout2)
-    LinearLayout linearLayout2;
-    @BindView(R.id.spinner1)
-    Spinner spinner1;
-    @BindView(R.id.spinner2)
-    Spinner spinner2;
-    @BindView(R.id.spinner3)
-    Spinner spinner3;
-    @BindView(R.id.spinner4)
-    Spinner spinner4;
-    @BindView(R.id.relativeLayout)
-    RelativeLayout relativeLayout;
-    @BindView(R.id.button_next)
-    Button buttonNext;
-    @BindView(R.id.checkbox1)
-    CheckBox checkBox1;
-    @BindView(R.id.checkbox2)
-    CheckBox checkBox2;
-    @BindView(R.id.checkbox3)
-    CheckBox checkBox3;
-    private View findViewById;
     private Context context;
     private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
     private Typeface typeface;
@@ -124,10 +57,11 @@ public class FormFragment extends Fragment {
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    //    private List<ServiceDictionary> serviceDictionaries;
-    private List<RequestDictionary> requestDictionaries;
     private ExaminerDuties examinerDuties;
-//    PersianCalendar persianCalendar = new PersianCalendar();
+    FormFragmentBinding binding;
+    private List<RequestDictionary> requestDictionaries;
+    //    PersianCalendar persianCalendar = new PersianCalendar();
+//    private List<ServiceDictionary> serviceDictionaries;
 
     public FormFragment() {
 
@@ -159,23 +93,19 @@ public class FormFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        findViewById = inflater.inflate(R.layout.form_fragment, container, false);
-        ButterKnife.bind(this, findViewById);
+        binding = FormFragmentBinding.inflate(inflater, container, false);
         initialize();
-        return findViewById;
+        return binding.getRoot();
     }
 
     private void initialize() {
-        FontManager fontManager = new FontManager(context);
-        fontManager.setFont(relativeLayout);
-        typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
         initializeSpinner();
         setOnButtonNextClickListener();
         setOnEditText19ClickListener();
     }
 
     void setOnButtonNextClickListener() {
-        buttonNext.setOnClickListener(v -> {
+        binding.buttonNext.setOnClickListener(v -> {
             if (prepareForm()) {
                 CalculationUserInput calculationUserInput = prepareField();
                 prepareServices(calculationUserInput);
@@ -186,7 +116,7 @@ public class FormFragment extends Fragment {
     }
 
     void setOnEditText19ClickListener() {
-        editText19.setOnClickListener(v -> {
+        binding.editText19.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(context);
             datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Single);
             datePickerDialog.setDisableDaysAgo(false);
@@ -194,37 +124,37 @@ public class FormFragment extends Fragment {
             datePickerDialog.setTextSizeWeek(12.0f);
             datePickerDialog.setTextSizeDate(14.0f);
             datePickerDialog.setCanceledOnTouchOutside(true);
-            datePickerDialog.setOnSingleDateSelectedListener(date -> editText19.setText(date.getPersianShortDate()));
+            datePickerDialog.setOnSingleDateSelectedListener(date -> binding.editText19.setText(date.getPersianShortDate()));
             datePickerDialog.showDialog();
         });
     }
 
     private CalculationUserInput prepareField() {
         CalculationUserInput calculationUserInput = new CalculationUserInput();
-        calculationUserInput.trackNumber = editTextTrackNumber.getText().toString();
-        calculationUserInput.billId = editTextBillId.getText().toString();
-        calculationUserInput.sifoon100 = Integer.valueOf(editTextSifoon100.getText().toString());
-        calculationUserInput.sifoon125 = Integer.valueOf(editTextSifoon125.getText().toString());
-        calculationUserInput.sifoon150 = Integer.valueOf(editTextSifoon150.getText().toString());
-        calculationUserInput.sifoon200 = Integer.valueOf(editTextSifoon200.getText().toString());
-        calculationUserInput.arse = Integer.valueOf(editTextArese.getText().toString());
-        calculationUserInput.aianKol = Integer.valueOf(editTextAianKol.getText().toString());
-        calculationUserInput.aianMaskooni = Integer.valueOf(editTextAianMaskooni.getText().toString());
-        calculationUserInput.aianTejari = Integer.valueOf(editTextAianNonMaskooni.getText().toString());
-        calculationUserInput.tedadMaskooni = Integer.valueOf(editTextTedadMaskooni.getText().toString());
-        calculationUserInput.tedadTejari = Integer.valueOf(editTextTedadTejari.getText().toString());
-        calculationUserInput.tedadSaier = Integer.valueOf(editTextTedadSaier.getText().toString());
-        calculationUserInput.arzeshMelk = Integer.valueOf(editTextArzeshMelk.getText().toString());
-        calculationUserInput.tedadTaxfif = Integer.valueOf(editTextTedadTakhfif.getText().toString());
-        calculationUserInput.zarfiatQarardadi = Integer.valueOf(editTextZarfiatQaradadi.getText().toString());
-        calculationUserInput.parNumber = editTextPariNumber.getText().toString();
-        calculationUserInput.karbariId = karbariDictionaries.get(spinner1.getSelectedItemPosition()).getId();
-        calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(spinner2.getSelectedItemPosition()).getId();
-        calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(spinner3.getSelectedItemPosition()).getId();
-        calculationUserInput.taxfifId = taxfifDictionaries.get(spinner4.getSelectedItemPosition()).getId();
-        calculationUserInput.adamTaxfifAb = checkBox1.isChecked();
-        calculationUserInput.adamTaxfifFazelab = checkBox2.isChecked();
-        calculationUserInput.ensheabQeireDaem = checkBox3.isChecked();
+        calculationUserInput.trackNumber = binding.editTextTrackNumber.getText().toString();
+        calculationUserInput.billId = binding.editTextBillId.getText().toString();
+        calculationUserInput.sifoon100 = Integer.valueOf(binding.editTextSifoon100.getText().toString());
+        calculationUserInput.sifoon125 = Integer.valueOf(binding.editTextSifoon125.getText().toString());
+        calculationUserInput.sifoon150 = Integer.valueOf(binding.editTextSifoon150.getText().toString());
+        calculationUserInput.sifoon200 = Integer.valueOf(binding.editTextSifoon200.getText().toString());
+        calculationUserInput.arse = Integer.valueOf(binding.editTextArese.getText().toString());
+        calculationUserInput.aianKol = Integer.valueOf(binding.editTextAianKol.getText().toString());
+        calculationUserInput.aianMaskooni = Integer.valueOf(binding.editTextAianMaskooni.getText().toString());
+        calculationUserInput.aianTejari = Integer.valueOf(binding.editTextAianNonMaskooni.getText().toString());
+        calculationUserInput.tedadMaskooni = Integer.valueOf(binding.editTextTedadMaskooni.getText().toString());
+        calculationUserInput.tedadTejari = Integer.valueOf(binding.editTextTedadTejari.getText().toString());
+        calculationUserInput.tedadSaier = Integer.valueOf(binding.editTextTedadSaier.getText().toString());
+        calculationUserInput.arzeshMelk = Integer.valueOf(binding.editTextArzeshMelk.getText().toString());
+        calculationUserInput.tedadTaxfif = Integer.valueOf(binding.editTextTedadTakhfif.getText().toString());
+        calculationUserInput.zarfiatQarardadi = Integer.valueOf(binding.editTextZarfiatQaradadi.getText().toString());
+        calculationUserInput.parNumber = binding.editTextPariNumber.getText().toString();
+        calculationUserInput.karbariId = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
+        calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
+        calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
+        calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
+        calculationUserInput.adamTaxfifAb = binding.checkbox1.isChecked();
+        calculationUserInput.adamTaxfifFazelab = binding.checkbox2.isChecked();
+        calculationUserInput.ensheabQeireDaem = binding.checkbox3.isChecked();
         return calculationUserInput;
     }
 
@@ -246,26 +176,26 @@ public class FormFragment extends Fragment {
     }
 
     private boolean prepareForm() {
-        return checkIsNoEmpty(editTextZoneTitle)
-                && checkIsNoEmpty(editTextTrackNumber)
-                && checkIsNoEmpty(editTextBillId)
-                && checkIsNoEmpty(editTextSifoon100)
-                && checkIsNoEmpty(editTextSifoon125)
-                && checkIsNoEmpty(editTextSifoon150)
-                && checkIsNoEmpty(editTextSifoon200)
-                && checkIsNoEmpty(editTextArese)
-                && checkIsNoEmpty(editTextAianKol)
-                && checkIsNoEmpty(editTextAianMaskooni)
-                && checkIsNoEmpty(editTextAianNonMaskooni)
-                && checkIsNoEmpty(editTextTedadMaskooni)
-                && checkIsNoEmpty(editTextTedadTejari)
-                && checkIsNoEmpty(editTextTedadSaier)
-                && checkIsNoEmpty(editTextArzeshMelk)
-                && checkIsNoEmpty(editTextTedadTakhfif)
-                && checkIsNoEmpty(editTextZarfiatQaradadi)
-                && checkIsNoEmpty(editTextPariNumber)
-                && checkIsNoEmpty(editText20)
-                && checkIsNoEmpty(editText19)
+        return checkIsNoEmpty(binding.editTextZoneTitle)
+                && checkIsNoEmpty(binding.editTextTrackNumber)
+                && checkIsNoEmpty(binding.editTextBillId)
+                && checkIsNoEmpty(binding.editTextSifoon100)
+                && checkIsNoEmpty(binding.editTextSifoon125)
+                && checkIsNoEmpty(binding.editTextSifoon150)
+                && checkIsNoEmpty(binding.editTextSifoon200)
+                && checkIsNoEmpty(binding.editTextArese)
+                && checkIsNoEmpty(binding.editTextAianKol)
+                && checkIsNoEmpty(binding.editTextAianMaskooni)
+                && checkIsNoEmpty(binding.editTextAianNonMaskooni)
+                && checkIsNoEmpty(binding.editTextTedadMaskooni)
+                && checkIsNoEmpty(binding.editTextTedadTejari)
+                && checkIsNoEmpty(binding.editTextTedadSaier)
+                && checkIsNoEmpty(binding.editTextArzeshMelk)
+                && checkIsNoEmpty(binding.editTextTedadTakhfif)
+                && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
+                && checkIsNoEmpty(binding.editTextPariNumber)
+                && checkIsNoEmpty(binding.editText20)
+                && checkIsNoEmpty(binding.editText19)
 //                && editText19.getText().length() > 0
                 ;
     }
@@ -316,8 +246,8 @@ public class FormFragment extends Fragment {
                 return view;
             }
         };
-        spinner1.setAdapter(arrayAdapter);
-        spinner1.setSelection(examinerDuties.getKarbariId());
+        binding.spinner1.setAdapter(arrayAdapter);
+        binding.spinner1.setSelection(examinerDuties.getKarbariId());
     }
 
     private void initializeTaxfifSpinner() {
@@ -345,8 +275,8 @@ public class FormFragment extends Fragment {
                 return view;
             }
         };
-        spinner4.setAdapter(arrayAdapter);
-        spinner4.setSelection(examinerDuties.getTaxfifId());
+        binding.spinner4.setAdapter(arrayAdapter);
+        binding.spinner4.setSelection(examinerDuties.getTaxfifId());
     }
 
     private void initializeNoeVagozariSpinner() {
@@ -374,8 +304,8 @@ public class FormFragment extends Fragment {
                 return view;
             }
         };
-        spinner2.setAdapter(arrayAdapter);
-        spinner2.setSelection(select);
+        binding.spinner2.setAdapter(arrayAdapter);
+        binding.spinner2.setSelection(select);
     }
 
     private void initializeQotrEnsheabSpinner() {
@@ -403,35 +333,35 @@ public class FormFragment extends Fragment {
                 return view;
             }
         };
-        spinner3.setAdapter(arrayAdapter);
-        spinner3.setSelection(examinerDuties.getQotrEnsheabId());
+        binding.spinner3.setAdapter(arrayAdapter);
+        binding.spinner3.setSelection(examinerDuties.getQotrEnsheabId());
     }
 
     private void initializeField() {
-        editTextZoneTitle.setText(examinerDuties.getZoneTitle());
-        editTextTrackNumber.setText(examinerDuties.getTrackNumber());
-        editTextBillId.setText(examinerDuties.getBillId());
-        editTextSifoon100.setText(String.valueOf(examinerDuties.getSifoon100()));
-        editTextSifoon125.setText(String.valueOf(examinerDuties.getSifoon125()));
-        editTextSifoon150.setText(String.valueOf(examinerDuties.getSifoon150()));
-        editTextSifoon200.setText(String.valueOf(examinerDuties.getSifoon200()));
-        editTextArese.setText(String.valueOf(examinerDuties.getArse()));
-        editTextAianKol.setText(String.valueOf(examinerDuties.getAianKol()));
-        editTextAianMaskooni.setText(String.valueOf(examinerDuties.getAianMaskooni()));
-        editTextAianNonMaskooni.setText(String.valueOf(examinerDuties.getAianNonMaskooni()));
-        editTextTedadMaskooni.setText(String.valueOf(examinerDuties.getTedadMaskooni()));
-        editTextTedadTejari.setText(String.valueOf(examinerDuties.getTedadTejari()));
-        editTextTedadSaier.setText(String.valueOf(examinerDuties.getTedadSaier()));
-        editTextArzeshMelk.setText(String.valueOf(examinerDuties.getArzeshMelk()));
-        editTextTedadTakhfif.setText(String.valueOf(examinerDuties.getTedadTaxfif()));
-        editTextZarfiatQaradadi.setText(String.valueOf(examinerDuties.getZarfiatQarardadi()));
-        editTextPariNumber.setText(examinerDuties.getParNumber());
-        editText19.setText(examinerDuties.getExaminationDay());
-        editText20.setText(examinerDuties.getPostalCode());
+        binding.editTextZoneTitle.setText(examinerDuties.getZoneTitle());
+        binding.editTextTrackNumber.setText(examinerDuties.getTrackNumber());
+        binding.editTextBillId.setText(examinerDuties.getBillId());
+        binding.editTextSifoon100.setText(String.valueOf(examinerDuties.getSifoon100()));
+        binding.editTextSifoon125.setText(String.valueOf(examinerDuties.getSifoon125()));
+        binding.editTextSifoon150.setText(String.valueOf(examinerDuties.getSifoon150()));
+        binding.editTextSifoon200.setText(String.valueOf(examinerDuties.getSifoon200()));
+        binding.editTextArese.setText(String.valueOf(examinerDuties.getArse()));
+        binding.editTextAianKol.setText(String.valueOf(examinerDuties.getAianKol()));
+        binding.editTextAianMaskooni.setText(String.valueOf(examinerDuties.getAianMaskooni()));
+        binding.editTextAianNonMaskooni.setText(String.valueOf(examinerDuties.getAianNonMaskooni()));
+        binding.editTextTedadMaskooni.setText(String.valueOf(examinerDuties.getTedadMaskooni()));
+        binding.editTextTedadTejari.setText(String.valueOf(examinerDuties.getTedadTejari()));
+        binding.editTextTedadSaier.setText(String.valueOf(examinerDuties.getTedadSaier()));
+        binding.editTextArzeshMelk.setText(String.valueOf(examinerDuties.getArzeshMelk()));
+        binding.editTextTedadTakhfif.setText(String.valueOf(examinerDuties.getTedadTaxfif()));
+        binding.editTextZarfiatQaradadi.setText(String.valueOf(examinerDuties.getZarfiatQarardadi()));
+        binding.editTextPariNumber.setText(examinerDuties.getParNumber());
+        binding.editText19.setText(examinerDuties.getExaminationDay());
+        binding.editText20.setText(examinerDuties.getPostalCode());
 
-        checkBox1.setChecked(examinerDuties.isAdamTaxfifAb());
-        checkBox2.setChecked(examinerDuties.isAdamTaxfifFazelab());
-        checkBox3.setChecked(examinerDuties.isEnsheabQeirDaem());
+        binding.checkbox1.setChecked(examinerDuties.isAdamTaxfifAb());
+        binding.checkbox2.setChecked(examinerDuties.isAdamTaxfifFazelab());
+        binding.checkbox3.setChecked(examinerDuties.isEnsheabQeirDaem());
     }
 //
 //    @SuppressLint("NewApi")
@@ -516,13 +446,13 @@ public class FormFragment extends Fragment {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);
-                linearLayout2.addView(linearLayout);
+                binding.linearLayout2.addView(linearLayout);
                 linearLayout = new LinearLayout(context);
             } else if (i == requestDictionaries.size() - 1) {
                 tag = "linearLayout".concat(String.valueOf(i));
                 linearLayout.setTag(tag);
                 linearLayout.setGravity(1);
-                linearLayout2.addView(linearLayout);
+                binding.linearLayout2.addView(linearLayout);
             }
         }
     }

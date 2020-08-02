@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -23,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -33,8 +32,8 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.databinding.DocumentActivityBinding;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -50,8 +49,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class DocumentActivity extends AppCompatActivity {
 
@@ -67,34 +64,6 @@ public class DocumentActivity extends AppCompatActivity {
     private final int GALLERY_REQUEST = 1888;
     private final int IMAGE_CROP_REQUEST = 1234;
     private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
-    @BindView(R.id.button_pick1)
-    Button buttonPick1;
-    @BindView(R.id.imageView1)
-    ImageView imageView1;
-    @BindView(R.id.button_pick2)
-    Button buttonPick2;
-    @BindView(R.id.imageView2)
-    ImageView imageView2;
-    @BindView(R.id.button_pick3)
-    Button buttonPick3;
-    @BindView(R.id.imageView3)
-    ImageView imageView3;
-    @BindView(R.id.button_pick4)
-    Button buttonPick4;
-    @BindView(R.id.imageView4)
-    ImageView imageView4;
-    @BindView(R.id.imageView5)
-    ImageView imageView5;
-    @BindView(R.id.button_pick5)
-    Button buttonPick5;
-    @BindView(R.id.imageView6)
-    ImageView imageView6;
-    @BindView(R.id.button_pick6)
-    Button buttonPick6;
-    @BindView(R.id.imageView7)
-    ImageView imageView7;
-    @BindView(R.id.constraintLayout)
-    ConstraintLayout constraintLayout;
     String mCurrentPhotoPath;
     Context context;
     boolean replace = false;
@@ -102,23 +71,26 @@ public class DocumentActivity extends AppCompatActivity {
     Bitmap bitmap;
     ImageView[] imageViews;//=new ImageView{imageView1, imageView2, imageView3, imageView4, imageView5, imageView6};
     Button[] buttonPicks;//= {buttonPick1, buttonPick2, buttonPick3, buttonPick4, buttonPick5, buttonPick6};
+    DocumentActivityBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.document_activity);
-        ButterKnife.bind(this);
+        binding = DocumentActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         context = this;
-        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
             askPermission();
         } else {
             byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
-            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, Objects.requireNonNull(bytes).length);
             initialize();
         }
     }
@@ -184,46 +156,44 @@ public class DocumentActivity extends AppCompatActivity {
     };
 
     void initialize() {
-        FontManager fontManager = new FontManager(getApplicationContext());
-        fontManager.setFont(constraintLayout);
         initializeButtons();
         initializeImageViews();
         loadImage();
     }
 
     void initializeButtons() {
-        buttonPick1.setOnClickListener(onClickListener);
-        buttonPick2.setOnClickListener(onClickListener);
-        buttonPick3.setOnClickListener(onClickListener);
-        buttonPick4.setOnClickListener(onClickListener);
-        buttonPick5.setOnClickListener(onClickListener);
-        buttonPick6.setOnClickListener(onClickListener);
+        binding.buttonPick1.setOnClickListener(onClickListener);
+        binding.buttonPick2.setOnClickListener(onClickListener);
+        binding.buttonPick3.setOnClickListener(onClickListener);
+        binding.buttonPick4.setOnClickListener(onClickListener);
+        binding.buttonPick5.setOnClickListener(onClickListener);
+        binding.buttonPick6.setOnClickListener(onClickListener);
         buttonPicks = new Button[6];
-        buttonPicks[0] = buttonPick1;
-        buttonPicks[1] = buttonPick2;
-        buttonPicks[2] = buttonPick3;
-        buttonPicks[3] = buttonPick4;
-        buttonPicks[4] = buttonPick5;
-        buttonPicks[5] = buttonPick6;
+        buttonPicks[0] = binding.buttonPick1;
+        buttonPicks[1] = binding.buttonPick2;
+        buttonPicks[2] = binding.buttonPick3;
+        buttonPicks[3] = binding.buttonPick4;
+        buttonPicks[4] = binding.buttonPick5;
+        buttonPicks[5] = binding.buttonPick6;
     }
 
     void initializeImageViews() {
-        imageView1.setOnClickListener(onClickListener);
-        imageView2.setOnClickListener(onClickListener);
-        imageView3.setOnClickListener(onClickListener);
-        imageView4.setOnClickListener(onClickListener);
-        imageView5.setOnClickListener(onClickListener);
-        imageView6.setOnClickListener(onClickListener);
-        imageView7.setImageBitmap(bitmap);
+        binding.imageView1.setOnClickListener(onClickListener);
+        binding.imageView2.setOnClickListener(onClickListener);
+        binding.imageView3.setOnClickListener(onClickListener);
+        binding.imageView4.setOnClickListener(onClickListener);
+        binding.imageView5.setOnClickListener(onClickListener);
+        binding.imageView6.setOnClickListener(onClickListener);
+        binding.imageView7.setImageBitmap(bitmap);
         imageCode = image7;
         saveImage(bitmap);
         imageViews = new ImageView[6];
-        imageViews[0] = imageView1;
-        imageViews[1] = imageView2;
-        imageViews[2] = imageView3;
-        imageViews[3] = imageView4;
-        imageViews[4] = imageView5;
-        imageViews[5] = imageView6;
+        imageViews[0] = binding.imageView1;
+        imageViews[1] = binding.imageView2;
+        imageViews[2] = binding.imageView3;
+        imageViews[3] = binding.imageView4;
+        imageViews[4] = binding.imageView5;
+        imageViews[5] = binding.imageView6;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

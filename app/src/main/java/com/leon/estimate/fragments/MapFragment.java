@@ -1,4 +1,4 @@
-package com.leon.estimate.Fragments;
+package com.leon.estimate.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,23 +16,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.leon.estimate.Activities.FormActivity;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
-import com.leon.estimate.Utils.DifferentCompanyManager;
-import com.leon.estimate.Utils.FontManager;
+import com.leon.estimate.activities.FormActivity;
+import com.leon.estimate.databinding.MapFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -41,9 +37,6 @@ import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
-import org.osmdroid.tileprovider.tilesource.TileSourcePolicy;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -58,9 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static android.content.Context.LOCATION_SERVICE;
 
 
@@ -73,53 +63,11 @@ public class MapFragment extends Fragment implements LocationListener {
     String trackNumber;
     private int polygonIndex;
     private int placeIndex;
-    private View findViewById;
-    private MapView mapView = null;
     private MyLocationNewOverlay locationOverlay;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-
-    @BindView(R.id.relativeLayout)
-    RelativeLayout relativeLayout;
-    @BindView(R.id.button_next)
-    Button buttonNext;
-
-    @BindView(R.id.editTextNationNumber)
-    EditText editTextNationNumber;
-    @BindView(R.id.editTextShenasname)
-    EditText editTextShenasname;
-    @BindView(R.id.editTextName)
-    EditText editTextName;
-    @BindView(R.id.editTextFamily)
-    EditText editTextFamily;
-    @BindView(R.id.editTextPostalCode)
-    EditText editTextPostalCode;
-    @BindView(R.id.editTextRadif)
-    EditText editTextRadif;
-    @BindView(R.id.editTextPhone)
-    EditText editTextPhone;
-    @BindView(R.id.editTextMobile)
-    EditText editTextMobile;
-    @BindView(R.id.editTextAddress)
-    EditText editTextAddress;
-    @BindView(R.id.editTextEshterak)
-    EditText editText26;
-    @BindView(R.id.editTextDescription)
-    EditText editTextDescription;
-    @BindView(R.id.editTextFatherName)
-    EditText editTextFatherName;
-    private OnlineTileSourceBase CUSTOM = new XYTileSource("test",
-            0, 19, 256, ".png", new String[]{
-//            "https://maps.wikimedia.org//osm-intl/",
-            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP)
-//            "http://172.18.12.242/osm_tiles/"
-    },
-            "© OpenStreetMap contributors",
-            new TileSourcePolicy(2,
-                    TileSourcePolicy.FLAG_NO_BULK
-                            | TileSourcePolicy.FLAG_NO_PREVENTIVE
-                            | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
-                            | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
-            ));
+    MapFragmentBinding binding;
+    private View findViewById;
+    private MapView mapView = null;
     private Context context;
     private ExaminerDuties examinerDuties;
     private CalculationUserInput calculationUserInput;
@@ -149,40 +97,37 @@ public class MapFragment extends Fragment implements LocationListener {
         }
         context = getActivity();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-        String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
-//        Mapbox.getInstance(context, accessToken);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         findViewById = inflater.inflate(R.layout.map_fragment, container, false);
-        ButterKnife.bind(this, findViewById);
+        binding = MapFragmentBinding.inflate(inflater, container, false);
         initialize();
-        return findViewById;
+        return binding.getRoot();
     }
 
     private void initialize() {
         initializeMap();
-        FontManager fontManager = new FontManager(context);
-        fontManager.setFont(relativeLayout);
-        buttonNext.setOnClickListener(v -> {
+        binding.buttonNext.setOnClickListener(v -> {
 //            mapView.setDrawingCacheEnabled(true);
 //            Bitmap bitmap = mapView.getDrawingCache(true);
 //            ((FormActivity) getActivity()).nextPage(bitmap);
             if (prepareForm()) {
                 calculationUserInput = new CalculationUserInput();
-                calculationUserInput.nationalId = editTextNationNumber.getText().toString();
-                calculationUserInput.firstName = editTextName.getText().toString();
-                calculationUserInput.sureName = editTextFamily.getText().toString();
-                calculationUserInput.fatherName = editTextFatherName.getText().toString();
-                calculationUserInput.postalCode = editTextPostalCode.getText().toString();
-                calculationUserInput.radif = editTextRadif.getText().toString();
-                calculationUserInput.phoneNumber = editTextPhone.getText().toString();
-                calculationUserInput.mobile = editTextMobile.getText().toString();
-                calculationUserInput.address = editTextAddress.getText().toString();
-                calculationUserInput.description = editTextDescription.getText().toString();
-                ((FormActivity) getActivity()).nextPage(convertMapToBitmap(), calculationUserInput);
+                calculationUserInput.nationalId = binding.editTextNationNumber.getText().toString();
+                calculationUserInput.firstName = binding.editTextName.getText().toString();
+                calculationUserInput.sureName = binding.editTextFamily.getText().toString();
+                calculationUserInput.fatherName = binding.editTextFatherName.getText().toString();
+                calculationUserInput.postalCode = binding.editTextPostalCode.getText().toString();
+                calculationUserInput.radif = binding.editTextRadif.getText().toString();
+                calculationUserInput.phoneNumber = binding.editTextPhone.getText().toString();
+                calculationUserInput.mobile = binding.editTextMobile.getText().toString();
+                calculationUserInput.address = binding.editTextAddress.getText().toString();
+                calculationUserInput.description = binding.editTextDescription.getText().toString();
+                ((FormActivity) Objects.requireNonNull(getActivity())).nextPage(
+                        convertMapToBitmap(), calculationUserInput);
             }
         });
         initializeField();
@@ -194,13 +139,13 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     private boolean prepareForm() {
-        return checkIsNoEmpty(editTextShenasname)
-                && checkIsNoEmpty(editTextName)
-                && checkIsNoEmpty(editTextFamily)
-                && checkIsNoEmpty(editTextFatherName)
-                && checkIsNoEmpty(editText26)
-                && checkIsNoEmpty(editTextRadif)
-                && checkIsNoEmpty(editTextAddress)
+        return checkIsNoEmpty(binding.editTextShenasname)
+                && checkIsNoEmpty(binding.editTextName)
+                && checkIsNoEmpty(binding.editTextFamily)
+                && checkIsNoEmpty(binding.editTextFatherName)
+                && checkIsNoEmpty(binding.editTextEshterak)
+                && checkIsNoEmpty(binding.editTextRadif)
+                && checkIsNoEmpty(binding.editTextAddress)
                 && checkOtherIsNoEmpty()
                 ;
     }
@@ -217,20 +162,20 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private boolean checkOtherIsNoEmpty() {
         View focusView;
-        if (editTextNationNumber.getText().toString().length() < 10) {
-            focusView = editTextNationNumber;
+        if (binding.editTextNationNumber.getText().toString().length() < 10) {
+            focusView = binding.editTextNationNumber;
             focusView.requestFocus();
             return false;
-        } else if (editTextPostalCode.getText().toString().length() < 10) {
-            focusView = editTextPostalCode;
+        } else if (binding.editTextPostalCode.getText().toString().length() < 10) {
+            focusView = binding.editTextPostalCode;
             focusView.requestFocus();
             return false;
-        } else if (editTextPhone.getText().toString().length() < 8) {
-            focusView = editTextPhone;
+        } else if (binding.editTextPhone.getText().toString().length() < 8) {
+            focusView = binding.editTextPhone;
             focusView.requestFocus();
             return false;
-        } else if (editTextMobile.getText().toString().length() < 9) {
-            focusView = editTextMobile;
+        } else if (binding.editTextMobile.getText().toString().length() < 9) {
+            focusView = binding.editTextMobile;
             focusView.requestFocus();
             return false;
         }
@@ -238,17 +183,17 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     private void initializeField() {
-        editTextAddress.setText(examinerDuties.getAddress());
-        editTextName.setText(examinerDuties.getFirstName());
-        editTextFamily.setText(examinerDuties.getSureName());
-        editTextNationNumber.setText(examinerDuties.getNationalId());
-        editTextFatherName.setText(examinerDuties.getFatherName());
-        editTextDescription.setText(examinerDuties.getDescription());
-        editTextPhone.setText(examinerDuties.getPhoneNumber());
-        editTextMobile.setText(examinerDuties.getMobile());
-        editText26.setText(examinerDuties.getEshterak().trim());
-        editTextPostalCode.setText(examinerDuties.getPostalCode());
-        editTextRadif.setText(examinerDuties.getRadif());
+        binding.editTextAddress.setText(examinerDuties.getAddress());
+        binding.editTextName.setText(examinerDuties.getFirstName());
+        binding.editTextFamily.setText(examinerDuties.getSureName());
+        binding.editTextNationNumber.setText(examinerDuties.getNationalId());
+        binding.editTextFatherName.setText(examinerDuties.getFatherName());
+        binding.editTextDescription.setText(examinerDuties.getDescription());
+        binding.editTextPhone.setText(examinerDuties.getPhoneNumber());
+        binding.editTextMobile.setText(examinerDuties.getMobile());
+        binding.editTextEshterak.setText(examinerDuties.getEshterak().trim());
+        binding.editTextPostalCode.setText(examinerDuties.getPostalCode());
+        binding.editTextRadif.setText(examinerDuties.getRadif());
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -272,7 +217,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private void initializeMap() {
         mapView = findViewById.findViewById(R.id.mapView);
 //        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setTileSource(CUSTOM);
+//        mapView.setTileSource(CUSTOM);
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
         IMapController mapController = mapView.getController();

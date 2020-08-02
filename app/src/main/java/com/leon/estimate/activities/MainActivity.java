@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,12 +18,9 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -61,8 +58,7 @@ import com.leon.estimate.Utils.ICallback;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
-import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.geojson.Point;
+import com.leon.estimate.databinding.MainActivityBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -73,8 +69,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourcePolicy;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -94,15 +88,12 @@ public class MainActivity extends AppCompatActivity
     public double latitude;
     public double longitude;
     LocationManager locationManager;
-    String accessToken = "pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrNHBxenN0azB5YXozZXM3N2hiYWRndXMifQ.uinG5vJijYWskpmA52REfw";
+    MainActivityBinding binding;
     int REQUEST_LOCATION_CODE = 1236;
-    ImageView imageViewExit, imageViewDownload, imageViewUpload, imageViewPaper, imageViewForm;
     String trackNumber;
     DrawerLayout drawer;
     Context context;
-    private PermissionsManager permissionsManager;
     private MapView mapView = null;
-
     List<CalculationUserInput> calculationUserInputList;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
@@ -128,11 +119,8 @@ public class MainActivity extends AppCompatActivity
     };
 
     OnlineTileSourceBase CUSTOM = new XYTileSource("MapQuest",
-            0, 19, 256, ".png", new String[]{
-//            "https://maps.wikimedia.org//osm-intl/",
-//            DifferentCompanyManager.getBaseUrl(CompanyNames.ESF_MAP)
-            "http://172.18.12.242/osm_tiles/"
-    },
+            0, 19, 256, ".png",
+            new String[]{"http://172.18.12.242/osm_tiles/"},
             "© OpenStreetMap contributors",
             new TileSourcePolicy(2,
                     TileSourcePolicy.FLAG_NO_BULK
@@ -224,27 +212,27 @@ public class MainActivity extends AppCompatActivity
         return bestLocation;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         context = this;
-        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            askPermission();
-        } else {
-            Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-//            Configuration.getInstance().getOsmdroidBasePath();
-//            Mapbox.getInstance(this, accessToken);
-            setContentView(R.layout.main_activity);
-            initialize();
+        binding = MainActivityBinding.inflate(getLayoutInflater());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            ) {
+                askPermission();
+            } else {
+                Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+                setContentView(binding.getRoot());
+                initialize();
+            }
         }
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_10_11).build();
-        readData();
+//        readData();
     }
 
     @SuppressLint("MissingPermission")
@@ -305,72 +293,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    void test() {
-        Polyline line = new Polyline(mapView);
-//        line.setTitle("Central Park, NYC");
-        line.setSubDescription(Polyline.class.getCanonicalName());
-        line.setWidth(20f);
-        line.setColor(R.color.green1);
-        List<GeoPoint> pts = new ArrayList<>();
-        //here, we create a polygon, note that you need 5 points in order to make a closed polygon (rectangle)
-
-        pts.add(new GeoPoint(32.70347921245878, 51.71537283422978));
-        pts.add(new GeoPoint(32.704279694809834, 51.71409512700282));
-        pts.add(new GeoPoint(32.70246839703522, 51.71404849535219));
-        pts.add(new GeoPoint(32.86055430536678, 51.563165144538516));
-        pts.add(new GeoPoint(32.861076853343896, 51.56335859857319));
-        line.setPoints(pts);
-        line.setGeodesic(true);
-        line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapView));
-        //Note, the info window will not show if you set the onclick listener
-        //line can also attach click listeners to the line
-
-        line.setOnClickListener((polyline, mapView, eventPos) -> {
-            return false;
-        });
-        mapView.getOverlayManager().add(line);
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    private void initRouteCoordinates() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        assert lm != null;
-        @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = 0;
-        double latitude = 0;
-        if (location != null) {
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-        }
-        List<Point> routeCoordinates = new ArrayList<>();
-        routeCoordinates.add(Point.fromLngLat(longitude, latitude));
-        routeCoordinates.add(Point.fromLngLat(longitude + longitude / 1000, latitude + longitude / 1000));
-//        routeCoordinates.add(Point.fromLngLat(longitude - longitude/1000, latitude + longitude/1000));
-//        routeCoordinates.add(Point.fromLngLat(longitude - longitude/1000, latitude - longitude/1000));
-//        routeCoordinates.add(Point.fromLngLat(longitude + longitude/1000, latitude - longitude/1000));
-    }
-
     void setImageViewFindByViewId() {
-        imageViewDownload = findViewById(R.id.imageViewDownload);
-        imageViewDownload.setOnClickListener(onClickListener);
-
-        imageViewUpload = findViewById(R.id.imageViewUpload);
-        imageViewUpload.setOnClickListener(onClickListener);
-
-
-        imageViewPaper = findViewById(R.id.imageViewPaper);
-        imageViewPaper.setOnClickListener(onClickListener);
-
-        imageViewExit = findViewById(R.id.imageViewExit);
-        imageViewExit.setOnClickListener(onClickListener);
-
-        imageViewForm = findViewById(R.id.imageViewForm);
-        imageViewForm.setOnClickListener(onClickListener);
+        binding.imageViewDownload.setOnClickListener(onClickListener);
+        binding.imageViewUpload.setOnClickListener(onClickListener);
+        binding.imageViewPaper.setOnClickListener(onClickListener);
+        binding.imageViewExit.setOnClickListener(onClickListener);
+        binding.imageViewForm.setOnClickListener(onClickListener);
     }
 
 

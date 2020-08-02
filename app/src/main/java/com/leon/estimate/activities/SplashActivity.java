@@ -1,38 +1,27 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.leon.estimate.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.leon.estimate.databinding.SplashActivityBinding;
 
 public class SplashActivity extends AppCompatActivity {
 
-    @BindView(R.id.imageViewSplashScreen)
-    ImageView imageViewSplash;
-    @BindView(R.id.shimmer_view_container)
-    ShimmerFrameLayout container;
-    @BindView(R.id.textViewVersion)
-    TextView textViewVersion;
     private boolean splashLoaded = false;
+    SplashActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.splash_activity);
-        ButterKnife.bind(this);
-
+        binding = SplashActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         if (!splashLoaded) {
             setContentView(R.layout.splash_activity);
             initialize();
@@ -47,12 +36,11 @@ public class SplashActivity extends AppCompatActivity {
 
     private void initialize() {
         int splashResourceId = R.drawable.img_splash;
-        imageViewSplash.setImageResource(splashResourceId);
-        container = findViewById(R.id.shimmer_view_container);
+        binding.imageViewSplashScreen.setImageResource(splashResourceId);
     }
 
     private void startSplash() {
-        container.startShimmer();
+        binding.shimmerViewContainer.startShimmer();
         Thread timerThread = new Thread() {
             public void run() {
                 try {
@@ -79,8 +67,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        imageViewSplash.setImageDrawable(null);
-        container = null;
+        binding.imageViewSplashScreen.setImageDrawable(null);
     }
 
     @Override

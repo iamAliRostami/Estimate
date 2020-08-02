@@ -4,7 +4,7 @@
     android:id="@+id/activity_admin_forget_password"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,7 +76,8 @@
                     android:hint="@string/username"
                     android:inputType="text"
                     android:lines="1"
-                    android:padding="@dimen/activity_medium_padding" />
+                    android:padding="@dimen/activity_medium_padding"
+                    tools:ignore="Autofill" />
 
                 <ImageView
                     android:id="@+id/imageViewUsername"
@@ -106,7 +107,8 @@
                     android:hint="@string/password"
                     android:inputType="textPassword"
                     android:lines="1"
-                    android:padding="@dimen/activity_medium_padding" />
+                    android:padding="@dimen/activity_medium_padding"
+                    tools:ignore="Autofill" />
                 <!--                android:text="123456"-->
 
                 <ImageView
@@ -152,20 +154,11 @@
                 android:id="@+id/textViewVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_mid_margin"
                 android:gravity="center"
                 android:text="@string/version"
                 android:textColor="@color/text_color2" />
-
-            <TextView
-                android:id="@+id/textViewFooter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/gray3"
-                android:gravity="center"
-                android:text="@string/company_site"
-                android:textColor="@color/black1" />
         </LinearLayout>
 
+        <include layout="@layout/footer" />
     </LinearLayout>
 </RelativeLayout>

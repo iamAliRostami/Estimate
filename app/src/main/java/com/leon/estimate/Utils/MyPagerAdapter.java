@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.leon.estimate.Fragments.FormFragment;
-import com.leon.estimate.Fragments.MapFragment;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.fragments.FormFragment;
+import com.leon.estimate.fragments.MapFragment;
 
 import org.jetbrains.annotations.NotNull;
 

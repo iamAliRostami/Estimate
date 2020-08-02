@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.os.Bundle;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,48 +7,42 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.leon.estimate.R;
 import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.databinding.BrightnessContrastActivityBinding;
 
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class BrightnessContrastActivity extends AppCompatActivity {
-
-    @BindView(R.id.seekBar_brightness)
-    SeekBar seekBarBrightness;
-    @BindView(R.id.seekBar_contrast)
-    SeekBar seekBarContrast;
-    @BindView(R.id.imageView)
-    ImageView imageView;
-    @BindView(R.id.textView_brightness)
-    TextView textViewBrightness;
-    @BindView(R.id.textView_contrast)
-    TextView textViewContrast;
-    @BindView(R.id.button_accepted)
-    Button buttonAccepted;
-    @BindView(R.id.button_close)
-    Button buttonClose;
+    //
+//    @BindView(R.id.seekBar_brightness)
+//    SeekBar seekBarBrightness;
+//    @BindView(R.id.seekBar_contrast)
+//    SeekBar seekBarContrast;
+//    @BindView(R.id.imageView)
+//    ImageView imageView;
+//    @BindView(R.id.textView_brightness)
+//    TextView textViewBrightness;
+//    @BindView(R.id.textView_contrast)
+//    TextView textViewContrast;
+//    @BindView(R.id.button_accepted)
+//    Button buttonAccepted;
+//    @BindView(R.id.button_close)
+//    Button buttonClose;
     Bitmap bitmapTemp;
-
+    BrightnessContrastActivityBinding binding;
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             int brightness = progress - 250;
             bitmapTemp = brightnessController(ScannerConstants.bitmapSelectedImage, brightness);
-            imageView.setImageBitmap(bitmapTemp);
-            textViewBrightness.setText("درخشش: ".concat(String.valueOf(brightness)));
+            binding.imageView.setImageBitmap(bitmapTemp);
+            binding.textViewBrightness.setText("درخشش: ".concat(String.valueOf(brightness)));
         }
 
         @Override
@@ -67,9 +61,10 @@ public class BrightnessContrastActivity extends AppCompatActivity {
             float contrast = (float) (progress) / 10;
 //            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast, 7 / 10);
 //            bitmapTemp = contrastController(bitmapTemp, contrast, seekBarBrightness.getProgress() - 250);
-            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast, seekBarBrightness.getProgress() - 250);
-            imageView.setImageBitmap(bitmapTemp);
-            textViewContrast.setText("کنتراست: ".concat(String.valueOf(contrast)));
+            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast,
+                    binding.seekBarBrightness.getProgress() - 250);
+            binding.imageView.setImageBitmap(bitmapTemp);
+            binding.textViewContrast.setText("کنتراست: ".concat(String.valueOf(contrast)));
 
         }
 
@@ -104,8 +99,8 @@ public class BrightnessContrastActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.brightness_contrast_activity);
-        ButterKnife.bind(this);
+        binding = BrightnessContrastActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         initialize();
     }
 
@@ -120,19 +115,19 @@ public class BrightnessContrastActivity extends AppCompatActivity {
     View.OnClickListener onClickListenerClose = v -> finish();
 
     void initialize() {
-        seekBarBrightness.setMax(500);
-        seekBarBrightness.setOnSeekBarChangeListener(onSeekBarChangeListenerBrightness);
-        seekBarBrightness.setProgress(250);
+        binding.seekBarBrightness.setMax(500);
+        binding.seekBarBrightness.setOnSeekBarChangeListener(onSeekBarChangeListenerBrightness);
+        binding.seekBarBrightness.setProgress(250);
 
-        seekBarContrast.setMax(100);
-        seekBarContrast.setOnSeekBarChangeListener(onSeekBarChangeListenerContrast);
-        seekBarContrast.setProgress(50);
+        binding.seekBarContrast.setMax(100);
+        binding.seekBarContrast.setOnSeekBarChangeListener(onSeekBarChangeListenerContrast);
+        binding.seekBarContrast.setProgress(50);
 
         bitmapTemp = ScannerConstants.bitmapSelectedImage;
-        imageView.setImageBitmap(bitmapTemp);
+        binding.imageView.setImageBitmap(bitmapTemp);
 
-        buttonAccepted.setOnClickListener(onClickListenerAccepted);
-        buttonClose.setOnClickListener(onClickListenerClose);
+        binding.buttonAccepted.setOnClickListener(onClickListenerAccepted);
+        binding.buttonClose.setOnClickListener(onClickListenerClose);
     }
 
 

@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,12 +13,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -40,7 +34,6 @@ import com.leon.estimate.R;
 import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.DifferentCompanyManager;
-import com.leon.estimate.Utils.FontManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.IAbfaService;
 import com.leon.estimate.Utils.ICallback;
@@ -48,45 +41,19 @@ import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+import com.leon.estimate.databinding.LoginActivityBinding;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
-    @BindView(R.id.editTextUsername)
-    EditText editTextUsername;
-    @BindView(R.id.editTextPassword)
-    EditText editTextPassword;
-    @BindView(R.id.textViewFooter)
-    TextView textViewFooter;
-    @BindView(R.id.buttonLogin)
-    Button buttonLogin;
-    @BindView(R.id.activity_admin_forget_password)
-    RelativeLayout relativeLayout;
-    @BindView(R.id.linearLayoutUsername)
-    LinearLayout linearLayoutUsername;
-    @BindView(R.id.linearLayoutPassword)
-    LinearLayout linearLayoutPassword;
-    @BindView(R.id.imageViewPerson)
-    ImageView imageViewPerson;
-    @BindView(R.id.imageViewLogo)
-    ImageView imageViewLogo;
-    @BindView(R.id.imageViewUsername)
-    ImageView imageViewUsername;
-    @BindView(R.id.imageViewPassword)
-    ImageView imageViewPassword;
-    @BindView(R.id.textViewVersion)
-    TextView textViewVersion;
+    LoginActivityBinding binding;
     int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
-    private FontManager fontManager;
     private String username, password, deviceId;
     private View viewFocus;
     private Context context;
@@ -95,23 +62,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.login_activity);
-        ButterKnife.bind(this);
+        binding = LoginActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         initialize();
     }
 
     void initialize() {
         context = this;
-        textViewVersion.setText(getString(R.string.copy_right).concat("  ").
+        binding.textViewVersion.setText(getString(R.string.copy_right).concat("  ").
                 concat(getString(R.string.version).concat(" ").concat(BuildConfig.VERSION_NAME)));
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
-        fontManager = new FontManager(getApplicationContext());
-        fontManager.setFont(relativeLayout);
-        imageViewPassword.setImageResource(R.drawable.img_password);
-        imageViewLogo.setImageResource(R.drawable.img_bg_logo);
-        imageViewPerson.setImageResource(R.drawable.img_profile);
-        imageViewUsername.setImageResource(R.drawable.img_user);
+        binding.imageViewPassword.setImageResource(R.drawable.img_password);
+        binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
+        binding.imageViewPerson.setImageResource(R.drawable.img_profile);
+        binding.imageViewUsername.setImageResource(R.drawable.img_user);
         setEditTextUsernameChangedListener();
         setEditTextPasswordChangedListener();
         setEditTextUsernameOnFocusChangeListener();
@@ -164,10 +129,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        imageViewPerson.setImageDrawable(null);
-        imageViewPassword.setImageDrawable(null);
-        imageViewLogo.setImageDrawable(null);
-        imageViewUsername.setImageDrawable(null);
+        binding.imageViewPerson.setImageDrawable(null);
+        binding.imageViewPassword.setImageDrawable(null);
+        binding.imageViewLogo.setImageDrawable(null);
+        binding.imageViewUsername.setImageDrawable(null);
         System.gc();
         Runtime.getRuntime().gc();
     }
@@ -249,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setEditTextUsernameChangedListener() {
-        editTextUsername.addTextChangedListener(new TextWatcher() {
+        binding.editTextUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -257,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                editTextUsername.setHint("");
+                binding.editTextUsername.setHint("");
             }
 
             @Override
@@ -268,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setEditTextPasswordChangedListener() {
-        editTextPassword.addTextChangedListener(new TextWatcher() {
+        binding.editTextPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -276,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                editTextPassword.setHint("");
+                binding.editTextPassword.setHint("");
             }
 
             @Override
@@ -287,56 +252,55 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setEditTextUsernameOnFocusChangeListener() {
-        editTextUsername.setOnFocusChangeListener((view, b) -> {
-            editTextUsername.setHint("");
+        binding.editTextUsername.setOnFocusChangeListener((view, b) -> {
+            binding.editTextUsername.setHint("");
             if (b) {
-                linearLayoutUsername.setBackground(getResources().getDrawable(R.drawable.border_3));
-                editTextPassword.setTextColor(getResources().getColor(R.color.black));
+                binding.linearLayoutUsername.setBackground(getResources().getDrawable(R.drawable.border_3));
+                binding.editTextPassword.setTextColor(getResources().getColor(R.color.black));
             } else {
-                linearLayoutUsername.setBackground(getResources().getDrawable(R.drawable.border_2));
-                editTextPassword.setTextColor(getResources().getColor(R.color.gray2));
+                binding.linearLayoutUsername.setBackground(getResources().getDrawable(R.drawable.border_2));
+                binding.editTextPassword.setTextColor(getResources().getColor(R.color.gray2));
             }
         });
     }
 
     private void setEditTextPasswordOnFocusChangeListener() {
-        editTextPassword.setOnFocusChangeListener((view, b) -> {
-            editTextPassword.setHint("");
+        binding.editTextPassword.setOnFocusChangeListener((view, b) -> {
+            binding.editTextPassword.setHint("");
             if (b) {
-                linearLayoutPassword.setBackground(getResources().getDrawable(R.drawable.border_3));
-                editTextPassword.setTextColor(getResources().getColor(R.color.black));
+                binding.linearLayoutPassword.setBackground(getResources().getDrawable(R.drawable.border_3));
+                binding.editTextPassword.setTextColor(getResources().getColor(R.color.black));
             } else {
-                linearLayoutPassword.setBackground(getResources().getDrawable(R.drawable.border_2));
-                editTextPassword.setTextColor(getResources().getColor(R.color.gray2));
+                binding.linearLayoutPassword.setBackground(getResources().getDrawable(R.drawable.border_2));
+                binding.editTextPassword.setTextColor(getResources().getColor(R.color.gray2));
             }
         });
     }
 
     private void setImageViewOnClickListener() {
-        imageViewPassword.setOnClickListener(view -> {
-            if (editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
-                editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+        binding.imageViewPassword.setOnClickListener(view -> {
+            if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
             else
-                editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-            fontManager.setFont(relativeLayout);
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         });
     }
 
     private void setButtonOnClickListener() {
-        buttonLogin.setOnClickListener(view -> {
+        binding.buttonLogin.setOnClickListener(view -> {
             boolean cancel = false;
-            username = editTextUsername.getText().toString();
-            password = editTextPassword.getText().toString();
+            username = binding.editTextUsername.getText().toString();
+            password = binding.editTextPassword.getText().toString();
             if (username.length() < 1) {
-                viewFocus = editTextUsername;
+                viewFocus = binding.editTextUsername;
                 viewFocus.requestFocus();
-                editTextUsername.setError(getString(R.string.error_empty));
+                binding.editTextUsername.setError(getString(R.string.error_empty));
                 cancel = true;
             }
             if (!cancel && password.length() < 1) {
-                viewFocus = editTextPassword;
+                viewFocus = binding.editTextPassword;
                 viewFocus.requestFocus();
-                editTextPassword.setError(getString(R.string.error_empty));
+                binding.editTextPassword.setError(getString(R.string.error_empty));
                 cancel = true;
             }
             if (!cancel) {
@@ -346,20 +310,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setButtonOnLongClickListener() {
-        buttonLogin.setOnLongClickListener(view -> {
+        binding.buttonLogin.setOnLongClickListener(view -> {
             boolean cancel = false;
-            username = editTextUsername.getText().toString();
-            password = editTextPassword.getText().toString();
+            username = binding.editTextUsername.getText().toString();
+            password = binding.editTextPassword.getText().toString();
             if (username.length() < 1) {
-                viewFocus = editTextUsername;
+                viewFocus = binding.editTextUsername;
                 viewFocus.requestFocus();
-                editTextUsername.setError(getString(R.string.error_empty));
+                binding.editTextUsername.setError(getString(R.string.error_empty));
                 cancel = true;
             }
             if (!cancel && password.length() < 1) {
-                viewFocus = editTextPassword;
+                viewFocus = binding.editTextPassword;
                 viewFocus.requestFocus();
-                editTextPassword.setError(getString(R.string.error_empty));
+                binding.editTextPassword.setError(getString(R.string.error_empty));
                 cancel = true;
             }
             if (!cancel) {

@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.annotation.SuppressLint;
 import android.content.ContextWrapper;
@@ -12,24 +12,20 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.databinding.CropActivityBinding;
 
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
@@ -43,24 +39,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import team.clevel.documentscanner.libraries.NativeClass;
-import team.clevel.documentscanner.libraries.PolygonView;
 
 public class CropActivity extends AppCompatActivity {
-    private FrameLayout frameLayoutHolder;
-    private ImageView imageViewRotate, imageViewInvert, imageViewRebase, imageView;
-    private PolygonView polygonView;
     private Bitmap bitmapSelectedImage, bitmapTempOriginal;
-    private Button buttonCrop, buttonClose;
     private NativeClass nativeClass;
     private boolean isInverted;
-    private ProgressBar progressBar;
-
+    CropActivityBinding binding;
     @SuppressLint("CheckResult")
     private View.OnClickListener onButtonCropClickListener = v -> {
         setProgressBar(true);
@@ -68,12 +58,8 @@ public class CropActivity extends AppCompatActivity {
             ScannerConstants.bitmapSelectedImage = getCroppedImage();
             if (ScannerConstants.bitmapSelectedImage == null)
                 return false;
-//            if (ScannerConstants.saveStorage)
-//                saveToInternalStorage(ScannerConstants.bitmapSelectedImage);
             return false;
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe((result) -> {
                     setProgressBar(false);
                     if (ScannerConstants.bitmapSelectedImage != null) {
@@ -82,34 +68,32 @@ public class CropActivity extends AppCompatActivity {
                     }
                 });
     };
-    private View.OnClickListener onButtonCloseClickListener = v -> finish();
+    @SuppressLint("CheckResult")
     private View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
-        @SuppressLint("CheckResult")
         @Override
         public void onClick(View v) {
             setProgressBar(true);
             Observable.fromCallable(() -> {
                 invertColor();
                 return false;
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe((result) -> {
                         setProgressBar(false);
-                        Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage, frameLayoutHolder.getWidth(), frameLayoutHolder.getHeight());
-                        imageView.setImageBitmap(scaledBitmap);
+                        Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage,
+                                binding.holderImageCrop.getWidth(), binding.holderImageCrop.getHeight());
+                        binding.imageView.setImageBitmap(scaledBitmap);
                     });
-
-
         }
     };
+    private View.OnClickListener onButtonCloseClickListener = v -> finish();
     private View.OnClickListener onImageViewRebase = v -> {
-        ScannerConstants.bitmapSelectedImage = bitmapTempOriginal.copy(bitmapTempOriginal.getConfig(), true);
+        ScannerConstants.bitmapSelectedImage = bitmapTempOriginal.copy(
+                bitmapTempOriginal.getConfig(), true);
         isInverted = false;
         initializeElement();
     };
+    @SuppressLint("CheckResult")
     private View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
-        @SuppressLint("CheckResult")
         @Override
         public void onClick(View v) {
             setProgressBar(true);
@@ -118,15 +102,20 @@ public class CropActivity extends AppCompatActivity {
                     invertColor();
                 ScannerConstants.bitmapSelectedImage = rotateBitmap(bitmapSelectedImage, 90);
                 return false;
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe((result) -> {
                         setProgressBar(false);
                         initializeElement();
                     });
         }
     };
+
+    public static Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
     private void setImageRotation() {
         Bitmap tempBitmap = ScannerConstants.bitmapSelectedImage.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
@@ -140,18 +129,12 @@ public class CropActivity extends AppCompatActivity {
             }
         }
     }
-    public static Bitmap rotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.crop_activity);
-        ButterKnife.bind(this);
+        binding = CropActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         isInverted = false;
         if (ScannerConstants.bitmapSelectedImage != null) {
             initializeElement();
@@ -165,9 +148,9 @@ public class CropActivity extends AppCompatActivity {
         RelativeLayout rlContainer = findViewById(R.id.rlContainer);
         setViewInteract(rlContainer, !isShow);
         if (isShow)
-            progressBar.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.VISIBLE);
         else
-            progressBar.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.GONE);
     }
 
     private void setViewInteract(View view, boolean canDo) {
@@ -182,64 +165,57 @@ public class CropActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
     private void initializeElement() {
         nativeClass = new NativeClass();
-        buttonCrop = findViewById(R.id.btnImageCrop);
-        buttonClose = findViewById(R.id.btnClose);
-        frameLayoutHolder = findViewById(R.id.holderImageCrop);
-        imageView = findViewById(R.id.imageView);
-        imageViewRotate = findViewById(R.id.ivRotate);
-        imageViewInvert = findViewById(R.id.ivInvert);
-        imageViewRebase = findViewById(R.id.ivRebase);
-        buttonCrop.setText(ScannerConstants.cropText);
-        buttonClose.setText(ScannerConstants.backText);
-        polygonView = findViewById(R.id.polygonView);
-        progressBar = findViewById(R.id.progressBar);
-        if (progressBar.getIndeterminateDrawable() != null && ScannerConstants.progressColor != null)
-            progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(ScannerConstants.progressColor), android.graphics.PorterDuff.Mode.MULTIPLY);
-        else if (progressBar.getProgressDrawable() != null && ScannerConstants.progressColor != null)
-            progressBar.getProgressDrawable().setColorFilter(Color.parseColor(ScannerConstants.progressColor), android.graphics.PorterDuff.Mode.MULTIPLY);
+        if (binding.progressBar.getIndeterminateDrawable() != null &&
+                ScannerConstants.progressColor != null)
+            binding.progressBar.getIndeterminateDrawable().setColorFilter(
+                    Color.parseColor(ScannerConstants.progressColor),
+                    android.graphics.PorterDuff.Mode.MULTIPLY);
+        else if (binding.progressBar.getProgressDrawable() != null &&
+                ScannerConstants.progressColor != null)
+            binding.progressBar.getProgressDrawable().setColorFilter(
+                    Color.parseColor(ScannerConstants.progressColor),
+                    android.graphics.PorterDuff.Mode.MULTIPLY);
         setProgressBar(true);
-//        buttonCrop.setBackgroundColor(Color.parseColor(ScannerConstants.cropColor));
-//        buttonClose.setBackgroundColor(Color.parseColor(ScannerConstants.backColor));
         Observable.fromCallable(() -> {
             setImageRotation();
             return false;
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe((result) -> {
                     setProgressBar(false);
-                    frameLayoutHolder.post(this::initializeCropping);
-                    buttonCrop.setOnClickListener(onButtonCropClickListener);
-                    buttonClose.setOnClickListener(onButtonCloseClickListener);
-                    imageViewRotate.setOnClickListener(onImageViewRotateClick);
-                    imageViewInvert.setOnClickListener(onButtonInvertColorClickListener);
-                    imageViewRebase.setOnClickListener(onImageViewRebase);
+                    binding.holderImageCrop.post(this::initializeCropping);
+                    binding.buttonCrop.setOnClickListener(onButtonCropClickListener);
+                    binding.buttonClose.setOnClickListener(onButtonCloseClickListener);
+                    binding.imageViewRotate.setOnClickListener(onImageViewRotateClick);
+                    binding.imageViewInvert.setOnClickListener(onButtonInvertColorClickListener);
+                    binding.imageViewRebase.setOnClickListener(onImageViewRebase);
                 });
     }
 
     private void initializeCropping() {
-
         bitmapSelectedImage = ScannerConstants.bitmapSelectedImage;
         bitmapTempOriginal = bitmapSelectedImage.copy(bitmapSelectedImage.getConfig(), true);
         ScannerConstants.bitmapSelectedImage = null;
 
-        Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage, frameLayoutHolder.getWidth(), frameLayoutHolder.getHeight());
-        imageView.setImageBitmap(scaledBitmap);
+        Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage, binding.holderImageCrop.getWidth(),
+                binding.holderImageCrop.getHeight());
+        binding.imageView.setImageBitmap(scaledBitmap);
 
-        Bitmap tempBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        Bitmap tempBitmap = ((BitmapDrawable) binding.imageView.getDrawable()).getBitmap();
         Map<Integer, PointF> pointFs = null;
         try {
             pointFs = getEdgePoints(tempBitmap);
-            polygonView.setPoints(pointFs);
-            polygonView.setVisibility(View.VISIBLE);
+            binding.polygonView.setPoints(pointFs);
+            binding.polygonView.setVisibility(View.VISIBLE);
 
             int padding = (int) getResources().getDimension(R.dimen.scanPadding);
 
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(tempBitmap.getWidth() + 2 * padding, tempBitmap.getHeight() + 2 * padding);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    tempBitmap.getWidth() + 2 * padding,
+                    tempBitmap.getHeight() + 2 * padding);
             layoutParams.gravity = Gravity.CENTER;
 
-            polygonView.setLayoutParams(layoutParams);
-            polygonView.setPointColor(getResources().getColor(R.color.blue));
+            binding.polygonView.setLayoutParams(layoutParams);
+            binding.polygonView.setPointColor(getResources().getColor(R.color.blue));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,7 +224,8 @@ public class CropActivity extends AppCompatActivity {
 
     private void invertColor() {
         if (!isInverted) {
-            Bitmap bmpMonochrome = Bitmap.createBitmap(bitmapSelectedImage.getWidth(), bitmapSelectedImage.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bmpMonochrome = Bitmap.createBitmap(bitmapSelectedImage.getWidth(),
+                    bitmapSelectedImage.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bmpMonochrome);
             ColorMatrix ma = new ColorMatrix();
             ma.setSaturation(0);
@@ -257,49 +234,28 @@ public class CropActivity extends AppCompatActivity {
             canvas.drawBitmap(bitmapSelectedImage, 0, 0, paint);
             bitmapSelectedImage = bmpMonochrome.copy(bmpMonochrome.getConfig(), true);
         } else {
-            bitmapSelectedImage = bitmapTempOriginal.copy(bitmapTempOriginal.getConfig(), true);
+            bitmapSelectedImage = bitmapTempOriginal.copy(bitmapTempOriginal.getConfig(),
+                    true);
         }
         isInverted = !isInverted;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "cropped_" + timeStamp + ".png";
-        File myPath = new File(directory, imageFileName);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return directory.getAbsolutePath();
-    }
 
     protected Bitmap getCroppedImage() {
         try {
-            Map<Integer, PointF> points = polygonView.getPoints();
+            Map<Integer, PointF> points = binding.polygonView.getPoints();
 
-            float xRatio = (float) bitmapSelectedImage.getWidth() / imageView.getWidth();
-            float yRatio = (float) bitmapSelectedImage.getHeight() / imageView.getHeight();
+            float xRatio = (float) bitmapSelectedImage.getWidth() / binding.imageView.getWidth();
+            float yRatio = (float) bitmapSelectedImage.getHeight() / binding.imageView.getHeight();
 
-            float x1 = (points.get(0).x) * xRatio;
-            float x2 = (points.get(1).x) * xRatio;
-            float x3 = (points.get(2).x) * xRatio;
-            float x4 = (points.get(3).x) * xRatio;
-            float y1 = (points.get(0).y) * yRatio;
-            float y2 = (points.get(1).y) * yRatio;
-            float y3 = (points.get(2).y) * yRatio;
-            float y4 = (points.get(3).y) * yRatio;
+            float x1 = (Objects.requireNonNull(points.get(0)).x) * xRatio;
+            float x2 = (Objects.requireNonNull(points.get(1)).x) * xRatio;
+            float x3 = (Objects.requireNonNull(points.get(2)).x) * xRatio;
+            float x4 = (Objects.requireNonNull(points.get(3)).x) * xRatio;
+            float y1 = (Objects.requireNonNull(points.get(0)).y) * yRatio;
+            float y2 = (Objects.requireNonNull(points.get(1)).y) * yRatio;
+            float y3 = (Objects.requireNonNull(points.get(2)).y) * yRatio;
+            float y4 = (Objects.requireNonNull(points.get(3)).y) * yRatio;
             return nativeClass.getScannedBitmap(bitmapSelectedImage, x1, y1, x2, y2, x3, y3, x4, y4);
         } catch (Exception e) {
             runOnUiThread(() -> Toast.makeText(CropActivity.this, ScannerConstants.cropError, Toast.LENGTH_SHORT).show());
@@ -315,8 +271,7 @@ public class CropActivity extends AppCompatActivity {
 
     private Map<Integer, PointF> getEdgePoints(Bitmap tempBitmap) throws Exception {
         List<PointF> pointFs = getContourEdgePoints(tempBitmap);
-        Map<Integer, PointF> orderedPoints = orderedValidEdgePoints(tempBitmap, pointFs);
-        return orderedPoints;
+        return orderedValidEdgePoints(tempBitmap, pointFs);
     }
 
     private List<PointF> getContourEdgePoints(Bitmap tempBitmap) {
@@ -343,10 +298,33 @@ public class CropActivity extends AppCompatActivity {
     }
 
     private Map<Integer, PointF> orderedValidEdgePoints(Bitmap tempBitmap, List<PointF> pointFs) {
-        Map<Integer, PointF> orderedPoints = polygonView.getOrderedPoints(pointFs);
-        if (!polygonView.isValidShape(orderedPoints)) {
+        Map<Integer, PointF> orderedPoints = binding.polygonView.getOrderedPoints(pointFs);
+        if (!binding.polygonView.isValidShape(orderedPoints)) {
             orderedPoints = getOutlinePoints(tempBitmap);
         }
         return orderedPoints;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private String saveToInternalStorage(Bitmap bitmapImage) {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "cropped_" + timeStamp + ".png";
+        File myPath = new File(directory, imageFileName);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
     }
 }

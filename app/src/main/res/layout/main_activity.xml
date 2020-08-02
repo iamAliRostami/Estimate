@@ -27,7 +27,8 @@
             android:layout_gravity="right"
             android:gravity="center"
             android:orientation="vertical"
-            android:weightSum="6">
+            android:weightSum="6"
+            tools:ignore="RtlHardcoded">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/image_form"
-                    tools:ignore="NestedWeights" />
+                    tools:ignore="ContentDescription,NestedWeights" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +70,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/image_download"
-                    tools:ignore="NestedWeights" />
+                    tools:ignore="ContentDescription,NestedWeights" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,7 +96,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/image_upload"
-                    tools:ignore="NestedWeights" />
+                    tools:ignore="ContentDescription,NestedWeights" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,8 +113,8 @@
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imageViewPaper"
@@ -122,7 +123,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/image_paper"
-                    tools:ignore="NestedWeights" />
+                    tools:ignore="ContentDescription,NestedWeights" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -148,7 +149,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/image_exit"
-                    tools:ignore="NestedWeights" />
+                    tools:ignore="ContentDescription,NestedWeights" />
 
                 <TextView
                     android:layout_width="wrap_content"

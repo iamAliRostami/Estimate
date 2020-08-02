@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/activity_mid_margin"
     android:layout_marginBottom="@dimen/activity_mid_margin"
-    tools:context=".Activities.ListActivity">
+    tools:context=".activities.ListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

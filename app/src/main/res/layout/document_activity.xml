@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
     android:id="@+id/constraintLayout"
-    tools:context="com.leon.estimate.Activities.DocumentActivity">
+    tools:context="com.leon.estimate.activities.DocumentActivity">
 
     <ScrollView
         android:layout_width="match_parent"

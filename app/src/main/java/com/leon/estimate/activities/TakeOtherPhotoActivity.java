@@ -1,4 +1,4 @@
-package com.leon.estimate.Activities;
+package com.leon.estimate.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,7 +16,6 @@ import android.os.StrictMode;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,11 +26,11 @@ import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.databinding.TakeOtherPhotoActivityBinding;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -47,29 +46,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public final class TakeOtherPhotoActivity extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888;
     private final int GALLERY_REQUEST = 1888;
     private final int IMAGE_CROP_REQUEST = 1234;
     private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
-    @BindView(R.id.button_pick1)
-    Button buttonPick;
-    @BindView(R.id.imageView1)
-    ImageView imageView;
     static String imageFileName;
     String mCurrentPhotoPath;
     boolean replace = false;
     Context context;
+    TakeOtherPhotoActivityBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        setContentView(R.layout.take_other_photo_activity);
-        ButterKnife.bind(this);
+        binding = TakeOtherPhotoActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         context = this;
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -115,8 +108,8 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
-            imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
-            buttonPick.setText("تغییر عکس");
+            binding.imageView1.setImageBitmap(ScannerConstants.bitmapSelectedImage);
+            binding.buttonPick1.setText("تغییر عکس");
             saveTempBitmap(ScannerConstants.bitmapSelectedImage);
             if (ScannerConstants.bitmapSelectedImage != null) {
                 Toast.makeText(this, "انجام شد", Toast.LENGTH_SHORT).show();
@@ -219,7 +212,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
     }
 
     public final void setOnClickListener() {
-        buttonPick.setOnClickListener(it -> {
+        binding.buttonPick1.setOnClickListener(it -> {
             Builder builder = new Builder(TakeOtherPhotoActivity.this);
             builder.setTitle("Carbon");
             builder.setMessage("تصویر را از کجا انتخاب میکنید؟");
