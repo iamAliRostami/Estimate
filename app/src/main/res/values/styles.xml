@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/my_font1</item>
         <item name="background">@drawable/img_background</item>
+        <item name="android:windowBackground">@drawable/img_background</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -4,18 +4,19 @@
     android:id="@+id/constraintLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/activity_mid_margin"
-    android:layout_marginBottom="@dimen/activity_mid_margin"
+    android:layout_gravity="center"
     tools:context=".activities.ListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/activity_large_margin"
         android:divider="@null"
         android:dividerHeight="0dp"
-        tools:ignore="MissingConstraints" />
+        android:foregroundGravity="center"
+        tools:ignore="MissingConstraints"
+        tools:listitem="@layout/item_address_1" />
 
     <TextView
         android:id="@+id/textViewEmpty"

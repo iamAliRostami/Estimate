@@ -3,7 +3,6 @@ package com.leon.estimate.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +40,9 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view;
         if (size % 2 == 0)
-            view = layoutInflater.inflate(R.layout.item_address_1, null);
+            view = layoutInflater.inflate(R.layout.item_address_1, viewGroup, false);
         else
-            view = layoutInflater.inflate(R.layout.item_address_2, null);
+            view = layoutInflater.inflate(R.layout.item_address_2, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
 
         holder.itemView.setOnClickListener(view1 -> {
@@ -83,29 +82,27 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
         viewHolder.textViewMoshtarakMobile.setText(examinerDuties.getMoshtarakMobile());
         viewHolder.textViewNeighbourBillId.setText(examinerDuties.getNeighbourBillId());
 
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
-        viewHolder.textViewName.setTypeface(typeface);
-        viewHolder.textViewPeymayesh.setTypeface(typeface);
-        viewHolder.textViewExaminationDay.setTypeface(typeface);
-        viewHolder.textViewServiceGroup.setTypeface(typeface);
-        viewHolder.textViewAddress.setTypeface(typeface);
-        viewHolder.textViewRadif.setTypeface(typeface);
-        viewHolder.textViewTrackNumber.setTypeface(typeface);
-        viewHolder.textViewNotificationMobile.setTypeface(typeface);
-        viewHolder.textViewMoshtarakMobile.setTypeface(typeface);
-        viewHolder.textViewNeighbourBillId.setTypeface(typeface);
-
-        viewHolder.textViewName.setWidth(width / 6);
-        viewHolder.textViewExaminationDay.setWidth(width / 6);
-        viewHolder.textViewAddress.setWidth(width / 3);
-        viewHolder.textViewServiceGroup.setWidth(width / 6);
-        viewHolder.textViewPeymayesh.setWidth(width / 6);
-
-        viewHolder.textViewRadif.setWidth(width / 4);
-        viewHolder.textViewTrackNumber.setWidth(width / 4);
-        viewHolder.textViewNotificationMobile.setWidth(width / 4);
-        viewHolder.textViewMoshtarakMobile.setWidth(width / 4);
-        viewHolder.textViewNeighbourBillId.setWidth(width / 4);
+//        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
+//        viewHolder.textViewName.setTypeface(typeface);
+//        viewHolder.textViewPeymayesh.setTypeface(typeface);
+//        viewHolder.textViewExaminationDay.setTypeface(typeface);
+//        viewHolder.textViewServiceGroup.setTypeface(typeface);
+//        viewHolder.textViewAddress.setTypeface(typeface);
+//        viewHolder.textViewRadif.setTypeface(typeface);
+//        viewHolder.textViewTrackNumber.setTypeface(typeface);
+//        viewHolder.textViewNotificationMobile.setTypeface(typeface);
+//        viewHolder.textViewMoshtarakMobile.setTypeface(typeface);
+//        viewHolder.textViewNeighbourBillId.setTypeface(typeface);
+//        viewHolder.textViewName.setWidth(width / 6);
+//        viewHolder.textViewExaminationDay.setWidth(width / 6);
+//        viewHolder.textViewAddress.setWidth(width / 3);
+//        viewHolder.textViewServiceGroup.setWidth(width / 6);
+//        viewHolder.textViewPeymayesh.setWidth(width / 6);//
+//        viewHolder.textViewRadif.setWidth(width / 4);
+//        viewHolder.textViewTrackNumber.setWidth(width / 4);
+//        viewHolder.textViewNotificationMobile.setWidth(width / 4);
+//        viewHolder.textViewMoshtarakMobile.setWidth(width / 4);
+//        viewHolder.textViewNeighbourBillId.setWidth(width / 4);
 
         viewHolder.textViewName.setGravity(1);
         viewHolder.textViewPeymayesh.setGravity(1);
