@@ -3,6 +3,8 @@ package com.leon.estimate.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.leon.estimate.Infrastructure.ISharedPreferenceManager;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**

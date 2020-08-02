@@ -30,13 +30,13 @@ import com.leon.estimate.Enums.ErrorHandlerType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
+import com.leon.estimate.Infrastructure.IAbfaService;
+import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.IAbfaService;
-import com.leon.estimate.Utils.ICallback;
 import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initialize();
@@ -69,8 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void initialize() {
         context = this;
-        binding.textViewVersion.setText(getString(R.string.copy_right).concat("  ").
-                concat(getString(R.string.version).concat(" ").concat(BuildConfig.VERSION_NAME)));
+        binding.textViewVersion.setText(getString(R.string.version).concat(" ").concat(BuildConfig.VERSION_NAME));
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
         binding.imageViewPassword.setImageResource(R.drawable.img_password);

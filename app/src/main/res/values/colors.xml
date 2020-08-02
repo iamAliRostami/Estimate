@@ -63,7 +63,7 @@
     <color name="black1">#4d4d4d</color>
     <color name="black_overlay">#66000000</color>
     <color name="black2">#232121</color>
-    <color name="text_color1">#92abca</color>
-    <color name="text_color2">#575757</color>
+    <color name="text_color1">#CFCFCF</color>
+    <color name="text_color2">#4D4C4C</color>
 
 </resources>

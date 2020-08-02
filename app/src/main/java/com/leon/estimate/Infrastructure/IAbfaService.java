@@ -1,9 +1,12 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.Infrastructure;
 
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.Input;
+import com.leon.estimate.Utils.LoginFeedBack;
+import com.leon.estimate.Utils.LoginInfo;
+import com.leon.estimate.Utils.SimpleMessage;
 
 import java.util.ArrayList;
 
