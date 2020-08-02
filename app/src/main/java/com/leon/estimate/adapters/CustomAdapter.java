@@ -1,4 +1,4 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,29 +8,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.Calculation;
 import com.leon.estimate.activities.FormActivity;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private Context context;
-    private List<ExaminerDuties> examinerDuties;
+    private List<Calculation> calculations;
     private int width;
     private int size = 0;
 
-    public CustomAdapter1(Context context, List<ExaminerDuties> examinerDuties, int width) {
+    public CustomAdapter(Context context, List<Calculation> calculations, int width) {
         this.context = context;
-        this.examinerDuties = examinerDuties;
+        this.calculations = calculations;
         this.width = width;
     }
 
@@ -45,43 +44,33 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
         else
             view = layoutInflater.inflate(R.layout.item_address_2, null);
         ViewHolder holder = new ViewHolder(view);
-
         holder.itemView.setOnClickListener(view1 -> {
-            if (examinerDuties.get(i).isPeymayesh()) {
-                Toast.makeText(context, "این مسیر پیمایش شده است.", Toast.LENGTH_LONG).show();
-            } else {
-                Intent intent = new Intent(context, FormActivity.class);
-                intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.get(i).getTrackNumber());
-                intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.get(i).getRequestDictionaryString());
-                context.startActivity(intent);
-            }
+//            Intent intent = new Intent(context, Form1Activity.class);
+            Intent intent = new Intent(context, FormActivity.class);
+            intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), calculations.get(i).getTrackNumber());
+            context.startActivity(intent);
         });
         return holder;
     }
 
 
-    @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ExaminerDuties examinerDuties = this.examinerDuties.get(i);
+        Calculation calculation = calculations.get(i);
 
-        viewHolder.textViewName.setText(examinerDuties.getNameAndFamily());
-        if (examinerDuties.isPeymayesh()) {
+        viewHolder.textViewName.setText(calculation.getNameAndFamily());
+        if (calculation.isPeymayesh())
             viewHolder.textViewPeymayesh.setText("پیمایش شده");
-            viewHolder.textViewPeymayesh.setBackground(context.getDrawable(R.drawable.border_green_2));
-
-        } else {
+        else
             viewHolder.textViewPeymayesh.setText("پیمایش نشده");
-            viewHolder.textViewPeymayesh.setBackground(context.getDrawable(R.drawable.border_red_2));
-        }
-        viewHolder.textViewExaminationDay.setText(examinerDuties.getExaminationDay());
-        viewHolder.textViewServiceGroup.setText(examinerDuties.getServiceGroup());
-        viewHolder.textViewAddress.setText(examinerDuties.getAddress().trim());
-        viewHolder.textViewRadif.setText(examinerDuties.getRadif());
-        viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
-        viewHolder.textViewNotificationMobile.setText(examinerDuties.getNotificationMobile());
-        viewHolder.textViewMoshtarakMobile.setText(examinerDuties.getMoshtarakMobile());
-        viewHolder.textViewNeighbourBillId.setText(examinerDuties.getNeighbourBillId());
+        viewHolder.textViewExaminationDay.setText(calculation.getExaminationDay());
+        viewHolder.textViewServiceGroup.setText(calculation.getServiceGroup());
+        viewHolder.textViewAddress.setText(calculation.getAddress().trim());
+        viewHolder.textViewRadif.setText(calculation.getRadif());
+        viewHolder.textViewTrackNumber.setText(calculation.getTrackNumber());
+        viewHolder.textViewNotificationMobile.setText(calculation.getNotificationMobile());
+        viewHolder.textViewMoshtarakMobile.setText(calculation.getMoshtarakMobile());
+        viewHolder.textViewNeighbourBillId.setText(calculation.getNeighbourBillId());
 
         Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
         viewHolder.textViewName.setTypeface(typeface);
@@ -124,7 +113,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
 
     @Override
     public int getItemCount() {
-        return examinerDuties.size();
+        return calculations.size();
     }
 
     @Override

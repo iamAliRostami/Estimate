@@ -28,11 +28,11 @@ import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
-import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.MyPagerAdapter;
+import com.leon.estimate.Utils.HttpClientWrapperOld;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+import com.leon.estimate.adapters.MyPagerAdapter;
 import com.leon.estimate.databinding.FormActivityBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -132,7 +132,7 @@ public class FormActivity extends AppCompatActivity {
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
         calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-        HttpClientWrapper.callHttpAsync(call, sendCalculation, ErrorHandlerType.ordinary);
+        HttpClientWrapperOld.callHttpAsync(call, sendCalculation, ErrorHandlerType.ordinary);
     }
 
     void updateExamination() {

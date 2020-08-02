@@ -107,5 +107,10 @@
     <string name="bill_id">شناسه قبض</string>
     <string name="other_number">تعداد سایر</string>
     <string name="postal_code">کد پستی</string>
+    <string name="canceled">عملیات متوقف شد.</string>
+    <string name="waiting">لطفا صبر کنید…</string>
+    <string name="turn_internet_on">اینترنت وصل نیست، اینترنت وایفای یا همراه خود را روشن کنید.</string>
+    <string name="access_denialed">مجوز رد شد \n</string>
     <string name="taxfif_number">تعداد تخفیف</string>
+    <string name="not_found">رکوردی یافت نشد!</string>
 </resources>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
@@ -36,7 +37,7 @@ import com.leon.estimate.R;
 import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.DifferentCompanyManager;
-import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.HttpClientWrapperOld;
 import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -67,11 +68,14 @@ public class LoginActivity extends AppCompatActivity {
         initialize();
     }
 
+    @SuppressLint("HardwareIds")
     void initialize() {
         context = this;
-        binding.textViewVersion.setText(getString(R.string.version).concat(" ").concat(BuildConfig.VERSION_NAME));
+        binding.textViewVersion.setText(getString(R.string.version).concat(" ")
+                .concat(BuildConfig.VERSION_NAME));
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
+        deviceId = Build.SERIAL;
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
         binding.imageViewPerson.setImageResource(R.drawable.img_profile);
@@ -85,19 +89,17 @@ public class LoginActivity extends AppCompatActivity {
         setButtonOnLongClickListener();
     }
 
-    @SuppressLint("HardwareIds")
     void attemptLogin() {
-        deviceId = Build.SERIAL;
         Retrofit retrofit = NetworkHelper.getInstance(false, "");
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
-        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(new LoginInfo(deviceId, username, password));
+        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(
+                new LoginInfo(deviceId, username, password));
         LoginFeedBack loginFeedBack = new LoginFeedBack();
-        HttpClientWrapper.callHttpAsync(call, loginFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
+        HttpClientWrapperOld.callHttpAsync(call, loginFeedBack, this,
+                ProgressType.SHOW.getValue(), ErrorHandlerType.login);
     }
 
-    @SuppressLint("HardwareIds")
     void attemptSerial() {
-        deviceId = Build.SERIAL;
         Retrofit retrofit;
         if (DifferentCompanyManager.getActiveCompanyName() == CompanyNames.DEBUG) {
             Gson gson = new GsonBuilder()
@@ -115,42 +117,9 @@ public class LoginActivity extends AppCompatActivity {
         final IAbfaService serial = retrofit.create(IAbfaService.class);
         Call<SimpleMessage> call = serial.signSerial(new LoginInfo(deviceId, username, password));
         SignSerialFeedBack signSerialFeedBack = new SignSerialFeedBack();
-        HttpClientWrapper.callHttpAsync(call, signSerialFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
+        HttpClientWrapperOld.callHttpAsync(call, signSerialFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initialize();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        binding.imageViewPerson.setImageDrawable(null);
-        binding.imageViewPassword.setImageDrawable(null);
-        binding.imageViewLogo.setImageDrawable(null);
-        binding.imageViewUsername.setImageDrawable(null);
-        System.gc();
-        Runtime.getRuntime().gc();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        context = null;
-        System.gc();
-        Runtime.getRuntime().gc();
-    }
-
-    class SignSerialFeedBack
-            implements ICallback<SimpleMessage> {
-        @Override
-        public void execute(SimpleMessage simpleMessage) {
-            Toast.makeText(context, simpleMessage.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void askPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
@@ -163,7 +132,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.access_denialed) +
+                        deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
                 forceClose();
             }
         };
@@ -176,7 +146,9 @@ public class LoginActivity extends AppCompatActivity {
                 .setGotoSettingButtonText("اعطای دسترسی")
                 .setPermissions(
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).check();
     }
 
@@ -287,6 +259,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setButtonOnClickListener() {
         binding.buttonLogin.setOnClickListener(view -> {
+
             boolean cancel = false;
             username = binding.editTextUsername.getText().toString();
             password = binding.editTextPassword.getText().toString();
@@ -303,7 +276,10 @@ public class LoginActivity extends AppCompatActivity {
                 cancel = true;
             }
             if (!cancel) {
-                attemptLogin();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+//                attemptLogin();
             }
         });
     }
@@ -333,6 +309,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initialize();
+    }
+
     class LoginFeedBack
             implements ICallback<com.leon.estimate.Utils.LoginFeedBack> {
         @Override
@@ -351,4 +333,40 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        binding.imageViewPerson.setImageDrawable(null);
+        binding.imageViewPassword.setImageDrawable(null);
+        binding.imageViewLogo.setImageDrawable(null);
+        binding.imageViewUsername.setImageDrawable(null);
+        System.gc();
+        Runtime.getRuntime().gc();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        context = null;
+        System.gc();
+        Runtime.getRuntime().gc();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    class SignSerialFeedBack
+            implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            Toast.makeText(context, simpleMessage.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

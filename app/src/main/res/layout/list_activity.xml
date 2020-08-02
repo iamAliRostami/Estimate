@@ -11,15 +11,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/activity_large_margin"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:scrollbars="vertical"
-        tools:ignore="MissingConstraints">
-
-
-    </androidx.recyclerview.widget.RecyclerView>
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textViewEmpty"
@@ -28,7 +24,7 @@
         android:layout_centerInParent="true"
         android:foregroundGravity="center"
         android:gravity="center"
-        android:text="رکوردی یافت نشد!"
+        android:text="@string/not_found"
         android:textColor="@color/red1"
         android:textSize="@dimen/textSizeLarge"
         android:textStyle="bold"

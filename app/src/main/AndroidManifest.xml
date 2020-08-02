@@ -36,15 +36,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        <activity android:name=".activities.ListActivity" />
         <activity android:name=".activities.DocumentActivity" />
         <activity
             android:name=".activities.FormActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            tools:ignore="LockedOrientationActivity" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activities.BrightnessContrastActivity" />
         <activity android:name=".activities.CropActivity" />
-        <activity android:name=".activities.ListActivity" />
         <activity
             android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"
@@ -58,15 +57,13 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/login"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
             android:name=".activities.TakeOtherPhotoActivity"
             android:label="@string/paper" />

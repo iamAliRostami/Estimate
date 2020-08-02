@@ -54,7 +54,7 @@ import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.CustomDialog;
-import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.HttpClientWrapperOld;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_10_11).build();
-//        readData();
+        readData();
     }
 
     @SuppressLint("MissingPermission")
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         Download download = new Download();
-        HttpClientWrapper.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
+        HttpClientWrapperOld.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
     }
 
     void send() {
@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
             SendCalculation sendCalculation = new SendCalculation();
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-            HttpClientWrapper.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+            HttpClientWrapperOld.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
 
         } else
             Toast.makeText(getApplicationContext(), "مسیری برای تخلیه وجود ندارد", Toast.LENGTH_LONG).show();

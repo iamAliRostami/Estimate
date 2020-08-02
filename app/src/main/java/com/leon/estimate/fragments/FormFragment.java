@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
@@ -110,7 +111,7 @@ public class FormFragment extends Fragment {
                 CalculationUserInput calculationUserInput = prepareField();
                 prepareServices(calculationUserInput);
 //                Log.e("services", calculationUserInput.selectedServicesString);
-                ((FormActivity) getActivity()).nextPage(null, calculationUserInput);
+                ((FormActivity) Objects.requireNonNull(getActivity())).nextPage(null, calculationUserInput);
             }
         });
     }

@@ -3,7 +3,6 @@ package com.leon.estimate.activities;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -20,11 +19,10 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.CustomAdapter1;
+import com.leon.estimate.adapters.CustomAdapter1;
 import com.leon.estimate.databinding.ListActivityBinding;
 
 import java.util.List;
-
 
 public class ListActivity extends AppCompatActivity {
     Context context;
@@ -38,7 +36,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = ListActivityBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.list_activity);
+        setContentView(binding.getRoot());
         initialize();
     }
 
@@ -65,11 +63,11 @@ public class ListActivity extends AppCompatActivity {
 //        examinerDuties = daoExaminerDuties.unreadExaminerDuties();
         examinerDuties = daoExaminerDuties.ExaminerDuties();
         if (this.examinerDuties.isEmpty()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             binding.recyclerView.setVisibility(View.GONE);
             binding.textViewEmpty.setVisibility(View.VISIBLE);
         } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             binding.textViewEmpty.setVisibility(View.GONE);
             binding.recyclerView.setVisibility(View.VISIBLE);
             customAdapter = new CustomAdapter1(context, this.examinerDuties, width);
@@ -78,7 +76,8 @@ public class ListActivity extends AppCompatActivity {
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(this) {
                 @Override
                 public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
-                                                             @NonNull View child, @NonNull Rect rect, boolean immediate) {
+                                                             @NonNull View child,
+                                                             @NonNull Rect rect, boolean immediate) {
                     return false;
                 }
             });
