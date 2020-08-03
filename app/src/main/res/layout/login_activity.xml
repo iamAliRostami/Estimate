@@ -77,6 +77,7 @@
                     android:inputType="text"
                     android:lines="1"
                     android:padding="@dimen/activity_medium_padding"
+                    android:text="test_u1"
                     tools:ignore="Autofill" />
 
                 <ImageView
@@ -108,8 +109,9 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:padding="@dimen/activity_medium_padding"
+
+                    android:text="pspihp"
                     tools:ignore="Autofill" />
-                <!--                android:text="123456"-->
 
                 <ImageView
                     android:id="@+id/imageViewPassword"
@@ -138,7 +140,7 @@
                 android:layout_marginRight="@dimen/_30sdp"
                 android:background="@drawable/border_blue_1"
                 android:text="@string/login"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color1"
                 android:textSize="@dimen/textSizeLarge"
                 android:textStyle="bold" />
         </LinearLayout>

@@ -2,6 +2,7 @@ package com.leon.estimate.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.leon.estimate.Enums.CompanyNames;
 
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +51,7 @@ public final class NetworkHelper {
                 .create();
         String baseUrl = DifferentCompanyManager.getBaseUrl(DifferentCompanyManager.getActiveCompanyName());
         if (!b)
-            baseUrl = DifferentCompanyManager.getLocalBaseUrl(DifferentCompanyManager.getActiveCompanyName());
+            baseUrl = DifferentCompanyManager.getLocalBaseUrl(CompanyNames.SEPANO);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(token))

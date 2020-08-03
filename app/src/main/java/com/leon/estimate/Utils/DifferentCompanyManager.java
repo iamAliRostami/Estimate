@@ -100,6 +100,7 @@ public class DifferentCompanyManager {
                 return "http://217.66.195.75/";
             case ESF:
                 return "http://172.18.12.14:100";
+//                return "http://172.18.12.121";
             case DEBUG:
                 return "http://192.168.43.185:45458/";
             case ESF_MAP:
@@ -137,6 +138,8 @@ public class DifferentCompanyManager {
 //                return "http://172.18.12.121";
             case ESF_MAP:
                 return "http://172.18.12.242/osm_tiles/";
+            case SEPANO:
+                return "http://172.18.12.4:5002/";
             default:
                 throw new UnsupportedOperationException();
         }

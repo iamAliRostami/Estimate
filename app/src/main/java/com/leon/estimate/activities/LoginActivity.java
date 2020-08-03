@@ -20,36 +20,33 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.location.LocationManagerCompat;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.BuildConfig;
-import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
-import com.leon.estimate.Enums.ErrorHandlerType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
-import com.leon.estimate.Utils.DifferentCompanyManager;
-import com.leon.estimate.Utils.HttpClientWrapperOld;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
-import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.LoginActivityBinding;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     LoginActivityBinding binding;
@@ -62,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initialize();
@@ -90,34 +86,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void attemptLogin() {
-        Retrofit retrofit = NetworkHelper.getInstance(false, "");
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
         Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(
                 new LoginInfo(deviceId, username, password));
+//        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(
+//                username, password);
         LoginFeedBack loginFeedBack = new LoginFeedBack();
-        HttpClientWrapperOld.callHttpAsync(call, loginFeedBack, this,
-                ProgressType.SHOW.getValue(), ErrorHandlerType.login);
-    }
-
-    void attemptSerial() {
-        Retrofit retrofit;
-        if (DifferentCompanyManager.getActiveCompanyName() == CompanyNames.DEBUG) {
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-            String baseUrl = "http://81.90.148.25/";
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .client(NetworkHelper.getHttpClient(""))
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-        } else {
-            retrofit = NetworkHelper.getInstance(true, "");
-        }
-        final IAbfaService serial = retrofit.create(IAbfaService.class);
-        Call<SimpleMessage> call = serial.signSerial(new LoginInfo(deviceId, username, password));
-        SignSerialFeedBack signSerialFeedBack = new SignSerialFeedBack();
-        HttpClientWrapperOld.callHttpAsync(call, signSerialFeedBack, this, ProgressType.SHOW.getValue(), ErrorHandlerType.login);
+        GetError error = new GetError();
+        GetErrorIncomplete incomplete = new GetErrorIncomplete();
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+                loginFeedBack, incomplete, error);
     }
 
 
@@ -276,43 +255,21 @@ public class LoginActivity extends AppCompatActivity {
                 cancel = true;
             }
             if (!cancel) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-//                attemptLogin();
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent);
+//                finish();
+                attemptLogin();
             }
         });
     }
 
     private void setButtonOnLongClickListener() {
         binding.buttonLogin.setOnLongClickListener(view -> {
-            boolean cancel = false;
-            username = binding.editTextUsername.getText().toString();
-            password = binding.editTextPassword.getText().toString();
-            if (username.length() < 1) {
-                viewFocus = binding.editTextUsername;
-                viewFocus.requestFocus();
-                binding.editTextUsername.setError(getString(R.string.error_empty));
-                cancel = true;
-            }
-            if (!cancel && password.length() < 1) {
-                viewFocus = binding.editTextPassword;
-                viewFocus.requestFocus();
-                binding.editTextPassword.setError(getString(R.string.error_empty));
-                cancel = true;
-            }
-            if (!cancel) {
-//                attemptSerial();
-//                GpsEnabled();
-            }
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
             return false;
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initialize();
     }
 
     class LoginFeedBack
@@ -335,6 +292,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        context = null;
+        System.gc();
+        Runtime.getRuntime().gc();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         binding.imageViewPerson.setImageDrawable(null);
@@ -350,22 +319,32 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        context = null;
-        System.gc();
-        Runtime.getRuntime().gc();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
+    protected void onStart() {
+        super.onStart();
+        initialize();
     }
 
-    class SignSerialFeedBack
-            implements ICallback<SimpleMessage> {
+    class GetErrorIncomplete implements ICallbackIncomplete<com.leon.estimate.Utils.LoginFeedBack> {
         @Override
-        public void execute(SimpleMessage simpleMessage) {
-            Toast.makeText(context, simpleMessage.getMessage(), Toast.LENGTH_SHORT).show();
+        public void executeIncomplete(Response<com.leon.estimate.Utils.LoginFeedBack> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, LoginActivity.this, error,
+                    LoginActivity.this.getString(R.string.dear_user),
+                    LoginActivity.this.getString(R.string.login),
+                    LoginActivity.this.getString(R.string.accepted));
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            new CustomDialog(DialogType.YellowRedirect, LoginActivity.this, error,
+                    LoginActivity.this.getString(R.string.dear_user),
+                    LoginActivity.this.getString(R.string.login),
+                    LoginActivity.this.getString(R.string.accepted));
         }
     }
 

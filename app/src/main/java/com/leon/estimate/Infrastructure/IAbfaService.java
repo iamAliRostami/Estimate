@@ -15,6 +15,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -133,6 +134,12 @@ public interface IAbfaService {
 
     @POST("/Auth/Account/login")
     Call<LoginFeedBack> login(@Body LoginInfo logininfo);
+
+    @POST("/SepanoDMS/V1/Login/{username}/{password}")
+    Call<LoginFeedBack> login(
+            @Path("username") String username,
+            @Path("password") String password
+    );
 
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(
