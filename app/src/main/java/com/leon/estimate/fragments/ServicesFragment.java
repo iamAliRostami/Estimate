@@ -3,7 +3,9 @@ package com.leon.estimate.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
@@ -33,7 +36,7 @@ import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.adapters.CheckBoxAdapter;
-import com.leon.estimate.databinding.FormFragmentBinding;
+import com.leon.estimate.databinding.ServicesFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
@@ -44,12 +47,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class FormFragment extends Fragment {
+public class ServicesFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
-
+    ServicesFragmentBinding binding;
+    private String mParam2;
     private Context context;
     private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
-    //    private Typeface typeface;
+    private Typeface typeface;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
@@ -57,14 +61,15 @@ public class FormFragment extends Fragment {
     private List<TaxfifDictionary> taxfifDictionaries;
     private ExaminerDuties examinerDuties;
     private List<RequestDictionary> requestDictionaries;
-    FormFragmentBinding binding;
+    //    PersianCalendar persianCalendar = new PersianCalendar();
+//    private List<ServiceDictionary> serviceDictionaries;
 
-    public FormFragment() {
+    public ServicesFragment() {
 
     }
 
-    public static FormFragment newInstance(ExaminerDuties examinerDuties, String param2) {
-        FormFragment fragment = new FormFragment();
+    public static ServicesFragment newInstance(ExaminerDuties examinerDuties, String param2) {
+        ServicesFragment fragment = new ServicesFragment();
         Bundle args = new Bundle();
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
@@ -81,14 +86,15 @@ public class FormFragment extends Fragment {
             String json = getArguments().getString(BundleEnum.REQUEST.getValue());
             Gson gson = new GsonBuilder().create();
             examinerDuties = gson.fromJson(json, ExaminerDuties.class);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = getActivity();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FormFragmentBinding.inflate(inflater, container, false);
+        binding = ServicesFragmentBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
     }
@@ -228,7 +234,7 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
+                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -257,7 +263,7 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
+                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -286,7 +292,7 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
+                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -315,7 +321,7 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
+                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -351,6 +357,51 @@ public class FormFragment extends Fragment {
         binding.checkbox2.setChecked(examinerDuties.isAdamTaxfifFazelab());
         binding.checkbox3.setChecked(examinerDuties.isEnsheabQeirDaem());
     }
+
+    @SuppressLint("NewApi")
+    private void initializeServicesCheckBox1() {
+        Gson gson = new GsonBuilder().create();
+        requestDictionaries = Arrays.asList(gson.fromJson(examinerDuties.getRequestDictionaryString(), RequestDictionary[].class));
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        String tag;
+        int padding = (int) context.getResources().getDimension(R.dimen.activity_mid_padding);
+        int margin = (int) context.getResources().getDimension(R.dimen.activity_mid_margin);
+//        int textSize = (int) context.getResources().getDimension(R.dimen.textSizeSmall);
+        int textSize = 20;
+
+        for (int i = 0; i < requestDictionaries.size(); i++) {
+            CheckBox checkBox = new CheckBox(context);
+//            checkBox.setGravity(1);
+            checkBox.setText(requestDictionaries.get(i).getTitle());
+            checkBox.setTextSize(textSize);
+            Log.e("text ", requestDictionaries.get(i).getTitle());
+            checkBox.setTypeface(typeface);
+            checkBox.setTextColor(context.getColor(R.color.blue4));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(margin, margin, margin, margin);
+//            checkBox.setLayoutParams(params);
+//            checkBox.setPadding(padding, padding, padding, padding);
+            if (requestDictionaries.get(i).isSelected())
+                checkBox.setChecked(true);
+            checkBoxes.add(checkBox);
+            linearLayout.addView(checkBox);
+            if (i % 2 == 1) {
+                tag = "linearLayout".concat(String.valueOf(i));
+                linearLayout.setTag(tag);
+                linearLayout.setGravity(1);
+                binding.linearLayout2.addView(linearLayout);
+                linearLayout = new LinearLayout(context);
+            } else if (i == requestDictionaries.size() - 1) {
+                tag = "linearLayout".concat(String.valueOf(i));
+                linearLayout.setTag(tag);
+                linearLayout.setGravity(1);
+                binding.linearLayout2.addView(linearLayout);
+            }
+        }
+    }
+
 
     @SuppressLint("NewApi")
     private void initializeServicesCheckBox() {

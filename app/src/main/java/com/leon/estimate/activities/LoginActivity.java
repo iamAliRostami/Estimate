@@ -232,7 +232,8 @@ public class LoginActivity extends AppCompatActivity {
             if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
                 binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
             else
-                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         });
     }
 

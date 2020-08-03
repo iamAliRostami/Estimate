@@ -11,6 +11,8 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.fragments.FormFragment;
 import com.leon.estimate.fragments.MapFragment;
+import com.leon.estimate.fragments.PersonalFragment;
+import com.leon.estimate.fragments.ServicesFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,13 +38,13 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                return FormFragment.newInstance(examinerDuties, "Page # 1");
+                return ServicesFragment.newInstance(examinerDuties, "Page # 1");
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return MapFragment.newInstance(examinerDuties, "Page # 2");
+                return FormFragment.newInstance(examinerDuties, "Page # 2");
             case 2: // Fragment # 1 - This will show SecondFragment
-//                return Form2Fragment.newInstance("2", "Page # 3");
+                return PersonalFragment.newInstance(examinerDuties, "Page # 3");
             case 3: // Fragment # 1 - This will show SecondFragment
-//                return Form4Fragment.newInstance("4", "Page # 4");
+                return MapFragment.newInstance(examinerDuties, "Page # 4");
             default:
                 return null;
         }

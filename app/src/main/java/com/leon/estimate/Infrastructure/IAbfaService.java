@@ -141,6 +141,26 @@ public interface IAbfaService {
             @Path("password") String password
     );
 
+    @GET("/SepanoDMS/V1/GetDoc/{token}")
+    Call<ArrayList<String>> getDoc(
+            @Path("token") String token
+    );
+
+    @GET("/SepanoDms/V1/GetTitles/{token}")
+    Call<ArrayList<String>> getTitle(
+            @Path("token") String token
+    );
+
+    @GET("/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
+    Call<ArrayList<String>> getDocsListHighQuality(
+            @Path("token") String token
+    );
+
+    @GET("/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
+    Call<ArrayList<String>> getDocsListThumbnail(
+            @Path("token") String token
+    );
+
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(
             @Query("deviceId") String deviceId);
