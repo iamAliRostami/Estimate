@@ -8,6 +8,7 @@ public enum SharedReferenceKeys {
     USERNAME("username"),
     PASSWORD("password"),
     TOKEN("token"),
+    TOKEN_FOR_FILE("token_for_file"),
     REFRESH_TOKEN("refresh_token"),
     THEME_STABLE("theme_stable"),
     THEME_TEMPORARY("theme_temporary"),

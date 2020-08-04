@@ -39,6 +39,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name=".activities.ListActivity" />
         <activity android:name=".activities.DocumentActivity" />
+        <activity android:name=".activities.DocumentActivity1" />
         <activity
             android:name=".activities.FormActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />

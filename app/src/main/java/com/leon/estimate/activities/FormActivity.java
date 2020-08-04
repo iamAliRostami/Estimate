@@ -121,8 +121,8 @@ public class FormActivity extends AppCompatActivity {
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
         updateExamination();
 
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
-                SharedReferenceNames.ACCOUNT.getValue());
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
+                getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
         Retrofit retrofit = NetworkHelper.getInstance(false, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);

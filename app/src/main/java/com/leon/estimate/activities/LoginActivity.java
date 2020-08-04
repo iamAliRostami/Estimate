@@ -266,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setButtonOnLongClickListener() {
         binding.buttonLogin.setOnLongClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
             startActivity(intent);
             finish();
             return false;
@@ -289,6 +289,32 @@ public class LoginActivity extends AppCompatActivity {
                 sharedPreferenceManager.putData(SharedReferenceKeys.REFRESH_TOKEN.getValue(), loginFeedBack.getRefresh_token());
                 GpsEnabled();
             }
+        }
+    }
+
+    class GetErrorIncomplete implements ICallbackIncomplete<com.leon.estimate.Utils.LoginFeedBack> {
+        @Override
+        public void executeIncomplete(Response<com.leon.estimate.Utils.LoginFeedBack> response) {
+
+            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, LoginActivity.this, error,
+                    LoginActivity.this.getString(R.string.dear_user),
+                    LoginActivity.this.getString(R.string.login),
+                    LoginActivity.this.getString(R.string.accepted));
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            new CustomDialog(DialogType.YellowRedirect, LoginActivity.this, error,
+                    LoginActivity.this.getString(R.string.dear_user),
+                    LoginActivity.this.getString(R.string.login),
+                    LoginActivity.this.getString(R.string.accepted));
         }
     }
 
@@ -323,30 +349,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initialize();
-    }
-
-    class GetErrorIncomplete implements ICallbackIncomplete<com.leon.estimate.Utils.LoginFeedBack> {
-        @Override
-        public void executeIncomplete(Response<com.leon.estimate.Utils.LoginFeedBack> response) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, LoginActivity.this, error,
-                    LoginActivity.this.getString(R.string.dear_user),
-                    LoginActivity.this.getString(R.string.login),
-                    LoginActivity.this.getString(R.string.accepted));
-        }
-    }
-
-    class GetError implements ICallbackError {
-        @Override
-        public void executeError(Throwable t) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageTotal(t);
-            new CustomDialog(DialogType.YellowRedirect, LoginActivity.this, error,
-                    LoginActivity.this.getString(R.string.dear_user),
-                    LoginActivity.this.getString(R.string.login),
-                    LoginActivity.this.getString(R.string.accepted));
-        }
     }
 
 }

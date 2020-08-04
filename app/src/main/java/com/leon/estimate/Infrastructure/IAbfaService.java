@@ -4,12 +4,14 @@ import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.Input;
+import com.leon.estimate.Tables.Uri;
 import com.leon.estimate.Utils.LoginFeedBack;
 import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.SimpleMessage;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -183,5 +185,9 @@ public interface IAbfaService {
     @POST("/MoshtarakinApi/ExaminationManager/SetExaminationInfo")
     Call<SimpleMessage> SetExaminationInfo(
             @Body CalculationUserInput calculationUserInput);
+
+    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/PHPSESSID=k8a8m5q2gh2k96mhfs6qtcnnv3; remember_me=5660bce40fb96587ad34e559a7383933")
+    Call<ResponseBody> GetDoc(@Body Uri uri);
+
 }
 

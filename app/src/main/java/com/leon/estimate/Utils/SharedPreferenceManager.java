@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.leon.estimate.Infrastructure.ISharedPreferenceManager;
 
+import java.util.Objects;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -24,9 +26,9 @@ public class SharedPreferenceManager implements ISharedPreferenceManager {
 
         if (appPrefs == null) {
             return false;
-        } else if (appPrefs.getString(key, "").length() < 1) {
+        } else if (Objects.requireNonNull(appPrefs.getString(key, "")).length() < 1) {
             return false;
-        } else return !appPrefs.getString(key, "").isEmpty();
+        } else return !Objects.requireNonNull(appPrefs.getString(key, "")).isEmpty();
     }
 
     @Override
