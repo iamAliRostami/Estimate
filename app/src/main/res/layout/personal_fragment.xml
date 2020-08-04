@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/activity_mid_margin"
         android:layout_marginRight="@dimen/activity_mid_margin"
-        android:gravity="center"
+        android:gravity="top|center_horizontal"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
@@ -28,9 +28,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_mid_margin"
-            android:layout_weight="1"
             android:background="@drawable/border_gray_1"
             android:padding="@dimen/activity_mid_padding"
             android:paddingTop="@dimen/activity_mid_padding"
@@ -185,7 +184,7 @@
                                 android:gravity="center"
                                 android:inputType="phone"
                                 android:lines="1"
-                                android:maxLength="9"
+                                android:maxLength="8"
                                 android:maxLines="1"
                                 android:singleLine="true" />
 

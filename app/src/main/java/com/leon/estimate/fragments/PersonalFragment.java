@@ -1,10 +1,7 @@
 package com.leon.estimate.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,28 +18,14 @@ import com.leon.estimate.activities.FormActivity1;
 import com.leon.estimate.databinding.PersonalFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 
 public class PersonalFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     PersonalFragmentBinding binding;
-    private double latitude, longitude;
-    private LocationManager locationManager;
-    private int polygonIndex, placeIndex;
-    private MyLocationNewOverlay locationOverlay;
-    private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-    //    private View findViewById;
-    private MapView mapView = null;
     private Context context;
-    //    private ExaminerDuties examinerDuties;
-    private CalculationUserInput calculationUserInput;
 
     public PersonalFragment() {
     }
@@ -64,7 +47,6 @@ public class PersonalFragment extends Fragment {
         context = getActivity();
         ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_malek)));
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     @Override
@@ -77,32 +59,29 @@ public class PersonalFragment extends Fragment {
     }
 
     private void initialize() {
-//        binding.buttonNext.setOnClickListener(v -> {
-////            mapView.setDrawingCacheEnabled(true);
-////            Bitmap bitmap = mapView.getDrawingCache(true);
-////            ((FormActivity) getActivity()).nextPage(bitmap);
-//            if (prepareForm()) {
-//                calculationUserInput = new CalculationUserInput();
-//                calculationUserInput.nationalId = binding.editTextNationNumber.getText().toString();
-//                calculationUserInput.firstName = binding.editTextName.getText().toString();
-//                calculationUserInput.sureName = binding.editTextFamily.getText().toString();
-//                calculationUserInput.fatherName = binding.editTextFatherName.getText().toString();
-//                calculationUserInput.postalCode = binding.editTextPostalCode.getText().toString();
-//                calculationUserInput.radif = binding.editTextRadif.getText().toString();
-//                calculationUserInput.phoneNumber = binding.editTextPhone.getText().toString();
-//                calculationUserInput.mobile = binding.editTextMobile.getText().toString();
-//                calculationUserInput.address = binding.editTextAddress.getText().toString();
-//                calculationUserInput.description = binding.editTextDescription.getText().toString();
-//                ((FormActivity) Objects.requireNonNull(getActivity())).nextPage(
-//                        convertMapToBitmap(), calculationUserInput);
-//            }
-//        });
         initializeField();
     }
 
-    private Bitmap convertMapToBitmap() {
-        mapView.setDrawingCacheEnabled(true);
-        return mapView.getDrawingCache(true);
+    public CalculationUserInput setOnButtonNextClickListener() {
+        if (prepareForm()) {
+            return prepareField();
+        }
+        return null;
+    }
+
+    private CalculationUserInput prepareField() {
+        CalculationUserInput calculationUserInput = new CalculationUserInput();
+        calculationUserInput.nationalId = binding.editTextNationNumber.getText().toString();
+        calculationUserInput.firstName = binding.editTextName.getText().toString();
+        calculationUserInput.sureName = binding.editTextFamily.getText().toString();
+        calculationUserInput.fatherName = binding.editTextFatherName.getText().toString();
+        calculationUserInput.postalCode = binding.editTextPostalCode.getText().toString();
+        calculationUserInput.radif = binding.editTextRadif.getText().toString();
+        calculationUserInput.phoneNumber = binding.editTextPhone.getText().toString();
+        calculationUserInput.mobile = binding.editTextMobile.getText().toString();
+        calculationUserInput.address = binding.editTextAddress.getText().toString();
+        calculationUserInput.description = binding.editTextDescription.getText().toString();
+        return calculationUserInput;
     }
 
     private boolean prepareForm() {
@@ -162,6 +141,7 @@ public class PersonalFragment extends Fragment {
         binding.editTextPostalCode.setText(FormActivity1.examinerDuties.getPostalCode());
         binding.editTextRadif.setText(FormActivity1.examinerDuties.getRadif());
     }
+
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);

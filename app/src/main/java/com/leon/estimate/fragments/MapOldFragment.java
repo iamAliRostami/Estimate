@@ -28,7 +28,7 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.activities.FormActivity;
-import com.leon.estimate.databinding.MapFragmentBinding;
+import com.leon.estimate.databinding.MapFragmentOldBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -58,7 +58,7 @@ public class MapOldFragment extends Fragment implements LocationListener {
     private static final String ARG_PARAM2 = "param2";
     List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
     String trackNumber;
-    MapFragmentBinding binding;
+    MapFragmentOldBinding binding;
     private double latitude;
     private double longitude;
     private LocationManager locationManager;
@@ -103,7 +103,7 @@ public class MapOldFragment extends Fragment implements LocationListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         findViewById = inflater.inflate(R.layout.map_fragment, container, false);
-        binding = MapFragmentBinding.inflate(inflater, container, false);
+        binding = MapFragmentOldBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
     }

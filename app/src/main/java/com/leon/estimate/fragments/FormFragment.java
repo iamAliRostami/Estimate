@@ -86,7 +86,6 @@ public class FormFragment extends Fragment {
 
     private void initialize() {
         initializeSpinner();
-        setOnButtonNextClickListener();
         setOnEditText19ClickListener();
     }
 

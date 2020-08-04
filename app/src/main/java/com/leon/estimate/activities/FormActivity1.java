@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -98,9 +99,9 @@ public class FormActivity1 extends AppCompatActivity {
                         Toast.makeText(context, "حداقل یکی از سرویس ها را انتخاب کنید.", Toast.LENGTH_LONG).show();
                     break;
                 case 2:
-                    FormFragment fragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
-                    if (fragment != null && fragment.setOnButtonNextClickListener() != null) {
-                        calculationUserInput = fragment.setOnButtonNextClickListener();
+                    FormFragment formFragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    if (formFragment != null && formFragment.setOnButtonNextClickListener() != null) {
+                        calculationUserInput = formFragment.setOnButtonNextClickListener();
                         calculationUserInput.selectedServicesString = calculationUserInputTemp.selectedServicesString;
                         calculationUserInput.selectedServicesObject = calculationUserInputTemp.selectedServicesObject;
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -110,13 +111,35 @@ public class FormActivity1 extends AppCompatActivity {
                     }
                     break;
                 case 3:
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, new MapFragment());
-                    fragmentTransaction.commit();
-                    pageNumber = pageNumber + 1;
+                    PersonalFragment personalFragment = (PersonalFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    if (personalFragment != null && personalFragment.setOnButtonNextClickListener() != null) {
+                        calculationUserInputTemp = personalFragment.setOnButtonNextClickListener();
+
+                        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+                        calculationUserInput.firstName = calculationUserInputTemp.firstName;
+                        calculationUserInput.sureName = calculationUserInputTemp.sureName;
+                        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
+                        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+                        calculationUserInput.radif = calculationUserInputTemp.radif;
+                        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+                        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+                        calculationUserInput.address = calculationUserInputTemp.address;
+                        calculationUserInput.description = calculationUserInputTemp.description;
+
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment, new MapFragment());
+                        fragmentTransaction.commit();
+                        pageNumber = pageNumber + 1;
+                    }
                     break;
                 case 4:
-                    Intent intent = new Intent(context, DocumentActivity.class);
+                    MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
+                    if (mapFragment != null) {
+                        intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(),
+                                convertBitmapToByte(mapFragment.convertMapToBitmap()));
+                    }
+                    prepareToSend();
                     startActivity(intent);
                     finish();
                     break;
@@ -162,9 +185,11 @@ public class FormActivity1 extends AppCompatActivity {
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
         updateExamination();
 
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        SharedPreferenceManager sharedPreferenceManager =
+                new SharedPreferenceManager(getApplicationContext(),
+                        SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         SendCalculation sendCalculation = new SendCalculation();
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
@@ -217,6 +242,7 @@ public class FormActivity1 extends AppCompatActivity {
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
+            Log.e("simple Message", simpleMessage.getMessage());
             MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                     .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();

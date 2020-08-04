@@ -81,6 +81,10 @@ public class DocumentActivity extends AppCompatActivity {
         binding = DocumentActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
+        if (getIntent().getExtras() != null) {
+            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, Objects.requireNonNull(bytes).length);
+        }
         if (checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -89,8 +93,6 @@ public class DocumentActivity extends AppCompatActivity {
                         != PackageManager.PERMISSION_GRANTED) {
             askPermission();
         } else {
-            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
-            bitmap = BitmapFactory.decodeByteArray(bytes, 0, Objects.requireNonNull(bytes).length);
             initialize();
         }
     }

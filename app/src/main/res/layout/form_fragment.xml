@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/activity_mid_margin"
         android:layout_marginRight="@dimen/activity_mid_margin"
-        android:gravity="center"
+        android:gravity="top|center_horizontal"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
@@ -20,7 +20,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_large_margin"
-            android:gravity="center"
             android:text="@string/moshakhasat_melk"
             android:textColor="@color/blue4"
             android:textSize="@dimen/textSizeHuge"

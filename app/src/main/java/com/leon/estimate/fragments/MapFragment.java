@@ -16,18 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
-import com.leon.estimate.activities.FormActivity;
+import com.leon.estimate.activities.FormActivity1;
 import com.leon.estimate.databinding.MapFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,10 +35,8 @@ import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -59,18 +54,14 @@ public class MapFragment extends Fragment implements LocationListener {
     private double latitude;
     private double longitude;
     private LocationManager locationManager;
-    List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
-    String trackNumber;
+    //    List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
+//    String trackNumber;
     private int polygonIndex;
     private int placeIndex;
     private MyLocationNewOverlay locationOverlay;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     MapFragmentBinding binding;
-    private View findViewById;
-    private MapView mapView = null;
     private Context context;
-    private ExaminerDuties examinerDuties;
-    private CalculationUserInput calculationUserInput;
 
     public MapFragment() {
     }
@@ -89,20 +80,16 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String json = getArguments().getString(BundleEnum.REQUEST.getValue());
-            Gson gson = new GsonBuilder().create();
-            examinerDuties = gson.fromJson(json, ExaminerDuties.class);
-            String mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         context = getActivity();
+        ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
+                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.location)));
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        findViewById = inflater.inflate(R.layout.map_fragment, container, false);
+//        findViewById = inflater.inflate(R.layout.map_fragment, container, false);
         binding = MapFragmentBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
@@ -110,90 +97,11 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private void initialize() {
         initializeMap();
-        binding.buttonNext.setOnClickListener(v -> {
-//            mapView.setDrawingCacheEnabled(true);
-//            Bitmap bitmap = mapView.getDrawingCache(true);
-//            ((FormActivity) getActivity()).nextPage(bitmap);
-            if (prepareForm()) {
-                calculationUserInput = new CalculationUserInput();
-                calculationUserInput.nationalId = binding.editTextNationNumber.getText().toString();
-                calculationUserInput.firstName = binding.editTextName.getText().toString();
-                calculationUserInput.sureName = binding.editTextFamily.getText().toString();
-                calculationUserInput.fatherName = binding.editTextFatherName.getText().toString();
-                calculationUserInput.postalCode = binding.editTextPostalCode.getText().toString();
-                calculationUserInput.radif = binding.editTextRadif.getText().toString();
-                calculationUserInput.phoneNumber = binding.editTextPhone.getText().toString();
-                calculationUserInput.mobile = binding.editTextMobile.getText().toString();
-                calculationUserInput.address = binding.editTextAddress.getText().toString();
-                calculationUserInput.description = binding.editTextDescription.getText().toString();
-                ((FormActivity) Objects.requireNonNull(getActivity())).nextPage(
-                        convertMapToBitmap(), calculationUserInput);
-            }
-        });
-        initializeField();
     }
 
-    private Bitmap convertMapToBitmap() {
-        mapView.setDrawingCacheEnabled(true);
-        return mapView.getDrawingCache(true);
-    }
-
-    private boolean prepareForm() {
-        return checkIsNoEmpty(binding.editTextShenasname)
-                && checkIsNoEmpty(binding.editTextName)
-                && checkIsNoEmpty(binding.editTextFamily)
-                && checkIsNoEmpty(binding.editTextFatherName)
-                && checkIsNoEmpty(binding.editTextEshterak)
-                && checkIsNoEmpty(binding.editTextRadif)
-                && checkIsNoEmpty(binding.editTextAddress)
-                && checkOtherIsNoEmpty()
-                ;
-    }
-
-    private boolean checkIsNoEmpty(EditText editText) {
-        View focusView;
-        if (editText.getText().toString().length() < 1) {
-            focusView = editText;
-            focusView.requestFocus();
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkOtherIsNoEmpty() {
-        View focusView;
-        if (binding.editTextNationNumber.getText().toString().length() < 10) {
-            focusView = binding.editTextNationNumber;
-            focusView.requestFocus();
-            return false;
-        } else if (binding.editTextPostalCode.getText().toString().length() < 10) {
-            focusView = binding.editTextPostalCode;
-            focusView.requestFocus();
-            return false;
-        } else if (binding.editTextPhone.getText().toString().length() < 8) {
-            focusView = binding.editTextPhone;
-            focusView.requestFocus();
-            return false;
-        } else if (binding.editTextMobile.getText().toString().length() < 9) {
-            focusView = binding.editTextMobile;
-            focusView.requestFocus();
-            return false;
-        }
-        return true;
-    }
-
-    private void initializeField() {
-        binding.editTextAddress.setText(examinerDuties.getAddress());
-        binding.editTextName.setText(examinerDuties.getFirstName());
-        binding.editTextFamily.setText(examinerDuties.getSureName());
-        binding.editTextNationNumber.setText(examinerDuties.getNationalId());
-        binding.editTextFatherName.setText(examinerDuties.getFatherName());
-        binding.editTextDescription.setText(examinerDuties.getDescription());
-        binding.editTextPhone.setText(examinerDuties.getPhoneNumber());
-        binding.editTextMobile.setText(examinerDuties.getMobile());
-        binding.editTextEshterak.setText(examinerDuties.getEshterak().trim());
-        binding.editTextPostalCode.setText(examinerDuties.getPostalCode());
-        binding.editTextRadif.setText(examinerDuties.getRadif());
+    public Bitmap convertMapToBitmap() {
+        binding.mapView.setDrawingCacheEnabled(true);
+        return binding.mapView.getDrawingCache(true);
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -209,18 +117,18 @@ public class MapFragment extends Fragment implements LocationListener {
         wayPoints.add(endPoint);
         Road road = roadManager.getRoad(wayPoints);
         Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-        mapView.getOverlays().add(roadOverlay);
-        mapView.invalidate();
+        binding.mapView.getOverlays().add(roadOverlay);
+        binding.mapView.invalidate();
     }
 
     @SuppressLint("MissingPermission")
     private void initializeMap() {
-        mapView = findViewById.findViewById(R.id.mapView);
+//        mapView = findViewById.findViewById(R.id.mapView);
 //        mapView.setTileSource(TileSourceFactory.MAPNIK);
 //        mapView.setTileSource(CUSTOM);
-        mapView.setBuiltInZoomControls(true);
-        mapView.setMultiTouchControls(true);
-        IMapController mapController = mapView.getController();
+        binding.mapView.setBuiltInZoomControls(true);
+        binding.mapView.setMultiTouchControls(true);
+        IMapController mapController = binding.mapView.getController();
         mapController.setZoom(19.5);
 
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
@@ -236,10 +144,10 @@ public class MapFragment extends Fragment implements LocationListener {
         GeoPoint startPoint = new GeoPoint(latitude, longitude);
 //        startPoint = new GeoPoint(48.8583, 2.2944);
         mapController.setCenter(startPoint);
-        locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+        locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), binding.mapView);
         locationOverlay.enableMyLocation();
-        mapView.getOverlays().add(locationOverlay);
-        mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
+        binding.mapView.getOverlays().add(locationOverlay);
+        binding.mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
                 Log.e("location1", p.toString());
@@ -258,19 +166,19 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private void addPlace(GeoPoint p) {
         GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
-        Marker startMarker = new Marker(mapView);
+        Marker startMarker = new Marker(binding.mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 //        mapView.getOverlays().add(startMarker);
         if (placeIndex != 0) {//TODO crash on paging...
-            mapView.getOverlayManager().remove(placeIndex);
+            binding.mapView.getOverlayManager().remove(placeIndex);
         }
-        mapView.getOverlayManager().add(startMarker);
-        placeIndex = mapView.getOverlays().size() - 1;
+        binding.mapView.getOverlayManager().add(startMarker);
+        placeIndex = binding.mapView.getOverlays().size() - 1;
     }
 
     private void createPolygon(GeoPoint geoPoint) {
-        Polyline line = new Polyline(mapView);
+        Polyline line = new Polyline(binding.mapView);
         line.setTitle("محل شما");
         line.setSubDescription(Polyline.class.getCanonicalName());
         line.setWidth(20f);
@@ -283,16 +191,15 @@ public class MapFragment extends Fragment implements LocationListener {
 
         line.setPoints(pts);
         line.setGeodesic(true);
-        line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapView));
+        line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, binding.mapView));
         line.setOnClickListener((polyline, mapView, eventPos) -> {
             return false;
         });
         if (polygonIndex != 0) {//TODO crash on paging...
-            mapView.getOverlayManager().remove(polygonIndex);
+            binding.mapView.getOverlayManager().remove(polygonIndex);
         }
-
-        mapView.getOverlayManager().add(line);
-        polygonIndex = mapView.getOverlays().size() - 1;
+        binding.mapView.getOverlayManager().add(line);
+        polygonIndex = binding.mapView.getOverlays().size() - 1;
     }
 
 
@@ -330,13 +237,11 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     @Override
-    public void onProviderEnabled(String provider) {
-
+    public void onProviderEnabled(@NotNull String provider) {
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
-
+    public void onProviderDisabled(@NotNull String provider) {
     }
 
     @Override

@@ -49,7 +49,8 @@ public final class NetworkHelper {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
-        String baseUrl = DifferentCompanyManager.getBaseUrl(DifferentCompanyManager.getActiveCompanyName());
+        String baseUrl = DifferentCompanyManager.getBaseUrl(
+                DifferentCompanyManager.getActiveCompanyName());
         if (!b)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(CompanyNames.SEPANO);
         Retrofit retrofit = new Retrofit.Builder()
