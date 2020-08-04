@@ -2,7 +2,6 @@ package com.leon.estimate.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +47,11 @@ public class CheckBoxAdapter extends BaseAdapter {
         holder = new CheckBoxViewHolder(view);
         holder.checkBox.setText(requestDictionaries.get(position).getTitle());
         holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-            Log.e("select".concat(String.valueOf(position)), String.valueOf(b));
             requestDictionaries.get(position).setSelected(b);
+//            if (b) counter = counter + 1;
+//            else counter = counter - 1;
+//            Log.e("select".concat(String.valueOf(position)), String.valueOf(b));
+//            Log.e("number selected", String.valueOf(counter));
         });
         holder.checkBox.setChecked(requestDictionaries.get(position).isSelected());
         return view;

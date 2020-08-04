@@ -7,10 +7,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
@@ -84,23 +85,35 @@ public class FormActivity1 extends AppCompatActivity {
 
     void setOnButtonClickListener() {
         binding.buttonNext.setOnClickListener(view -> {
-            FragmentTransaction fragmentTransaction;
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             switch (pageNumber) {
                 case 1:
-                    calculationUserInput = ServicesFragment.prepareServices();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, new FormFragment());
-                    fragmentTransaction.commit();
+                    calculationUserInputTemp = ServicesFragment.prepareServices();
+                    if (calculationUserInputTemp != null) {
+                        fragmentTransaction.replace(R.id.fragment, new FormFragment());
+                        fragmentTransaction.commit();
+                        pageNumber = pageNumber + 1;
+                    } else
+                        Toast.makeText(context, "حداقل یکی از سرویس ها را انتخاب کنید.", Toast.LENGTH_LONG).show();
                     break;
                 case 2:
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
-                    fragmentTransaction.commit();
+                    FormFragment fragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    if (fragment != null && fragment.setOnButtonNextClickListener() != null) {
+                        calculationUserInput = fragment.setOnButtonNextClickListener();
+                        calculationUserInput.selectedServicesString = calculationUserInputTemp.selectedServicesString;
+                        calculationUserInput.selectedServicesObject = calculationUserInputTemp.selectedServicesObject;
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
+                        fragmentTransaction.commit();
+                        pageNumber = pageNumber + 1;
+                    }
                     break;
                 case 3:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment, new MapFragment());
                     fragmentTransaction.commit();
+                    pageNumber = pageNumber + 1;
                     break;
                 case 4:
                     Intent intent = new Intent(context, DocumentActivity.class);
@@ -108,7 +121,6 @@ public class FormActivity1 extends AppCompatActivity {
                     finish();
                     break;
             }
-            pageNumber = pageNumber + 1;
         });
         binding.buttonPrevious.setOnClickListener(view -> {
             FragmentTransaction fragmentTransaction;
@@ -221,7 +233,7 @@ public class FormActivity1 extends AppCompatActivity {
             json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
             Gson gson = new GsonBuilder().create();
             requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
-            Log.e("data", json);
+//            Log.e("data", json);
             return null;
         }
 
@@ -252,6 +264,9 @@ public class FormActivity1 extends AppCompatActivity {
                     .allowMainThreadQueries().build();
             daoExaminerDuties = dataBase.daoExaminerDuties();
             examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
+            fragmentTransaction.commit();
             return null;
         }
 
@@ -268,10 +283,6 @@ public class FormActivity1 extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
-            fragmentTransaction.commit();
-            dialog.dismiss();
             dialog.dismiss();
         }
 

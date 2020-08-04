@@ -33,7 +33,7 @@ import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.adapters.CheckBoxAdapter;
-import com.leon.estimate.databinding.FormFragmentBinding;
+import com.leon.estimate.databinding.FormFragmentOldBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
@@ -46,7 +46,7 @@ import java.util.Objects;
 
 public class FormOldFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
-    FormFragmentBinding binding;
+    FormFragmentOldBinding binding;
     private Context context;
     private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
     //    private Typeface typeface;
@@ -87,7 +87,7 @@ public class FormOldFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FormFragmentBinding.inflate(inflater, container, false);
+        binding = FormFragmentOldBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
     }

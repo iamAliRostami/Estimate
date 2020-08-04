@@ -48,14 +48,20 @@ public class ServicesFragment extends Fragment {
 
     public static CalculationUserInput prepareServices() {
         CalculationUserInput calculationUserInput = new CalculationUserInput();
+        int counter = 0;
         for (int i = 0; i < checkBoxAdapter.requestDictionaries.size(); i++) {
+            if (checkBoxAdapter.requestDictionaries.get(i).isSelected())
+                counter = counter + 1;
             FormActivity1.requestDictionaries.get(i).setSelected(
                     checkBoxAdapter.requestDictionaries.get(i).isSelected());
         }
-        calculationUserInput.selectedServicesObject = FormActivity1.requestDictionaries;
-        Gson gson = new GsonBuilder().create();
-        calculationUserInput.selectedServicesString = gson.toJson(FormActivity1.requestDictionaries);
-        return calculationUserInput;
+        if (counter > 0) {
+            calculationUserInput.selectedServicesObject = FormActivity1.requestDictionaries;
+            Gson gson = new GsonBuilder().create();
+            calculationUserInput.selectedServicesString = gson.toJson(FormActivity1.requestDictionaries);
+
+            return calculationUserInput;
+        } else return null;
     }
 
     @Override
@@ -71,7 +77,7 @@ public class ServicesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                context.getString(R.string.app_name).concat(" / ").concat("خدمات"));
+                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.services)));
     }
 
     private void initialize() {

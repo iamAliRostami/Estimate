@@ -95,7 +95,7 @@
     <string name="map_information">اطلاعات نقشه</string>
     <string name="information">information</string>
     <string name="address">نشانی</string>
-    <string name="services">خدمات:</string>
+    <string name="services">خدمات</string>
     <string name="zone">منطقه</string>
     <string name="user_type">کاربری</string>
     <string name="sifoon_100">سیفون 100</string>
@@ -123,4 +123,6 @@
     <string name="not_found">رکوردی یافت نشد!</string>
     <string name="next">بعدی</string>
     <string name="previous">قبلی</string>
+    <string name="moshakhasat_melk">مشخصات ملک</string>
+    <string name="moshakhasat_malek">مشخصات مالک</string>
 </resources>

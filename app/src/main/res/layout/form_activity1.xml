@@ -21,8 +21,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_mid_padding"
-        android:background="@drawable/border_red_1"
+        android:background="@drawable/border_red_2"
         android:text="@string/previous"
+        android:textColor="@color/white"
         android:textSize="@dimen/textSizeLarge"
         tools:ignore="RelativeOverlap,RtlHardcoded" />
 
@@ -33,8 +34,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_mid_padding"
-        android:background="@drawable/border_green_1"
+        android:background="@drawable/border_green_2"
         android:text="@string/next"
+        android:textColor="@color/white"
         android:textSize="@dimen/textSizeLarge"
         tools:ignore="RtlHardcoded" />
 </RelativeLayout>

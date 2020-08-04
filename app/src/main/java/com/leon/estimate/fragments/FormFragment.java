@@ -1,14 +1,12 @@
 package com.leon.estimate.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 
@@ -16,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
@@ -31,8 +28,7 @@ import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
-import com.leon.estimate.activities.FormActivity;
-import com.leon.estimate.adapters.CheckBoxAdapter;
+import com.leon.estimate.activities.FormActivity1;
 import com.leon.estimate.databinding.FormFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
@@ -40,7 +36,6 @@ import com.sardari.daterangepicker.dialog.DatePickerDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,14 +43,13 @@ public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private Context context;
-    private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
     //    private Typeface typeface;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    private ExaminerDuties examinerDuties;
+    //    private ExaminerDuties examinerDuties;
     private List<RequestDictionary> requestDictionaries;
     FormFragmentBinding binding;
 
@@ -77,16 +71,13 @@ public class FormFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String json = getArguments().getString(BundleEnum.REQUEST.getValue());
-            Gson gson = new GsonBuilder().create();
-            examinerDuties = gson.fromJson(json, ExaminerDuties.class);
-        }
         context = getActivity();
+        ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
+                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_melk)));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FormFragmentBinding.inflate(inflater, container, false);
         initialize();
@@ -99,15 +90,11 @@ public class FormFragment extends Fragment {
         setOnEditText19ClickListener();
     }
 
-    void setOnButtonNextClickListener() {
-        binding.buttonNext.setOnClickListener(v -> {
-            if (prepareForm()) {
-                CalculationUserInput calculationUserInput = prepareField();
-                prepareServices(calculationUserInput);
-//                Log.e("services", calculationUserInput.selectedServicesString);
-                ((FormActivity) Objects.requireNonNull(getActivity())).nextPage(null, calculationUserInput);
-            }
-        });
+    public CalculationUserInput setOnButtonNextClickListener() {
+        if (prepareForm()) {
+            return prepareField();
+        }
+        return null;
     }
 
     void setOnEditText19ClickListener() {
@@ -153,16 +140,6 @@ public class FormFragment extends Fragment {
         return calculationUserInput;
     }
 
-    private CalculationUserInput prepareServices(CalculationUserInput calculationUserInput) {
-        for (int i = 0; i < checkBoxes.size(); i++) {
-            requestDictionaries.get(i).setSelected(checkBoxes.get(i).isSelected());
-        }
-        calculationUserInput.selectedServicesObject = requestDictionaries;
-        Gson gson = new GsonBuilder().create();
-        calculationUserInput.selectedServicesString = gson.toJson(requestDictionaries);
-        return calculationUserInput;
-    }
-
     private boolean prepareForm() {
         return checkIsNoEmpty(binding.editTextZoneTitle)
                 && checkIsNoEmpty(binding.editTextTrackNumber)
@@ -205,7 +182,6 @@ public class FormFragment extends Fragment {
         initializeKarbariSpinner();
         initializeQotrEnsheabSpinner();
         initializeTaxfifSpinner();
-        initializeServicesCheckBox();
         initializeField();
     }
 
@@ -235,7 +211,7 @@ public class FormFragment extends Fragment {
             }
         };
         binding.spinner1.setAdapter(arrayAdapter);
-        binding.spinner1.setSelection(examinerDuties.getKarbariId());
+        binding.spinner1.setSelection(FormActivity1.examinerDuties.getKarbariId());
     }
 
     private void initializeTaxfifSpinner() {
@@ -264,7 +240,7 @@ public class FormFragment extends Fragment {
             }
         };
         binding.spinner4.setAdapter(arrayAdapter);
-        binding.spinner4.setSelection(examinerDuties.getTaxfifId());
+        binding.spinner4.setSelection(FormActivity1.examinerDuties.getTaxfifId());
     }
 
     private void initializeNoeVagozariSpinner() {
@@ -322,43 +298,34 @@ public class FormFragment extends Fragment {
             }
         };
         binding.spinner3.setAdapter(arrayAdapter);
-        binding.spinner3.setSelection(examinerDuties.getQotrEnsheabId());
+        binding.spinner3.setSelection(FormActivity1.examinerDuties.getQotrEnsheabId());
     }
 
     private void initializeField() {
-        binding.editTextZoneTitle.setText(examinerDuties.getZoneTitle());
-        binding.editTextTrackNumber.setText(examinerDuties.getTrackNumber());
-        binding.editTextBillId.setText(examinerDuties.getBillId());
-        binding.editTextSifoon100.setText(String.valueOf(examinerDuties.getSifoon100()));
-        binding.editTextSifoon125.setText(String.valueOf(examinerDuties.getSifoon125()));
-        binding.editTextSifoon150.setText(String.valueOf(examinerDuties.getSifoon150()));
-        binding.editTextSifoon200.setText(String.valueOf(examinerDuties.getSifoon200()));
-        binding.editTextArese.setText(String.valueOf(examinerDuties.getArse()));
-        binding.editTextAianKol.setText(String.valueOf(examinerDuties.getAianKol()));
-        binding.editTextAianMaskooni.setText(String.valueOf(examinerDuties.getAianMaskooni()));
-        binding.editTextAianNonMaskooni.setText(String.valueOf(examinerDuties.getAianNonMaskooni()));
-        binding.editTextTedadMaskooni.setText(String.valueOf(examinerDuties.getTedadMaskooni()));
-        binding.editTextTedadTejari.setText(String.valueOf(examinerDuties.getTedadTejari()));
-        binding.editTextTedadSaier.setText(String.valueOf(examinerDuties.getTedadSaier()));
-        binding.editTextArzeshMelk.setText(String.valueOf(examinerDuties.getArzeshMelk()));
-        binding.editTextTedadTakhfif.setText(String.valueOf(examinerDuties.getTedadTaxfif()));
-        binding.editTextZarfiatQaradadi.setText(String.valueOf(examinerDuties.getZarfiatQarardadi()));
-        binding.editTextPariNumber.setText(examinerDuties.getParNumber());
-        binding.editText19.setText(examinerDuties.getExaminationDay());
-        binding.editText20.setText(examinerDuties.getPostalCode());
+        binding.editTextZoneTitle.setText(FormActivity1.examinerDuties.getZoneTitle());
+        binding.editTextTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber());
+        binding.editTextBillId.setText(FormActivity1.examinerDuties.getBillId());
+        binding.editTextSifoon100.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon100()));
+        binding.editTextSifoon125.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon125()));
+        binding.editTextSifoon150.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon150()));
+        binding.editTextSifoon200.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon200()));
+        binding.editTextArese.setText(String.valueOf(FormActivity1.examinerDuties.getArse()));
+        binding.editTextAianKol.setText(String.valueOf(FormActivity1.examinerDuties.getAianKol()));
+        binding.editTextAianMaskooni.setText(String.valueOf(FormActivity1.examinerDuties.getAianMaskooni()));
+        binding.editTextAianNonMaskooni.setText(String.valueOf(FormActivity1.examinerDuties.getAianNonMaskooni()));
+        binding.editTextTedadMaskooni.setText(String.valueOf(FormActivity1.examinerDuties.getTedadMaskooni()));
+        binding.editTextTedadTejari.setText(String.valueOf(FormActivity1.examinerDuties.getTedadTejari()));
+        binding.editTextTedadSaier.setText(String.valueOf(FormActivity1.examinerDuties.getTedadSaier()));
+        binding.editTextArzeshMelk.setText(String.valueOf(FormActivity1.examinerDuties.getArzeshMelk()));
+        binding.editTextTedadTakhfif.setText(String.valueOf(FormActivity1.examinerDuties.getTedadTaxfif()));
+        binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity1.examinerDuties.getZarfiatQarardadi()));
+        binding.editTextPariNumber.setText(FormActivity1.examinerDuties.getParNumber());
+        binding.editText19.setText(FormActivity1.examinerDuties.getExaminationDay());
+        binding.editText20.setText(FormActivity1.examinerDuties.getPostalCode());
 
-        binding.checkbox1.setChecked(examinerDuties.isAdamTaxfifAb());
-        binding.checkbox2.setChecked(examinerDuties.isAdamTaxfifFazelab());
-        binding.checkbox3.setChecked(examinerDuties.isEnsheabQeirDaem());
-    }
-
-    @SuppressLint("NewApi")
-    private void initializeServicesCheckBox() {
-        Gson gson = new GsonBuilder().create();
-        requestDictionaries = Arrays.asList(gson.fromJson(examinerDuties.getRequestDictionaryString(),
-                RequestDictionary[].class));
-        CheckBoxAdapter checkBoxAdapter = new CheckBoxAdapter(context, requestDictionaries);
-        binding.gridView.setAdapter(checkBoxAdapter);
+        binding.checkbox1.setChecked(FormActivity1.examinerDuties.isAdamTaxfifAb());
+        binding.checkbox2.setChecked(FormActivity1.examinerDuties.isAdamTaxfifFazelab());
+        binding.checkbox3.setChecked(FormActivity1.examinerDuties.isEnsheabQeirDaem());
     }
 
     @Override
