@@ -163,7 +163,7 @@
                     <ImageView
                         android:id="@+id/imageView5"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="wrap_content"
                         android:layout_margin="@dimen/activity_mid_margin"
                         android:src="@drawable/icon_finder_camera"
                         tools:ignore="ContentDescription" />

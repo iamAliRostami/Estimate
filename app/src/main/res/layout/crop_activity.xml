@@ -54,7 +54,7 @@
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/activity_mid_padding"
                 android:src="@drawable/ic_invert_colors"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="ContentDescription,UnusedAttribute" />
         </RelativeLayout>
 
         <FrameLayout
