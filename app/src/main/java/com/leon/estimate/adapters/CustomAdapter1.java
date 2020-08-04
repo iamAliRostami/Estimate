@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
-import com.leon.estimate.activities.FormActivity;
+import com.leon.estimate.activities.FormActivity1;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +49,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
             if (examinerDuties.get(i).isPeymayesh()) {
                 Toast.makeText(context, "این مسیر پیمایش شده است.", Toast.LENGTH_LONG).show();
             } else {
-                Intent intent = new Intent(context, FormActivity.class);
+                Intent intent = new Intent(context, FormActivity1.class);
                 intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.get(i).getTrackNumber());
                 intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.get(i).getRequestDictionaryString());
                 context.startActivity(intent);

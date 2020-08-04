@@ -121,4 +121,6 @@
     <string name="access_denialed">مجوز رد شد \n</string>
     <string name="taxfif_number">تعداد تخفیف</string>
     <string name="not_found">رکوردی یافت نشد!</string>
+    <string name="next">بعدی</string>
+    <string name="previous">قبلی</string>
 </resources>

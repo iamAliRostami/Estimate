@@ -42,6 +42,9 @@
         <activity
             android:name=".activities.FormActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activities.FormActivity1"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activities.BrightnessContrastActivity" />
         <activity android:name=".activities.CropActivity" />
         <activity

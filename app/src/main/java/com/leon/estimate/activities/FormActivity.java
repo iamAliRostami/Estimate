@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -47,9 +50,9 @@ public class FormActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     Context context;
     String trackNumber, json;
+    MyDatabase dataBase;
     List<RequestDictionary> requestDictionaries;
     ExaminerDuties examinerDuties;
-    MyDatabase dataBase;
     DaoExaminerDuties daoExaminerDuties;
     CalculationUserInput calculationUserInput, calculationUserInputTemp;
     FormActivityBinding binding;
@@ -63,10 +66,10 @@ public class FormActivity extends AppCompatActivity {
         context = this;
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
-            json = getIntent().getExtras().getString(BundleEnum.SERVICES.getValue());
-            Gson gson = new GsonBuilder().create();
-            requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
+
+            new SerializeJson().execute(getIntent());
         }
+
         initialize();
     }
 
@@ -83,7 +86,6 @@ public class FormActivity extends AppCompatActivity {
         dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
                 .allowMainThreadQueries().build();
         daoExaminerDuties = dataBase.daoExaminerDuties();
-//        examinerDuties = daoExaminerDuties.examinerDutiesByTrackNumber(trackNumber);
         examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context, examinerDuties);
         binding.viewPager.setAdapter(adapterViewPager);
@@ -111,10 +113,6 @@ public class FormActivity extends AppCompatActivity {
         return bos.toByteArray();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     void prepareToSend() {
         fillCalculationUserInput();
@@ -125,7 +123,6 @@ public class FormActivity extends AppCompatActivity {
 
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-//        Retrofit retrofit = NetworkHelper.getInstance(false, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
         Retrofit retrofit = NetworkHelper.getInstance(false, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         SendCalculation sendCalculation = new SendCalculation();
@@ -143,28 +140,28 @@ public class FormActivity extends AppCompatActivity {
 
     void fillCalculationUserInput() {
         //TODO SELECTED SERVICE
-        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
-        calculationUserInput.firstName = calculationUserInputTemp.firstName.trim();
-        calculationUserInput.sureName = calculationUserInputTemp.sureName.trim();
-        calculationUserInput.fatherName = calculationUserInputTemp.fatherName.trim();
-        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
-        calculationUserInput.radif = calculationUserInputTemp.radif;
-        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
-        calculationUserInput.mobile = calculationUserInputTemp.mobile;
-        calculationUserInput.address = calculationUserInputTemp.address;
-        calculationUserInput.description = calculationUserInputTemp.description;
-
-        calculationUserInput.trackingId = examinerDuties.getTrackingId();
-        calculationUserInput.requestType = Integer.valueOf(examinerDuties.getRequestType());
-        calculationUserInput.parNumber = examinerDuties.getParNumber();
-        calculationUserInput.billId = examinerDuties.getBillId();
-        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
-        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
-        calculationUserInput.nationalId = examinerDuties.getNationalId();
-        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
-        calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
-        calculationUserInput.trackingId = examinerDuties.getTrackingId();
-        calculationUserInput.setSent(true);
+//        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+//        calculationUserInput.firstName = calculationUserInputTemp.firstName.trim();
+//        calculationUserInput.sureName = calculationUserInputTemp.sureName.trim();
+//        calculationUserInput.fatherName = calculationUserInputTemp.fatherName.trim();
+//        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+//        calculationUserInput.radif = calculationUserInputTemp.radif;
+//        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+//        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+//        calculationUserInput.address = calculationUserInputTemp.address;
+//        calculationUserInput.description = calculationUserInputTemp.description;
+//
+//        calculationUserInput.trackingId = examinerDuties.getTrackingId();
+//        calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
+//        calculationUserInput.parNumber = examinerDuties.getParNumber();
+//        calculationUserInput.billId = examinerDuties.getBillId();
+//        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
+//        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
+//        calculationUserInput.nationalId = examinerDuties.getNationalId();
+//        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
+//        calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
+//        calculationUserInput.trackingId = examinerDuties.getTrackingId();
+//        calculationUserInput.setSent(true);
     }
 
     class SendCalculation implements ICallback<SimpleMessage> {
@@ -175,5 +172,37 @@ public class FormActivity extends AppCompatActivity {
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
         }
+    }
+
+    public void setActionBarTitle(String title) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class SerializeJson extends AsyncTask<Intent, String, String> {
+        @Override
+        protected String doInBackground(Intent... intents) {
+            json = getIntent().getExtras().getString(BundleEnum.SERVICES.getValue());
+            Gson gson = new GsonBuilder().create();
+            requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
+            Log.e("data", json);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
     }
 }
