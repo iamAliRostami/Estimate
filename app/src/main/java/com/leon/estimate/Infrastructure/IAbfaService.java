@@ -3,6 +3,8 @@ package com.leon.estimate.Infrastructure;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.ImageDataThumbnail;
+import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.Uri;
 import com.leon.estimate.Utils.LoginFeedBack;
@@ -137,31 +139,37 @@ public interface IAbfaService {
     @POST("/Auth/Account/login")
     Call<LoginFeedBack> login(@Body LoginInfo logininfo);
 
-    @POST("/SepanoDMS/V1/Login/{username}/{password}")
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Login/{username}/{password}")
     Call<LoginFeedBack> login(
             @Path("username") String username,
             @Path("password") String password
     );
 
-    @GET("/SepanoDMS/V1/GetDoc/{token}")
+    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/PHPSESSID=k8a8m5q2gh2k96mhfs6qtcnnv3; remember_me=5660bce40fb96587ad34e559a7383933")
+    Call<ResponseBody> GetDoc(@Body Uri uri);
+
+    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDoc/{token}")
     Call<ArrayList<String>> getDoc(
+            @Path("token") String token, @Body Uri uri
+    );
+
+    @GET("/MoshtarakinApi/SepanoDms/V1/GetTitles/{token}")
+    Call<ImageDataTitle> getTitle(
             @Path("token") String token
     );
 
-    @GET("/SepanoDms/V1/GetTitles/{token}")
-    Call<ArrayList<String>> getTitle(
-            @Path("token") String token
+    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
+    Call<ImageDataThumbnail> getDocsListThumbnail(
+            @Path("token") String token,
+            @Path("billIdOrTrackNumber") String billIdOrTrackNumber
     );
 
-    @GET("/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
+    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
     Call<ArrayList<String>> getDocsListHighQuality(
-            @Path("token") String token
+            @Path("token") String token,
+            @Path("billIdOrTrackNumber") String billIdOrTrackNumber
     );
 
-    @GET("/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
-    Call<ArrayList<String>> getDocsListThumbnail(
-            @Path("token") String token
-    );
 
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(
@@ -186,8 +194,6 @@ public interface IAbfaService {
     Call<SimpleMessage> SetExaminationInfo(
             @Body CalculationUserInput calculationUserInput);
 
-    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/PHPSESSID=k8a8m5q2gh2k96mhfs6qtcnnv3; remember_me=5660bce40fb96587ad34e559a7383933")
-    Call<ResponseBody> GetDoc(@Body Uri uri);
 
 }
 

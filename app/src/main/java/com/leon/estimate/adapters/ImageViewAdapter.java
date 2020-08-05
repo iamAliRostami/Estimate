@@ -2,7 +2,6 @@ package com.leon.estimate.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.ImageData;
+import com.leon.estimate.Tables.ImageDataTitle;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ImageViewAdapter extends BaseAdapter {
-    public List<ImageData> imageData;
-    public List<Image> images;
+    public ArrayList<ImageDataTitle> imageDataTitleList;
     LayoutInflater inflater;
-    private Context context;
 
-    public ImageViewAdapter(Context c, List<ImageData> imageData) {
-        this.imageData = imageData;
-        context = c;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        LayoutInflater inflater = (LayoutInflater.from(context));
+    public ImageViewAdapter(Context c, ArrayList<ImageDataTitle> imageDataTitleList) {
+        this.imageDataTitleList = imageDataTitleList;
+        inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
-        return imageData.size();
+        return imageDataTitleList.size();
     }
 
     public Object getItem(int position) {
@@ -43,12 +38,14 @@ public class ImageViewAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams"})
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageViewHolder holder;
+        ImageDataTitle imageDataTitle = imageDataTitleList.get(position);
         View view = convertView;
         if (view == null) {
-            view = inflater.inflate(R.layout.item_check_box, null);
+            view = inflater.inflate(R.layout.item_image, null);
         }
         holder = new ImageViewHolder(view);
-//        holder.imageView.setImageURI();
+        holder.textView.setText(imageDataTitle.getTitle());
+        holder.imageView.setImageBitmap(imageDataTitle.getBitmap());
         return view;
     }
 
@@ -57,8 +54,8 @@ public class ImageViewAdapter extends BaseAdapter {
         public TextView textView;
 
         public ImageViewHolder(View view) {
-            imageView = (ImageView) view.findViewById(R.id.imageView);
-            textView = (TextView) view.findViewById(R.id.textView);
+            imageView = view.findViewById(R.id.imageView);
+            textView = view.findViewById(R.id.textView);
         }
     }
 }

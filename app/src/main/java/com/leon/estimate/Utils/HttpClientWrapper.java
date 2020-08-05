@@ -39,17 +39,20 @@ public class HttpClientWrapper {
                     } else {
                         ((Activity) context).runOnUiThread(() -> callbackIncomplete.executeIncomplete(response));
                     }
-                    progressBar.getDialog().dismiss();
+                    if (progressBar.getDialog() != null)
+                        progressBar.getDialog().dismiss();
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<T> call, @NonNull Throwable t) {
                     ((Activity) context).runOnUiThread(() -> callbackError.executeError(t));
-                    progressBar.getDialog().dismiss();
+                    if (progressBar.getDialog() != null)
+                        progressBar.getDialog().dismiss();
                 }
             });
         } else {
-            progressBar.getDialog().dismiss();
+            if (progressBar.getDialog() != null)
+                progressBar.getDialog().dismiss();
             Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_SHORT).show();
         }
 

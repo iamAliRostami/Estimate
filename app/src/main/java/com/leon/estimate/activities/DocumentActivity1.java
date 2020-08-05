@@ -16,7 +16,10 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,7 +41,8 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoImages;
-import com.leon.estimate.Tables.ImageData;
+import com.leon.estimate.Tables.ImageDataThumbnail;
+import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.CustomDialog;
@@ -47,8 +51,10 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivity1Binding;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -74,13 +80,18 @@ public class DocumentActivity1 extends AppCompatActivity {
     static String imageFileName;
     private final int CAMERA_REQUEST = 1888;
     private final int GALLERY_REQUEST = 1888;
-    private final int IMAGE_CROP_REQUEST = 1234;
-    private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
     String mCurrentPhotoPath;
     Context context;
     boolean replace = false;
     int imageCode;
     Bitmap bitmap;
+    int counter = 0;
+    ImageViewAdapter imageViewAdapter;
+    ArrayList<ImageDataTitle> imageDataTitles;
+    ArrayList<ImageDataThumbnail.Data> imageDataThumbnail;
+    ArrayList<String> imageDataThumbnailUri;
+
+    ArrayList<String> arrayListTitle = new ArrayList<>();
     ImageView[] imageViews;//=new ImageView{imageView1, imageView2, imageView3, imageView4, imageView5, imageView6};
     Button[] buttonPicks;//= {buttonPick1, buttonPick2, buttonPick3, buttonPick4, buttonPick5, buttonPick6};
     DocumentActivity1Binding binding;
@@ -146,7 +157,13 @@ public class DocumentActivity1 extends AppCompatActivity {
 
     void initialize() {
         binding.buttonPick1.setOnClickListener(onClickListener);
+        imageDataTitles = new ArrayList<>();
+        imageDataThumbnailUri = new ArrayList<>();
+        imageViewAdapter = new ImageViewAdapter(context, imageDataTitles);
+        binding.gridViewImage.setAdapter(imageViewAdapter);
         initializeImageViews();
+        getImageTitles();
+        getImageThumbnailList();
         loadImage();
     }
 
@@ -156,45 +173,47 @@ public class DocumentActivity1 extends AppCompatActivity {
         saveImage(bitmap);
         imageViews = new ImageView[6];
         imageViews[0] = binding.imageView1;
+    }
 
+    void getImageTitles() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
-        final IAbfaService GetImage = retrofit.create(IAbfaService.class);
-        Call<ResponseBody> call = GetImage.GetDoc(new com.leon.estimate.Tables.Uri("http://172.18.12.4:5002/api/v1/download?type=main&file=22115040"));
+        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+        Call<ImageDataTitle> call = abfaService.getTitle("PHPSESSID=65jksmpvsgoqp9e6egksc0ep33; remember_me=3141800a7024ac240c346fe4340828bc");
+        GetImageTitles getImageTitles = new GetImageTitles();
+        GetImageTitlesIncomplete incomplete = new GetImageTitlesIncomplete();
+        GetError error = new GetError();
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(),
+                this, getImageTitles, incomplete, error);
+    }
+
+    void getImageThumbnailList() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+        Call<ImageDataThumbnail> call = getImage.getDocsListThumbnail(
+                "PHPSESSID=echem7k653ri4bejkl4e9ddjb1; remember_me=aa0279e66d45874ce8b882db03029d3b", "10000018");
+        GetImageThumbnailList imageDoc = new GetImageThumbnailList();
+        GetError error = new GetError();
+        GetImageThumbnailListErrorIncomplete incomplete = new GetImageThumbnailListErrorIncomplete();
+
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+                imageDoc, incomplete, error);
+    }
+
+    void getImageThumbnail(String uri) {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+        Call<ResponseBody> call = getImage.GetDoc(new com.leon.estimate.Tables.Uri(uri));
         GetImageDoc imageDoc = new GetImageDoc();
         GetError error = new GetError();
-        GetErrorIncomplete incomplete = new GetErrorIncomplete();
-
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+        GetImageDocErrorIncomplete incomplete = new GetImageDocErrorIncomplete();
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
                 imageDoc, incomplete, error);
-
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(@NotNull Call<ResponseBody> call,
-//                                   @NotNull Response<ResponseBody> response) {
-//                if (response.isSuccessful()) {
-//                    if (response.body() != null) {
-//                        // display the image data in a ImageView or save it
-//                        Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
-//                        binding.imageView1.setImageBitmap(bmp);
-//                    } else {
-//                        // TODO
-//                    }
-//                } else {
-//                    // TODO
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                // TODO
-//            }
-//        });
-
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int IMAGE_CROP_REQUEST = 1234;
+        int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             Bitmap bitmap;
@@ -229,6 +248,108 @@ public class DocumentActivity1 extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    static class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
+        @Override
+        public void executeIncomplete(Response<ImageDataTitle> response) {
+
+        }
+    }
+
+    class GetImageTitles implements ICallback<ImageDataTitle> {
+        @Override
+        public void execute(ImageDataTitle imageDataTitle) {
+            if (imageDataTitle.isSuccess()) {
+                for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
+                    arrayListTitle.add(dataTitle.getTitle());
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
+                        android.R.layout.simple_spinner_dropdown_item, arrayListTitle) {
+                    @NotNull
+                    @Override
+                    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        final CheckedTextView textView = view.findViewById(android.R.id.text1);
+                        textView.setChecked(true);
+                        textView.setTextColor(getResources().getColor(R.color.black));
+                        return view;
+                    }
+                };
+                binding.spinnerTitle.setAdapter(arrayAdapter);
+            } else {
+
+            }
+        }
+    }
+
+    class GetImageThumbnailList implements ICallback<ImageDataThumbnail> {
+        @Override
+        public void execute(ImageDataThumbnail responseBody) {
+            imageDataThumbnail = responseBody.getData();
+            for (ImageDataThumbnail.Data data : imageDataThumbnail) {
+                imageDataThumbnailUri.add(data.getImg());
+            }
+            getImageThumbnail(imageDataThumbnail.get(0).getImg());
+        }
+    }
+
+    class GetImageThumbnailListErrorIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
+
+        @Override
+        public void executeIncomplete(Response<ImageDataThumbnail> response) {
+            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
+                    DocumentActivity1.this.getString(R.string.dear_user),
+                    DocumentActivity1.this.getString(R.string.login),
+                    DocumentActivity1.this.getString(R.string.accepted));
+        }
+    }
+
+    class GetImageDoc implements ICallback<ResponseBody> {
+        @Override
+        public void execute(ResponseBody responseBody) {
+            Bitmap bmp = BitmapFactory.decodeStream(responseBody.byteStream());
+//            binding.imageView1.setImageBitmap(bmp);
+            ImageDataTitle imageDataTitle = new ImageDataTitle();
+            Log.e("title", imageDataThumbnail.get(counter).getTitle_name());
+            imageDataTitle.setTitle(imageDataThumbnail.get(counter).getTitle_name());
+            imageDataTitle.setBitmap(bmp);
+            imageDataTitles.add(imageDataTitle);
+            imageViewAdapter.notifyDataSetChanged();
+            counter = counter + 1;
+            if (imageDataThumbnail.size() > counter) {
+                getImageThumbnail(imageDataThumbnail.get(counter).getImg());
+            }
+        }
+    }
+
+    class GetImageDocErrorIncomplete implements ICallbackIncomplete<ResponseBody> {
+
+        @Override
+        public void executeIncomplete(Response<ResponseBody> response) {
+            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
+                    DocumentActivity1.this.getString(R.string.dear_user),
+                    DocumentActivity1.this.getString(R.string.login),
+                    DocumentActivity1.this.getString(R.string.accepted));
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            new CustomDialog(DialogType.YellowRedirect, DocumentActivity1.this, error,
+                    DocumentActivity1.this.getString(R.string.dear_user),
+                    DocumentActivity1.this.getString(R.string.login),
+                    DocumentActivity1.this.getString(R.string.accepted));
         }
     }
 
@@ -345,45 +466,5 @@ public class DocumentActivity1 extends AppCompatActivity {
         finish();
     }
 
-    class GetImageDoc implements ICallback<ResponseBody> {
-        @Override
-        public void execute(ResponseBody responseBody) {
-            Bitmap bmp = BitmapFactory.decodeStream(responseBody.byteStream());
-            binding.imageView1.setImageBitmap(bmp);
-        }
-    }
-
-    class GetTitle implements ICallback<ImageData> {
-        @Override
-        public void execute(ImageData imageData) {
-
-        }
-    }
-
-    class GetErrorIncomplete implements ICallbackIncomplete<ResponseBody> {
-
-        @Override
-        public void executeIncomplete(Response<ResponseBody> response) {
-            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
-                    DocumentActivity1.this.getString(R.string.dear_user),
-                    DocumentActivity1.this.getString(R.string.login),
-                    DocumentActivity1.this.getString(R.string.accepted));
-        }
-    }
-
-    class GetError implements ICallbackError {
-        @Override
-        public void executeError(Throwable t) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageTotal(t);
-            new CustomDialog(DialogType.YellowRedirect, DocumentActivity1.this, error,
-                    DocumentActivity1.this.getString(R.string.dear_user),
-                    DocumentActivity1.this.getString(R.string.login),
-                    DocumentActivity1.this.getString(R.string.accepted));
-        }
-    }
 }
 
