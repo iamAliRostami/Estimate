@@ -6,19 +6,24 @@ import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Input;
+import com.leon.estimate.Tables.Login;
+import com.leon.estimate.Tables.LoginFeedBack;
+import com.leon.estimate.Tables.LoginInfo;
+import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Tables.Uri;
-import com.leon.estimate.Utils.LoginFeedBack;
-import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.SimpleMessage;
 
 import java.util.ArrayList;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -139,17 +144,22 @@ public interface IAbfaService {
     @POST("/Auth/Account/login")
     Call<LoginFeedBack> login(@Body LoginInfo logininfo);
 
+    @POST("MoshtarakinApi/SepanoDMS/V1/Auth/Login/{userName}/{password}")
+    Call<LoginFeedBack> login1(
+            @Path("userName") String username,
+            @Path("password") String password);
+
     @POST("/MoshtarakinApi/SepanoDMS/V1/Login/{username}/{password}")
-    Call<LoginFeedBack> login(
+    Call<Login> login2(
             @Path("username") String username,
             @Path("password") String password
     );
 
-    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/PHPSESSID=k8a8m5q2gh2k96mhfs6qtcnnv3; remember_me=5660bce40fb96587ad34e559a7383933")
-    Call<ResponseBody> GetDoc(@Body Uri uri);
+//    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/PHPSESSID=k8a8m5q2gh2k96mhfs6qtcnnv3; remember_me=5660bce40fb96587ad34e559a7383933")
+//    Call<ResponseBody> GetDoc(@Body Uri uri);
 
-    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDoc/{token}")
-    Call<ArrayList<String>> getDoc(
+    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/{token}")
+    Call<ResponseBody> getDoc(
             @Path("token") String token, @Body Uri uri
     );
 
@@ -170,6 +180,23 @@ public interface IAbfaService {
             @Path("billIdOrTrackNumber") String billIdOrTrackNumber
     );
 
+    @Multipart
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Upload/{token}")
+    Call<UploadImage> uploadDoc(
+            @Path("token") String token,
+            @Part MultipartBody.Part imageFile,
+            @Part("docId") int docId,
+            @Part("billId") String billId
+    );
+
+    @Multipart
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Upload/{token}")
+    Call<UploadImage> uploadDocNew(
+            @Path("token") String token,
+            @Part MultipartBody.Part imageFile,
+            @Part("docId") int docId,
+            @Part("trackingNumber") String trackingNumber
+    );
 
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(
@@ -193,7 +220,6 @@ public interface IAbfaService {
     @POST("/MoshtarakinApi/ExaminationManager/SetExaminationInfo")
     Call<SimpleMessage> SetExaminationInfo(
             @Body CalculationUserInput calculationUserInput);
-
 
 }
 

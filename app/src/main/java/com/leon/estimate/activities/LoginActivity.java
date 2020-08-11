@@ -23,6 +23,7 @@ import androidx.core.location.LocationManagerCompat;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.BuildConfig;
+import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -36,7 +37,6 @@ import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.LoginInfo;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.databinding.LoginActivityBinding;
@@ -52,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     LoginActivityBinding binding;
     int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
-    private String username, password, deviceId;
+    private String username;
+    private String password;
     private View viewFocus;
     private Context context;
 
@@ -71,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 .concat(BuildConfig.VERSION_NAME));
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
-        deviceId = Build.SERIAL;
+        String deviceId = Build.SERIAL;
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
         binding.imageViewPerson.setImageResource(R.drawable.img_profile);
@@ -88,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
     void attemptLogin() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
-        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(
-                new LoginInfo(deviceId, username, password));
-//        Call<com.leon.estimate.Utils.LoginFeedBack> call = loginInfo.login(
+        Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login1(
+                username, password);
+//        Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login(
 //                username, password);
         LoginFeedBack loginFeedBack = new LoginFeedBack();
         GetError error = new GetError();
@@ -267,6 +268,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setButtonOnLongClickListener() {
         binding.buttonLogin.setOnLongClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
+            intent.putExtra(BundleEnum.BILL_ID.getValue(), "10000018");
             startActivity(intent);
             finish();
             return false;
@@ -274,9 +276,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     class LoginFeedBack
-            implements ICallback<com.leon.estimate.Utils.LoginFeedBack> {
+            implements ICallback<com.leon.estimate.Tables.LoginFeedBack> {
         @Override
-        public void execute(com.leon.estimate.Utils.LoginFeedBack loginFeedBack) {
+        public void execute(com.leon.estimate.Tables.LoginFeedBack loginFeedBack) {
             if (loginFeedBack.getAccess_token() == null ||
                     loginFeedBack.getRefresh_token() == null ||
                     loginFeedBack.getAccess_token().length() < 1 ||
@@ -292,13 +294,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    class GetErrorIncomplete implements ICallbackIncomplete<com.leon.estimate.Utils.LoginFeedBack> {
+    class GetErrorIncomplete implements ICallbackIncomplete<com.leon.estimate.Tables.LoginFeedBack> {
         @Override
-        public void executeIncomplete(Response<com.leon.estimate.Utils.LoginFeedBack> response) {
-
-            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
+        public void executeIncomplete(Response<com.leon.estimate.Tables.LoginFeedBack> response) {
+//            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            if (response.code() == 404) {
+                error = LoginActivity.this.getString(R.string.error_is_not_match);
+            }
             new CustomDialog(DialogType.Yellow, LoginActivity.this, error,
                     LoginActivity.this.getString(R.string.dear_user),
                     LoginActivity.this.getString(R.string.login),

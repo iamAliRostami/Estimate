@@ -1,5 +1,6 @@
 package com.leon.estimate.Utils;
 
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 
 import java.util.Objects;

@@ -1,6 +1,9 @@
 package com.leon.estimate.Tables;
 
+import android.graphics.Bitmap;
+
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -10,24 +13,66 @@ public class Images {
     int imageId;
     String address;
     String billId;
-    String eshterak;
+    String trackingNumber;
+    String docId;
     String peygiri;
-    String imageCode;
+    @Ignore
+    String docTitle;
+    @Ignore
+    Bitmap bitmap;
+    @Ignore
+    boolean needSave;
 
-    public Images(String address, String imageCode, String peygiri, String billId, String eshterak) {
+    public Images(String address, String billId, String trackingNumber, String docId, String peygiri) {
         this.address = address;
         this.billId = billId;
-        this.eshterak = eshterak;
-        this.imageCode = imageCode;
+        this.trackingNumber = trackingNumber;
+        this.docId = docId;
         this.peygiri = peygiri;
     }
 
-    public String getImageCode() {
-        return imageCode;
+    public Images(String address, String billId, String trackingNumber, String docId,
+                  String docTitle, Bitmap bitmap, Boolean needSave) {
+        this.address = address;
+        this.billId = billId;
+        this.trackingNumber = trackingNumber;
+        this.docId = docId;
+        this.docTitle = docTitle;
+        this.bitmap = bitmap;
+        this.needSave = needSave;
     }
 
-    public void setImageCode(String imageCode) {
-        this.imageCode = imageCode;
+    public Images(String billId, String trackingNumber, String docTitle, Bitmap bitmap,
+                  Boolean needSave) {
+        this.billId = billId;
+        this.trackingNumber = trackingNumber;
+        this.docTitle = docTitle;
+        this.bitmap = bitmap;
+        this.needSave = needSave;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public String getDocTitle() {
+        return docTitle;
+    }
+
+    public void setDocTitle(String docTitle) {
+        this.docTitle = docTitle;
+    }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public int getImageId() {
@@ -54,12 +99,12 @@ public class Images {
         this.billId = billId;
     }
 
-    public String getEshterak() {
-        return eshterak;
+    public String getTrackingNumber() {
+        return trackingNumber;
     }
 
-    public void setEshterak(String eshterak) {
-        this.eshterak = eshterak;
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 
     public String getPeygiri() {

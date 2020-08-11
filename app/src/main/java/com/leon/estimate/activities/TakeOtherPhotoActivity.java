@@ -108,8 +108,8 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
-            binding.imageView1.setImageBitmap(ScannerConstants.bitmapSelectedImage);
-            binding.buttonPick1.setText("تغییر عکس");
+            binding.imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
+            binding.buttonPick.setText("تغییر عکس");
             saveTempBitmap(ScannerConstants.bitmapSelectedImage);
             if (ScannerConstants.bitmapSelectedImage != null) {
                 Toast.makeText(this, "انجام شد", Toast.LENGTH_SHORT).show();
@@ -212,7 +212,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
     }
 
     public final void setOnClickListener() {
-        binding.buttonPick1.setOnClickListener(it -> {
+        binding.buttonPick.setOnClickListener(it -> {
             Builder builder = new Builder(TakeOtherPhotoActivity.this);
             builder.setTitle("Carbon");
             builder.setMessage("تصویر را از کجا انتخاب میکنید؟");

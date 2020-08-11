@@ -100,8 +100,8 @@ public class DocumentActivity extends AppCompatActivity {
     View.OnClickListener onClickListener = v -> {
         Log.e("ID", String.valueOf(v.getId()));
         switch (v.getId()) {
-            case R.id.button_pick1:
-            case R.id.imageView1:
+            case R.id.button_pick:
+            case R.id.image_view:
                 imageCode = image1;
                 break;
             case R.id.button_pick2:
@@ -180,17 +180,17 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     void initializeImageViews() {
-        binding.imageView1.setOnClickListener(onClickListener);
+        binding.imageView.setOnClickListener(onClickListener);
         binding.imageView2.setOnClickListener(onClickListener);
         binding.imageView3.setOnClickListener(onClickListener);
         binding.imageView4.setOnClickListener(onClickListener);
         binding.imageView5.setOnClickListener(onClickListener);
         binding.imageView6.setOnClickListener(onClickListener);
-        binding.imageView7.setImageBitmap(bitmap);
+        binding.imageViewMap.setImageBitmap(bitmap);
         imageCode = image7;
         saveImage(bitmap);
         imageViews = new ImageView[6];
-        imageViews[0] = binding.imageView1;
+        imageViews[0] = binding.imageView;
         imageViews[1] = binding.imageView2;
         imageViews[2] = binding.imageView3;
         imageViews[3] = binding.imageView4;

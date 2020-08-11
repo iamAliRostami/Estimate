@@ -7,6 +7,7 @@ package com.leon.estimate.Enums;
 public enum BundleEnum {
     BILL_ID("bill_Id"),
     TRACK_NUMBER("trackNumber"),
+    NEW_ENSHEAB("new_ensheab"),
     DATA("data"),
     READ_STATUS("readStatus"),
     THEME("theme"),

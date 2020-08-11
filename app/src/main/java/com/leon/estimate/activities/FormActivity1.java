@@ -134,11 +134,14 @@ public class FormActivity1 extends AppCompatActivity {
                     break;
                 case 4:
                     MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.fragment);
-                    Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
                     if (mapFragment != null) {
                         intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(),
                                 convertBitmapToByte(mapFragment.convertMapToBitmap()));
                     }
+                    intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
+                    intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+                    intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                     prepareToSend();
                     startActivity(intent);
                     finish();
@@ -259,7 +262,6 @@ public class FormActivity1 extends AppCompatActivity {
             json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
             Gson gson = new GsonBuilder().create();
             requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
-//            Log.e("data", json);
             return null;
         }
 
@@ -281,6 +283,7 @@ public class FormActivity1 extends AppCompatActivity {
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     class GetDBData extends AsyncTask<Integer, String, String> {
         ProgressDialog dialog;
 
@@ -311,6 +314,5 @@ public class FormActivity1 extends AppCompatActivity {
             super.onPostExecute(s);
             dialog.dismiss();
         }
-
     }
 }

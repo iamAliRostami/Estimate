@@ -104,6 +104,8 @@
                 android:layout_margin="@dimen/activity_large_margin"
                 android:layout_weight="1"
                 android:background="@drawable/border_red_2"
+                android:text="@string/close"
+                android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge"
                 tools:ignore="ButtonStyle" />
 
@@ -115,6 +117,8 @@
                 android:layout_margin="@dimen/activity_large_margin"
                 android:layout_weight="1"
                 android:background="@drawable/border_green_2"
+                android:text="@string/crop"
+                android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge"
                 tools:ignore="ButtonStyle" />
 

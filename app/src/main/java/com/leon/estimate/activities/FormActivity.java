@@ -100,7 +100,7 @@ public class FormActivity extends AppCompatActivity {
         } else {
             this.calculationUserInputTemp = calculationUserInput;
             prepareToSend();
-            Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
             intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), convertBitmapToByte(bitmap));
             context.startActivity(intent);
             finish();

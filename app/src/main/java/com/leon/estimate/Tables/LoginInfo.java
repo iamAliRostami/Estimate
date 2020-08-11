@@ -1,4 +1,4 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.Tables;
 
 /**
  * Created by Leon on 12/18/2017.

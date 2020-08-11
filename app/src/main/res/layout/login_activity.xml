@@ -76,10 +76,11 @@
                     android:hint="@string/username"
                     android:inputType="text"
                     android:lines="1"
+                    android:text="appExam"
                     android:padding="@dimen/activity_medium_padding"
-                    android:text="test_u1"
                     tools:ignore="Autofill" />
 
+                <!--                android:text="test_u1"-->
                 <ImageView
                     android:id="@+id/imageViewUsername"
                     android:layout_width="50dp"
@@ -109,9 +110,10 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:padding="@dimen/activity_medium_padding"
-
-                    android:text="pspihp"
+                    android:text="123456"
                     tools:ignore="Autofill" />
+
+                <!--                android:text="pspihp"-->
 
                 <ImageView
                     android:id="@+id/imageViewPassword"

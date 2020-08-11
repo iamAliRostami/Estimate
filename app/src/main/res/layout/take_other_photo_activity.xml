@@ -26,14 +26,14 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView1"
+                    android:id="@+id/image_view"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:src="@drawable/icon_finder_camera" />
 
                 <Button
-                    android:id="@+id/button_pick1"
+                    android:id="@+id/button_pick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/activity_large_margin"

@@ -10,21 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.ImageDataTitle;
+import com.leon.estimate.Tables.Images;
 
 import java.util.ArrayList;
 
 public class ImageViewAdapter extends BaseAdapter {
-    public ArrayList<ImageDataTitle> imageDataTitleList;
+    public ArrayList<Images> images;
     LayoutInflater inflater;
 
-    public ImageViewAdapter(Context c, ArrayList<ImageDataTitle> imageDataTitleList) {
-        this.imageDataTitleList = imageDataTitleList;
+    public ImageViewAdapter(Context c, ArrayList<Images> images) {
+        this.images = images;
         inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
-        return imageDataTitleList.size();
+        return images.size();
     }
 
     public Object getItem(int position) {
@@ -38,13 +38,13 @@ public class ImageViewAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams"})
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageViewHolder holder;
-        ImageDataTitle imageDataTitle = imageDataTitleList.get(position);
+        Images imageDataTitle = images.get(position);
         View view = convertView;
         if (view == null) {
             view = inflater.inflate(R.layout.item_image, null);
         }
         holder = new ImageViewHolder(view);
-        holder.textView.setText(imageDataTitle.getTitle());
+        holder.textView.setText(imageDataTitle.getDocTitle());
         holder.imageView.setImageBitmap(imageDataTitle.getBitmap());
         return view;
     }
