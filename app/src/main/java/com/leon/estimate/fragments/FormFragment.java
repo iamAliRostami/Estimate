@@ -1,7 +1,10 @@
 package com.leon.estimate.fragments;
 
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
@@ -26,7 +30,6 @@ import com.leon.estimate.Tables.KarbariDictionary;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
-import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.activities.FormActivity1;
 import com.leon.estimate.databinding.FormFragmentBinding;
@@ -43,14 +46,11 @@ public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private Context context;
-    //    private Typeface typeface;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    //    private ExaminerDuties examinerDuties;
-    private List<RequestDictionary> requestDictionaries;
     FormFragmentBinding binding;
 
     public FormFragment() {
@@ -85,8 +85,8 @@ public class FormFragment extends Fragment {
     }
 
     private void initialize() {
-        initializeSpinner();
-        setOnEditText19ClickListener();
+        new initializeSpinners().execute();
+        setOnEditTextSodurDateClickListener();
     }
 
     public CalculationUserInput setOnButtonNextClickListener() {
@@ -96,8 +96,9 @@ public class FormFragment extends Fragment {
         return null;
     }
 
-    void setOnEditText19ClickListener() {
-        binding.editText19.setOnClickListener(v -> {
+    @SuppressLint("ClickableViewAccessibility")
+    void setOnEditTextSodurDateClickListener() {
+        binding.editTextSodurDate.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(context);
             datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Single);
             datePickerDialog.setDisableDaysAgo(false);
@@ -105,7 +106,7 @@ public class FormFragment extends Fragment {
             datePickerDialog.setTextSizeWeek(12.0f);
             datePickerDialog.setTextSizeDate(14.0f);
             datePickerDialog.setCanceledOnTouchOutside(true);
-            datePickerDialog.setOnSingleDateSelectedListener(date -> binding.editText19.setText(date.getPersianShortDate()));
+            datePickerDialog.setOnSingleDateSelectedListener(date -> binding.editTextSodurDate.setText(date.getPersianShortDate()));
             datePickerDialog.showDialog();
         });
     }
@@ -158,15 +159,14 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(binding.editTextTedadTakhfif)
                 && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
                 && checkIsNoEmpty(binding.editTextPariNumber)
-                && checkIsNoEmpty(binding.editText20)
-                && checkIsNoEmpty(binding.editText19)
-//                && editText19.getText().length() > 0
-                ;
+                && checkIsNoEmpty(binding.editTextPelak)
+                && checkIsNoEmpty(binding.editTextSodurDate);
     }
 
     boolean checkIsNoEmpty(EditText editText) {
         View focusView;
         if (editText.getText().toString().length() < 1) {
+            editText.setError(getString(R.string.error_empty));
             focusView = editText;
             focusView.requestFocus();
             return false;
@@ -175,7 +175,7 @@ public class FormFragment extends Fragment {
     }
 
     private void initializeSpinner() {
-        dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         initializeNoeVagozariSpinner();
         initializeKarbariSpinner();
@@ -188,13 +188,8 @@ public class FormFragment extends Fragment {
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         karbariDictionaries = daoKarbariDictionary.getKarbariDictionary();
         List<String> arrayListSpinner1 = new ArrayList<>();
-        int select = 0, counter = 0;
         for (KarbariDictionary karbariDictionary : karbariDictionaries) {
             arrayListSpinner1.add(karbariDictionary.getTitle());
-            if (karbariDictionary.isSelected()) {
-                select = counter;
-            }
-            counter++;
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
@@ -203,7 +198,6 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -217,13 +211,8 @@ public class FormFragment extends Fragment {
         DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
         taxfifDictionaries = daoTaxfifDictionary.getTaxfifDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
-        int select = 0, counter = 0;
         for (TaxfifDictionary taxfifDictionary : taxfifDictionaries) {
             arrayListSpinner1.add(taxfifDictionary.getTitle());
-            if (taxfifDictionary.isSelected()) {
-                select = counter;
-            }
-            counter++;
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
@@ -232,7 +221,6 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -275,13 +263,8 @@ public class FormFragment extends Fragment {
         DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
         qotrEnsheabDictionaries = daoQotrEnsheabDictionary.getQotrEnsheabDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
-        int select = 0, counter = 0;
         for (QotrEnsheabDictionary qotrEnsheabDictionary : qotrEnsheabDictionaries) {
             arrayListSpinner1.add(qotrEnsheabDictionary.getTitle());
-            if (qotrEnsheabDictionary.isSelected()) {
-                select = counter;
-            }
-            counter++;
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
@@ -290,7 +273,6 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -319,21 +301,39 @@ public class FormFragment extends Fragment {
         binding.editTextTedadTakhfif.setText(String.valueOf(FormActivity1.examinerDuties.getTedadTaxfif()));
         binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity1.examinerDuties.getZarfiatQarardadi()));
         binding.editTextPariNumber.setText(FormActivity1.examinerDuties.getParNumber());
-        binding.editText19.setText(FormActivity1.examinerDuties.getExaminationDay());
-        binding.editText20.setText(FormActivity1.examinerDuties.getPostalCode());
+        binding.editTextSodurDate.setText(FormActivity1.examinerDuties.getExaminationDay());
+        binding.editTextPelak.setText(FormActivity1.examinerDuties.getPostalCode());
 
         binding.checkbox1.setChecked(FormActivity1.examinerDuties.isAdamTaxfifAb());
         binding.checkbox2.setChecked(FormActivity1.examinerDuties.isAdamTaxfifFazelab());
         binding.checkbox3.setChecked(FormActivity1.examinerDuties.isEnsheabQeirDaem());
     }
 
-    @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
-    }
+    @SuppressLint("StaticFieldLeak")
+    class initializeSpinners extends AsyncTask<Integer, Integer, Integer> {
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
+        ProgressDialog dialog;
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            initializeSpinner();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setMessage(context.getString(R.string.loading_getting_info));
+            dialog.setTitle(context.getString(R.string.loading_connecting));
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Integer s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+        }
     }
 }

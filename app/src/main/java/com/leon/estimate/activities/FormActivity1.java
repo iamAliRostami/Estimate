@@ -19,11 +19,14 @@ import androidx.room.Room;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.ErrorHandlerType;
+import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
@@ -32,7 +35,8 @@ import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
-import com.leon.estimate.Utils.HttpClientWrapperOld;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -49,6 +53,7 @@ import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FormActivity1 extends AppCompatActivity {
@@ -96,7 +101,7 @@ public class FormActivity1 extends AppCompatActivity {
                         fragmentTransaction.commit();
                         pageNumber = pageNumber + 1;
                     } else
-                        Toast.makeText(context, "حداقل یکی از سرویس ها را انتخاب کنید.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.select_service, Toast.LENGTH_LONG).show();
                     break;
                 case 2:
                     FormFragment formFragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
@@ -180,12 +185,9 @@ public class FormActivity1 extends AppCompatActivity {
         return bos.toByteArray();
     }
 
-
     void prepareToSend() {
         fillCalculationUserInput();
-        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
-        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
+        updateCalculationUserInput();
         updateExamination();
 
         SharedPreferenceManager sharedPreferenceManager =
@@ -195,10 +197,19 @@ public class FormActivity1 extends AppCompatActivity {
         Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         SendCalculation sendCalculation = new SendCalculation();
+        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
+        GetError error = new GetError();
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
         calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-        HttpClientWrapperOld.callHttpAsync(call, sendCalculation, ErrorHandlerType.ordinary);
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+                sendCalculation, incomplete, error);
+    }
+
+    void updateCalculationUserInput() {
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
+        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
     }
 
     void updateExamination() {
@@ -230,7 +241,7 @@ public class FormActivity1 extends AppCompatActivity {
         calculationUserInput.identityCode = examinerDuties.getIdentityCode();
         calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
         calculationUserInput.trackingId = examinerDuties.getTrackingId();
-        calculationUserInput.setSent(true);
+        calculationUserInput.setSent(false);
     }
 
     public void setActionBarTitle(String title) {
@@ -246,10 +257,17 @@ public class FormActivity1 extends AppCompatActivity {
         @Override
         public void execute(SimpleMessage simpleMessage) {
             Log.e("simple Message", simpleMessage.getMessage());
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                    .allowMainThreadQueries().build();
+//            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+//                    .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+        }
+    }
+
+    class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+
         }
     }
 
@@ -283,13 +301,22 @@ public class FormActivity1 extends AppCompatActivity {
 
     }
 
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(FormActivity1.this, error, Toast.LENGTH_LONG).show();
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     class GetDBData extends AsyncTask<Integer, String, String> {
         ProgressDialog dialog;
 
         @Override
         protected String doInBackground(Integer... integers) {
-            dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+            dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                     .allowMainThreadQueries().build();
             daoExaminerDuties = dataBase.daoExaminerDuties();
             examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);

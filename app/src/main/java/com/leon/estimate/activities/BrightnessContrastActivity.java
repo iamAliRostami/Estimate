@@ -19,21 +19,6 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 public class BrightnessContrastActivity extends AppCompatActivity {
-    //
-//    @BindView(R.id.seekBar_brightness)
-//    SeekBar seekBarBrightness;
-//    @BindView(R.id.seekBar_contrast)
-//    SeekBar seekBarContrast;
-//    @BindView(R.id.imageView)
-//    ImageView imageView;
-//    @BindView(R.id.textView_brightness)
-//    TextView textViewBrightness;
-//    @BindView(R.id.textView_contrast)
-//    TextView textViewContrast;
-//    @BindView(R.id.button_accepted)
-//    Button buttonAccepted;
-//    @BindView(R.id.button_close)
-//    Button buttonClose;
     Bitmap bitmapTemp;
     BrightnessContrastActivityBinding binding;
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
@@ -65,7 +50,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
                     binding.seekBarBrightness.getProgress() - 250);
             binding.imageView.setImageBitmap(bitmapTemp);
             binding.textViewContrast.setText("کنتراست: ".concat(String.valueOf(contrast)));
-
         }
 
         @Override

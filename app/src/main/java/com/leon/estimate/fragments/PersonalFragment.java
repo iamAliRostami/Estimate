@@ -76,6 +76,7 @@ public class PersonalFragment extends Fragment {
         calculationUserInput.sureName = binding.editTextFamily.getText().toString();
         calculationUserInput.fatherName = binding.editTextFatherName.getText().toString();
         calculationUserInput.postalCode = binding.editTextPostalCode.getText().toString();
+
         calculationUserInput.radif = binding.editTextRadif.getText().toString();
         calculationUserInput.phoneNumber = binding.editTextPhone.getText().toString();
         calculationUserInput.mobile = binding.editTextMobile.getText().toString();
@@ -99,6 +100,7 @@ public class PersonalFragment extends Fragment {
     private boolean checkIsNoEmpty(EditText editText) {
         View focusView;
         if (editText.getText().toString().length() < 1) {
+            editText.setError(getString(R.string.error_empty));
             focusView = editText;
             focusView.requestFocus();
             return false;
@@ -109,18 +111,22 @@ public class PersonalFragment extends Fragment {
     private boolean checkOtherIsNoEmpty() {
         View focusView;
         if (binding.editTextNationNumber.getText().toString().length() < 10) {
+            binding.editTextNationNumber.setError(getString(R.string.error_format));
             focusView = binding.editTextNationNumber;
             focusView.requestFocus();
             return false;
         } else if (binding.editTextPostalCode.getText().toString().length() < 10) {
+            binding.editTextPostalCode.setError(getString(R.string.error_format));
             focusView = binding.editTextPostalCode;
             focusView.requestFocus();
             return false;
         } else if (binding.editTextPhone.getText().toString().length() < 8) {
+            binding.editTextPhone.setError(getString(R.string.error_format));
             focusView = binding.editTextPhone;
             focusView.requestFocus();
             return false;
         } else if (binding.editTextMobile.getText().toString().length() < 9) {
+            binding.editTextMobile.setError(getString(R.string.error_format));
             focusView = binding.editTextMobile;
             focusView.requestFocus();
             return false;
@@ -137,9 +143,13 @@ public class PersonalFragment extends Fragment {
         binding.editTextDescription.setText(FormActivity1.examinerDuties.getDescription());
         binding.editTextPhone.setText(FormActivity1.examinerDuties.getPhoneNumber());
         binding.editTextMobile.setText(FormActivity1.examinerDuties.getMobile());
-        binding.editTextEshterak.setText(FormActivity1.examinerDuties.getEshterak().trim());
+
+        binding.editTextEshterak.setText(Objects.requireNonNull(
+                FormActivity1.examinerDuties.getEshterak().trim()));
         binding.editTextPostalCode.setText(FormActivity1.examinerDuties.getPostalCode());
-        binding.editTextRadif.setText(FormActivity1.examinerDuties.getRadif());
+        float floatNumber = Float.parseFloat(FormActivity1.examinerDuties.getRadif());
+        int intNumber = (int) floatNumber;
+        binding.editTextRadif.setText(String.valueOf(intNumber));
     }
 
     @Override

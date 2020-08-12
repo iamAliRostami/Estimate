@@ -83,7 +83,7 @@ public class CustomErrorHandling extends Exception {
         } else if (httpResponseCode == 405) {
             errorMessage = context.getString(R.string.error_not_update1);
         } else if (httpResponseCode == 406) {
-            errorMessage = context.getString(R.string.error_not_update2);
+            errorMessage = context.getString(R.string.error_call_backup);
         }
         return errorMessage;
     }
@@ -101,7 +101,7 @@ public class CustomErrorHandling extends Exception {
         } else if (httpResponseCode == 405) {
             errorMessage = context.getString(R.string.error_not_update1);
         } else if (httpResponseCode == 406) {
-            errorMessage = context.getString(R.string.error_not_update2);
+            errorMessage = context.getString(R.string.error_call_backup);
         }
         return errorMessage;
     }

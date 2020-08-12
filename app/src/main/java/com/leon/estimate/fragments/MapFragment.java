@@ -89,7 +89,6 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        findViewById = inflater.inflate(R.layout.map_fragment, container, false);
         binding = MapFragmentBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
@@ -123,9 +122,6 @@ public class MapFragment extends Fragment implements LocationListener {
 
     @SuppressLint("MissingPermission")
     private void initializeMap() {
-//        mapView = findViewById.findViewById(R.id.mapView);
-//        mapView.setTileSource(TileSourceFactory.MAPNIK);
-//        mapView.setTileSource(CUSTOM);
         binding.mapView.setBuiltInZoomControls(true);
         binding.mapView.setMultiTouchControls(true);
         IMapController mapController = binding.mapView.getController();
@@ -179,10 +175,10 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
-        line.setTitle("محل شما");
+//        line.setTitle("محل شما");
         line.setSubDescription(Polyline.class.getCanonicalName());
-        line.setWidth(20f);
-        line.setColor(R.color.green1);
+//        line.setWidth(5f);
+//        line.setColor(R.color.green1);
 
         List<GeoPoint> pts = new ArrayList<>(polygonPoint);
         pts.add(geoPoint);
@@ -192,9 +188,6 @@ public class MapFragment extends Fragment implements LocationListener {
         line.setPoints(pts);
         line.setGeodesic(true);
         line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, binding.mapView));
-        line.setOnClickListener((polyline, mapView, eventPos) -> {
-            return false;
-        });
         if (polygonIndex != 0) {//TODO crash on paging...
             binding.mapView.getOverlayManager().remove(polygonIndex);
         }
@@ -205,12 +198,14 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private Location getLastKnownLocation() {
         Location l = null;
-        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(LOCATION_SERVICE);
+        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(
+                getActivity()).getSystemService(LOCATION_SERVICE);
         assert mLocationManager != null;
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 l = mLocationManager.getLastKnownLocation(provider);
             }
             if (l == null) {

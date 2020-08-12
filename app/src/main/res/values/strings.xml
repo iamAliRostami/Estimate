@@ -43,6 +43,7 @@
 
     <string name="error">خطا</string>
     <string name="error_empty">این فیلد باید پر شود.</string>
+    <string name="error_format">فرمت وارد شده صحیح نمیباشد.</string>
     <string name="error_empty_all">همه فیلد ها خالی است.</string>
     <string name="error_short_length">.این فیلد کوتاه است</string>
     <string name="error_similar">شماره پرونده و شماره اشتراک مطابق نیستند.</string>
@@ -54,9 +55,9 @@
     <string name="error_passwords_is_not_match">گذرواژه و تکرار آن با یکدیکر مطابق نیستند</string>
     <string name="error_in_record_voice">در ضبظ صدا مشکلی به وجود آمد</string>
     <string name="error_in_play_voice">در پخش صدا مشکلی به وجود آمد</string>
-    <string name="error_in_format">فرمت وارد نشده نادرست است</string>
+    <!--    <string name="error_in_format">فرمت وارد نشده نادرست است</string>-->
     <string name="error_not_update1">همکار گرامی لطفا نسخه به روز شده اپلیکیشن را از منوی تنظیمات  بخش به روز رسانی دریافت نمایید</string>
-    <string name="error_not_update2">همکار گرامی لطفا چهت دریافت آخرین نسخه اپلیکیشن با راهبر تماس حاصل فرمایید</string>
+    <string name="error_call_backup">همکار گرامی مشکلی در دریافت اطلاعات این بخش به وجود آمد، با پشتیبان بخش اسناد تماس حاصل فرمایید.</string>
     <string name="error_not_auth">مجوز های شما باطل شده است، از برنامه خارج و مجددا وارد شوید</string>
     <string name="error_bill_id">شناسه قبض صحیح نمیباشد.</string>
     <string name="error_connection">خطا در جابجایی اطلاعات، لطفا مجدد تلاش کنید.</string>
@@ -134,4 +135,17 @@
     <string name="gallery">گالری</string>
     <string name="camera">دوربین</string>
     <string name="done">انجام شد</string>
+    <string name="sodur_date">تاریخ صدور پروانه</string>
+    <string name="parvane_number">شماره پروانه</string>
+    <string name="pelak">شماره پلاک ثبتی</string>
+    <string name="aian_kol">اعیان کل</string>
+    <string name="aian_non_maskouni">اعیان غیرمسکونی</string>
+    <string name="tedad_tejari">تعداد تجاری</string>
+    <string name="arzesh_mantaghe">ارزش منطقه</string>
+    <string name="qotre_ensheab">قطر انشعاب</string>
+    <string name="noe_takhfif">نوع تخفیف</string>
+    <string name="adame_takhfif_fazelab">عدم تخفیف فاضلاب</string>
+    <string name="ensheab_gheire_daem">انشعاب غیردائم</string>
+    <string name="select_service">حداقل یکی از سرویس ها را انتخاب کنید.</string>
+    <string name="empty_masir">مسیری برای تخلیه وجود ندارد</string>
 </resources>

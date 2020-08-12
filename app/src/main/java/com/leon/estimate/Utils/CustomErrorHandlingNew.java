@@ -38,7 +38,7 @@ public class CustomErrorHandlingNew {
         } else if (code == 404) {
             errorMessage = context.getString(R.string.error_change_server);
         } else if (code >= 400 && code < 500) {
-            errorMessage = context.getString(R.string.error_not_update);
+            errorMessage = context.getString(R.string.error_not_auth);
         } else {
             errorMessage = context.getString(R.string.error_other);
         }

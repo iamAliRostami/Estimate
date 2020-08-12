@@ -95,7 +95,7 @@ public class FormOldFragment extends Fragment {
     private void initialize() {
         initializeSpinner();
         setOnButtonNextClickListener();
-        setOnEditText19ClickListener();
+        setOneditTextSodurDateClickListener();
     }
 
     void setOnButtonNextClickListener() {
@@ -109,8 +109,8 @@ public class FormOldFragment extends Fragment {
         });
     }
 
-    void setOnEditText19ClickListener() {
-        binding.editText19.setOnClickListener(v -> {
+    void setOneditTextSodurDateClickListener() {
+        binding.editTextSodurDate.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(context);
             datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Single);
             datePickerDialog.setDisableDaysAgo(false);
@@ -118,7 +118,7 @@ public class FormOldFragment extends Fragment {
             datePickerDialog.setTextSizeWeek(12.0f);
             datePickerDialog.setTextSizeDate(14.0f);
             datePickerDialog.setCanceledOnTouchOutside(true);
-            datePickerDialog.setOnSingleDateSelectedListener(date -> binding.editText19.setText(date.getPersianShortDate()));
+            datePickerDialog.setOnSingleDateSelectedListener(date -> binding.editTextSodurDate.setText(date.getPersianShortDate()));
             datePickerDialog.showDialog();
         });
     }
@@ -181,9 +181,9 @@ public class FormOldFragment extends Fragment {
                 && checkIsNoEmpty(binding.editTextTedadTakhfif)
                 && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
                 && checkIsNoEmpty(binding.editTextPariNumber)
-                && checkIsNoEmpty(binding.editText20)
-                && checkIsNoEmpty(binding.editText19)
-//                && editText19.getText().length() > 0
+                && checkIsNoEmpty(binding.editTextPelak)
+                && checkIsNoEmpty(binding.editTextSodurDate)
+//                && editTextSodurDate.getText().length() > 0
                 ;
     }
 
@@ -343,8 +343,8 @@ public class FormOldFragment extends Fragment {
         binding.editTextTedadTakhfif.setText(String.valueOf(examinerDuties.getTedadTaxfif()));
         binding.editTextZarfiatQaradadi.setText(String.valueOf(examinerDuties.getZarfiatQarardadi()));
         binding.editTextPariNumber.setText(examinerDuties.getParNumber());
-        binding.editText19.setText(examinerDuties.getExaminationDay());
-        binding.editText20.setText(examinerDuties.getPostalCode());
+        binding.editTextSodurDate.setText(examinerDuties.getExaminationDay());
+        binding.editTextPelak.setText(examinerDuties.getPostalCode());
 
         binding.checkbox1.setChecked(examinerDuties.isAdamTaxfifAb());
         binding.checkbox2.setChecked(examinerDuties.isAdamTaxfifFazelab());

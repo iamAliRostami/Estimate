@@ -128,21 +128,11 @@ public class DocumentActivity1 extends AppCompatActivity {
     };
     @SuppressLint("UseCompatLoadingForDrawables")
     View.OnClickListener onUploadClickListener = view -> {
-//        isMap = false;
         binding.buttonUpload.setVisibility(View.GONE);
         binding.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_finder_camera));
         uploadImage(imageDataTitle.getData().get(
                 binding.spinnerTitle.getSelectedItemPosition()).getId(),
                 ScannerConstants.bitmapSelectedImage);
-    };
-    View.OnClickListener onUploadMapClickListener = new View.OnClickListener() {//TODO
-        @Override
-        public void onClick(View view) {
-//            isMap = true;
-//            binding.linearLayoutUploadMap.setVisibility(View.VISIBLE);
-//            uploadImage(imageDataTitle.getData().get(
-//                    binding.spinnerMapTitle.getSelectedItemPosition()).getId(), bitmap);
-        }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -158,7 +148,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             getExtra();
         }
-        billId = "10000018";
+        billId = "1136481816311";
         attemptLogin();
         if (checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ||
@@ -185,7 +175,6 @@ public class DocumentActivity1 extends AppCompatActivity {
     void initialize() {
         binding.buttonPick.setOnClickListener(onPickClickListener);
         binding.buttonUpload.setOnClickListener(onUploadClickListener);
-//        binding.buttonUploadMap.setOnClickListener(onUploadMapClickListener);
         images = new ArrayList<>();
         imageViewAdapter = new ImageViewAdapter(context, images);
         binding.gridViewImage.setAdapter(imageViewAdapter);
@@ -196,12 +185,10 @@ public class DocumentActivity1 extends AppCompatActivity {
     void initializeImageView() {
         binding.imageView.setOnClickListener(onPickClickListener);
         if (bitmap != null) {
-//            binding.imageViewMap.setImageBitmap(bitmap);
             binding.imageView.setImageBitmap(bitmap);
             ScannerConstants.bitmapSelectedImage = bitmap;
             binding.buttonUpload.setVisibility(View.VISIBLE);
         }
-//        else binding.linearLayoutUploadMap.setVisibility(View.GONE);
     }
 
     void attemptLogin() {
@@ -271,33 +258,6 @@ public class DocumentActivity1 extends AppCompatActivity {
                 uploadImage, incomplete, error);
     }
 
-    void loadImage() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        DaoImages daoImages = dataBase.daoImages();
-        List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
-        if (imagesList.size() > 0)
-            Log.e("size", String.valueOf(imagesList.size()));
-        try {
-            File f = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
-            for (int i = 0; i < imagesList.size(); i++) {
-                f = new File(f, imagesList.get(i).getAddress());
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                imagesList.get(i).setBitmap(b);
-                for (int j = 0; j < imageDataTitle.getData().size(); j++) {
-                    if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
-                        imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
-                }
-                images.add(imagesList.get(i));
-                imageViewAdapter.notifyDataSetChanged();
-//                    binding.imageView.setImageBitmap(b);//TODO
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @SuppressLint("SimpleDateFormat")
     MultipartBody.Part bitmapToFile(Bitmap bitmap, String fileNameToSave) {
         if (fileNameToSave == null) {
@@ -332,6 +292,14 @@ public class DocumentActivity1 extends AppCompatActivity {
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), f);
         MultipartBody.Part body = MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
         return body;
+    }
+
+    public void saveTempBitmap(Bitmap bitmap) {
+        if (isExternalStorageWritable()) {
+            saveImage(bitmap);
+        } else {
+            Log.e("error", "isExternalStorageWritable");
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -369,6 +337,37 @@ public class DocumentActivity1 extends AppCompatActivity {
             daoImages.insertImage(image);
         } catch (Exception e) {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    void loadImage() {
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+                .allowMainThreadQueries().build();
+        DaoImages daoImages = dataBase.daoImages();
+        List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
+        if (imagesList.size() > 0)
+            Log.e("size", String.valueOf(imagesList.size()));
+        try {
+            File f = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
+            for (int i = 0; i < imagesList.size(); i++) {
+                f = new File(f, imagesList.get(i).getAddress());
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                imagesList.get(i).setBitmap(b);
+                for (int j = 0; j < imageDataTitle.getData().size(); j++) {
+                    if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
+                        imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
+                }
+                images.add(imagesList.get(i));
+                imageViewAdapter.notifyDataSetChanged();
+            }
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -421,44 +420,38 @@ public class DocumentActivity1 extends AppCompatActivity {
             if (ScannerConstants.bitmapSelectedImage != null) {
                 binding.imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
                 binding.buttonUpload.setVisibility(View.VISIBLE);
-
-                Toast.makeText(this, R.string.done, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.done, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, R.string.canceled, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.canceled, Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    class GetImageTitles implements ICallback<ImageDataTitle> {
-        @Override
-        public void execute(ImageDataTitle imageDataTitle) {
-            if (imageDataTitle.isSuccess()) {
-                DocumentActivity1.imageDataTitle = imageDataTitle;
-                for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
-                    arrayListTitle.add(dataTitle.getTitle());
-                }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                        android.R.layout.simple_spinner_dropdown_item, arrayListTitle) {
-                    @NotNull
-                    @Override
-                    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                        View view = super.getView(position, convertView, parent);
-                        final CheckedTextView textView = view.findViewById(android.R.id.text1);
-                        textView.setChecked(true);
-                        textView.setTextColor(getResources().getColor(R.color.black));
-                        return view;
-                    }
-                };
-                binding.spinnerTitle.setAdapter(arrayAdapter);
-                loadImage();
-            } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
-                DocumentActivity1.this.startActivity(intent);
-                finish();
+    public final void askPermission() {
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_LONG).show();
+                initialize();
             }
-        }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_LONG).show();
+                finishAffinity();
+            }
+        };
+
+        new TedPermission(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleMessage("جهت استفاده از برنامه مجوزهای پیشنهادی را قبول فرمایید")
+                .setDeniedMessage("در صورت رد این مجوز قادر به استفاده از این دستگاه نخواهید بود" + "\n" +
+                        "لطفا با فشار دادن دکمه اعطای دسترسی و سپس در بخش دسترسی ها با این مجوز ها موافقت نمایید")
+////                .setGotoSettingButtonText("اعطای دسترسی")
+                .setPermissions(Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).check();
     }
 
     class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
@@ -490,6 +483,38 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
+    class GetImageTitles implements ICallback<ImageDataTitle> {
+        @Override
+        public void execute(ImageDataTitle imageDataTitle) {
+            if (imageDataTitle.isSuccess()) {
+                DocumentActivity1.imageDataTitle = imageDataTitle;
+                for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
+                    arrayListTitle.add(dataTitle.getTitle());
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
+                        android.R.layout.simple_spinner_dropdown_item, arrayListTitle) {
+                    @NotNull
+                    @Override
+                    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        final CheckedTextView textView = view.findViewById(android.R.id.text1);
+                        textView.setChecked(true);
+                        textView.setTextColor(getResources().getColor(R.color.black));
+                        return view;
+                    }
+                };
+                binding.spinnerTitle.setAdapter(arrayAdapter);
+                loadImage();
+            } else {
+                Toast.makeText(DocumentActivity1.this,
+                        DocumentActivity1.this.getString(R.string.error_call_backup), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
+                DocumentActivity1.this.startActivity(intent);
+                finish();
+            }
+        }
+    }
+
     class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
 
         @Override
@@ -498,28 +523,9 @@ public class DocumentActivity1 extends AppCompatActivity {
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
 
             Toast.makeText(DocumentActivity1.this, error, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
+            Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
             DocumentActivity1.this.startActivity(intent);
             finish();
-        }
-    }
-
-    class GetImageThumbnailList implements ICallback<ImageDataThumbnail> {
-        @Override
-        public void execute(ImageDataThumbnail responseBody) {
-            if (responseBody.isSuccess()) {
-                imageDataThumbnail = responseBody.getData();
-                for (ImageDataThumbnail.Data data : imageDataThumbnail) {
-                    imageDataThumbnailUri.add(data.getImg());
-                }
-                getImageThumbnail(imageDataThumbnail.get(0).getImg());
-            } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
-                DocumentActivity1.this.startActivity(intent);
-                finish();
-            }
         }
     }
 
@@ -533,14 +539,6 @@ public class DocumentActivity1 extends AppCompatActivity {
                     DocumentActivity1.this.getString(R.string.dear_user),
                     DocumentActivity1.this.getString(R.string.download_document),
                     DocumentActivity1.this.getString(R.string.accepted));
-        }
-    }
-
-    public void saveTempBitmap(Bitmap bitmap) {
-        if (isExternalStorageWritable()) {
-            saveImage(bitmap);
-        } else {
-            Log.e("error", "isExternalStorageWritable");
         }
     }
 
@@ -573,31 +571,10 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
     class UploadImageDoc implements ICallback<UploadImage> {
         @Override
         public void execute(UploadImage responseBody) {
             if (responseBody.isSuccess()) {
-//                Images image;
-//                if (isMap) {
-//                    image = new Images(imageFileName, billId, trackNumber,
-//                            String.valueOf(imageDataTitle.getData().get(
-//                                    binding.spinnerMapTitle.getSelectedItemPosition()).getId()),
-//                            imageDataTitle.getData().get(
-//                                    binding.spinnerMapTitle.getSelectedItemPosition()).getTitle(),
-//                            bitmap, true);
-//                } else {
-//                    image = new Images(imageFileName, billId, trackNumber,
-//                            String.valueOf(imageDataTitle.getData().get(
-//                                    binding.spinnerTitle.getSelectedItemPosition()).getId()),
-//                            imageDataTitle.getData().get(
-//                                    binding.spinnerTitle.getSelectedItemPosition()).getTitle(),
-//                            ScannerConstants.bitmapSelectedImage, true);
-//                }
                 Images image = new Images(imageFileName, billId, trackNumber,
                         String.valueOf(imageDataTitle.getData().get(
                                 binding.spinnerTitle.getSelectedItemPosition()).getId()),
@@ -639,31 +616,23 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
-    public final void askPermission() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
-                initialize();
+    class GetImageThumbnailList implements ICallback<ImageDataThumbnail> {
+        @Override
+        public void execute(ImageDataThumbnail responseBody) {
+            if (responseBody.isSuccess()) {
+                imageDataThumbnail = responseBody.getData();
+                for (ImageDataThumbnail.Data data : imageDataThumbnail) {
+                    imageDataThumbnailUri.add(data.getImg());
+                }
+                getImageThumbnail(imageDataThumbnail.get(0).getImg());
+            } else {
+                Toast.makeText(DocumentActivity1.this,
+                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
+                DocumentActivity1.this.startActivity(intent);
+                finish();
             }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                finishAffinity();
-            }
-        };
-
-        new TedPermission(this)
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("جهت استفاده از برنامه مجوزهای پیشنهادی را قبول فرمایید")
-                .setDeniedMessage("در صورت رد این مجوز قادر به استفاده از این دستگاه نخواهید بود" + "\n" +
-                        "لطفا با فشار دادن دکمه اعطای دسترسی و سپس در بخش دسترسی ها با این مجوز ها موافقت نمایید")
-////                .setGotoSettingButtonText("اعطای دسترسی")
-                .setPermissions(Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).check();
+        }
     }
 
     @Override

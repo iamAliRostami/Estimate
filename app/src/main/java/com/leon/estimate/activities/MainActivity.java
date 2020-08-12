@@ -40,6 +40,7 @@ import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
@@ -63,10 +64,7 @@ import com.leon.estimate.databinding.MainActivityBinding;
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.TileSourcePolicy;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -118,16 +116,6 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    OnlineTileSourceBase CUSTOM = new XYTileSource("MapQuest",
-            0, 19, 256, ".png",
-            new String[]{"http://172.18.12.242/osm_tiles/"},
-            "© OpenStreetMap contributors",
-            new TileSourcePolicy(2,
-                    TileSourcePolicy.FLAG_NO_BULK
-                            | TileSourcePolicy.FLAG_NO_PREVENTIVE
-                            | TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
-                            | TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
-            ));
 
     void initialize() {
         initializeMap();
@@ -241,30 +229,7 @@ public class MainActivity extends AppCompatActivity
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-//            mapView.setTileSource(CUSTOM);
-//            mapView.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, "",
-//                    new String[] { "http://basemap.nationalmap.gov/ArcGIS/rest/services/USGSTopo/MapServer/tile/" }) {
-//                @Override
-//                public String getTileURLString(long pMapTileIndex) {
-//                    return getBaseUrl()
-//                            + MapTileIndex.getZoom(pMapTileIndex)
-//                            + "/" + MapTileIndex.getY(pMapTileIndex)
-//                            + "/" + MapTileIndex.getX(pMapTileIndex)
-//                            + mImageFilenameEnding;
-//                }
-//            });
             mapView.setTileSource(TileSourceFactory.MAPNIK);
-
-//            mapView.setTileSource(new XYTileSource("MAPNIK",
-//                    0, 18, 256, ".jpg", new String[]{
-//                    "http://a.tile.openstreetmap.org/",
-//                    "http://b.tile.openstreetmap.org/",
-//                    "http://c.tile.openstreetmap.org/"}));
-//            mapView.setBuiltInZoomControls(true);
-//            mapView.setMultiTouchControls(true);
-//            mapView.setUseDataConnection(false); //optional, but a good way to prevent loading from the network and test your zip loading.
-
-
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
@@ -316,12 +281,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onProviderEnabled(String provider) {
+    public void onProviderEnabled(@NotNull String provider) {
 
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
+    public void onProviderDisabled(@NotNull String provider) {
     }
 
 
@@ -415,7 +380,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void send() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
@@ -434,7 +399,7 @@ public class MainActivity extends AppCompatActivity
             HttpClientWrapperOld.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
 
         } else
-            Toast.makeText(getApplicationContext(), "مسیری برای تخلیه وجود ندارد", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
     }
 
     class Download implements ICallback<Input> {
