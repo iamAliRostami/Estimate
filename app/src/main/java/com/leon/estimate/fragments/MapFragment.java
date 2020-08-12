@@ -54,11 +54,8 @@ public class MapFragment extends Fragment implements LocationListener {
     private double latitude;
     private double longitude;
     private LocationManager locationManager;
-    //    List<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
-//    String trackNumber;
     private int polygonIndex;
     private int placeIndex;
-    private MyLocationNewOverlay locationOverlay;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     MapFragmentBinding binding;
     private Context context;
@@ -140,7 +137,7 @@ public class MapFragment extends Fragment implements LocationListener {
         GeoPoint startPoint = new GeoPoint(latitude, longitude);
 //        startPoint = new GeoPoint(48.8583, 2.2944);
         mapController.setCenter(startPoint);
-        locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), binding.mapView);
+        MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), binding.mapView);
         locationOverlay.enableMyLocation();
         binding.mapView.getOverlays().add(locationOverlay);
         binding.mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
@@ -158,6 +155,7 @@ public class MapFragment extends Fragment implements LocationListener {
                 return false;
             }
         }));
+//        addRouteOverlay(startPoint, new GeoPoint(48.8583, 2.2944));
     }
 
     private void addPlace(GeoPoint p) {

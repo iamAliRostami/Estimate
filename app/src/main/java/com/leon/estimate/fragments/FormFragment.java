@@ -106,7 +106,8 @@ public class FormFragment extends Fragment {
             datePickerDialog.setTextSizeWeek(12.0f);
             datePickerDialog.setTextSizeDate(14.0f);
             datePickerDialog.setCanceledOnTouchOutside(true);
-            datePickerDialog.setOnSingleDateSelectedListener(date -> binding.editTextSodurDate.setText(date.getPersianShortDate()));
+            datePickerDialog.setOnSingleDateSelectedListener(date ->
+                    binding.editTextSodurDate.setText(date.getPersianShortDate()));
             datePickerDialog.showDialog();
         });
     }
@@ -311,7 +312,6 @@ public class FormFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
     class initializeSpinners extends AsyncTask<Integer, Integer, Integer> {
-
         ProgressDialog dialog;
 
         @Override

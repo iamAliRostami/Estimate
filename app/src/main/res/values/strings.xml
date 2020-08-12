@@ -16,11 +16,11 @@
     <string name="form1">فرم اولیه</string>
     <string name="form2">فرم ثانویه</string>
     <string name="owner">مالک</string>
-    <string name="phone_number">تلفن</string>
+    <string name="phone_number">تلفن ثابت</string>
     <string name="request_type">نوع تقاضا</string>
     <string name="id_number">ردیف</string>
     <string name="nation_number">کد ملی</string>
-    <string name="mobile_number">همراه</string>
+    <string name="mobile_number">شماره موبایل</string>
     <string name="request_date">تاریخ درخواست</string>
     <string name="account_number">اشتراک</string>
     <string name="license">پروانه</string>
@@ -110,8 +110,11 @@
     <string name="number_maskooni">تعداد مسکونی</string>
     <string name="zarfiat_qaradadi">ظرفیت قراردادی</string>
     <string name="adam_taxfif_ab">عدم تخفیف آب</string>
-    <string name="name">نام</string>
     <string name="phone">تلفن ثابت</string>
+    <string name="nation_code">کد ملی</string>
+    <string name="name">نام</string>
+    <string name="father_name">نام پدر</string>
+    <string name="shomare_eshterak">شماره اشتراک</string>
     <string name="sms_phone">شماره پیامک ها</string>
     <string name="shomare_peygiri">شماره پیگیری</string>
     <string name="noe_vagozari">نوع واگذاری</string>
@@ -148,4 +151,10 @@
     <string name="ensheab_gheire_daem">انشعاب غیردائم</string>
     <string name="select_service">حداقل یکی از سرویس ها را انتخاب کنید.</string>
     <string name="empty_masir">مسیری برای تخلیه وجود ندارد</string>
+    <string name="_031">031</string>
+    <string name="shenasname">شماره شناسنامه</string>
+    <string name="family">نام خانوادگی</string>
+    <string name="radif">شماره ردیف</string>
+    <string name="_09">09</string>
+    <string name="description">توضیحات</string>
 </resources>
