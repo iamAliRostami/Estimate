@@ -25,7 +25,6 @@ import java.util.Objects;
 public class PersonalFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     PersonalFragmentBinding binding;
-    private Context context;
 
     public PersonalFragment() {
     }
@@ -44,15 +43,16 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
-        ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_malek)));
+        Context context = getActivity();
+        if (context != null) {
+            ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
+                    context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_malek)));
+        }
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        findViewById = inflater.inflate(R.layout.map_fragment, container, false);
         binding = PersonalFragmentBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
@@ -76,7 +76,6 @@ public class PersonalFragment extends Fragment {
         calculationUserInput.sureName = binding.editTextFamily.getText().toString();
         calculationUserInput.fatherName = binding.editTextFatherName.getText().toString();
         calculationUserInput.postalCode = binding.editTextPostalCode.getText().toString();
-
         calculationUserInput.radif = binding.editTextRadif.getText().toString();
         calculationUserInput.phoneNumber = binding.editTextPhone.getText().toString();
         calculationUserInput.mobile = binding.editTextMobile.getText().toString();
