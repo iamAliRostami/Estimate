@@ -161,7 +161,7 @@
                         android:layout_gravity="left"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
-                        android:text="@string/taxfif_number"
+                        android:text="@string/noe_takhfif"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
@@ -177,6 +177,7 @@
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         tools:ignore="RtlHardcoded" />
 
                     <TextView
@@ -360,12 +361,12 @@
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
 
-                    <CheckBox
-                        android:id="@+id/checkbox1"
+                    <Spinner
+                        android:id="@+id/spinner4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center" />
 
                     <EditText
@@ -535,7 +536,7 @@
                         android:layout_gravity="left"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:gravity="left"
-                        android:text="@string/noe_takhfif"
+                        android:text="@string/taxfif_number"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
@@ -551,6 +552,7 @@
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeMedium"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         tools:ignore="RtlHardcoded" />
 
                     <TextView
@@ -701,13 +703,14 @@
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
 
-                    <Spinner
-                        android:id="@+id/spinner4"
+                    <CheckBox
+                        android:id="@+id/checkbox1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="center" />
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="center"
+                        android:visibility="gone" />
 
                     <CheckBox
                         android:id="@+id/checkbox2"
@@ -715,7 +718,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:visibility="gone" />
 
                     <CheckBox
                         android:id="@+id/checkbox3"

@@ -285,7 +285,7 @@ public class FormFragment extends Fragment {
 
     private void initializeField() {
         binding.editTextZoneTitle.setText(FormActivity1.examinerDuties.getZoneTitle());
-        binding.editTextTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber());
+        binding.editTextTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber().replace(".0", ""));
         binding.editTextBillId.setText(FormActivity1.examinerDuties.getBillId());
         binding.editTextSifoon100.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon100()));
         binding.editTextSifoon125.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon125()));

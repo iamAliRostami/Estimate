@@ -411,9 +411,9 @@ public class DocumentActivity1 extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
+            this.startActivityForResult(new Intent(this, CropActivity.class),
+                    IMAGE_CROP_REQUEST);
         } else if (requestCode == IMAGE_CROP_REQUEST && resultCode == RESULT_OK) {
-//            ScannerConstants.bitmapSelectedImage = ((BitmapDrawable) imageView1.getDrawable()).getBitmap();
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
@@ -437,7 +437,8 @@ public class DocumentActivity1 extends AppCompatActivity {
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" +
+                        deniedPermissions.toString(), Toast.LENGTH_LONG).show();
                 finishAffinity();
             }
         };
@@ -458,7 +459,8 @@ public class DocumentActivity1 extends AppCompatActivity {
         @Override
         public void executeIncomplete(Response<ImageDataTitle> response) {
             Toast.makeText(DocumentActivity1.this,
-                    DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                    DocumentActivity1.this.getString(R.string.error_not_auth),
+                    Toast.LENGTH_LONG).show();
             Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
             DocumentActivity1.this.startActivity(intent);
             finish();
@@ -475,7 +477,8 @@ public class DocumentActivity1 extends AppCompatActivity {
                 getImageThumbnailList();
             } else {
                 Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                        DocumentActivity1.this.getString(R.string.error_not_auth),
+                        Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
                 DocumentActivity1.this.startActivity(intent);
                 finish();
@@ -507,7 +510,8 @@ public class DocumentActivity1 extends AppCompatActivity {
                 loadImage();
             } else {
                 Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_call_backup), Toast.LENGTH_LONG).show();
+                        DocumentActivity1.this.getString(R.string.error_call_backup),
+                        Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
                 DocumentActivity1.this.startActivity(intent);
                 finish();
@@ -546,7 +550,6 @@ public class DocumentActivity1 extends AppCompatActivity {
         @Override
         public void execute(ResponseBody responseBody) {
             Bitmap bmp = BitmapFactory.decodeStream(responseBody.byteStream());
-//            binding.imageView1.setImageBitmap(bmp);
             Images image = new Images(billId, trackNumber,
                     imageDataThumbnail.get(counter).getTitle_name(), bmp, false);
             images.add(image);

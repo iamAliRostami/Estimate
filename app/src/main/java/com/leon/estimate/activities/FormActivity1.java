@@ -248,17 +248,11 @@ public class FormActivity1 extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
             Log.e("simple Message", simpleMessage.getMessage());
-//            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-//                    .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
         }
@@ -310,6 +304,11 @@ public class FormActivity1 extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     @SuppressLint("StaticFieldLeak")
     class GetDBData extends AsyncTask<Integer, String, String> {
         ProgressDialog dialog;
@@ -320,6 +319,11 @@ public class FormActivity1 extends AppCompatActivity {
                     .allowMainThreadQueries().build();
             daoExaminerDuties = dataBase.daoExaminerDuties();
             examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
+//            float floatNumber = Float.parseFloat(trackNumber);
+//            int intNumber = (int) floatNumber;
+//            trackNumber = String.valueOf(intNumber);
+            trackNumber = trackNumber.replace(".0", "");
+//            examinerDuties.setTrackNumber(trackNumber);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
             fragmentTransaction.commit();

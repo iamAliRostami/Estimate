@@ -59,7 +59,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
     }
 
 
-    @SuppressLint("NewApi")
+    @SuppressLint({"NewApi", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         ExaminerDuties examinerDuties = this.examinerDuties.get(i);
@@ -77,7 +77,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
         viewHolder.textViewServiceGroup.setText(examinerDuties.getServiceGroup());
         viewHolder.textViewAddress.setText(examinerDuties.getAddress().trim());
         viewHolder.textViewRadif.setText(examinerDuties.getRadif());
-        viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
+        viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber().replace(".0", ""));
         viewHolder.textViewNotificationMobile.setText(examinerDuties.getNotificationMobile());
         viewHolder.textViewMoshtarakMobile.setText(examinerDuties.getMoshtarakMobile());
         viewHolder.textViewNeighbourBillId.setText(examinerDuties.getNeighbourBillId());

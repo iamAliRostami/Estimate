@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity
             }
             SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
             String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-            Retrofit retrofit = NetworkHelper.getInstance(false, token);
+            Retrofit retrofit = NetworkHelper.getInstance(true, token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
             SendCalculation sendCalculation = new SendCalculation();
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);

@@ -85,15 +85,12 @@ public class PersonalFragment extends Fragment {
     }
 
     private boolean prepareForm() {
-        return checkIsNoEmpty(binding.editTextShenasname)
-                && checkIsNoEmpty(binding.editTextName)
+        return checkIsNoEmpty(binding.editTextName)
                 && checkIsNoEmpty(binding.editTextFamily)
-                && checkIsNoEmpty(binding.editTextFatherName)
                 && checkIsNoEmpty(binding.editTextEshterak)
                 && checkIsNoEmpty(binding.editTextRadif)
                 && checkIsNoEmpty(binding.editTextAddress)
-                && checkOtherIsNoEmpty()
-                ;
+                && checkOtherIsNoEmpty();
     }
 
     private boolean checkIsNoEmpty(EditText editText) {
@@ -114,7 +111,8 @@ public class PersonalFragment extends Fragment {
             focusView = binding.editTextNationNumber;
             focusView.requestFocus();
             return false;
-        } else if (binding.editTextPostalCode.getText().toString().length() < 10) {
+        } else if (binding.editTextPostalCode.getText().toString().length() > 0 &&
+                binding.editTextPostalCode.getText().toString().length() < 10) {
             binding.editTextPostalCode.setError(getString(R.string.error_format));
             focusView = binding.editTextPostalCode;
             focusView.requestFocus();
@@ -142,13 +140,18 @@ public class PersonalFragment extends Fragment {
         binding.editTextDescription.setText(FormActivity1.examinerDuties.getDescription());
         binding.editTextPhone.setText(FormActivity1.examinerDuties.getPhoneNumber());
         binding.editTextMobile.setText(FormActivity1.examinerDuties.getMobile());
-
         binding.editTextEshterak.setText(Objects.requireNonNull(
                 FormActivity1.examinerDuties.getEshterak().trim()));
         binding.editTextPostalCode.setText(FormActivity1.examinerDuties.getPostalCode());
         float floatNumber = Float.parseFloat(FormActivity1.examinerDuties.getRadif());
         int intNumber = (int) floatNumber;
-        binding.editTextRadif.setText(String.valueOf(intNumber));
+        binding.editTextRadif.setText(
+                FormActivity1.examinerDuties.getRadif().replace(".0", ""));
+
+        binding.textViewZone.setText(FormActivity1.examinerDuties.getZoneTitle());
+        binding.textViewBillId.setText(FormActivity1.examinerDuties.getBillId());
+        binding.textViewTrackNumber.setText(
+                FormActivity1.examinerDuties.getTrackNumber().replace(".0", ""));
     }
 
     @Override
