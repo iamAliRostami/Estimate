@@ -236,9 +236,9 @@ public class FormFragment extends Fragment {
         noeVagozariDictionaries = daoNoeVagozariDictionary.getNoeVagozariDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
         int select = 0, counter = 0;
-        for (NoeVagozariDictionary taxfifdictionary : noeVagozariDictionaries) {
-            arrayListSpinner1.add(taxfifdictionary.getTitle());
-            if (taxfifdictionary.isSelected()) {
+        for (NoeVagozariDictionary noeVagozariDictionary : noeVagozariDictionaries) {
+            arrayListSpinner1.add(noeVagozariDictionary.getTitle());
+            if (noeVagozariDictionary.isSelected()) {
                 select = counter;
             }
             counter++;
@@ -285,7 +285,7 @@ public class FormFragment extends Fragment {
 
     private void initializeField() {
         binding.editTextZoneTitle.setText(FormActivity1.examinerDuties.getZoneTitle());
-        binding.editTextTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber().replace(".0", ""));
+        binding.editTextTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber());
         binding.editTextBillId.setText(FormActivity1.examinerDuties.getBillId());
         binding.editTextSifoon100.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon100()));
         binding.editTextSifoon125.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon125()));

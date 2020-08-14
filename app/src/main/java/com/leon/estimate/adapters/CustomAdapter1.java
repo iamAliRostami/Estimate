@@ -24,13 +24,11 @@ import java.util.List;
 public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHolder> {
     private Context context;
     private List<ExaminerDuties> examinerDuties;
-    private int width;
     private int size = 0;
 
     public CustomAdapter1(Context context, List<ExaminerDuties> examinerDuties, int width) {
         this.context = context;
         this.examinerDuties = examinerDuties;
-        this.width = width;
     }
 
     @SuppressLint("InflateParams")
@@ -77,32 +75,10 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
         viewHolder.textViewServiceGroup.setText(examinerDuties.getServiceGroup());
         viewHolder.textViewAddress.setText(examinerDuties.getAddress().trim());
         viewHolder.textViewRadif.setText(examinerDuties.getRadif());
-        viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber().replace(".0", ""));
+        viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
         viewHolder.textViewNotificationMobile.setText(examinerDuties.getNotificationMobile());
         viewHolder.textViewMoshtarakMobile.setText(examinerDuties.getMoshtarakMobile());
         viewHolder.textViewNeighbourBillId.setText(examinerDuties.getNeighbourBillId());
-
-//        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/BYekan_3.ttf");
-//        viewHolder.textViewName.setTypeface(typeface);
-//        viewHolder.textViewPeymayesh.setTypeface(typeface);
-//        viewHolder.textViewExaminationDay.setTypeface(typeface);
-//        viewHolder.textViewServiceGroup.setTypeface(typeface);
-//        viewHolder.textViewAddress.setTypeface(typeface);
-//        viewHolder.textViewRadif.setTypeface(typeface);
-//        viewHolder.textViewTrackNumber.setTypeface(typeface);
-//        viewHolder.textViewNotificationMobile.setTypeface(typeface);
-//        viewHolder.textViewMoshtarakMobile.setTypeface(typeface);
-//        viewHolder.textViewNeighbourBillId.setTypeface(typeface);
-//        viewHolder.textViewName.setWidth(width / 6);
-//        viewHolder.textViewExaminationDay.setWidth(width / 6);
-//        viewHolder.textViewAddress.setWidth(width / 3);
-//        viewHolder.textViewServiceGroup.setWidth(width / 6);
-//        viewHolder.textViewPeymayesh.setWidth(width / 6);//
-//        viewHolder.textViewRadif.setWidth(width / 4);
-//        viewHolder.textViewTrackNumber.setWidth(width / 4);
-//        viewHolder.textViewNotificationMobile.setWidth(width / 4);
-//        viewHolder.textViewMoshtarakMobile.setWidth(width / 4);
-//        viewHolder.textViewNeighbourBillId.setWidth(width / 4);
 
         viewHolder.textViewName.setGravity(1);
         viewHolder.textViewPeymayesh.setGravity(1);
@@ -134,7 +110,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
         return position;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName;
         TextView textViewPeymayesh;
         TextView textViewExaminationDay;

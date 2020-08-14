@@ -346,20 +346,6 @@
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
 
-                    <EditText
-                        android:id="@+id/editTextTedadTakhfif"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLength="8"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
 
                     <Spinner
                         android:id="@+id/spinner4"
@@ -720,6 +706,21 @@
                         android:layout_margin="@dimen/activity_mid_margin"
                         android:gravity="center"
                         android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/editTextTedadTakhfif"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
 
                     <CheckBox
                         android:id="@+id/checkbox3"

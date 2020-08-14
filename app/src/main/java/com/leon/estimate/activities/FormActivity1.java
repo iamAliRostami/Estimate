@@ -95,42 +95,38 @@ public class FormActivity1 extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             switch (pageNumber) {
                 case 1:
+                    PersonalFragment personalFragment = (PersonalFragment)
+                            fragmentManager.findFragmentById(R.id.fragment);
+                    if (personalFragment != null) {
+                        calculationUserInputTemp = personalFragment.setOnButtonNextClickListener();
+                        if (calculationUserInputTemp != null) {
+                            prepareFromPersonal();
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
+                            fragmentTransaction.commit();
+                            pageNumber = pageNumber + 1;
+                        }
+                    }
+                    break;
+                case 2:
                     calculationUserInputTemp = ServicesFragment.prepareServices();
                     if (calculationUserInputTemp != null) {
+                        calculationUserInput.selectedServicesObject =
+                                calculationUserInputTemp.selectedServicesObject;
+                        calculationUserInput.selectedServices =
+                                calculationUserInputTemp.selectedServices;
                         fragmentTransaction.replace(R.id.fragment, new FormFragment());
                         fragmentTransaction.commit();
                         pageNumber = pageNumber + 1;
                     } else
                         Toast.makeText(context, R.string.select_service, Toast.LENGTH_LONG).show();
                     break;
-                case 2:
-                    FormFragment formFragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
-                    if (formFragment != null && formFragment.setOnButtonNextClickListener() != null) {
-                        calculationUserInput = formFragment.setOnButtonNextClickListener();
-                        calculationUserInput.selectedServicesString = calculationUserInputTemp.selectedServicesString;
-                        calculationUserInput.selectedServicesObject = calculationUserInputTemp.selectedServicesObject;
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
-                        fragmentTransaction.commit();
-                        pageNumber = pageNumber + 1;
-                    }
-                    break;
                 case 3:
-                    PersonalFragment personalFragment = (PersonalFragment) fragmentManager.findFragmentById(R.id.fragment);
-                    if (personalFragment != null && personalFragment.setOnButtonNextClickListener() != null) {
-                        calculationUserInputTemp = personalFragment.setOnButtonNextClickListener();
-
-                        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
-                        calculationUserInput.firstName = calculationUserInputTemp.firstName;
-                        calculationUserInput.sureName = calculationUserInputTemp.sureName;
-                        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
-                        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
-                        calculationUserInput.radif = calculationUserInputTemp.radif;
-                        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
-                        calculationUserInput.mobile = calculationUserInputTemp.mobile;
-                        calculationUserInput.address = calculationUserInputTemp.address;
-                        calculationUserInput.description = calculationUserInputTemp.description;
-
+                    FormFragment formFragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    if (formFragment != null)
+                        calculationUserInputTemp = formFragment.setOnButtonNextClickListener();
+                    if (calculationUserInputTemp != null) {
+                        prepareFromForm();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragment, new MapFragment());
                         fragmentTransaction.commit();
@@ -161,22 +157,92 @@ public class FormActivity1 extends AppCompatActivity {
                     break;
                 case 2:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
+                    fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
                     fragmentTransaction.commit();
                     break;
                 case 3:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, new FormFragment());
+                    fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
                     fragmentTransaction.commit();
                     break;
                 case 4:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
+                    fragmentTransaction.replace(R.id.fragment, new FormFragment());
                     fragmentTransaction.commit();
                     break;
             }
             pageNumber = pageNumber - 1;
         });
+    }
+
+    void prepareFromForm() {
+        calculationUserInput.sifoon100 = calculationUserInputTemp.sifoon100;
+        calculationUserInput.sifoon125 = calculationUserInputTemp.sifoon125;
+        calculationUserInput.sifoon150 = calculationUserInputTemp.sifoon150;
+        calculationUserInput.sifoon200 = calculationUserInputTemp.sifoon200;
+        calculationUserInput.arse = calculationUserInputTemp.arse;
+        calculationUserInput.aianKol = calculationUserInputTemp.aianKol;
+        calculationUserInput.aianMaskooni = calculationUserInputTemp.aianMaskooni;
+        calculationUserInput.aianTejari = calculationUserInputTemp.aianTejari;
+        calculationUserInput.tedadMaskooni = calculationUserInputTemp.tedadMaskooni;
+        calculationUserInput.tedadTejari = calculationUserInputTemp.tedadTejari;
+        calculationUserInput.tedadSaier = calculationUserInputTemp.tedadSaier;
+        calculationUserInput.arzeshMelk = calculationUserInputTemp.arzeshMelk;
+        calculationUserInput.tedadTaxfif = calculationUserInputTemp.tedadTaxfif;
+        calculationUserInput.zarfiatQarardadi = calculationUserInputTemp.zarfiatQarardadi;
+        calculationUserInput.parNumber = calculationUserInputTemp.parNumber;
+        calculationUserInput.karbariId = calculationUserInputTemp.karbariId;
+        calculationUserInput.noeVagozariId = calculationUserInputTemp.noeVagozariId;
+        calculationUserInput.qotrEnsheabId = calculationUserInputTemp.qotrEnsheabId;
+        calculationUserInput.taxfifId = calculationUserInputTemp.taxfifId;
+        calculationUserInput.adamTaxfifAb = calculationUserInputTemp.adamTaxfifAb;
+        calculationUserInput.adamTaxfifFazelab = calculationUserInputTemp.adamTaxfifFazelab;
+        calculationUserInput.ensheabQeireDaem = calculationUserInputTemp.ensheabQeireDaem;
+        examinerDuties.setSifoon100(calculationUserInputTemp.sifoon100);
+        examinerDuties.setSifoon125(calculationUserInputTemp.sifoon125);
+        examinerDuties.setSifoon150(calculationUserInputTemp.sifoon150);
+        examinerDuties.setSifoon200(calculationUserInputTemp.sifoon200);
+        examinerDuties.setArse(calculationUserInputTemp.arse);
+        examinerDuties.setAianKol(calculationUserInputTemp.aianKol);
+        examinerDuties.setAianMaskooni(calculationUserInputTemp.aianMaskooni);
+        examinerDuties.setAianNonMaskooni(calculationUserInputTemp.aianTejari);
+        examinerDuties.setTedadMaskooni(calculationUserInputTemp.tedadMaskooni);
+        examinerDuties.setTedadTejari(calculationUserInputTemp.tedadTejari);
+        examinerDuties.setTedadSaier(calculationUserInputTemp.tedadSaier);
+        examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
+        examinerDuties.setTedadTaxfif(calculationUserInputTemp.tedadTaxfif);
+        examinerDuties.setZarfiatQarardadi(calculationUserInputTemp.zarfiatQarardadi);
+        examinerDuties.setParNumber(calculationUserInputTemp.parNumber);
+        examinerDuties.setKarbariId(calculationUserInputTemp.karbariId);
+        examinerDuties.setQotrEnsheabId(calculationUserInputTemp.qotrEnsheabId);
+        examinerDuties.setTaxfifId(calculationUserInputTemp.taxfifId);
+        examinerDuties.setAdamTaxfifAb(calculationUserInputTemp.adamTaxfifAb);
+        examinerDuties.setAdamTaxfifFazelab(calculationUserInputTemp.adamTaxfifFazelab);
+        examinerDuties.setEnsheabQeirDaem(calculationUserInputTemp.ensheabQeireDaem);
+    }
+
+    void prepareFromPersonal() {
+        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+        calculationUserInput.firstName = calculationUserInputTemp.firstName;
+        calculationUserInput.sureName = calculationUserInputTemp.sureName;
+        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
+        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+        calculationUserInput.radif = calculationUserInputTemp.radif;
+        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+        calculationUserInput.address = calculationUserInputTemp.address;
+        calculationUserInput.description = calculationUserInputTemp.description;
+
+        examinerDuties.setFirstName(calculationUserInputTemp.firstName);
+        examinerDuties.setSureName(calculationUserInputTemp.sureName);
+        examinerDuties.setNameAndFamily(calculationUserInputTemp.firstName.concat(" ")
+                .concat(calculationUserInputTemp.sureName));
+        examinerDuties.setFatherName(calculationUserInputTemp.fatherName);
+        examinerDuties.setPostalCode(calculationUserInput.postalCode);
+        examinerDuties.setPhoneNumber(calculationUserInput.phoneNumber);
+        examinerDuties.setMobile(calculationUserInputTemp.mobile);//TODO 3 mobile
+        examinerDuties.setAddress(calculationUserInputTemp.address);
+        examinerDuties.setDescription(calculationUserInputTemp.description);
     }
 
     private byte[] convertBitmapToByte(Bitmap bitmap) {
@@ -261,7 +327,6 @@ public class FormActivity1 extends AppCompatActivity {
     class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
         @Override
         public void executeIncomplete(Response<SimpleMessage> response) {
-
         }
     }
 
@@ -319,13 +384,8 @@ public class FormActivity1 extends AppCompatActivity {
                     .allowMainThreadQueries().build();
             daoExaminerDuties = dataBase.daoExaminerDuties();
             examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
-//            float floatNumber = Float.parseFloat(trackNumber);
-//            int intNumber = (int) floatNumber;
-//            trackNumber = String.valueOf(intNumber);
-            trackNumber = trackNumber.replace(".0", "");
-//            examinerDuties.setTrackNumber(trackNumber);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
+            fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
             fragmentTransaction.commit();
             return null;
         }

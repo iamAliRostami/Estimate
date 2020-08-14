@@ -2,6 +2,7 @@ package com.leon.estimate.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,15 +144,11 @@ public class PersonalFragment extends Fragment {
         binding.editTextEshterak.setText(Objects.requireNonNull(
                 FormActivity1.examinerDuties.getEshterak().trim()));
         binding.editTextPostalCode.setText(FormActivity1.examinerDuties.getPostalCode());
-        float floatNumber = Float.parseFloat(FormActivity1.examinerDuties.getRadif());
-        int intNumber = (int) floatNumber;
-        binding.editTextRadif.setText(
-                FormActivity1.examinerDuties.getRadif().replace(".0", ""));
+        binding.editTextRadif.setText(FormActivity1.examinerDuties.getRadif());
 
         binding.textViewZone.setText(FormActivity1.examinerDuties.getZoneTitle());
         binding.textViewBillId.setText(FormActivity1.examinerDuties.getBillId());
-        binding.textViewTrackNumber.setText(
-                FormActivity1.examinerDuties.getTrackNumber().replace(".0", ""));
+        binding.textViewTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber());
     }
 
     @Override
@@ -162,5 +159,12 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("onResume", "happened");
+        initializeField();
     }
 }
