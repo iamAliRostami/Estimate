@@ -119,16 +119,17 @@ public class FormFragment extends Fragment {
         calculationUserInput.sifoon150 = Integer.parseInt(binding.editTextSifoon150.getText().toString());
         calculationUserInput.sifoon200 = Integer.parseInt(binding.editTextSifoon200.getText().toString());
         calculationUserInput.arse = Integer.parseInt(binding.editTextArese.getText().toString());
-        calculationUserInput.aianKol = Integer.parseInt(binding.editTextAianKol.getText().toString());
         calculationUserInput.aianMaskooni = Integer.parseInt(binding.editTextAianMaskooni.getText().toString());
         calculationUserInput.aianTejari = Integer.parseInt(binding.editTextAianNonMaskooni.getText().toString());
+        calculationUserInput.aianKol = Integer.parseInt(binding.editTextAianKol.getText().toString());
         calculationUserInput.tedadMaskooni = Integer.parseInt(binding.editTextTedadMaskooni.getText().toString());
         calculationUserInput.tedadTejari = Integer.parseInt(binding.editTextTedadTejari.getText().toString());
         calculationUserInput.tedadSaier = Integer.parseInt(binding.editTextTedadSaier.getText().toString());
-        calculationUserInput.arzeshMelk = Integer.parseInt(binding.editTextArzeshMelk.getText().toString());
         calculationUserInput.tedadTaxfif = Integer.parseInt(binding.editTextTedadTakhfif.getText().toString());
         calculationUserInput.zarfiatQarardadi = Integer.parseInt(binding.editTextZarfiatQaradadi.getText().toString());
+        calculationUserInput.arzeshMelk = Integer.parseInt(binding.editTextArzeshMelk.getText().toString());
         calculationUserInput.parNumber = binding.editTextPariNumber.getText().toString();
+
         calculationUserInput.karbariId = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
         calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
@@ -182,8 +183,13 @@ public class FormFragment extends Fragment {
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         karbariDictionaries = daoKarbariDictionary.getKarbariDictionary();
         List<String> arrayListSpinner1 = new ArrayList<>();
+        int selected = 0, counter = 0;
         for (KarbariDictionary karbariDictionary : karbariDictionaries) {
             arrayListSpinner1.add(karbariDictionary.getTitle());
+            if (karbariDictionary.getId() == FormActivity1.examinerDuties.getKarbariId()) {
+                selected = counter;
+            }
+            counter = counter + 1;
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
@@ -198,15 +204,21 @@ public class FormFragment extends Fragment {
             }
         };
         binding.spinner1.setAdapter(arrayAdapter);
-        binding.spinner1.setSelection(FormActivity1.examinerDuties.getKarbariId());
+//        binding.spinner1.setSelection(FormActivity1.examinerDuties.getKarbariId());
+        binding.spinner1.setSelection(selected);
     }
 
     private void initializeTaxfifSpinner() {
         DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
         taxfifDictionaries = daoTaxfifDictionary.getTaxfifDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
+        int selected = 0, counter = 0;
         for (TaxfifDictionary taxfifDictionary : taxfifDictionaries) {
             arrayListSpinner1.add(taxfifDictionary.getTitle());
+            if (taxfifDictionary.getId() == FormActivity1.examinerDuties.getTaxfifId()) {
+                selected = counter;
+            }
+            counter = counter + 1;
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
@@ -221,7 +233,8 @@ public class FormFragment extends Fragment {
             }
         };
         binding.spinner4.setAdapter(arrayAdapter);
-        binding.spinner4.setSelection(FormActivity1.examinerDuties.getTaxfifId());
+//        binding.spinner4.setSelection(FormActivity1.examinerDuties.getTaxfifId());
+        binding.spinner4.setSelection(selected);
     }
 
     private void initializeNoeVagozariSpinner() {
@@ -243,7 +256,6 @@ public class FormFragment extends Fragment {
             public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 final CheckedTextView textView = view.findViewById(android.R.id.text1);
-//                textView.setTypeface(typeface);
                 textView.setChecked(true);
                 textView.setTextColor(getResources().getColor(R.color.black));
                 return view;
@@ -257,8 +269,13 @@ public class FormFragment extends Fragment {
         DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
         qotrEnsheabDictionaries = daoQotrEnsheabDictionary.getQotrEnsheabDictionaries();
         List<String> arrayListSpinner1 = new ArrayList<>();
+        int counter = 0, selected = 0;
         for (QotrEnsheabDictionary qotrEnsheabDictionary : qotrEnsheabDictionaries) {
             arrayListSpinner1.add(qotrEnsheabDictionary.getTitle());
+            if (FormActivity1.examinerDuties.getQotrEnsheabId() == qotrEnsheabDictionary.getId()) {
+                selected = counter;
+            }
+            counter = counter + 1;
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
@@ -273,7 +290,8 @@ public class FormFragment extends Fragment {
             }
         };
         binding.spinner3.setAdapter(arrayAdapter);
-        binding.spinner3.setSelection(FormActivity1.examinerDuties.getQotrEnsheabId());
+//        binding.spinner3.setSelection(FormActivity1.examinerDuties.getQotrEnsheabId());
+        binding.spinner3.setSelection(selected);
     }
 
     private void initializeField() {

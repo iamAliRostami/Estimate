@@ -25,15 +25,6 @@
             android:textSize="@dimen/textSizeHuge"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-        </LinearLayout>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -146,21 +137,27 @@
                         android:layout_marginBottom="@dimen/activity_mid_margin"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="@string/qotre_ensheab"
+                        android:text="@string/sifoon_125"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
                         tools:ignore="RtlHardcoded" />
 
-                    <Spinner
-                        android:id="@+id/spinner3"
+                    <EditText
+                        android:id="@+id/editTextSifoon125"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
                         android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
                         android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
                         android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding" />
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -207,45 +204,6 @@
                         android:layout_marginBottom="@dimen/activity_mid_margin"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="@string/sifoon_125"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextSifoon125"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="4">
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1"
-                        android:gravity="left"
                         android:text="@string/sifoon_200"
                         android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeLarge"
@@ -267,6 +225,40 @@
                         android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/qotre_ensheab"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Spinner
+                        android:id="@+id/spinner3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding" />
+
 
                     <TextView
                         android:layout_width="0dp"
@@ -678,7 +670,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
+                        android:layout_gravity="center"
                         android:layout_marginTop="@dimen/activity_mid_margin"
                         android:layout_marginBottom="@dimen/activity_mid_margin"
                         android:layout_weight="1"
@@ -744,7 +736,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
+                        android:layout_gravity="center"
                         android:layout_marginTop="@dimen/activity_mid_margin"
                         android:layout_marginBottom="@dimen/activity_mid_margin"
                         android:layout_weight="1"

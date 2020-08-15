@@ -198,26 +198,27 @@ public class FormActivity1 extends AppCompatActivity {
         calculationUserInput.adamTaxfifAb = calculationUserInputTemp.adamTaxfifAb;
         calculationUserInput.adamTaxfifFazelab = calculationUserInputTemp.adamTaxfifFazelab;
         calculationUserInput.ensheabQeireDaem = calculationUserInputTemp.ensheabQeireDaem;
+
         examinerDuties.setSifoon100(calculationUserInputTemp.sifoon100);
         examinerDuties.setSifoon125(calculationUserInputTemp.sifoon125);
         examinerDuties.setSifoon150(calculationUserInputTemp.sifoon150);
         examinerDuties.setSifoon200(calculationUserInputTemp.sifoon200);
         examinerDuties.setArse(calculationUserInputTemp.arse);
-        examinerDuties.setAianKol(calculationUserInputTemp.aianKol);
         examinerDuties.setAianMaskooni(calculationUserInputTemp.aianMaskooni);
         examinerDuties.setAianNonMaskooni(calculationUserInputTemp.aianTejari);
+        examinerDuties.setAianKol(calculationUserInputTemp.aianKol);
         examinerDuties.setTedadMaskooni(calculationUserInputTemp.tedadMaskooni);
         examinerDuties.setTedadTejari(calculationUserInputTemp.tedadTejari);
         examinerDuties.setTedadSaier(calculationUserInputTemp.tedadSaier);
-        examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
         examinerDuties.setTedadTaxfif(calculationUserInputTemp.tedadTaxfif);
         examinerDuties.setZarfiatQarardadi(calculationUserInputTemp.zarfiatQarardadi);
+        examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
         examinerDuties.setParNumber(calculationUserInputTemp.parNumber);
+
         examinerDuties.setKarbariId(calculationUserInputTemp.karbariId);
         examinerDuties.setQotrEnsheabId(calculationUserInputTemp.qotrEnsheabId);
         examinerDuties.setTaxfifId(calculationUserInputTemp.taxfifId);
-        examinerDuties.setAdamTaxfifAb(calculationUserInputTemp.adamTaxfifAb);
-        examinerDuties.setAdamTaxfifFazelab(calculationUserInputTemp.adamTaxfifFazelab);
+
         examinerDuties.setEnsheabQeirDaem(calculationUserInputTemp.ensheabQeireDaem);
     }
 

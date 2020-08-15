@@ -93,6 +93,13 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private void initialize() {
         initializeMap();
+        binding.imageViewRefresh.setOnClickListener(view -> {
+            binding.mapView.getOverlays().clear();
+            placeIndex = 0;
+            polygonIndex = 0;
+            polygonPoint.removeAll(polygonPoint);
+            initializeMap();
+        });
     }
 
     public Bitmap convertMapToBitmap() {
@@ -163,6 +170,8 @@ public class MapFragment extends Fragment implements LocationListener {
         Marker startMarker = new Marker(binding.mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        startMarker.setTitle("محل شما");
+        startMarker.setSubDescription("اینجا محل استفرار شماست");
 //        mapView.getOverlays().add(startMarker);
         if (placeIndex != 0) {//TODO crash on paging...
             binding.mapView.getOverlayManager().remove(placeIndex);
@@ -173,8 +182,9 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
-//        line.setTitle("محل شما");
-        line.setSubDescription(Polyline.class.getCanonicalName());
+
+        line.setTitle("محل شما");
+        line.setSubDescription("چند ضلعی محل انشعاب");
 //        line.setWidth(5f);
 //        line.setColor(R.color.green1);
 
@@ -226,7 +236,6 @@ public class MapFragment extends Fragment implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
