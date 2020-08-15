@@ -233,6 +233,7 @@ public class FormActivity1 extends AppCompatActivity {
         calculationUserInput.address = calculationUserInputTemp.address;
         calculationUserInput.description = calculationUserInputTemp.description;
 
+        examinerDuties.setNationalId(calculationUserInputTemp.nationalId);
         examinerDuties.setFirstName(calculationUserInputTemp.firstName);
         examinerDuties.setSureName(calculationUserInputTemp.sureName);
         examinerDuties.setNameAndFamily(calculationUserInputTemp.firstName.concat(" ")

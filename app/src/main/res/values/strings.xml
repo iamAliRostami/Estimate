@@ -8,11 +8,11 @@
     <string name="form1">فرم اولیه</string>
     <string name="form2">فرم ثانویه</string>
     <string name="owner">مالک</string>
-    <string name="phone_number">تلفن ثابت</string>
+    <string name="phone_number">تلفن</string>
     <string name="request_type">نوع تقاضا</string>
     <string name="id_number">ردیف</string>
     <string name="nation_number">کد ملی</string>
-    <string name="mobile_number">شماره موبایل</string>
+    <string name="mobile_number">موبایل</string>
     <string name="request_date">تاریخ درخواست</string>
     <string name="account_number">اشتراک</string>
     <string name="license">پروانه</string>

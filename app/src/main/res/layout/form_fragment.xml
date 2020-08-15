@@ -25,6 +25,15 @@
             android:textSize="@dimen/textSizeHuge"
             android:textStyle="bold" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,706 +45,722 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:baselineAligned="false"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/zone"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:gravity="left"
                         android:text="@string/user_type"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeLarge"
                         tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/bill_id"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/sifoon_100"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/sifoon_150"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/arse_kol"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/ayan_maskooni"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/number_maskooni"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/other_number"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/noe_takhfif"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/adam_taxfif_ab"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        android:visibility="gone"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/zarfiat_qaradadi"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/parvane_number"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/pelak"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/editTextZoneTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor,TextFields" />
 
                     <Spinner
                         android:id="@+id/spinner1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/editTextBillId"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/noe_vagozari"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Spinner
+                        android:id="@+id/spinner2"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/sifoon_100"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
 
                     <EditText
                         android:id="@+id/editTextSifoon100"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/qotre_ensheab"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Spinner
+                        android:id="@+id/spinner3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/sifoon_150"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
 
                     <EditText
                         android:id="@+id/editTextSifoon150"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/sifoon_125"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextSifoon125"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/sifoon_200"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextSifoon200"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/arse_kol"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
 
                     <EditText
                         android:id="@+id/editTextArese"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/ayan_maskooni"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
 
                     <EditText
                         android:id="@+id/editTextAianMaskooni"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/aian_non_maskouni"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+
+                    <EditText
+                        android:id="@+id/editTextAianNonMaskooni"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
 
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/aian_kol"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
                     <EditText
-                        android:id="@+id/editTextTedadMaskooni"
-                        android:layout_width="match_parent"
+                        android:id="@+id/editTextAianKol"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/number_maskooni"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextTedadMaskooni"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLength="10"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/tedad_tejari"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
                     <EditText
-                        android:id="@+id/editTextTedadSaier"
-                        android:layout_width="match_parent"
+                        android:id="@+id/editTextTedadTejari"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/other_number"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextTedadSaier"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="text"
                         android:lines="1"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/noe_takhfif"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
 
                     <Spinner
                         android:id="@+id/spinner4"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="center" />
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding" />
 
-                    <EditText
-                        android:id="@+id/editTextZarfiatQaradadi"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLength="8"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <EditText
-                        android:id="@+id/editTextPariNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLength="8"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <EditText
-                        android:id="@+id/editTextPelak"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLength="8"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/shomare_peygiri"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/noe_vagozari"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/qotre_ensheab"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/sifoon_125"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/sifoon_200"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/aian_kol"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/aian_non_maskouni"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/tedad_tejari"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/arzesh_mantaghe"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:gravity="left"
                         android:text="@string/taxfif_number"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/textSizeLarge"
                         tools:ignore="HardcodedText,RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/adame_takhfif_fazelab"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        android:visibility="gone"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/ensheab_gheire_daem"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="left"
-                        android:text="@string/sodur_date"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold"
-                        tools:ignore="RtlHardcoded" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/editTextTrackNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <Spinner
-                        android:id="@+id/spinner2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="center" />
-
-                    <Spinner
-                        android:id="@+id/spinner3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:gravity="center" />
-
-                    <EditText
-                        android:id="@+id/editTextSifoon125"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <EditText
-                        android:id="@+id/editTextSifoon200"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-
-                    <EditText
-                        android:id="@+id/editTextAianKol"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <EditText
-                        android:id="@+id/editTextAianNonMaskooni"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-
-                    <EditText
-                        android:id="@+id/editTextTedadTejari"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLength="10"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <EditText
-                        android:id="@+id/editTextArzeshMelk"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <CheckBox
-                        android:id="@+id/checkbox1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:gravity="center"
-                        android:visibility="gone" />
-
-                    <CheckBox
-                        android:id="@+id/checkbox2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="center"
-                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/editTextTedadTakhfif"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:gravity="center"
                         android:inputType="phone"
                         android:lines="1"
                         android:maxLength="8"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,LabelFor" />
 
-                    <CheckBox
-                        android:id="@+id/checkbox3"
-                        android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/zarfiat_qaradadi"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextZarfiatQaradadi"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
-                        android:gravity="center" />
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/arzesh_mantaghe"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextArzeshMelk"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/parvane_number"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextPariNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/pelak"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <EditText
+                        android:id="@+id/editTextPelak"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_gray_1"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:singleLine="true"
+                        tools:ignore="Autofill,LabelFor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/ensheab_gheire_daem"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding">
+
+                        <CheckBox
+                            android:id="@+id/checkbox3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginTop="@dimen/activity_mid_margin"
+                        android:layout_marginBottom="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="@string/sodur_date"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
 
                     <EditText
                         android:id="@+id/editTextSodurDate"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
+                        android:layout_weight="1"
                         android:background="@drawable/border_gray_1"
                         android:editable="false"
                         android:gravity="center"
@@ -743,6 +768,8 @@
                         android:lines="1"
                         android:maxLength="10"
                         android:maxLines="1"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
                         android:singleLine="true"
                         tools:ignore="Autofill,Deprecated,LabelFor,TextFields" />
                 </LinearLayout>

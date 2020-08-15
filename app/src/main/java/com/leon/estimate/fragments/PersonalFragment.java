@@ -88,8 +88,8 @@ public class PersonalFragment extends Fragment {
     private boolean prepareForm() {
         return checkIsNoEmpty(binding.editTextName)
                 && checkIsNoEmpty(binding.editTextFamily)
-                && checkIsNoEmpty(binding.editTextEshterak)
-                && checkIsNoEmpty(binding.editTextRadif)
+//                && checkIsNoEmpty(binding.editTextEshterak)
+//                && checkIsNoEmpty(binding.editTextRadif)
                 && checkIsNoEmpty(binding.editTextAddress)
                 && checkOtherIsNoEmpty();
     }
@@ -123,7 +123,7 @@ public class PersonalFragment extends Fragment {
             focusView = binding.editTextPhone;
             focusView.requestFocus();
             return false;
-        } else if (binding.editTextMobile.getText().toString().length() < 9) {
+        } else if (binding.editTextMobile.getText().toString().length() < 11) {
             binding.editTextMobile.setError(getString(R.string.error_format));
             focusView = binding.editTextMobile;
             focusView.requestFocus();

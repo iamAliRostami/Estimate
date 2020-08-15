@@ -114,8 +114,6 @@ public class FormFragment extends Fragment {
 
     private CalculationUserInput prepareField() {
         CalculationUserInput calculationUserInput = new CalculationUserInput();
-        calculationUserInput.trackNumber = binding.editTextTrackNumber.getText().toString();
-        calculationUserInput.billId = binding.editTextBillId.getText().toString();
         calculationUserInput.sifoon100 = Integer.parseInt(binding.editTextSifoon100.getText().toString());
         calculationUserInput.sifoon125 = Integer.parseInt(binding.editTextSifoon125.getText().toString());
         calculationUserInput.sifoon150 = Integer.parseInt(binding.editTextSifoon150.getText().toString());
@@ -135,17 +133,12 @@ public class FormFragment extends Fragment {
         calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
         calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
         calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
-        calculationUserInput.adamTaxfifAb = binding.checkbox1.isChecked();
-        calculationUserInput.adamTaxfifFazelab = binding.checkbox2.isChecked();
         calculationUserInput.ensheabQeireDaem = binding.checkbox3.isChecked();
         return calculationUserInput;
     }
 
     private boolean prepareForm() {
-        return checkIsNoEmpty(binding.editTextZoneTitle)
-                && checkIsNoEmpty(binding.editTextTrackNumber)
-                && checkIsNoEmpty(binding.editTextBillId)
-                && checkIsNoEmpty(binding.editTextSifoon100)
+        return checkIsNoEmpty(binding.editTextSifoon100)
                 && checkIsNoEmpty(binding.editTextSifoon125)
                 && checkIsNoEmpty(binding.editTextSifoon150)
                 && checkIsNoEmpty(binding.editTextSifoon200)
@@ -284,9 +277,6 @@ public class FormFragment extends Fragment {
     }
 
     private void initializeField() {
-        binding.editTextZoneTitle.setText(FormActivity1.examinerDuties.getZoneTitle());
-        binding.editTextTrackNumber.setText(FormActivity1.examinerDuties.getTrackNumber());
-        binding.editTextBillId.setText(FormActivity1.examinerDuties.getBillId());
         binding.editTextSifoon100.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon100()));
         binding.editTextSifoon125.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon125()));
         binding.editTextSifoon150.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon150()));
@@ -305,8 +295,6 @@ public class FormFragment extends Fragment {
         binding.editTextSodurDate.setText(FormActivity1.examinerDuties.getExaminationDay());
         binding.editTextPelak.setText(FormActivity1.examinerDuties.getPostalCode());
 
-        binding.checkbox1.setChecked(FormActivity1.examinerDuties.isAdamTaxfifAb());
-        binding.checkbox2.setChecked(FormActivity1.examinerDuties.isAdamTaxfifFazelab());
         binding.checkbox3.setChecked(FormActivity1.examinerDuties.isEnsheabQeirDaem());
     }
 
