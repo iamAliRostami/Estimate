@@ -134,8 +134,10 @@ public class PersonalFragment extends Fragment {
 
     private void initializeField() {
         binding.editTextAddress.setText(FormActivity1.examinerDuties.getAddress());
-        binding.editTextName.setText(FormActivity1.examinerDuties.getFirstName());
-        binding.editTextFamily.setText(FormActivity1.examinerDuties.getSureName());
+        if (FormActivity1.examinerDuties.getFirstName() != null)
+            binding.editTextName.setText(FormActivity1.examinerDuties.getFirstName().trim());
+        if (FormActivity1.examinerDuties.getSureName() != null)
+            binding.editTextFamily.setText(FormActivity1.examinerDuties.getSureName().trim());
         binding.editTextNationNumber.setText(FormActivity1.examinerDuties.getNationalId());
         binding.editTextFatherName.setText(FormActivity1.examinerDuties.getFatherName());
         binding.editTextDescription.setText(FormActivity1.examinerDuties.getDescription());

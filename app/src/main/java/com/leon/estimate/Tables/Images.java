@@ -21,6 +21,8 @@ public class Images {
     @Ignore
     Bitmap bitmap;
     @Ignore
+    String uri;
+    @Ignore
     boolean needSave;
 
     public Images(String address, String billId, String trackingNumber, String docId, String peygiri) {
@@ -42,13 +44,22 @@ public class Images {
         this.needSave = needSave;
     }
 
-    public Images(String billId, String trackingNumber, String docTitle, Bitmap bitmap,
-                  Boolean needSave) {
+    public Images(String billId, String trackingNumber, String docTitle, String uri,
+                  Bitmap bitmap, Boolean needSave) {
         this.billId = billId;
         this.trackingNumber = trackingNumber;
         this.docTitle = docTitle;
+        this.uri = uri;
         this.bitmap = bitmap;
         this.needSave = needSave;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public Bitmap getBitmap() {

@@ -144,4 +144,6 @@
     <string name="radif">شماره ردیف</string>
     <string name="_09">09</string>
     <string name="description">توضیحات</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

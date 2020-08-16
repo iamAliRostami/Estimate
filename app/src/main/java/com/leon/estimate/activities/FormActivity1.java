@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -113,8 +112,8 @@ public class FormActivity1 extends AppCompatActivity {
                     if (calculationUserInputTemp != null) {
                         calculationUserInput.selectedServicesObject =
                                 calculationUserInputTemp.selectedServicesObject;
-                        calculationUserInput.selectedServices =
-                                calculationUserInputTemp.selectedServices;
+                        calculationUserInput.selectedServicesString =
+                                calculationUserInputTemp.selectedServicesString;
                         fragmentTransaction.replace(R.id.fragment, new FormFragment());
                         fragmentTransaction.commit();
                         pageNumber = pageNumber + 1;
@@ -288,16 +287,16 @@ public class FormActivity1 extends AppCompatActivity {
 
     void fillCalculationUserInput() {
         //TODO SELECTED SERVICE
-        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
-        calculationUserInput.firstName = calculationUserInputTemp.firstName.trim();
-        calculationUserInput.sureName = calculationUserInputTemp.sureName.trim();
-        calculationUserInput.fatherName = calculationUserInputTemp.fatherName.trim();
-        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
-        calculationUserInput.radif = calculationUserInputTemp.radif;
-        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
-        calculationUserInput.mobile = calculationUserInputTemp.mobile;
-        calculationUserInput.address = calculationUserInputTemp.address;
-        calculationUserInput.description = calculationUserInputTemp.description;
+//        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+//        calculationUserInput.firstName = calculationUserInputTemp.firstName.trim();
+//        calculationUserInput.sureName = calculationUserInputTemp.sureName.trim();
+//        calculationUserInput.fatherName = calculationUserInputTemp.fatherName.trim();
+//        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+//        calculationUserInput.radif = calculationUserInputTemp.radif;
+//        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+//        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+//        calculationUserInput.address = calculationUserInputTemp.address;
+//        calculationUserInput.description = calculationUserInputTemp.description;
 
         calculationUserInput.trackingId = examinerDuties.getTrackingId();
         calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
@@ -305,10 +304,9 @@ public class FormActivity1 extends AppCompatActivity {
         calculationUserInput.billId = examinerDuties.getBillId();
         calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
         calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
-        calculationUserInput.nationalId = examinerDuties.getNationalId();
+//        calculationUserInput.nationalId = examinerDuties.getNationalId();
         calculationUserInput.identityCode = examinerDuties.getIdentityCode();
         calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
-        calculationUserInput.trackingId = examinerDuties.getTrackingId();
         calculationUserInput.setSent(false);
     }
 
@@ -320,7 +318,6 @@ public class FormActivity1 extends AppCompatActivity {
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
-            Log.e("simple Message", simpleMessage.getMessage());
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
         }

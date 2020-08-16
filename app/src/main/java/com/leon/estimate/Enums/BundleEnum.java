@@ -13,6 +13,7 @@ public enum BundleEnum {
     THEME("theme"),
     ACCOUNT("ACCOUNT"),
     TYPE("type"),
+    TITLE("title"),
     ON_OFFLOAD("ON_OFFLOAD"),
     POSITION("position"),
     SPINNER_POSITION("spinner_position"),

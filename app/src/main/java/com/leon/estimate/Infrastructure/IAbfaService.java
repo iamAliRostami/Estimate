@@ -168,12 +168,12 @@ public interface IAbfaService {
             @Path("token") String token
     );
 
-//    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
-@GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
-Call<ImageDataThumbnail> getDocsListThumbnail(
-        @Path("token") String token,
-        @Path("billIdOrTrackNumber") String billIdOrTrackNumber
-);
+    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
+//    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
+    Call<ImageDataThumbnail> getDocsListThumbnail(
+            @Path("token") String token,
+            @Path("billIdOrTrackNumber") String billIdOrTrackNumber
+    );
 
     @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
     Call<ArrayList<String>> getDocsListHighQuality(

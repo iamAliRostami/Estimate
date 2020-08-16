@@ -213,10 +213,10 @@ public class CalculationUserInputSend {
         Gson gson = new GsonBuilder().create();
         Type userListType = new TypeToken<ArrayList<RequestDictionary>>() {
         }.getType();
-        ArrayList<RequestDictionary> requestDictionaries1 = gson.fromJson(json, userListType);
+        ArrayList<RequestDictionary> requestDictionaryArrayList = gson.fromJson(json, userListType);
         selectedServices = new ArrayList<>();
-        for (RequestDictionary requestDictionary : requestDictionaries1) {
-            selectedServices.add(requestDictionary.getId());
+        for (RequestDictionary requestDictionary : requestDictionaryArrayList) {
+//            selectedServices.add(requestDictionary.getId());
             if (requestDictionary.isSelected()) {
                 selectedServices.add(requestDictionary.getId());
             }

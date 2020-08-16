@@ -149,7 +149,6 @@ public class DocumentActivity1 extends AppCompatActivity {
             getExtra();
         }
         billId = "1136481816311";
-        attemptLogin();
         if (checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -180,6 +179,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         binding.gridViewImage.setAdapter(imageViewAdapter);
         imageDataThumbnailUri = new ArrayList<>();//TODO
         initializeImageView();
+        attemptLogin();
     }
 
     void initializeImageView() {
@@ -229,6 +229,7 @@ public class DocumentActivity1 extends AppCompatActivity {
 
     void getImageThumbnail(String uri) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
+//        Retrofit retrofit = NetworkHelper.getInstanceWithCache(context);
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), new com.leon.estimate.Tables.Uri(uri));
@@ -490,8 +491,12 @@ public class DocumentActivity1 extends AppCompatActivity {
         @Override
         public void execute(ImageDataTitle imageDataTitle) {
             if (imageDataTitle.isSuccess()) {
+                int selected = 0, counter = 0;
                 DocumentActivity1.imageDataTitle = imageDataTitle;
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
+                    if (dataTitle.getTitle().equals("کروکی"))
+                        selected = counter;
+                    counter = counter + 1;
                     arrayListTitle.add(dataTitle.getTitle());
                 }
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
@@ -507,6 +512,7 @@ public class DocumentActivity1 extends AppCompatActivity {
                     }
                 };
                 binding.spinnerTitle.setAdapter(arrayAdapter);
+                binding.spinnerTitle.setSelection(selected);
                 loadImage();
             } else {
                 Toast.makeText(DocumentActivity1.this,
@@ -533,6 +539,25 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
+    class GetImageThumbnailList implements ICallback<ImageDataThumbnail> {
+        @Override
+        public void execute(ImageDataThumbnail responseBody) {
+            if (responseBody.isSuccess()) {
+                imageDataThumbnail = responseBody.getData();
+                for (ImageDataThumbnail.Data data : imageDataThumbnail) {
+                    imageDataThumbnailUri.add(data.getImg());
+                }
+                getImageThumbnail(imageDataThumbnail.get(0).getImg());
+            } else {
+                Toast.makeText(DocumentActivity1.this,
+                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
+                DocumentActivity1.this.startActivity(intent);
+                finish();
+            }
+        }
+    }
+
     class GetImageThumbnailListErrorIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
 
         @Override
@@ -551,7 +576,8 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void execute(ResponseBody responseBody) {
             Bitmap bmp = BitmapFactory.decodeStream(responseBody.byteStream());
             Images image = new Images(billId, trackNumber,
-                    imageDataThumbnail.get(counter).getTitle_name(), bmp, false);
+                    imageDataThumbnail.get(counter).getTitle_name(),
+                    imageDataThumbnailUri.get(counter), bmp, false);
             images.add(image);
             imageViewAdapter.notifyDataSetChanged();
             counter = counter + 1;
@@ -619,24 +645,6 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
-    class GetImageThumbnailList implements ICallback<ImageDataThumbnail> {
-        @Override
-        public void execute(ImageDataThumbnail responseBody) {
-            if (responseBody.isSuccess()) {
-                imageDataThumbnail = responseBody.getData();
-                for (ImageDataThumbnail.Data data : imageDataThumbnail) {
-                    imageDataThumbnailUri.add(data.getImg());
-                }
-                getImageThumbnail(imageDataThumbnail.get(0).getImg());
-            } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-                DocumentActivity1.this.startActivity(intent);
-                finish();
-            }
-        }
-    }
 
     @Override
     public void onBackPressed() {
