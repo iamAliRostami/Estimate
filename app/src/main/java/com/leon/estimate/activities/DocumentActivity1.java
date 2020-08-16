@@ -162,7 +162,8 @@ public class DocumentActivity1 extends AppCompatActivity {
     }
 
     void getExtra() {
-        billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
+        billId = Objects.requireNonNull(
+                getIntent().getExtras()).getString(BundleEnum.BILL_ID.getValue());
         trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
         isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
         byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
@@ -177,7 +178,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         images = new ArrayList<>();
         imageViewAdapter = new ImageViewAdapter(context, images);
         binding.gridViewImage.setAdapter(imageViewAdapter);
-        imageDataThumbnailUri = new ArrayList<>();//TODO
+        imageDataThumbnailUri = new ArrayList<>();
         initializeImageView();
         attemptLogin();
     }
@@ -217,12 +218,11 @@ public class DocumentActivity1 extends AppCompatActivity {
     void getImageThumbnailList() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
-        Call<ImageDataThumbnail> call = getImage.getDocsListThumbnail(
-                sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
-                billId);
+        Call<ImageDataThumbnail> call = getImage.getDocsListThumbnail(sharedPreferenceManager
+                .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), billId);
         GetImageThumbnailList imageDoc = new GetImageThumbnailList();
         GetError error = new GetError();
-        GetImageThumbnailListErrorIncomplete incomplete = new GetImageThumbnailListErrorIncomplete();
+        GetImageThumbnailListIncomplete incomplete = new GetImageThumbnailListIncomplete();
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
                 imageDoc, incomplete, error);
     }
@@ -232,10 +232,11 @@ public class DocumentActivity1 extends AppCompatActivity {
 //        Retrofit retrofit = NetworkHelper.getInstanceWithCache(context);
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
-                SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), new com.leon.estimate.Tables.Uri(uri));
+                SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
+                new com.leon.estimate.Tables.Uri(uri));
         GetImageDoc imageDoc = new GetImageDoc();
         GetError error = new GetError();
-        GetImageDocErrorIncomplete incomplete = new GetImageDocErrorIncomplete();
+        GetImageDocIncomplete incomplete = new GetImageDocIncomplete();
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
                 imageDoc, incomplete, error);
     }
@@ -254,7 +255,7 @@ public class DocumentActivity1 extends AppCompatActivity {
 
         UploadImageDoc uploadImage = new UploadImageDoc();
         GetError error = new GetError();
-        UploadImageDocErrorIncomplete incomplete = new UploadImageDocErrorIncomplete();
+        UploadImageDocIncomplete incomplete = new UploadImageDocIncomplete();
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
                 uploadImage, incomplete, error);
     }
@@ -283,16 +284,17 @@ public class DocumentActivity1 extends AppCompatActivity {
             e.printStackTrace();
         }
         try {
-            fos.write(bitmapData);
-            fos.flush();
-            fos.close();
+            if (fos != null) {
+                fos.write(bitmapData);
+                fos.flush();
+                fos.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), f);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
-        return body;
+        return MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
     }
 
     public void saveTempBitmap(Bitmap bitmap) {
@@ -307,7 +309,6 @@ public class DocumentActivity1 extends AppCompatActivity {
     void saveImage(Bitmap bitmapImage) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "AbfaCamera");
-//        File mediaStorageDir = new File(ScannerConstants.fileName, "AbfaCamera");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return;
@@ -348,12 +349,10 @@ public class DocumentActivity1 extends AppCompatActivity {
     }
 
     void loadImage() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoImages daoImages = dataBase.daoImages();
         List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
-        if (imagesList.size() > 0)
-            Log.e("size", String.valueOf(imagesList.size()));
         try {
             File f = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_PICTURES), "AbfaCamera");
@@ -440,7 +439,8 @@ public class DocumentActivity1 extends AppCompatActivity {
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
                 Toast.makeText(getApplicationContext(), "مجوز رد شد \n" +
                         deniedPermissions.toString(), Toast.LENGTH_LONG).show();
-                finishAffinity();
+                finish();
+//                finishAffinity();
             }
         };
 
@@ -449,42 +449,10 @@ public class DocumentActivity1 extends AppCompatActivity {
                 .setRationaleMessage("جهت استفاده از برنامه مجوزهای پیشنهادی را قبول فرمایید")
                 .setDeniedMessage("در صورت رد این مجوز قادر به استفاده از این دستگاه نخواهید بود" + "\n" +
                         "لطفا با فشار دادن دکمه اعطای دسترسی و سپس در بخش دسترسی ها با این مجوز ها موافقت نمایید")
-////                .setGotoSettingButtonText("اعطای دسترسی")
                 .setPermissions(Manifest.permission.CAMERA,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).check();
-    }
-
-    class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
-        @Override
-        public void executeIncomplete(Response<ImageDataTitle> response) {
-            Toast.makeText(DocumentActivity1.this,
-                    DocumentActivity1.this.getString(R.string.error_not_auth),
-                    Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
-            DocumentActivity1.this.startActivity(intent);
-            finish();
-        }
-    }
-
-    class LoginDocument implements ICallback<Login> {
-        @Override
-        public void execute(Login loginFeedBack) {
-            if (loginFeedBack.isSuccess()) {
-                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
-                        loginFeedBack.getData().getToken());
-                getImageTitles();
-                getImageThumbnailList();
-            } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth),
-                        Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
-                DocumentActivity1.this.startActivity(intent);
-                finish();
-            }
-        }
     }
 
     class GetImageTitles implements ICallback<ImageDataTitle> {
@@ -517,6 +485,37 @@ public class DocumentActivity1 extends AppCompatActivity {
             } else {
                 Toast.makeText(DocumentActivity1.this,
                         DocumentActivity1.this.getString(R.string.error_call_backup),
+                        Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
+                DocumentActivity1.this.startActivity(intent);
+                finish();
+            }
+        }
+    }
+
+    class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
+        @Override
+        public void executeIncomplete(Response<ImageDataTitle> response) {
+            Toast.makeText(DocumentActivity1.this,
+                    DocumentActivity1.this.getString(R.string.error_not_auth),
+                    Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
+            DocumentActivity1.this.startActivity(intent);
+            finish();
+        }
+    }
+
+    class LoginDocument implements ICallback<Login> {
+        @Override
+        public void execute(Login loginFeedBack) {
+            if (loginFeedBack.isSuccess()) {
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
+                        loginFeedBack.getData().getToken());
+                getImageTitles();
+                getImageThumbnailList();
+            } else {
+                Toast.makeText(DocumentActivity1.this,
+                        DocumentActivity1.this.getString(R.string.error_not_auth),
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
                 DocumentActivity1.this.startActivity(intent);
@@ -558,7 +557,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
-    class GetImageThumbnailListErrorIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
+    class GetImageThumbnailListIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
 
         @Override
         public void executeIncomplete(Response<ImageDataThumbnail> response) {
@@ -587,7 +586,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
-    class GetImageDocErrorIncomplete implements ICallbackIncomplete<ResponseBody> {
+    class GetImageDocIncomplete implements ICallbackIncomplete<ResponseBody> {
 
         @Override
         public void executeIncomplete(Response<ResponseBody> response) {
@@ -619,7 +618,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         }
     }
 
-    class UploadImageDocErrorIncomplete implements ICallbackIncomplete<UploadImage> {
+    class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
 
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
@@ -639,12 +638,11 @@ public class DocumentActivity1 extends AppCompatActivity {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(DocumentActivity1.this, error, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(DocumentActivity1.this, LoginActivity.class);
+            Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
             DocumentActivity1.this.startActivity(intent);
             finish();
         }
     }
-
 
     @Override
     public void onBackPressed() {

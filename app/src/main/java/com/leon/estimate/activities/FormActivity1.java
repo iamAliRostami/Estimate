@@ -286,25 +286,12 @@ public class FormActivity1 extends AppCompatActivity {
     }
 
     void fillCalculationUserInput() {
-        //TODO SELECTED SERVICE
-//        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
-//        calculationUserInput.firstName = calculationUserInputTemp.firstName.trim();
-//        calculationUserInput.sureName = calculationUserInputTemp.sureName.trim();
-//        calculationUserInput.fatherName = calculationUserInputTemp.fatherName.trim();
-//        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
-//        calculationUserInput.radif = calculationUserInputTemp.radif;
-//        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
-//        calculationUserInput.mobile = calculationUserInputTemp.mobile;
-//        calculationUserInput.address = calculationUserInputTemp.address;
-//        calculationUserInput.description = calculationUserInputTemp.description;
-
         calculationUserInput.trackingId = examinerDuties.getTrackingId();
         calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
         calculationUserInput.parNumber = examinerDuties.getParNumber();
         calculationUserInput.billId = examinerDuties.getBillId();
         calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
         calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
-//        calculationUserInput.nationalId = examinerDuties.getNationalId();
         calculationUserInput.identityCode = examinerDuties.getIdentityCode();
         calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
         calculationUserInput.setSent(false);
