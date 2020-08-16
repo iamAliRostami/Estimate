@@ -215,12 +215,14 @@ public class CalculationUserInputSend {
         }.getType();
         ArrayList<RequestDictionary> requestDictionaryArrayList = gson.fromJson(json, userListType);
         selectedServices = new ArrayList<>();
+//        int counter = 0;
+//        Log.e("size", String.valueOf(requestDictionaryArrayList.size()));
         for (RequestDictionary requestDictionary : requestDictionaryArrayList) {
-//            selectedServices.add(requestDictionary.getId());
             if (requestDictionary.isSelected()) {
                 selectedServices.add(requestDictionary.getId());
             }
+//            counter = counter + 1;
+//            Log.e("counter", String.valueOf(counter));
         }
     }
-
 }

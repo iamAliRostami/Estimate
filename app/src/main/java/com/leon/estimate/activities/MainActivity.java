@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity
     String trackNumber;
     DrawerLayout drawer;
     Context context;
-    private MapView mapView = null;
     List<CalculationUserInput> calculationUserInputList;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
@@ -116,6 +115,32 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        context = this;
+        binding = MainActivityBinding.inflate(getLayoutInflater());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED
+            ) {
+                askPermission();
+            } else {
+                Configuration.getInstance().load(context,
+                        PreferenceManager.getDefaultSharedPreferences(context));
+                setContentView(binding.getRoot());
+                initialize();
+            }
+        }
+//        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//                .fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_22_23).build();
+        readData();
+    }
 
     void initialize() {
         initializeMap();
@@ -152,13 +177,15 @@ public class MainActivity extends AppCompatActivity
             examinerDutiesList.get(i).setRequestDictionaryString(
                     gson1.toJson(examinerDutiesList.get(i).getRequestDictionary()));
         }
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
         for (int i = 0; i < examinerDutiesList.size(); i++) {
-            examinerDutiesList.get(i).setTrackNumber(examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-            examinerDutiesList.get(i).setRadif(examinerDutiesList.get(i).getRadif().replace(".0", ""));
+            examinerDutiesList.get(i).setTrackNumber(
+                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+            examinerDutiesList.get(i).setRadif(
+                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
             ExaminerDuties examinerDuties = examinerDutiesList.get(i);
             for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
                 ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
@@ -184,12 +211,14 @@ public class MainActivity extends AppCompatActivity
 
     private Location getLastKnownLocation() {
         Location l = null;
-        LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        LocationManager mLocationManager = (LocationManager)
+                getApplicationContext().getSystemService(LOCATION_SERVICE);
         assert mLocationManager != null;
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 l = mLocationManager.getLastKnownLocation(provider);
             }
             if (l == null) {
@@ -202,35 +231,12 @@ public class MainActivity extends AppCompatActivity
         return bestLocation;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        context = this;
-        binding = MainActivityBinding.inflate(getLayoutInflater());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            ) {
-                askPermission();
-            } else {
-                Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-                setContentView(binding.getRoot());
-                initialize();
-            }
-        }
-//        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-//                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_22_23).build();
-//        readData();
-    }
-
     @SuppressLint("MissingPermission")
     void initializeMap() {
         if (!GpsEnabled()) {
             initialize();
         } else {
-            mapView = findViewById(R.id.mapView);
+            MapView mapView = findViewById(R.id.mapView);
             mapView.setTileSource(TileSourceFactory.MAPNIK);
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);
@@ -254,8 +260,6 @@ public class MainActivity extends AppCompatActivity
             mapController.setCenter(startPoint);
             MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
             locationOverlay.enableMyLocation();
-//            test();
-//            initRouteCoordinates();
             mapView.getOverlays().add(locationOverlay);
         }
     }
@@ -267,7 +271,6 @@ public class MainActivity extends AppCompatActivity
         binding.imageViewExit.setOnClickListener(onClickListener);
         binding.imageViewForm.setOnClickListener(onClickListener);
     }
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -345,8 +348,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean GpsEnabled() {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean enabled = LocationManagerCompat.isLocationEnabled(Objects.requireNonNull(locationManager));
+        LocationManager locationManager = (LocationManager)
+                context.getSystemService(Context.LOCATION_SERVICE);
+        boolean enabled =
+                LocationManagerCompat.isLocationEnabled(Objects.requireNonNull(locationManager));
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         if (!enabled) {
             alertDialog.setCancelable(false);
@@ -371,10 +376,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     void download() {
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
+                getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-//        Retrofit retrofit = NetworkHelper.getInstance(false, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MGI0YjJjNi0zYzQ0LTRlNDMtYWQwMi05ODlhNmFiNTIwNTIiLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZlci8iLCJpYXQiOjE1ODIzNzE1MDEsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwcEV4YW0iLCJkaXNwbGF5TmFtZSI6Itin2b7ZhNuM2qnbjNi02YYg2KfYsdiy24zYp9io24wg2KrYs9iqIiwidXNlcklkIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwidXNlckNvZGUiOiI2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvc2VyaWFsbnVtYmVyIjoiZDY4NmFmOWY4YzVjNDUzYjk0ZTIwMWIxY2Q0YTRkM2YiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiMmRiNDE3YWYtNmU5My00YmU5LTgyOGEtMDE4ZDE0NjkwZWNmIiwiem9uZUlkIjoiMTMxMzAzIiwiYWN0aW9uIjpbIlByb2ZpbGUuSW5kZXgiLCJFeGFtaW5hdGlvbk1hbmFnZXIuR2V0TXlXb3JrcyJdLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFeGFtaW5lciIsInJvbGVJZCI6IjQiLCJuYmYiOjE1ODIzNzE1MDEsImV4cCI6MTU4MjQxODMwMSwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEifQ.iCLVExnN_UCqEgMvzGWB1Lw3UI4T-5ey3Z8aNQj_I1Y");
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         Download download = new Download();
@@ -389,10 +394,12 @@ public class MainActivity extends AppCompatActivity
         if (calculationUserInputList.size() > 0) {
             ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
             for (int i = 0; i < calculationUserInputList.size(); i++) {
-                CalculationUserInputSend calculationUserInputSend = new CalculationUserInputSend(calculationUserInputList.get(i));
+                CalculationUserInputSend calculationUserInputSend =
+                        new CalculationUserInputSend(calculationUserInputList.get(i));
                 calculationUserInputSends.add(calculationUserInputSend);
             }
-            SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+            SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
+                    getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
             String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
             Retrofit retrofit = NetworkHelper.getInstance(true, token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
@@ -419,8 +426,10 @@ public class MainActivity extends AppCompatActivity
             DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
             List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
             for (int i = 0; i < examinerDutiesList.size(); i++) {
-                examinerDutiesList.get(i).setTrackNumber(examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-                examinerDutiesList.get(i).setRadif(examinerDutiesList.get(i).getRadif().replace(".0", ""));
+                examinerDutiesList.get(i).setTrackNumber(
+                        examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+                examinerDutiesList.get(i).setRadif(
+                        examinerDutiesList.get(i).getRadif().replace(".0", ""));
                 ExaminerDuties examinerDuties = examinerDutiesList.get(i);
                 for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
                     ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
@@ -449,7 +458,8 @@ public class MainActivity extends AppCompatActivity
             DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
             daoKarbariDictionary.insertAll(input.getKarbariDictionary());
 
-            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
+            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
+                    input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
                     getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
         }
     }
@@ -457,7 +467,7 @@ public class MainActivity extends AppCompatActivity
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                     .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             for (CalculationUserInput calculationUserInput : calculationUserInputList) {
