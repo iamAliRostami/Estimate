@@ -2,6 +2,7 @@
     <string name="app_name">ارزیابی</string>
     <string name="downloadDetails">بارگیری</string>
     <string name="upload">بارگذاری</string>
+    <string name="upload_image">بارگذاری عکس</string>
     <string name="paper">مدارک</string>
     <string name="exit">خروج</string>
     <string name="form">فرم</string>
@@ -30,6 +31,7 @@
     <string name="version">نسخه</string>
 
     <string name="accepted">تایید</string>
+    <string name="final_accepted">تایید نهایی</string>
     <string name="message">message</string>
     <string name="dear_user">همکار گرامی!</string>
 
@@ -146,4 +148,6 @@
     <string name="description">توضیحات</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="document_received">مدارکی که تا کنون دریافت شده است:</string>
+    <string name="to_continue">جهت ادامه یکی از عملیات های زیر را انتخاب کنید:</string>
 </resources>

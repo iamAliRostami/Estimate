@@ -75,10 +75,8 @@ public class ExaminerDuties {
         billId = calculationUserInput.billId;
         nameAndFamily = calculationUserInput.firstName.trim().concat(" ".concat(calculationUserInput.sureName.trim()));
         notificationMobile = calculationUserInput.notificationMobile;
-//        serviceGroup = calculationUserInput.selectedServicesString;
         address = calculationUserInput.address;
         neighbourBillId = calculationUserInput.neighbourBillId;
-        isPeymayesh = true;
         trackingId = calculationUserInput.trackingId;
         requestType = String.valueOf(calculationUserInput.requestType);
         parNumber = calculationUserInput.parNumber;
@@ -112,6 +110,7 @@ public class ExaminerDuties {
         adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
         isEnsheabQeirDaem = calculationUserInput.ensheabQeireDaem;
         requestDictionaryString = calculationUserInput.selectedServicesString;
+//        isPeymayesh = true;
         return this;
     }
 

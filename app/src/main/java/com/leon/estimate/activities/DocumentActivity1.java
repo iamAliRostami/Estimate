@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -39,6 +40,9 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.DaoCalculationUserInput;
+import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
@@ -52,8 +56,10 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivity1Binding;
+import com.leon.estimate.fragments.HighQualityFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,6 +85,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.activities.FormActivity1.calculationUserInput;
+
 public class DocumentActivity1 extends AppCompatActivity {
 
     static String imageFileName;
@@ -90,6 +98,7 @@ public class DocumentActivity1 extends AppCompatActivity {
     Bitmap bitmap;
     ImageViewAdapter imageViewAdapter;
     int counter = 0;
+    MyDatabase dataBase;
     ArrayList<Images> images;
     ArrayList<ImageDataThumbnail.Data> imageDataThumbnail;
     ArrayList<String> imageDataThumbnailUri = new ArrayList<>(), arrayListTitle = new ArrayList<>();
@@ -134,6 +143,34 @@ public class DocumentActivity1 extends AppCompatActivity {
                 binding.spinnerTitle.getSelectedItemPosition()).getId(),
                 ScannerConstants.bitmapSelectedImage);
     };
+    View.OnClickListener onImageViewClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (ScannerConstants.bitmapSelectedImage != null) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                HighQualityFragment highQualityFragment = HighQualityFragment.newInstance(
+                        ScannerConstants.bitmapSelectedImage, binding.spinnerTitle.getSelectedItem().toString());
+                highQualityFragment.show(fragmentTransaction, binding.spinnerTitle.getSelectedItem().toString());
+            }
+        }
+    };
+    View.OnClickListener onAcceptedClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+            Retrofit retrofit = NetworkHelper.getInstance(true, token);
+            final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+            SendCalculation sendCalculation = new SendCalculation();
+            SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
+            GetError error = new GetError();
+
+            ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+            calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
+            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
+            HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                    sendCalculation, incomplete, error);
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -173,8 +210,11 @@ public class DocumentActivity1 extends AppCompatActivity {
     }
 
     void initialize() {
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .allowMainThreadQueries().build();
         binding.buttonPick.setOnClickListener(onPickClickListener);
         binding.buttonUpload.setOnClickListener(onUploadClickListener);
+        binding.buttonAccepted.setOnClickListener(onAcceptedClickListener);
         images = new ArrayList<>();
         imageViewAdapter = new ImageViewAdapter(context, images);
         binding.gridViewImage.setAdapter(imageViewAdapter);
@@ -190,6 +230,7 @@ public class DocumentActivity1 extends AppCompatActivity {
             ScannerConstants.bitmapSelectedImage = bitmap;
             binding.buttonUpload.setVisibility(View.VISIBLE);
         }
+        binding.imageView.setOnClickListener(onImageViewClickListener);
     }
 
     void attemptLogin() {
@@ -307,8 +348,11 @@ public class DocumentActivity1 extends AppCompatActivity {
 
     @SuppressLint("SimpleDateFormat")
     void saveImage(Bitmap bitmapImage) {
+//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES), "AbfaCamera");
+
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "AbfaCamera");
+                Environment.DIRECTORY_PICTURES) + "/AbfaCamera/");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return;
@@ -324,8 +368,6 @@ public class DocumentActivity1 extends AppCompatActivity {
             out.flush();
             out.close();
 
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                    .allowMainThreadQueries().build();
             DaoImages daoImages = dataBase.daoImages();
             Images image = new Images(imageFileName, billId, trackNumber,
                     String.valueOf(imageDataTitle.getData().get(
@@ -349,10 +391,10 @@ public class DocumentActivity1 extends AppCompatActivity {
     }
 
     void loadImage() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
         DaoImages daoImages = dataBase.daoImages();
         List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
+//        List<Images> imagesList = daoImages.getImages();
+        Log.e("size", String.valueOf(imagesList.size()));
         try {
             File f = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_PICTURES), "AbfaCamera");
@@ -613,8 +655,11 @@ public class DocumentActivity1 extends AppCompatActivity {
                 imageViewAdapter.notifyDataSetChanged();
                 Toast.makeText(DocumentActivity1.this,
                         DocumentActivity1.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
-            } else Toast.makeText(DocumentActivity1.this,
-                    DocumentActivity1.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
+            } else {
+                saveTempBitmap(ScannerConstants.bitmapSelectedImage);
+                Toast.makeText(DocumentActivity1.this,
+                        DocumentActivity1.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -629,6 +674,29 @@ public class DocumentActivity1 extends AppCompatActivity {
                     DocumentActivity1.this.getString(R.string.login),
                     DocumentActivity1.this.getString(R.string.accepted));
             saveTempBitmap(ScannerConstants.bitmapSelectedImage);
+        }
+    }
+
+    class SendCalculation implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+
+            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+            daoExaminerDuties.updateExamination(true, trackNumber);
+        }
+    }
+
+    class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
+                    DocumentActivity1.this.getString(R.string.dear_user),
+                    DocumentActivity1.this.getString(R.string.login),
+                    DocumentActivity1.this.getString(R.string.accepted));
         }
     }
 

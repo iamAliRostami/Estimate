@@ -76,19 +76,16 @@ public class ImageViewAdapter extends BaseAdapter {
         holder.textView.setText(imageDataTitle.getDocTitle());
         holder.imageView.setImageBitmap(imageDataTitle.getBitmap());
 //        holder.imageView.setImageBitmap(getResizedBitmap(imageDataTitle.getBitmap(), 500));
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imageDataTitle.getUri() == null) {
-                    FragmentTransaction fragmentTransaction = ((FragmentActivity) context).
-                            getSupportFragmentManager().beginTransaction();
-                    HighQualityFragment highQualityFragment =
-                            HighQualityFragment.newInstance(imageDataTitle.getBitmap(), "Image # 1");
-                    highQualityFragment.show(fragmentTransaction, "Image # 2");
-                } else {
-                    Log.e("uri", imageDataTitle.getUri().replace("thumbnail", "main"));
-                    getImageMain(imageDataTitle.getUri().replace("thumbnail", "main"));
-                }
+        holder.imageView.setOnClickListener(view1 -> {
+            if (imageDataTitle.getUri() == null) {
+                FragmentTransaction fragmentTransaction = ((FragmentActivity) context).
+                        getSupportFragmentManager().beginTransaction();
+                HighQualityFragment highQualityFragment =
+                        HighQualityFragment.newInstance(imageDataTitle.getBitmap(), imageDataTitle.getDocTitle());
+                highQualityFragment.show(fragmentTransaction, "Image # 2");
+            } else {
+                Log.e("uri", imageDataTitle.getUri().replace("thumbnail", "main"));
+                getImageMain(imageDataTitle.getUri().replace("thumbnail", "main"));
             }
         });
         return view;
@@ -142,12 +139,13 @@ public class ImageViewAdapter extends BaseAdapter {
         public void execute(ResponseBody responseBody) {
             Bitmap bmp = BitmapFactory.decodeStream(responseBody.byteStream());
 //            holder.imageView.setImageBitmap(bmp);
-
-            FragmentTransaction fragmentTransaction = ((FragmentActivity) context).
-                    getSupportFragmentManager().beginTransaction();
-            HighQualityFragment highQualityFragment =
-                    HighQualityFragment.newInstance(bmp, "Image # 1");
-            highQualityFragment.show(fragmentTransaction, "Image # 2");
+            if (bmp != null) {
+                FragmentTransaction fragmentTransaction = ((FragmentActivity) context).
+                        getSupportFragmentManager().beginTransaction();
+                HighQualityFragment highQualityFragment =
+                        HighQualityFragment.newInstance(bmp, "Image # 1");
+                highQualityFragment.show(fragmentTransaction, "Image # 2");
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.leon.estimate.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class HighQualityFragment extends DialogFragment {
                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             }
             title = getArguments().getString(BundleEnum.TITLE.getValue());
+            Log.e("title", title);
         }
     }
 

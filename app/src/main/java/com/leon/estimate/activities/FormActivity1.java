@@ -18,26 +18,18 @@ import androidx.room.Room;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.ProgressType;
-import com.leon.estimate.Enums.SharedReferenceKeys;
-import com.leon.estimate.Enums.SharedReferenceNames;
-import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
-import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
-import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.NetworkHelper;
-import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.FormActivity1Binding;
 import com.leon.estimate.fragments.FormFragment;
@@ -46,14 +38,11 @@ import com.leon.estimate.fragments.PersonalFragment;
 import com.leon.estimate.fragments.ServicesFragment;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class FormActivity1 extends AppCompatActivity {
     public static List<RequestDictionary> requestDictionaries;
@@ -144,7 +133,7 @@ public class FormActivity1 extends AppCompatActivity {
                     intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                     prepareToSend();
                     startActivity(intent);
-                    finish();
+//                    finish();
                     break;
             }
         });
@@ -257,32 +246,20 @@ public class FormActivity1 extends AppCompatActivity {
         updateCalculationUserInput();
         updateExamination();
 
-        SharedPreferenceManager sharedPreferenceManager =
-                new SharedPreferenceManager(getApplicationContext(),
-                        SharedReferenceNames.ACCOUNT.getValue());
-        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
-        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-        SendCalculation sendCalculation = new SendCalculation();
-        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
-        GetError error = new GetError();
-        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
-        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
-                sendCalculation, incomplete, error);
-    }
-
-    void updateCalculationUserInput() {
-        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
-        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
-    }
-
-    void updateExamination() {
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        daoExaminerDuties.updateExamination(true, trackNumber);
-        daoExaminerDuties.insert(examinerDuties.updateExaminerDuties(calculationUserInput));
+//        SharedPreferenceManager sharedPreferenceManager =
+//                new SharedPreferenceManager(getApplicationContext(),
+//                        SharedReferenceNames.ACCOUNT.getValue());
+//        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+//        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+//        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+//        SendCalculation sendCalculation = new SendCalculation();
+//        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
+//        GetError error = new GetError();
+//        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+//        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
+//        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
+//        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+//                sendCalculation, incomplete, error);
     }
 
     void fillCalculationUserInput() {
@@ -297,10 +274,21 @@ public class FormActivity1 extends AppCompatActivity {
         calculationUserInput.setSent(false);
     }
 
+    void updateCalculationUserInput() {
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
+        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
+    }
+
+    void updateExamination() {
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+//        daoExaminerDuties.updateExamination(true, trackNumber);
+        daoExaminerDuties.insert(examinerDuties.updateExaminerDuties(calculationUserInput));
+    }
+
     public void setActionBarTitle(String title) {
         Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
-
 
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
@@ -314,6 +302,11 @@ public class FormActivity1 extends AppCompatActivity {
         @Override
         public void executeIncomplete(Response<SimpleMessage> response) {
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -346,19 +339,6 @@ public class FormActivity1 extends AppCompatActivity {
 
     }
 
-    class GetError implements ICallbackError {
-        @Override
-        public void executeError(Throwable t) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageTotal(t);
-            Toast.makeText(FormActivity1.this, error, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @SuppressLint("StaticFieldLeak")
     class GetDBData extends AsyncTask<Integer, String, String> {
@@ -390,6 +370,15 @@ public class FormActivity1 extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             dialog.dismiss();
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(FormActivity1.this, error, Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity
 //        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_22_23).build();
-        readData();
+//        readData();
     }
 
     void initialize() {
