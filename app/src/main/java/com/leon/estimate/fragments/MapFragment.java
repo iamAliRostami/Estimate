@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,14 +148,14 @@ public class MapFragment extends Fragment implements LocationListener {
         binding.mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Log.e("location1", p.toString());
+//                Log.e("location1", p.toString());
                 createPolygon(p);
                 return false;
             }
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                Log.e("location2", p.toString());
+//                Log.e("location2", p.toString());
                 addPlace(p);
                 return false;
             }
