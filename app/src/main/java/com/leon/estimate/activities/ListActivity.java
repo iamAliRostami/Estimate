@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
@@ -55,9 +56,8 @@ public class ListActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
 
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
 //        examinerDuties = daoExaminerDuties.unreadExaminerDuties();
@@ -70,7 +70,7 @@ public class ListActivity extends AppCompatActivity {
 //            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             binding.textViewEmpty.setVisibility(View.GONE);
             binding.recyclerView.setVisibility(View.VISIBLE);
-            customAdapter = new CustomAdapter1(context, this.examinerDuties, width);
+            customAdapter = new CustomAdapter1(context, this.examinerDuties);
             customAdapter.notifyDataSetChanged();
             binding.recyclerView.setAdapter(customAdapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(this) {

@@ -1,5 +1,6 @@
 package com.leon.estimate.Utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.leon.estimate.activities.ListActivity;
  */
 
 public class CustomDialog {
+    @SuppressLint("StaticFieldLeak")
     static LovelyStandardDialog lovelyStandardDialog;
     Context context;
     String Top, Title, Message, ButtonText;
@@ -110,6 +112,10 @@ public class CustomDialog {
                     }
                 })
                 .show();
+    }
+
+    public interface Inline {
+        void inline(String negative, int negativeColor);
     }
 
 }

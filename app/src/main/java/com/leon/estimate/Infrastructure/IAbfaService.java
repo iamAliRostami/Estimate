@@ -9,6 +9,7 @@ import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.LoginFeedBack;
 import com.leon.estimate.Tables.LoginInfo;
+import com.leon.estimate.Tables.Place;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Tables.Uri;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -157,6 +158,11 @@ public interface IAbfaService {
 
 //    @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/PHPSESSID=k8a8m5q2gh2k96mhfs6qtcnnv3; remember_me=5660bce40fb96587ad34e559a7383933")
 //    Call<ResponseBody> GetDoc(@Body Uri uri);
+
+    @POST("/MoshtarakinApi/Gis/V1/GetXy/jesuschrist/{billId}")
+    Call<Place> getXY(
+            @Path("billId") String billId
+    );
 
     @POST("/MoshtarakinApi/SepanoDMS/V1/GetDoc/{token}")
     Call<ResponseBody> getDoc(

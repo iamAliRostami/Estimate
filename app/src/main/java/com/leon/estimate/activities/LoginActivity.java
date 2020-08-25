@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         LoginFeedBack loginFeedBack = new LoginFeedBack();
         GetError error = new GetError();
         GetErrorIncomplete incomplete = new GetErrorIncomplete();
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW_CANCELABLE.getValue(), this,
                 loginFeedBack, incomplete, error);
     }
 

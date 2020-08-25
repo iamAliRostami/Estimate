@@ -60,6 +60,7 @@ import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivity1Binding;
 import com.leon.estimate.fragments.HighQualityFragment;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -157,18 +158,10 @@ public class DocumentActivity1 extends AppCompatActivity {
     View.OnClickListener onAcceptedClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-            Retrofit retrofit = NetworkHelper.getInstance(true, token);
-            final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-            SendCalculation sendCalculation = new SendCalculation();
-            SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
-            GetError error = new GetError();
-
-            ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-            calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
-            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-            HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
-                    sendCalculation, incomplete, error);
+            new ShowDialogue(getString(R.string.accepted_question),
+                    getString(R.string.dear_user), getString(R.string.final_accepted),
+                    getString(R.string.yes), getString(R.string.no),
+                    R.color.red1, R.color.green2, R.color.yellow1, R.color.white);
         }
     };
 
@@ -497,6 +490,44 @@ public class DocumentActivity1 extends AppCompatActivity {
                 ).check();
     }
 
+    class ShowDialogue implements CustomDialog.Inline {
+        private LovelyStandardDialog lovelyStandardDialog;
+
+        ShowDialogue(String message, String title, String top, String positiveButtonText, String negativeButtonText,
+                     int positiveButtonColor, int negativeButtonColor, int topColor, int topTitleColor) {
+            lovelyStandardDialog = new LovelyStandardDialog(context)
+                    .setTitle(title).setMessage(message).setTopTitle(top).setTopColorRes(topColor)
+                    .setTopTitleColor(getResources().getColor(topTitleColor))
+                    .setPositiveButtonColor(getResources().getColor(positiveButtonColor))
+                    .setPositiveButton(positiveButtonText, v -> {
+                        Log.e("click", "positive");
+                        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+                        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+                        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+
+                        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+                        daoExaminerDuties.updateExamination(true, trackNumber);
+
+                        SendCalculation sendCalculation = new SendCalculation();
+                        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
+                        GetError error = new GetError();
+
+                        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+                        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
+                        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
+                        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                                sendCalculation, incomplete, error);
+                    });
+            inline(negativeButtonText, negativeButtonColor);
+        }
+
+        @Override
+        public void inline(String negative, int negativeColor) {
+            lovelyStandardDialog.setNegativeButtonColor(getResources().getColor(negativeColor))
+                    .setNegativeButton(negative, v -> lovelyStandardDialog.dismiss()).show();
+        }
+    }
+
     class GetImageTitles implements ICallback<ImageDataTitle> {
         @Override
         public void execute(ImageDataTitle imageDataTitle) {
@@ -510,13 +541,14 @@ public class DocumentActivity1 extends AppCompatActivity {
                     arrayListTitle.add(dataTitle.getTitle());
                 }
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                        android.R.layout.simple_spinner_dropdown_item, arrayListTitle) {
+                        R.layout.dropdown_menu_popup_item, arrayListTitle) {
                     @NotNull
                     @Override
                     public View getView(int position, View convertView, @NotNull ViewGroup parent) {
                         View view = super.getView(position, convertView, parent);
                         final CheckedTextView textView = view.findViewById(android.R.id.text1);
                         textView.setChecked(true);
+                        textView.setTextSize(context.getResources().getDimension(R.dimen.textSizeSmall));
                         textView.setTextColor(getResources().getColor(R.color.black));
                         return view;
                     }
@@ -683,8 +715,6 @@ public class DocumentActivity1 extends AppCompatActivity {
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
 
-            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-            daoExaminerDuties.updateExamination(true, trackNumber);
         }
     }
 

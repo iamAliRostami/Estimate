@@ -16,7 +16,7 @@
         tools:ignore="UselessParent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_large_margin"
@@ -64,6 +64,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
                         android:layout_weight="1"
+                        android:spinnerMode="dialog"
                         android:paddingTop="@dimen/activity_medium_padding"
                         android:paddingBottom="@dimen/activity_medium_padding"
                         android:textStyle="bold" />
@@ -82,6 +83,7 @@
                         tools:ignore="RtlHardcoded" />
 
                     <Spinner
+                        android:spinnerMode="dialog"
                         android:id="@+id/spinner2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -249,6 +251,7 @@
                         tools:ignore="RtlHardcoded" />
 
                     <Spinner
+                        android:spinnerMode="dialog"
                         android:id="@+id/spinner3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -519,6 +522,7 @@
                         tools:ignore="RtlHardcoded" />
 
                     <Spinner
+                        android:spinnerMode="dialog"
                         android:id="@+id/spinner4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

@@ -114,6 +114,7 @@ public class FormActivity1 extends AppCompatActivity {
                     if (formFragment != null)
                         calculationUserInputTemp = formFragment.setOnButtonNextClickListener();
                     if (calculationUserInputTemp != null) {
+                        binding.buttonNext.setText(R.string.save_info);
                         prepareFromForm();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragment, new MapFragment());
@@ -133,7 +134,7 @@ public class FormActivity1 extends AppCompatActivity {
                     intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                     prepareToSend();
                     startActivity(intent);
-//                    finish();
+                    finish();
                     break;
             }
         });
@@ -154,6 +155,7 @@ public class FormActivity1 extends AppCompatActivity {
                     fragmentTransaction.commit();
                     break;
                 case 4:
+                    binding.buttonNext.setText(R.string.next);
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment, new FormFragment());
                     fragmentTransaction.commit();

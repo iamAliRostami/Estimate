@@ -20,18 +20,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HttpClientWrapper {
+    public static Call call;
+
     public static <T> void callHttpAsync(Call<T> call, int dialogType,
                                          final Context context,
                                          final ICallback<T> callback,
                                          final ICallbackIncomplete<T> callbackIncomplete,
                                          final ICallbackError callbackError) {
+        HttpClientWrapper.call = call;
         CustomProgressBar progressBar = new CustomProgressBar();
-        if (dialogType == ProgressType.SHOW.getValue() ||
-                dialogType == ProgressType.SHOW_CANCELABLE.getValue()) {
+        if (dialogType == ProgressType.SHOW.getValue()) {
+            progressBar.show(context, context.getString(R.string.waiting));
+        } else if (dialogType == ProgressType.SHOW_CANCELABLE.getValue()) {
             progressBar.show(context, context.getString(R.string.waiting), true);
         }
         if (isOnline(context)) {
-            call.enqueue(new Callback<T>() {
+            HttpClientWrapper.call.enqueue(new Callback<T>() {
                 @Override
                 public void onResponse(@NonNull Call<T> call, @NonNull Response<T> response) {
                     if (response.isSuccessful()) {

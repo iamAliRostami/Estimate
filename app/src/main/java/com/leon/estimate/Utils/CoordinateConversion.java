@@ -15,7 +15,6 @@ public class CoordinateConversion {
     public String latLon2UTM(double latitude, double longitude) {
         LatLon2UTM c = new LatLon2UTM();
         return c.convertLatLonToUTM(latitude, longitude);
-
     }
 
     private void validate(double latitude, double longitude) {

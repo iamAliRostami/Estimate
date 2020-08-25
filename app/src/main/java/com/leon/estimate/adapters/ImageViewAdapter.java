@@ -129,7 +129,7 @@ public class ImageViewAdapter extends BaseAdapter {
 
         public ImageViewHolder(View view) {
             imageView = view.findViewById(R.id.imageView);
-            textView = view.findViewById(R.id.textView);
+            textView = view.findViewById(R.id.textViewTitle);
         }
 
     }

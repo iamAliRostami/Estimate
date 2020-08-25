@@ -2,7 +2,6 @@ package com.leon.estimate.Utils;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,9 +34,10 @@ public final class CustomProgressBar {
             Toast.makeText(MyApplication.getContext(),
                     MyApplication.getContext().getString(R.string.canceled),
                     Toast.LENGTH_LONG).show();
+            HttpClientWrapper.call.cancel();
 //            Intent intent = new Intent(context, HomeActivity.class);
 //            context.startActivity(intent);
-            ((Activity) context).finish();
+//            ((Activity) context).finish();
         });
     }
 
@@ -48,9 +48,8 @@ public final class CustomProgressBar {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = Objects.requireNonNull(inflater).inflate(R.layout.progress_bar, null);
         RelativeLayout relativeLayout = view.findViewById(R.id.relativeLayout);
-//        FontManager fontManager = new FontManager(context);
-//        fontManager.setFont(relativeLayout);
         relativeLayout.setOnClickListener(v -> {
+            HttpClientWrapper.call.cancel();
             dialog.dismiss();
             dialog.cancel();
         });

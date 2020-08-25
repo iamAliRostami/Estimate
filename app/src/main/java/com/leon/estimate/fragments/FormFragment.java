@@ -182,28 +182,16 @@ public class FormFragment extends Fragment {
     private void initializeKarbariSpinner() {
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         karbariDictionaries = daoKarbariDictionary.getKarbariDictionary();
-        List<String> arrayListSpinner1 = new ArrayList<>();
+        List<String> arrayListSpinner = new ArrayList<>();
         int selected = 0, counter = 0;
         for (KarbariDictionary karbariDictionary : karbariDictionaries) {
-            arrayListSpinner1.add(karbariDictionary.getTitle());
+            arrayListSpinner.add(karbariDictionary.getTitle());
             if (karbariDictionary.getId() == FormActivity1.examinerDuties.getKarbariId()) {
                 selected = counter;
             }
             counter = counter + 1;
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
-            @NotNull
-            @Override
-            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                final CheckedTextView textView = view.findViewById(android.R.id.text1);
-                textView.setChecked(true);
-                textView.setTextColor(getResources().getColor(R.color.black));
-                return view;
-            }
-        };
-        binding.spinner1.setAdapter(arrayAdapter);
+        binding.spinner1.setAdapter(createArrayAdapter(arrayListSpinner));
 //        binding.spinner1.setSelection(FormActivity1.examinerDuties.getKarbariId());
         binding.spinner1.setSelection(selected);
     }
@@ -211,28 +199,16 @@ public class FormFragment extends Fragment {
     private void initializeTaxfifSpinner() {
         DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
         taxfifDictionaries = daoTaxfifDictionary.getTaxfifDictionaries();
-        List<String> arrayListSpinner1 = new ArrayList<>();
+        List<String> arrayListSpinner = new ArrayList<>();
         int selected = 0, counter = 0;
         for (TaxfifDictionary taxfifDictionary : taxfifDictionaries) {
-            arrayListSpinner1.add(taxfifDictionary.getTitle());
+            arrayListSpinner.add(taxfifDictionary.getTitle());
             if (taxfifDictionary.getId() == FormActivity1.examinerDuties.getTaxfifId()) {
                 selected = counter;
             }
             counter = counter + 1;
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
-            @NotNull
-            @Override
-            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                final CheckedTextView textView = view.findViewById(android.R.id.text1);
-                textView.setChecked(true);
-                textView.setTextColor(getResources().getColor(R.color.black));
-                return view;
-            }
-        };
-        binding.spinner4.setAdapter(arrayAdapter);
+        binding.spinner4.setAdapter(createArrayAdapter(arrayListSpinner));
 //        binding.spinner4.setSelection(FormActivity1.examinerDuties.getTaxfifId());
         binding.spinner4.setSelection(selected);
     }
@@ -240,56 +216,32 @@ public class FormFragment extends Fragment {
     private void initializeNoeVagozariSpinner() {
         DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
         noeVagozariDictionaries = daoNoeVagozariDictionary.getNoeVagozariDictionaries();
-        List<String> arrayListSpinner1 = new ArrayList<>();
+        List<String> arrayListSpinner = new ArrayList<>();
         int select = 0, counter = 0;
         for (NoeVagozariDictionary noeVagozariDictionary : noeVagozariDictionaries) {
-            arrayListSpinner1.add(noeVagozariDictionary.getTitle());
+            arrayListSpinner.add(noeVagozariDictionary.getTitle());
             if (noeVagozariDictionary.isSelected()) {
                 select = counter;
             }
             counter++;
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
-            @NotNull
-            @Override
-            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                final CheckedTextView textView = view.findViewById(android.R.id.text1);
-                textView.setChecked(true);
-                textView.setTextColor(getResources().getColor(R.color.black));
-                return view;
-            }
-        };
-        binding.spinner2.setAdapter(arrayAdapter);
+        binding.spinner2.setAdapter(createArrayAdapter(arrayListSpinner));
         binding.spinner2.setSelection(select);
     }
 
     private void initializeQotrEnsheabSpinner() {
         DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
         qotrEnsheabDictionaries = daoQotrEnsheabDictionary.getQotrEnsheabDictionaries();
-        List<String> arrayListSpinner1 = new ArrayList<>();
+        List<String> arrayListSpinner = new ArrayList<>();
         int counter = 0, selected = 0;
         for (QotrEnsheabDictionary qotrEnsheabDictionary : qotrEnsheabDictionaries) {
-            arrayListSpinner1.add(qotrEnsheabDictionary.getTitle());
+            arrayListSpinner.add(qotrEnsheabDictionary.getTitle());
             if (FormActivity1.examinerDuties.getQotrEnsheabId() == qotrEnsheabDictionary.getId()) {
                 selected = counter;
             }
             counter = counter + 1;
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_dropdown_item, arrayListSpinner1) {
-            @NotNull
-            @Override
-            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                final CheckedTextView textView = view.findViewById(android.R.id.text1);
-                textView.setChecked(true);
-                textView.setTextColor(getResources().getColor(R.color.black));
-                return view;
-            }
-        };
-        binding.spinner3.setAdapter(arrayAdapter);
+        binding.spinner3.setAdapter(createArrayAdapter(arrayListSpinner));
 //        binding.spinner3.setSelection(FormActivity1.examinerDuties.getQotrEnsheabId());
         binding.spinner3.setSelection(selected);
     }
@@ -314,6 +266,22 @@ public class FormFragment extends Fragment {
         binding.editTextPelak.setText(FormActivity1.examinerDuties.getPostalCode());
 
         binding.checkbox3.setChecked(FormActivity1.examinerDuties.isEnsheabQeirDaem());
+    }
+
+    ArrayAdapter<String> createArrayAdapter(List<String> arrayListSpinner) {
+        return new ArrayAdapter<String>(context,
+                R.layout.dropdown_menu_popup_item, arrayListSpinner) {
+            @NotNull
+            @Override
+            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final CheckedTextView textView = view.findViewById(android.R.id.text1);
+                textView.setChecked(true);
+                textView.setTextSize(context.getResources().getDimension(R.dimen.textSizeSmall));
+                textView.setTextColor(getResources().getColor(R.color.black));
+                return view;
+            }
+        };
     }
 
     @SuppressLint("StaticFieldLeak")

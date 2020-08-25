@@ -10,17 +10,22 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -34,12 +39,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
 import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
@@ -54,7 +62,12 @@ import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Tables.Place;
+import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.CustomProgressBar;
+import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.HttpClientWrapperOld;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -63,10 +76,19 @@ import com.leon.estimate.databinding.MainActivityBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -79,19 +101,29 @@ import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
-    public double latitude;
-    public double longitude;
+    public double latitude, longitude;
     LocationManager locationManager;
     MainActivityBinding binding;
-    int REQUEST_LOCATION_CODE = 1236;
     String trackNumber;
     DrawerLayout drawer;
+    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0;
+    Polyline roadOverlay;
+    MapView mapView;
     Context context;
+    ArrayList<Integer> indexArray;
+    ArrayList<GeoPoint> wayPoints, placesPoints;
+    CoordinateConversion conversion;
+    List<ExaminerDuties> examinerDuties, examinerDutiesReady;
+    //    boolean isShown = false;
+    ArrayList<Boolean> isShown;
+    boolean doubleBackToExitPressedOnce = false;
     List<CalculationUserInput> calculationUserInputList;
+    Toolbar toolbar;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
         switch (view.getId()) {
@@ -115,7 +147,6 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,21 +167,10 @@ public class MainActivity extends AppCompatActivity
                 initialize();
             }
         }
-//        Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
+//        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
 //                .fallbackToDestructiveMigration()
 //                .addMigrations(MyDatabase.MIGRATION_22_23).build();
 //        readData();
-    }
-
-    void initialize() {
-        initializeMap();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        drawer = findViewById(R.id.drawer_layout);
-        drawer.openDrawer(GravityCompat.START);
-        setImageViewFindByViewId();
     }
 
     public void readData() {
@@ -209,6 +229,16 @@ public class MainActivity extends AppCompatActivity
         daoKarbariDictionary.insertAll(input.getKarbariDictionary());
     }
 
+    @SuppressLint("WrongConstant")
+    void initialize() {
+        toolbar = findViewById(R.id.toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        setActionBarTitle("خانه");
+        drawer.openDrawer(GravityCompat.START);
+        setImageViewClickListener();
+        initializeMap();
+    }
+
     private Location getLastKnownLocation() {
         Location l = null;
         LocationManager mLocationManager = (LocationManager)
@@ -236,7 +266,7 @@ public class MainActivity extends AppCompatActivity
         if (!GpsEnabled()) {
             initialize();
         } else {
-            MapView mapView = findViewById(R.id.mapView);
+            mapView = findViewById(R.id.mapView);
             mapView.setTileSource(TileSourceFactory.MAPNIK);
             mapView.setBuiltInZoomControls(true);
             mapView.setMultiTouchControls(true);
@@ -261,15 +291,166 @@ public class MainActivity extends AppCompatActivity
             MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
             locationOverlay.enableMyLocation();
             mapView.getOverlays().add(locationOverlay);
+            conversion = new CoordinateConversion();
+            initializePlace();
         }
     }
 
-    void setImageViewFindByViewId() {
+    void initializePlace() {
+        placesPoints = new ArrayList<>();
+        indexArray = new ArrayList<>();
+        isShown = new ArrayList<>();
+        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .allowMainThreadQueries().build();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        examinerDuties = daoExaminerDuties.ExaminerDuties();
+        examinerDutiesReady = new ArrayList<>();
+        if (examinerDuties != null && examinerDuties.size() > 0) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            getXY(examinerDuties.get(0).getBillId());
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    void setActionBarTitle(String title) {
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
+                (this, drawer, toolbar, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        toolbar.setNavigationOnClickListener(view1 -> {
+            drawer.openDrawer(Gravity.START);
+        });
+    }
+
+    void getXY(String billId) {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
+        GetXY getXY = new GetXY();
+        GetXYIncomplete incomplete = new GetXYIncomplete();
+        GetError error = new GetError();
+        Call<Place> call = iAbfaService.getXY(billId);
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                getXY, incomplete, error);
+    }
+
+    private void addPlace(GeoPoint p) {
+        placesPoints.add(p);
+        GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
+        Marker startMarker = new Marker(mapView);
+        startMarker.setPosition(startPoint);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+//        MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+//                org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
+        MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+                R.layout.custom_info_window, mapView);
+        startMarker.setInfoWindow(infoWindow);
+        startMarker.setOnMarkerClickListener((marker, mapView) -> {
+            //TODO start index from 1
+            int overlayIndex = mapView.getOverlayManager().indexOf(startMarker) / 2;
+            ExaminerDuties examinerDuties = examinerDutiesReady.get(overlayIndex);
+            Log.e("name", examinerDuties.getNameAndFamily());
+            InfoWindow.closeAllInfoWindowsOn(mapView);
+            infoWindow.close();
+            if (isShown.get(overlayIndex)/* && mapView.getOverlayManager().indexOf(startMarker) == wayIndex*/) {
+                mapView.getOverlays().remove(roadOverlay);
+                if (examinerDuties.isPeymayesh()) {
+                    Toast.makeText(context, R.string.is_peymayesh, Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(context, FormActivity1.class);
+                    intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.getTrackNumber());
+                    intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.getRequestDictionaryString());
+                    context.startActivity(intent);
+                }
+            } else {
+                new AddRoutOverlay().execute(new GeoPoint(getLastKnownLocation()), startPoint);
+                startMarker.setTitle(examinerDuties.getNameAndFamily().concat("\n")
+                        .concat(examinerDuties.getServiceGroup()));
+                startMarker.setSubDescription(examinerDuties.getAddress().concat("\n")
+                        .concat(examinerDuties.getMobile()));
+                startMarker.showInfoWindow();
+            }
+            for (int i = 0; i < isShown.size(); i++)
+                isShown.set(i, false);
+            isShown.set(overlayIndex, !isShown.get(overlayIndex));
+            wayIndex = mapView.getOverlayManager().indexOf(startMarker);
+            Log.e("index", String.valueOf(wayIndex));
+            return false;
+        });
+        mapView.getOverlayManager().add(startMarker);
+        mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) {
+                Log.e("location1", p.toString());
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                Log.e("location2", p.toString());
+                return false;
+            }
+        }));
+        int placeIndex = mapView.getOverlays().size() - 1;
+        Log.e("placeIndex", String.valueOf(placeIndex));
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    public void addRouteOverlay(GeoPoint startPoint, GeoPoint endPoint) {
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        if (roadOverlay != null) {
+            mapView.getOverlays().remove(roadOverlay);
+        }
+
+        RoadManager roadManager = new OSRMRoadManager(context);
+        wayPoints = new ArrayList<>();
+        wayPoints.add(startPoint);
+        wayPoints.add(endPoint);
+        Road road = roadManager.getRoad(wayPoints);
+        roadOverlay = RoadManager.buildRoadOverlay(road);
+        roadOverlay.setOnClickListener((polyline, mapView, eventPos) -> {
+//            mapView.getOverlays().remove(polyline);
+//            InfoWindow.closeAllInfoWindowsOn(mapView);
+//            isShown = !isShown;
+            return false;
+        });
+        mapView.getOverlays().add(roadOverlay);
+        mapView.invalidate();
+    }
+
+    void setImageViewClickListener() {
         binding.imageViewDownload.setOnClickListener(onClickListener);
         binding.imageViewUpload.setOnClickListener(onClickListener);
         binding.imageViewPaper.setOnClickListener(onClickListener);
         binding.imageViewExit.setOnClickListener(onClickListener);
         binding.imageViewForm.setOnClickListener(onClickListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        }
     }
 
     @Override
@@ -282,25 +463,38 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
     public void onProviderEnabled(@NotNull String provider) {
-
     }
 
     @Override
     public void onProviderDisabled(@NotNull String provider) {
     }
 
+    @SuppressLint("StaticFieldLeak")
+    class AddRoutOverlay extends AsyncTask<GeoPoint, Integer, Integer> {
+        CustomProgressBar progressBar;
 
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar = new CustomProgressBar();
+            progressBar.show(context, context.getString(R.string.waiting_for_routing));
+        }
+
+
+        @Override
+        protected Integer doInBackground(GeoPoint... geoPoints) {
+            addRouteOverlay(geoPoints[0], geoPoints[1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            progressBar.getDialog().dismiss();
         }
     }
 
@@ -331,7 +525,6 @@ public class MainActivity extends AppCompatActivity
                 .setRationaleMessage("جهت استفاده از برنامه مجوزهای پیشنهادی را قبول فرمایید")
                 .setDeniedMessage("در صورت رد این مجوز قادر به استفاده از این دستگاه نخواهید بود" + "\n" +
                         "لطفا با فشار دادن دکمه اعطای دسترسی و سپس در بخش دسترسی ها با این مجوز ها موافقت نمایید")
-////                .setGotoSettingButtonText("اعطای دسترسی")
                 .setPermissions(
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -474,6 +667,74 @@ public class MainActivity extends AppCompatActivity
                 trackNumber = calculationUserInput.trackNumber;
                 daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
             }
+        }
+    }
+
+    class GetXY implements ICallback<Place> {
+        @Override
+        public void execute(Place place) {
+            if (place.getX() != 0 && place.getY() != 0) {
+                String utm = "39 S ".concat(String.valueOf(place.getX())).concat(" ")
+                        .concat(String.valueOf(place.getY()));
+                double[] latLong = conversion.utm2LatLon(utm);
+                GeoPoint geoPointTemp = new GeoPoint(latLong[0], latLong[1]);
+                boolean isUnique = true;
+                for (GeoPoint geoPoint : placesPoints) {
+                    if (geoPoint.equals(geoPointTemp)) {
+                        isUnique = false;
+                        break;
+                    }
+                }
+                if (isUnique) {
+                    isShown.add(false);
+                    indexArray.add(counter);
+                    examinerDutiesReady.add(examinerDuties.get(counter));
+                    addPlace(new GeoPoint(latLong[0], latLong[1]));
+                }
+            }
+            counter = counter + 1;
+            if (counter < examinerDuties.size()) {
+                if (examinerDuties.get(counter).getBillId() != null
+                        && examinerDuties.get(counter).getBillId().length() > 0)
+                    getXY(examinerDuties.get(counter).getBillId());
+                else getXY(examinerDuties.get(counter).getNeighbourBillId());
+            }
+            if (counter == examinerDuties.size())
+                setActionBarTitle("خانه");
+        }
+    }
+
+    class GetXYIncomplete implements ICallbackIncomplete<Place> {
+        @Override
+        public void executeIncomplete(Response<Place> response) {
+            counter = counter + 1;
+            if (counter < examinerDuties.size()) {
+                if (examinerDuties.get(counter).getBillId() != null
+                        && examinerDuties.get(counter).getBillId().length() > 0)
+                    getXY(examinerDuties.get(counter).getBillId());
+                else getXY(examinerDuties.get(counter).getNeighbourBillId());
+            }
+            if (counter == examinerDuties.size())
+                setActionBarTitle("خانه");
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            Log.e("GetXYIncomplete", error);
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+//            counter = counter + 1;
+//            if (counter < examinerDuties.size()) {
+//                if (examinerDuties.get(counter).getBillId() != null
+//                        && examinerDuties.get(counter).getBillId().length() > 0)
+//                    getXY(examinerDuties.get(counter).getBillId());
+//                else getXY(examinerDuties.get(counter).getNeighbourBillId());
+//            }
+//            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+//            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+//            Log.e("GetXYError", error);
         }
     }
 }

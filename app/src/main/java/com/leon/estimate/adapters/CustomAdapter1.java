@@ -26,7 +26,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
     private List<ExaminerDuties> examinerDuties;
     private int size = 0;
 
-    public CustomAdapter1(Context context, List<ExaminerDuties> examinerDuties, int width) {
+    public CustomAdapter1(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
         this.examinerDuties = examinerDuties;
     }
@@ -45,7 +45,7 @@ public class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHold
 
         holder.itemView.setOnClickListener(view1 -> {
             if (examinerDuties.get(i).isPeymayesh()) {
-                Toast.makeText(context, "این مسیر پیمایش شده است.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getText(R.string.is_peymayesh), Toast.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent(context, FormActivity1.class);
                 intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.get(i).getTrackNumber());

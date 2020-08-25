@@ -38,7 +38,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -157,8 +156,8 @@ public class MapFragment extends Fragment implements LocationListener {
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                addPlace(p);
                 Log.e("location2", p.toString());
+                addPlace(p);
                 return false;
             }
         }));
@@ -170,39 +169,29 @@ public class MapFragment extends Fragment implements LocationListener {
         Marker startMarker = new Marker(binding.mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        startMarker.setTitle("محل شما");
-        startMarker.setSubDescription("اینجا محل استفرار شماست");
-//        mapView.getOverlays().add(startMarker);
         if (placeIndex != 0) {//TODO crash on paging...
-            binding.mapView.getOverlayManager().remove(placeIndex);
+            binding.mapView.getOverlays().remove(placeIndex);
         }
-        binding.mapView.getOverlayManager().add(startMarker);
+        binding.mapView.getOverlays().add(startMarker);
         placeIndex = binding.mapView.getOverlays().size() - 1;
     }
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
-
-        line.setTitle("محل شما");
-        line.setSubDescription("چند ضلعی محل انشعاب");
-//        line.setWidth(5f);
-//        line.setColor(R.color.green1);
-
-        List<GeoPoint> pts = new ArrayList<>(polygonPoint);
-        pts.add(geoPoint);
-        pts.add(pts.get(0));
-        polygonPoint.add(geoPoint);
-
-        line.setPoints(pts);
-        line.setGeodesic(true);
-        line.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, binding.mapView));
         if (polygonIndex != 0) {//TODO crash on paging...
-            binding.mapView.getOverlayManager().remove(polygonIndex);
+            binding.mapView.getOverlays().remove(polygonIndex);
         }
-        binding.mapView.getOverlayManager().add(line);
+        binding.mapView.getOverlays().add(line);
+//        ArrayList<GeoPoint> pts = new ArrayList<>(polygonPoint);
+//        pts.add(geoPoint);
+//        pts.add(pts.get(0));
+//        line.setPoints(pts);
+        polygonPoint.add(geoPoint);
+        polygonPoint.add(polygonPoint.get(0));
+        line.setPoints(polygonPoint);
+        polygonPoint.remove(polygonPoint.size() - 1);
         polygonIndex = binding.mapView.getOverlays().size() - 1;
     }
-
 
     private Location getLastKnownLocation() {
         Location l = null;
