@@ -23,7 +23,6 @@ import androidx.core.location.LocationManagerCompat;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.BuildConfig;
-import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -91,13 +90,8 @@ public class LoginActivity extends AppCompatActivity {
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
         Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login1(
                 username, password);
-//        Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login(
-//                username, password);
-        LoginFeedBack loginFeedBack = new LoginFeedBack();
-        GetError error = new GetError();
-        GetErrorIncomplete incomplete = new GetErrorIncomplete();
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW_CANCELABLE.getValue(), this,
-                loginFeedBack, incomplete, error);
+                new LoginFeedBack(), new GetErrorIncomplete(), new GetError());
     }
 
 
@@ -267,10 +261,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setButtonOnLongClickListener() {
         binding.buttonLogin.setOnLongClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
-            intent.putExtra(BundleEnum.BILL_ID.getValue(), "10000018");
-            startActivity(intent);
-            finish();
+//            Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
+//            intent.putExtra(BundleEnum.BILL_ID.getValue(), "10000018");
+//            startActivity(intent);
+//            finish();
             return false;
         });
     }
@@ -326,6 +320,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         context = null;
+        binding.imageViewPerson.setImageDrawable(null);
+        binding.imageViewPassword.setImageDrawable(null);
+        binding.imageViewLogo.setImageDrawable(null);
+        binding.imageViewUsername.setImageDrawable(null);
         System.gc();
         Runtime.getRuntime().gc();
         Runtime.getRuntime().totalMemory();
@@ -337,10 +335,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        binding.imageViewPerson.setImageDrawable(null);
-        binding.imageViewPassword.setImageDrawable(null);
-        binding.imageViewLogo.setImageDrawable(null);
-        binding.imageViewUsername.setImageDrawable(null);
         System.gc();
         Runtime.getRuntime().gc();
         Runtime.getRuntime().totalMemory();

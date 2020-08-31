@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
-import com.leon.estimate.activities.FormActivity1;
+import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.databinding.MapFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +76,7 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
+        ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.location)));
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
     }

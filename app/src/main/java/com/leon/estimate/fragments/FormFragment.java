@@ -31,7 +31,7 @@ import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
-import com.leon.estimate.activities.FormActivity1;
+import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.databinding.FormFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
@@ -72,7 +72,7 @@ public class FormFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
+        ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_melk)));
     }
 
@@ -186,7 +186,7 @@ public class FormFragment extends Fragment {
         int selected = 0, counter = 0;
         for (KarbariDictionary karbariDictionary : karbariDictionaries) {
             arrayListSpinner.add(karbariDictionary.getTitle());
-            if (karbariDictionary.getId() == FormActivity1.examinerDuties.getKarbariId()) {
+            if (karbariDictionary.getId() == FormActivity.examinerDuties.getKarbariId()) {
                 selected = counter;
             }
             counter = counter + 1;
@@ -203,7 +203,7 @@ public class FormFragment extends Fragment {
         int selected = 0, counter = 0;
         for (TaxfifDictionary taxfifDictionary : taxfifDictionaries) {
             arrayListSpinner.add(taxfifDictionary.getTitle());
-            if (taxfifDictionary.getId() == FormActivity1.examinerDuties.getTaxfifId()) {
+            if (taxfifDictionary.getId() == FormActivity.examinerDuties.getTaxfifId()) {
                 selected = counter;
             }
             counter = counter + 1;
@@ -236,7 +236,7 @@ public class FormFragment extends Fragment {
         int counter = 0, selected = 0;
         for (QotrEnsheabDictionary qotrEnsheabDictionary : qotrEnsheabDictionaries) {
             arrayListSpinner.add(qotrEnsheabDictionary.getTitle());
-            if (FormActivity1.examinerDuties.getQotrEnsheabId() == qotrEnsheabDictionary.getId()) {
+            if (FormActivity.examinerDuties.getQotrEnsheabId() == qotrEnsheabDictionary.getId()) {
                 selected = counter;
             }
             counter = counter + 1;
@@ -247,25 +247,25 @@ public class FormFragment extends Fragment {
     }
 
     private void initializeField() {
-        binding.editTextSifoon100.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon100()));
-        binding.editTextSifoon125.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon125()));
-        binding.editTextSifoon150.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon150()));
-        binding.editTextSifoon200.setText(String.valueOf(FormActivity1.examinerDuties.getSifoon200()));
-        binding.editTextArese.setText(String.valueOf(FormActivity1.examinerDuties.getArse()));
-        binding.editTextAianKol.setText(String.valueOf(FormActivity1.examinerDuties.getAianKol()));
-        binding.editTextAianMaskooni.setText(String.valueOf(FormActivity1.examinerDuties.getAianMaskooni()));
-        binding.editTextAianNonMaskooni.setText(String.valueOf(FormActivity1.examinerDuties.getAianNonMaskooni()));
-        binding.editTextTedadMaskooni.setText(String.valueOf(FormActivity1.examinerDuties.getTedadMaskooni()));
-        binding.editTextTedadTejari.setText(String.valueOf(FormActivity1.examinerDuties.getTedadTejari()));
-        binding.editTextTedadSaier.setText(String.valueOf(FormActivity1.examinerDuties.getTedadSaier()));
-        binding.editTextArzeshMelk.setText(String.valueOf(FormActivity1.examinerDuties.getArzeshMelk()));
-        binding.editTextTedadTakhfif.setText(String.valueOf(FormActivity1.examinerDuties.getTedadTaxfif()));
-        binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity1.examinerDuties.getZarfiatQarardadi()));
-        binding.editTextPariNumber.setText(FormActivity1.examinerDuties.getParNumber());
-        binding.editTextSodurDate.setText(FormActivity1.examinerDuties.getExaminationDay());
-        binding.editTextPelak.setText(FormActivity1.examinerDuties.getPostalCode());
+        binding.editTextSifoon100.setText(String.valueOf(FormActivity.examinerDuties.getSifoon100()));
+        binding.editTextSifoon125.setText(String.valueOf(FormActivity.examinerDuties.getSifoon125()));
+        binding.editTextSifoon150.setText(String.valueOf(FormActivity.examinerDuties.getSifoon150()));
+        binding.editTextSifoon200.setText(String.valueOf(FormActivity.examinerDuties.getSifoon200()));
+        binding.editTextArese.setText(String.valueOf(FormActivity.examinerDuties.getArse()));
+        binding.editTextAianKol.setText(String.valueOf(FormActivity.examinerDuties.getAianKol()));
+        binding.editTextAianMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getAianMaskooni()));
+        binding.editTextAianNonMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getAianNonMaskooni()));
+        binding.editTextTedadMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getTedadMaskooni()));
+        binding.editTextTedadTejari.setText(String.valueOf(FormActivity.examinerDuties.getTedadTejari()));
+        binding.editTextTedadSaier.setText(String.valueOf(FormActivity.examinerDuties.getTedadSaier()));
+        binding.editTextArzeshMelk.setText(String.valueOf(FormActivity.examinerDuties.getArzeshMelk()));
+        binding.editTextTedadTakhfif.setText(String.valueOf(FormActivity.examinerDuties.getTedadTaxfif()));
+        binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity.examinerDuties.getZarfiatQarardadi()));
+        binding.editTextPariNumber.setText(FormActivity.examinerDuties.getParNumber());
+        binding.editTextSodurDate.setText(FormActivity.examinerDuties.getExaminationDay());
+        binding.editTextPelak.setText(FormActivity.examinerDuties.getPostalCode());
 
-        binding.checkbox3.setChecked(FormActivity1.examinerDuties.isEnsheabQeirDaem());
+        binding.checkbox3.setChecked(FormActivity.examinerDuties.isEnsheabQeirDaem());
     }
 
     ArrayAdapter<String> createArrayAdapter(List<String> arrayListSpinner) {

@@ -110,25 +110,6 @@ public class CropActivity extends AppCompatActivity {
         }
     };
 
-    public static Bitmap rotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
-
-    private void setImageRotation() {
-        Bitmap tempBitmap = ScannerConstants.bitmapSelectedImage.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
-        for (int i = 1; i <= 4; i++) {
-            MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
-            if (point2f == null) {
-                tempBitmap = rotateBitmap(tempBitmap, 90 * i);
-            } else {
-                ScannerConstants.bitmapSelectedImage = tempBitmap.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
-                break;
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +125,26 @@ public class CropActivity extends AppCompatActivity {
         }
     }
 
+    public static Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    private void setImageRotation() {
+        Bitmap tempBitmap = ScannerConstants.bitmapSelectedImage.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
+        for (int i = 1; i <= 4; i++) {
+            MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
+            if (point2f == null) {
+                tempBitmap = rotateBitmap(tempBitmap, 90 * i);
+            } else {
+                ScannerConstants.bitmapSelectedImage = tempBitmap.copy(
+                        ScannerConstants.bitmapSelectedImage.getConfig(), true);
+                break;
+            }
+        }
+    }
     private void setProgressBar(boolean isShow) {
         RelativeLayout rlContainer = findViewById(R.id.rlContainer);
         setViewInteract(rlContainer, !isShow);
@@ -258,14 +259,16 @@ public class CropActivity extends AppCompatActivity {
             float y4 = (Objects.requireNonNull(points.get(3)).y) * yRatio;
             return nativeClass.getScannedBitmap(bitmapSelectedImage, x1, y1, x2, y2, x3, y3, x4, y4);
         } catch (Exception e) {
-            runOnUiThread(() -> Toast.makeText(CropActivity.this, ScannerConstants.cropError, Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> Toast.makeText(CropActivity.this, ScannerConstants.cropError,
+                    Toast.LENGTH_SHORT).show());
             return null;
         }
     }
 
     private Bitmap scaledBitmap(Bitmap bitmap, int width, int height) {
         Matrix m = new Matrix();
-        m.setRectToRect(new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()), new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
+        m.setRectToRect(new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()),
+                new RectF(0, 0, width, height), Matrix.ScaleToFit.CENTER);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
     }
 
@@ -283,9 +286,7 @@ public class CropActivity extends AppCompatActivity {
         for (int i = 0; i < points.size(); i++) {
             result.add(new PointF(((float) points.get(i).x), ((float) points.get(i).y)));
         }
-
         return result;
-
     }
 
     private Map<Integer, PointF> getOutlinePoints(Bitmap tempBitmap) {

@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.leon.estimate.R;
 import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.databinding.BrightnessContrastActivityBinding;
 
@@ -27,7 +28,7 @@ public class BrightnessContrastActivity extends AppCompatActivity {
             int brightness = progress - 250;
             bitmapTemp = brightnessController(ScannerConstants.bitmapSelectedImage, brightness);
             binding.imageView.setImageBitmap(bitmapTemp);
-            binding.textViewBrightness.setText("درخشش: ".concat(String.valueOf(brightness)));
+            binding.textViewBrightness.setText(getString(R.string.brightness).concat(String.valueOf(brightness)));
         }
 
         @Override
@@ -44,12 +45,10 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             float contrast = (float) (progress) / 10;
-//            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast, 7 / 10);
-//            bitmapTemp = contrastController(bitmapTemp, contrast, seekBarBrightness.getProgress() - 250);
             bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast,
                     binding.seekBarBrightness.getProgress() - 250);
             binding.imageView.setImageBitmap(bitmapTemp);
-            binding.textViewContrast.setText("کنتراست: ".concat(String.valueOf(contrast)));
+            binding.textViewContrast.setText(getString(R.string.contrast).concat(String.valueOf(contrast)));
         }
 
         @Override
@@ -61,33 +60,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
-
-    public static Bitmap contrastController(Bitmap bitmap, float contrast, float brightness) {
-        ColorMatrix colorMatrix = new ColorMatrix(new float[]
-                {
-                        contrast, 0, 0, 0, brightness,
-                        0, contrast, 0, 0, brightness,
-                        0, 0, contrast, 0, brightness,
-                        0, 0, 0, 1, 0
-                });
-        Bitmap ret = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-        Canvas canvas = new Canvas(ret);
-        Paint paint = new Paint();
-        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-//        canvas.drawBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), paint);
-        return ret;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        binding = BrightnessContrastActivityBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        initialize();
-    }
-
     View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -97,6 +69,15 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         }
     };
     View.OnClickListener onClickListenerClose = v -> finish();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        binding = BrightnessContrastActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initialize();
+    }
 
     void initialize() {
         binding.seekBarBrightness.setMax(500);
@@ -114,6 +95,21 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         binding.buttonClose.setOnClickListener(onClickListenerClose);
     }
 
+    public static Bitmap contrastController(Bitmap bitmap, float contrast, float brightness) {
+        ColorMatrix colorMatrix = new ColorMatrix(new float[]
+                {
+                        contrast, 0, 0, 0, brightness,
+                        0, contrast, 0, 0, brightness,
+                        0, 0, contrast, 0, brightness,
+                        0, 0, 0, 1, 0
+                });
+        Bitmap ret = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Canvas canvas = new Canvas(ret);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return ret;
+    }
 
     private Bitmap brightnessController(Bitmap bitmap, int value) {
         Mat src = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC1);

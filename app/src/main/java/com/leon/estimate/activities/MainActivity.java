@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity
                 if (examinerDuties.isPeymayesh()) {
                     Toast.makeText(context, R.string.is_peymayesh, Toast.LENGTH_LONG).show();
                 } else {
-                    Intent intent = new Intent(context, FormActivity1.class);
+                    Intent intent = new Intent(context, FormActivity.class);
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.getTrackNumber());
                     intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.getRequestDictionaryString());
                     context.startActivity(intent);

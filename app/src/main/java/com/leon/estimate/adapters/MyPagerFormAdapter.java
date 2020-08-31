@@ -16,12 +16,12 @@ import com.leon.estimate.fragments.ServicesFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-public class MyPagerAdapter extends FragmentPagerAdapter {
+public class MyPagerFormAdapter extends FragmentPagerAdapter {
     private static int NUM_ITEMS = 2;
     ExaminerDuties examinerDuties;
     Context context;
 
-    public MyPagerAdapter(FragmentManager fragmentManager, Context context, ExaminerDuties examinerDuties) {
+    public MyPagerFormAdapter(FragmentManager fragmentManager, Context context, ExaminerDuties examinerDuties) {
         super(fragmentManager);
         this.context = context;
         this.examinerDuties = examinerDuties;

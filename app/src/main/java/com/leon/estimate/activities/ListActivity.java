@@ -20,7 +20,7 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.adapters.CustomAdapter1;
+import com.leon.estimate.adapters.CustomListAdapter;
 import com.leon.estimate.databinding.ListActivityBinding;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
     Context context;
     List<ExaminerDuties> examinerDuties;
-    CustomAdapter1 customAdapter;
+    CustomListAdapter customAdapter;
     ProgressDialog dialog;
     ListActivityBinding binding;
 
@@ -70,7 +70,7 @@ public class ListActivity extends AppCompatActivity {
 //            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             binding.textViewEmpty.setVisibility(View.GONE);
             binding.recyclerView.setVisibility(View.VISIBLE);
-            customAdapter = new CustomAdapter1(context, this.examinerDuties);
+            customAdapter = new CustomListAdapter(context, this.examinerDuties);
             customAdapter.notifyDataSetChanged();
             binding.recyclerView.setAdapter(customAdapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(this) {

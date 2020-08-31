@@ -40,12 +40,9 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name=".activities.ListActivity" />
         <activity android:name=".activities.DocumentActivity" />
-        <activity android:name=".activities.DocumentActivity1" />
+        <activity android:name=".activities.DocumentFormActivity" />
         <activity
             android:name=".activities.FormActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".activities.FormActivity1"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activities.BrightnessContrastActivity" />
         <activity android:name=".activities.CropActivity" />
@@ -72,9 +69,6 @@
         <activity
             android:name=".activities.TakeOtherPhotoActivity"
             android:label="@string/paper" />
-        <activity
-            android:name=".activities.DownloadActivity"
-            android:label="@string/downloadDetails" />
     </application>
 
 </manifest>

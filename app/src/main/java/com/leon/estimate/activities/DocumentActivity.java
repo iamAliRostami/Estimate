@@ -275,7 +275,6 @@ public class DocumentActivity extends AppCompatActivity {
     void saveImage(Bitmap bitmapImage) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "AbfaCamera");
-//        File mediaStorageDir = new File(ScannerConstants.fileName, "AbfaCamera");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return;
@@ -347,8 +346,6 @@ public class DocumentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
-//        startActivity(intent);
         finish();
     }
 }

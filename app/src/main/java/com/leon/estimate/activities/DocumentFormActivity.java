@@ -58,7 +58,7 @@ import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.adapters.ImageViewAdapter;
-import com.leon.estimate.databinding.DocumentActivity1Binding;
+import com.leon.estimate.databinding.DocumentFormActivityBinding;
 import com.leon.estimate.fragments.HighQualityFragment;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -86,9 +86,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static com.leon.estimate.activities.FormActivity1.calculationUserInput;
+import static com.leon.estimate.activities.FormActivity.calculationUserInput;
 
-public class DocumentActivity1 extends AppCompatActivity {
+public class DocumentFormActivity extends AppCompatActivity {
 
     static String imageFileName;
     static ImageDataTitle imageDataTitle;
@@ -103,10 +103,10 @@ public class DocumentActivity1 extends AppCompatActivity {
     ArrayList<Images> images;
     ArrayList<ImageDataThumbnail.Data> imageDataThumbnail;
     ArrayList<String> imageDataThumbnailUri = new ArrayList<>(), arrayListTitle = new ArrayList<>();
-    DocumentActivity1Binding binding;
+    DocumentFormActivityBinding binding;
     SharedPreferenceManager sharedPreferenceManager;
     View.OnClickListener onPickClickListener = v -> {
-        AlertDialog.Builder builder = new AlertDialog.Builder(DocumentActivity1.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DocumentFormActivity.this);
         builder.setTitle(R.string.choose_document);
         builder.setMessage(R.string.select_source);
         builder.setPositiveButton(R.string.gallery, (dialog, which) -> {
@@ -118,7 +118,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         builder.setNegativeButton(R.string.camera, (dialog, which) -> {
             dialog.dismiss();
             Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-            if (cameraIntent.resolveActivity(DocumentActivity1.this.getPackageManager()) != null) {
+            if (cameraIntent.resolveActivity(DocumentFormActivity.this.getPackageManager()) != null) {
                 File photoFile = null;
                 try {
                     photoFile = createImageFile();
@@ -155,22 +155,18 @@ public class DocumentActivity1 extends AppCompatActivity {
             }
         }
     };
-    View.OnClickListener onAcceptedClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+    View.OnClickListener onAcceptedClickListener = view ->
             new ShowDialogue(getString(R.string.accepted_question),
                     getString(R.string.dear_user), getString(R.string.final_accepted),
                     getString(R.string.yes), getString(R.string.no),
                     R.color.red1, R.color.green2, R.color.yellow1, R.color.white);
-        }
-    };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        binding = DocumentActivity1Binding.inflate(getLayoutInflater());
+        binding = DocumentFormActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
         sharedPreferenceManager = new SharedPreferenceManager(context,
@@ -263,7 +259,6 @@ public class DocumentActivity1 extends AppCompatActivity {
 
     void getImageThumbnail(String uri) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
-//        Retrofit retrofit = NetworkHelper.getInstanceWithCache(context);
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
@@ -341,9 +336,6 @@ public class DocumentActivity1 extends AppCompatActivity {
 
     @SuppressLint("SimpleDateFormat")
     void saveImage(Bitmap bitmapImage) {
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "AbfaCamera");
-
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES) + "/AbfaCamera/");
         if (!mediaStorageDir.exists()) {
@@ -386,7 +378,6 @@ public class DocumentActivity1 extends AppCompatActivity {
     void loadImage() {
         DaoImages daoImages = dataBase.daoImages();
         List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
-//        List<Images> imagesList = daoImages.getImages();
         Log.e("size", String.valueOf(imagesList.size()));
         try {
             File f = new File(Environment.getExternalStoragePublicDirectory(
@@ -475,7 +466,6 @@ public class DocumentActivity1 extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "مجوز رد شد \n" +
                         deniedPermissions.toString(), Toast.LENGTH_LONG).show();
                 finish();
-//                finishAffinity();
             }
         };
 
@@ -533,7 +523,7 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void execute(ImageDataTitle imageDataTitle) {
             if (imageDataTitle.isSuccess()) {
                 int selected = 0, counter = 0;
-                DocumentActivity1.imageDataTitle = imageDataTitle;
+                DocumentFormActivity.imageDataTitle = imageDataTitle;
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
                     if (dataTitle.getTitle().equals("کروکی"))
                         selected = counter;
@@ -557,11 +547,11 @@ public class DocumentActivity1 extends AppCompatActivity {
                 binding.spinnerTitle.setSelection(selected);
                 loadImage();
             } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_call_backup),
+                Toast.makeText(DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.error_call_backup),
                         Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-                DocumentActivity1.this.startActivity(intent);
+                Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
+                DocumentFormActivity.this.startActivity(intent);
                 finish();
             }
         }
@@ -570,11 +560,11 @@ public class DocumentActivity1 extends AppCompatActivity {
     class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
         @Override
         public void executeIncomplete(Response<ImageDataTitle> response) {
-            Toast.makeText(DocumentActivity1.this,
-                    DocumentActivity1.this.getString(R.string.error_not_auth),
+            Toast.makeText(DocumentFormActivity.this,
+                    DocumentFormActivity.this.getString(R.string.error_not_auth),
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-            DocumentActivity1.this.startActivity(intent);
+            Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
+            DocumentFormActivity.this.startActivity(intent);
             finish();
         }
     }
@@ -588,11 +578,11 @@ public class DocumentActivity1 extends AppCompatActivity {
                 getImageTitles();
                 getImageThumbnailList();
             } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth),
+                Toast.makeText(DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.error_not_auth),
                         Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-                DocumentActivity1.this.startActivity(intent);
+                Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
+                DocumentFormActivity.this.startActivity(intent);
                 finish();
             }
         }
@@ -605,9 +595,9 @@ public class DocumentActivity1 extends AppCompatActivity {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
 
-            Toast.makeText(DocumentActivity1.this, error, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-            DocumentActivity1.this.startActivity(intent);
+            Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
+            DocumentFormActivity.this.startActivity(intent);
             finish();
         }
     }
@@ -622,10 +612,10 @@ public class DocumentActivity1 extends AppCompatActivity {
                 }
                 getImageThumbnail(imageDataThumbnail.get(0).getImg());
             } else {
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-                DocumentActivity1.this.startActivity(intent);
+                Toast.makeText(DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
+                DocumentFormActivity.this.startActivity(intent);
                 finish();
             }
         }
@@ -637,10 +627,10 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void executeIncomplete(Response<ImageDataThumbnail> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
-                    DocumentActivity1.this.getString(R.string.dear_user),
-                    DocumentActivity1.this.getString(R.string.download_document),
-                    DocumentActivity1.this.getString(R.string.accepted));
+            new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
+                    DocumentFormActivity.this.getString(R.string.dear_user),
+                    DocumentFormActivity.this.getString(R.string.download_document),
+                    DocumentFormActivity.this.getString(R.string.accepted));
         }
     }
 
@@ -666,10 +656,10 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void executeIncomplete(Response<ResponseBody> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
-                    DocumentActivity1.this.getString(R.string.dear_user),
-                    DocumentActivity1.this.getString(R.string.download_document),
-                    DocumentActivity1.this.getString(R.string.accepted));
+            new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
+                    DocumentFormActivity.this.getString(R.string.dear_user),
+                    DocumentFormActivity.this.getString(R.string.download_document),
+                    DocumentFormActivity.this.getString(R.string.accepted));
         }
     }
 
@@ -685,12 +675,12 @@ public class DocumentActivity1 extends AppCompatActivity {
                         ScannerConstants.bitmapSelectedImage, true);
                 images.add(0, image);
                 imageViewAdapter.notifyDataSetChanged();
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
+                Toast.makeText(DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
             } else {
                 saveTempBitmap(ScannerConstants.bitmapSelectedImage);
-                Toast.makeText(DocumentActivity1.this,
-                        DocumentActivity1.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
+                Toast.makeText(DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -701,10 +691,10 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void executeIncomplete(Response<UploadImage> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
-                    DocumentActivity1.this.getString(R.string.dear_user),
-                    DocumentActivity1.this.getString(R.string.login),
-                    DocumentActivity1.this.getString(R.string.accepted));
+            new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
+                    DocumentFormActivity.this.getString(R.string.dear_user),
+                    DocumentFormActivity.this.getString(R.string.login),
+                    DocumentFormActivity.this.getString(R.string.accepted));
             saveTempBitmap(ScannerConstants.bitmapSelectedImage);
         }
     }
@@ -723,10 +713,10 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void executeIncomplete(Response<SimpleMessage> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, DocumentActivity1.this, error,
-                    DocumentActivity1.this.getString(R.string.dear_user),
-                    DocumentActivity1.this.getString(R.string.login),
-                    DocumentActivity1.this.getString(R.string.accepted));
+            new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
+                    DocumentFormActivity.this.getString(R.string.dear_user),
+                    DocumentFormActivity.this.getString(R.string.login),
+                    DocumentFormActivity.this.getString(R.string.accepted));
         }
     }
 
@@ -735,9 +725,9 @@ public class DocumentActivity1 extends AppCompatActivity {
         public void executeError(Throwable t) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
-            Toast.makeText(DocumentActivity1.this, error, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(DocumentActivity1.this, ListActivity.class);
-            DocumentActivity1.this.startActivity(intent);
+            Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
+            DocumentFormActivity.this.startActivity(intent);
             finish();
         }
     }

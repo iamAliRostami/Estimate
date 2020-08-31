@@ -16,7 +16,7 @@ import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.ExaminerDuties;
-import com.leon.estimate.activities.FormActivity1;
+import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.adapters.CheckBoxAdapter;
 import com.leon.estimate.databinding.ServicesFragmentBinding;
 
@@ -52,13 +52,13 @@ public class ServicesFragment extends Fragment {
         for (int i = 0; i < checkBoxAdapter.requestDictionaries.size(); i++) {
             if (checkBoxAdapter.requestDictionaries.get(i).isSelected())
                 counter = counter + 1;
-            FormActivity1.requestDictionaries.get(i).setSelected(
+            FormActivity.requestDictionaries.get(i).setSelected(
                     checkBoxAdapter.requestDictionaries.get(i).isSelected());
         }
         if (counter > 0) {
-            calculationUserInput.selectedServicesObject = FormActivity1.requestDictionaries;
+            calculationUserInput.selectedServicesObject = FormActivity.requestDictionaries;
             Gson gson = new GsonBuilder().create();
-            calculationUserInput.selectedServicesString = gson.toJson(FormActivity1.requestDictionaries);
+            calculationUserInput.selectedServicesString = gson.toJson(FormActivity.requestDictionaries);
 
             return calculationUserInput;
         } else return null;
@@ -76,7 +76,7 @@ public class ServicesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ((FormActivity1) Objects.requireNonNull(getActivity())).setActionBarTitle(
+        ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.services)));
     }
 
@@ -86,7 +86,7 @@ public class ServicesFragment extends Fragment {
 
     @SuppressLint("NewApi")
     private void initializeServicesCheckBox() {
-        checkBoxAdapter = new CheckBoxAdapter(context, FormActivity1.requestDictionaries);
+        checkBoxAdapter = new CheckBoxAdapter(context, FormActivity.requestDictionaries);
         binding.gridView.setAdapter(checkBoxAdapter);
     }
 

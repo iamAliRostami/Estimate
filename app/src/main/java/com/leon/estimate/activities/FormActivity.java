@@ -7,54 +7,52 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.ErrorHandlerType;
-import com.leon.estimate.Enums.SharedReferenceKeys;
-import com.leon.estimate.Enums.SharedReferenceNames;
-import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
-import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
-import com.leon.estimate.Utils.HttpClientWrapperOld;
-import com.leon.estimate.Utils.NetworkHelper;
-import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.SimpleMessage;
-import com.leon.estimate.adapters.MyPagerAdapter;
 import com.leon.estimate.databinding.FormActivityBinding;
+import com.leon.estimate.fragments.FormFragment;
+import com.leon.estimate.fragments.MapFragment;
+import com.leon.estimate.fragments.PersonalFragment;
+import com.leon.estimate.fragments.ServicesFragment;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import retrofit2.Call;
-import retrofit2.Retrofit;
+import retrofit2.Response;
 
 public class FormActivity extends AppCompatActivity {
-    FragmentPagerAdapter adapterViewPager;
+    public static List<RequestDictionary> requestDictionaries;
+    public static ExaminerDuties examinerDuties;
+    public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
     Context context;
     String trackNumber, json;
+    int pageNumber = 1;
     MyDatabase dataBase;
-    List<RequestDictionary> requestDictionaries;
-    ExaminerDuties examinerDuties;
     DaoExaminerDuties daoExaminerDuties;
-    CalculationUserInput calculationUserInput, calculationUserInputTemp;
     FormActivityBinding binding;
 
     @Override
@@ -66,45 +64,177 @@ public class FormActivity extends AppCompatActivity {
         context = this;
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
-
             new SerializeJson().execute(getIntent());
         }
-
         initialize();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     void initialize() {
-        final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage(context.getString(R.string.loading_getting_info));
-        dialog.setTitle(context.getString(R.string.loading_connecting));
-        dialog.setCancelable(false);
-        dialog.show();
-
         calculationUserInput = new CalculationUserInput();
         calculationUserInputTemp = new CalculationUserInput();
-        dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
-        daoExaminerDuties = dataBase.daoExaminerDuties();
-        examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
-        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), context, examinerDuties);
-        binding.viewPager.setAdapter(adapterViewPager);
-        binding.viewPager.setOnTouchListener((v, event) -> true);
-        dialog.dismiss();
+        new GetDBData().execute();
+        setOnButtonClickListener();
     }
 
-    public void nextPage(Bitmap bitmap, CalculationUserInput calculationUserInput) {
-        if (binding.viewPager.getCurrentItem() == 0) {
-            this.calculationUserInput = calculationUserInput;
-            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
-        } else {
-            this.calculationUserInputTemp = calculationUserInput;
-            prepareToSend();
-            Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
-            intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), convertBitmapToByte(bitmap));
-            context.startActivity(intent);
-            finish();
-        }
+    void setOnButtonClickListener() {
+        binding.buttonNext.setOnClickListener(view -> {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            switch (pageNumber) {
+                case 1:
+                    PersonalFragment personalFragment = (PersonalFragment)
+                            fragmentManager.findFragmentById(R.id.fragment);
+                    if (personalFragment != null) {
+                        calculationUserInputTemp = personalFragment.setOnButtonNextClickListener();
+                        if (calculationUserInputTemp != null) {
+                            prepareFromPersonal();
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
+                            fragmentTransaction.commit();
+                            pageNumber = pageNumber + 1;
+                        }
+                    }
+                    break;
+                case 2:
+                    calculationUserInputTemp = ServicesFragment.prepareServices();
+                    if (calculationUserInputTemp != null) {
+                        calculationUserInput.selectedServicesObject =
+                                calculationUserInputTemp.selectedServicesObject;
+                        calculationUserInput.selectedServicesString =
+                                calculationUserInputTemp.selectedServicesString;
+                        fragmentTransaction.replace(R.id.fragment, new FormFragment());
+                        fragmentTransaction.commit();
+                        pageNumber = pageNumber + 1;
+                    } else
+                        Toast.makeText(context, R.string.select_service, Toast.LENGTH_LONG).show();
+                    break;
+                case 3:
+                    FormFragment formFragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    if (formFragment != null)
+                        calculationUserInputTemp = formFragment.setOnButtonNextClickListener();
+                    if (calculationUserInputTemp != null) {
+                        binding.buttonNext.setText(R.string.save_info);
+                        prepareFromForm();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment, new MapFragment());
+                        fragmentTransaction.commit();
+                        pageNumber = pageNumber + 1;
+                    }
+                    break;
+                case 4:
+                    MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
+                    if (mapFragment != null) {
+                        intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(),
+                                convertBitmapToByte(mapFragment.convertMapToBitmap()));
+                    }
+                    intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
+                    intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+                    intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
+                    prepareToSend();
+                    startActivity(intent);
+                    finish();
+                    break;
+            }
+        });
+        binding.buttonPrevious.setOnClickListener(view -> {
+            FragmentTransaction fragmentTransaction;
+            switch (pageNumber) {
+                case 1:
+                    finish();
+                    break;
+                case 2:
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
+                    fragmentTransaction.commit();
+                    break;
+                case 3:
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, new ServicesFragment());
+                    fragmentTransaction.commit();
+                    break;
+                case 4:
+                    binding.buttonNext.setText(R.string.next);
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, new FormFragment());
+                    fragmentTransaction.commit();
+                    break;
+            }
+            pageNumber = pageNumber - 1;
+        });
+    }
+
+    void prepareFromForm() {
+        calculationUserInput.sifoon100 = calculationUserInputTemp.sifoon100;
+        calculationUserInput.sifoon125 = calculationUserInputTemp.sifoon125;
+        calculationUserInput.sifoon150 = calculationUserInputTemp.sifoon150;
+        calculationUserInput.sifoon200 = calculationUserInputTemp.sifoon200;
+        calculationUserInput.arse = calculationUserInputTemp.arse;
+        calculationUserInput.aianKol = calculationUserInputTemp.aianKol;
+        calculationUserInput.aianMaskooni = calculationUserInputTemp.aianMaskooni;
+        calculationUserInput.aianTejari = calculationUserInputTemp.aianTejari;
+        calculationUserInput.tedadMaskooni = calculationUserInputTemp.tedadMaskooni;
+        calculationUserInput.tedadTejari = calculationUserInputTemp.tedadTejari;
+        calculationUserInput.tedadSaier = calculationUserInputTemp.tedadSaier;
+        calculationUserInput.arzeshMelk = calculationUserInputTemp.arzeshMelk;
+        calculationUserInput.tedadTaxfif = calculationUserInputTemp.tedadTaxfif;
+        calculationUserInput.zarfiatQarardadi = calculationUserInputTemp.zarfiatQarardadi;
+        calculationUserInput.parNumber = calculationUserInputTemp.parNumber;
+        calculationUserInput.karbariId = calculationUserInputTemp.karbariId;
+        calculationUserInput.noeVagozariId = calculationUserInputTemp.noeVagozariId;
+        calculationUserInput.qotrEnsheabId = calculationUserInputTemp.qotrEnsheabId;
+        calculationUserInput.taxfifId = calculationUserInputTemp.taxfifId;
+        calculationUserInput.adamTaxfifAb = calculationUserInputTemp.adamTaxfifAb;
+        calculationUserInput.adamTaxfifFazelab = calculationUserInputTemp.adamTaxfifFazelab;
+        calculationUserInput.ensheabQeireDaem = calculationUserInputTemp.ensheabQeireDaem;
+
+        examinerDuties.setSifoon100(calculationUserInputTemp.sifoon100);
+        examinerDuties.setSifoon125(calculationUserInputTemp.sifoon125);
+        examinerDuties.setSifoon150(calculationUserInputTemp.sifoon150);
+        examinerDuties.setSifoon200(calculationUserInputTemp.sifoon200);
+        examinerDuties.setArse(calculationUserInputTemp.arse);
+        examinerDuties.setAianMaskooni(calculationUserInputTemp.aianMaskooni);
+        examinerDuties.setAianNonMaskooni(calculationUserInputTemp.aianTejari);
+        examinerDuties.setAianKol(calculationUserInputTemp.aianKol);
+        examinerDuties.setTedadMaskooni(calculationUserInputTemp.tedadMaskooni);
+        examinerDuties.setTedadTejari(calculationUserInputTemp.tedadTejari);
+        examinerDuties.setTedadSaier(calculationUserInputTemp.tedadSaier);
+        examinerDuties.setTedadTaxfif(calculationUserInputTemp.tedadTaxfif);
+        examinerDuties.setZarfiatQarardadi(calculationUserInputTemp.zarfiatQarardadi);
+        examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
+        examinerDuties.setParNumber(calculationUserInputTemp.parNumber);
+
+        examinerDuties.setKarbariId(calculationUserInputTemp.karbariId);
+        examinerDuties.setQotrEnsheabId(calculationUserInputTemp.qotrEnsheabId);
+        examinerDuties.setTaxfifId(calculationUserInputTemp.taxfifId);
+
+        examinerDuties.setEnsheabQeirDaem(calculationUserInputTemp.ensheabQeireDaem);
+    }
+
+    void prepareFromPersonal() {
+        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+        calculationUserInput.firstName = calculationUserInputTemp.firstName;
+        calculationUserInput.sureName = calculationUserInputTemp.sureName;
+        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
+        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+        calculationUserInput.radif = calculationUserInputTemp.radif;
+        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+        calculationUserInput.address = calculationUserInputTemp.address;
+        calculationUserInput.description = calculationUserInputTemp.description;
+
+        examinerDuties.setNationalId(calculationUserInputTemp.nationalId);
+        examinerDuties.setFirstName(calculationUserInputTemp.firstName);
+        examinerDuties.setSureName(calculationUserInputTemp.sureName);
+        examinerDuties.setNameAndFamily(calculationUserInputTemp.firstName.concat(" ")
+                .concat(calculationUserInputTemp.sureName));
+        examinerDuties.setFatherName(calculationUserInputTemp.fatherName);
+        examinerDuties.setPostalCode(calculationUserInput.postalCode);
+        examinerDuties.setPhoneNumber(calculationUserInput.phoneNumber);
+        examinerDuties.setMobile(calculationUserInputTemp.mobile);//TODO 3 mobile
+        examinerDuties.setAddress(calculationUserInputTemp.address);
+        examinerDuties.setDescription(calculationUserInputTemp.description);
     }
 
     private byte[] convertBitmapToByte(Bitmap bitmap) {
@@ -113,70 +243,67 @@ public class FormActivity extends AppCompatActivity {
         return bos.toByteArray();
     }
 
-
     void prepareToSend() {
         fillCalculationUserInput();
+        updateCalculationUserInput();
+        updateExamination();
+
+//        SharedPreferenceManager sharedPreferenceManager =
+//                new SharedPreferenceManager(getApplicationContext(),
+//                        SharedReferenceNames.ACCOUNT.getValue());
+//        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+//        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+//        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+//        SendCalculation sendCalculation = new SendCalculation();
+//        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
+//        GetError error = new GetError();
+//        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+//        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
+//        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
+//        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+//                sendCalculation, incomplete, error);
+    }
+
+    void fillCalculationUserInput() {
+        calculationUserInput.trackingId = examinerDuties.getTrackingId();
+        calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
+        calculationUserInput.parNumber = examinerDuties.getParNumber();
+        calculationUserInput.billId = examinerDuties.getBillId();
+        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
+        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
+        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
+        calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
+        calculationUserInput.setSent(false);
+    }
+
+    void updateCalculationUserInput() {
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.deleteByTrackNumber(trackNumber);
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
-        updateExamination();
-
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
-                getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
-        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(false, token);
-        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-        SendCalculation sendCalculation = new SendCalculation();
-        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
-        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-        HttpClientWrapperOld.callHttpAsync(call, sendCalculation, ErrorHandlerType.ordinary);
     }
 
     void updateExamination() {
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        daoExaminerDuties.updateExamination(true, trackNumber);
+//        daoExaminerDuties.updateExamination(true, trackNumber);
         daoExaminerDuties.insert(examinerDuties.updateExaminerDuties(calculationUserInput));
     }
 
-    void fillCalculationUserInput() {
-        //TODO SELECTED SERVICE
-//        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
-//        calculationUserInput.firstName = calculationUserInputTemp.firstName.trim();
-//        calculationUserInput.sureName = calculationUserInputTemp.sureName.trim();
-//        calculationUserInput.fatherName = calculationUserInputTemp.fatherName.trim();
-//        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
-//        calculationUserInput.radif = calculationUserInputTemp.radif;
-//        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
-//        calculationUserInput.mobile = calculationUserInputTemp.mobile;
-//        calculationUserInput.address = calculationUserInputTemp.address;
-//        calculationUserInput.description = calculationUserInputTemp.description;
-//
-//        calculationUserInput.trackingId = examinerDuties.getTrackingId();
-//        calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
-//        calculationUserInput.parNumber = examinerDuties.getParNumber();
-//        calculationUserInput.billId = examinerDuties.getBillId();
-//        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
-//        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
-//        calculationUserInput.nationalId = examinerDuties.getNationalId();
-//        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
-//        calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
-//        calculationUserInput.trackingId = examinerDuties.getTrackingId();
-//        calculationUserInput.setSent(true);
+    public void setActionBarTitle(String title) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                    .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
         }
     }
 
-    public void setActionBarTitle(String title) {
-        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
+    class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+        }
     }
 
     @Override
@@ -186,24 +313,74 @@ public class FormActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     class SerializeJson extends AsyncTask<Intent, String, String> {
+        ProgressDialog dialog;
+
         @Override
         protected String doInBackground(Intent... intents) {
-            json = getIntent().getExtras().getString(BundleEnum.SERVICES.getValue());
+            json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
             Gson gson = new GsonBuilder().create();
             requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
-            Log.e("data", json);
             return null;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setMessage(context.getString(R.string.loading_getting_info));
+            dialog.setTitle(context.getString(R.string.loading_connecting));
+            dialog.setCancelable(false);
+            dialog.show();
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            dialog.dismiss();
         }
 
+    }
+
+
+    @SuppressLint("StaticFieldLeak")
+    class GetDBData extends AsyncTask<Integer, String, String> {
+        ProgressDialog dialog;
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                    .allowMainThreadQueries().build();
+            daoExaminerDuties = dataBase.daoExaminerDuties();
+            examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
+            fragmentTransaction.commit();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setMessage(context.getString(R.string.loading_getting_info));
+            dialog.setTitle(context.getString(R.string.loading_connecting));
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(FormActivity.this, error, Toast.LENGTH_LONG).show();
+        }
     }
 }
