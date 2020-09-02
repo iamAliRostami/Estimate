@@ -137,7 +137,7 @@ public class MapFragment extends Fragment implements LocationListener {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
         } else {
-            locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+            locationManager.requestLocationUpdates(bestProvider, 0, 0, this);
         }
         GeoPoint startPoint = new GeoPoint(latitude, longitude);
 //        startPoint = new GeoPoint(48.8583, 2.2944);
