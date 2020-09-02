@@ -225,7 +225,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     void attemptLogin() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-        Call<Login> call = abfaService.login2("test_u1", "pspihp");
+        Call<Login> call = abfaService.login2("test_u2", "pspihp");
         LoginDocument loginDocument = new LoginDocument();
         LoginDocumentIncomplete incomplete = new LoginDocumentIncomplete();
         GetError error = new GetError();
@@ -282,11 +282,8 @@ public class DocumentFormActivity extends AppCompatActivity {
             call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
                     SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, billId);
 
-        UploadImageDoc uploadImage = new UploadImageDoc();
-        GetError error = new GetError();
-        UploadImageDocIncomplete incomplete = new UploadImageDocIncomplete();
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
-                uploadImage, incomplete, error);
+                new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -380,9 +377,9 @@ public class DocumentFormActivity extends AppCompatActivity {
         List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
         Log.e("size", String.valueOf(imagesList.size()));
         try {
-            File f = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
             for (int i = 0; i < imagesList.size(); i++) {
+                File f = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES), "AbfaCamera");
                 f = new File(f, imagesList.get(i).getAddress());
                 Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
                 imagesList.get(i).setBitmap(b);
@@ -395,6 +392,7 @@ public class DocumentFormActivity extends AppCompatActivity {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            Log.e("error", e.toString());
         }
     }
 
@@ -610,7 +608,8 @@ public class DocumentFormActivity extends AppCompatActivity {
                 for (ImageDataThumbnail.Data data : imageDataThumbnail) {
                     imageDataThumbnailUri.add(data.getImg());
                 }
-                getImageThumbnail(imageDataThumbnail.get(0).getImg());
+                if (imageDataThumbnailUri.size() > 0)
+                    getImageThumbnail(imageDataThumbnail.get(0).getImg());
             } else {
                 Toast.makeText(DocumentFormActivity.this,
                         DocumentFormActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();

@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -54,21 +56,24 @@ import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Input;
+import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Place;
+import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomProgressBar;
 import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.HttpClientWrapperOld;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -93,13 +98,22 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -111,19 +125,21 @@ public class MainActivity extends AppCompatActivity
     MainActivityBinding binding;
     String trackNumber;
     DrawerLayout drawer;
-    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0;
+    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0, imageId, imageCounter = 0;
     Polyline roadOverlay;
     MapView mapView;
     Context context;
+    CoordinateConversion conversion;
     ArrayList<Integer> indexArray;
     ArrayList<GeoPoint> wayPoints, placesPoints;
-    CoordinateConversion conversion;
     List<ExaminerDuties> examinerDuties, examinerDutiesReady;
-    //    boolean isShown = false;
     ArrayList<Boolean> isShown;
-    boolean doubleBackToExitPressedOnce = false;
     List<CalculationUserInput> calculationUserInputList;
+    List<Images> images;
+    boolean doubleBackToExitPressedOnce = false;
     Toolbar toolbar;
+    MyDatabase dataBase;
+    SharedPreferenceManager sharedPreferenceManager;
     View.OnClickListener onClickListener = view -> {
         Intent intent;
         switch (view.getId()) {
@@ -153,6 +169,8 @@ public class MainActivity extends AppCompatActivity
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         context = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
+        sharedPreferenceManager = new SharedPreferenceManager(context,
+                SharedReferenceNames.ACCOUNT.getValue());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED ||
@@ -197,7 +215,7 @@ public class MainActivity extends AppCompatActivity
             examinerDutiesList.get(i).setRequestDictionaryString(
                     gson1.toJson(examinerDutiesList.get(i).getRequestDictionary()));
         }
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
@@ -229,14 +247,57 @@ public class MainActivity extends AppCompatActivity
         daoKarbariDictionary.insertAll(input.getKarbariDictionary());
     }
 
-    @SuppressLint("WrongConstant")
     void initialize() {
         toolbar = findViewById(R.id.toolbar);
         drawer = findViewById(R.id.drawer_layout);
-        setActionBarTitle("خانه");
+        setActionBarTitle(getString(R.string.home));
         drawer.openDrawer(GravityCompat.START);
         setImageViewClickListener();
         initializeMap();
+    }
+
+    void setImageViewClickListener() {
+        binding.imageViewDownload.setOnClickListener(onClickListener);
+        binding.imageViewUpload.setOnClickListener(onClickListener);
+        binding.imageViewPaper.setOnClickListener(onClickListener);
+        binding.imageViewExit.setOnClickListener(onClickListener);
+        binding.imageViewForm.setOnClickListener(onClickListener);
+    }
+
+    @SuppressLint("MissingPermission")
+    void initializeMap() {
+        if (!GpsEnabled()) {
+            initialize();
+        } else {
+            mapView = findViewById(R.id.mapView);
+            mapView.setTileSource(TileSourceFactory.MAPNIK);
+            mapView.setBuiltInZoomControls(true);
+            mapView.setMultiTouchControls(true);
+            IMapController mapController = mapView.getController();
+            mapController.setZoom(19.5);
+
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            String provider = String.valueOf(locationManager.getBestProvider(criteria, true));
+            Location location = getLastKnownLocation();
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            } else {
+                locationManager.requestLocationUpdates(provider, 0, 0, this);
+            }
+//            E/long: 51.7134364        E/lat: 32.7031978
+            Log.e("long", String.valueOf(longitude));
+            Log.e("lat", String.valueOf(latitude));
+            GeoPoint startPoint = new GeoPoint(latitude, longitude);
+            mapController.setCenter(startPoint);
+            MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+            locationOverlay.enableMyLocation();
+            mapView.getOverlays().add(locationOverlay);
+            conversion = new CoordinateConversion();
+            initializePlace();
+        }
     }
 
     private Location getLastKnownLocation() {
@@ -261,46 +322,11 @@ public class MainActivity extends AppCompatActivity
         return bestLocation;
     }
 
-    @SuppressLint("MissingPermission")
-    void initializeMap() {
-        if (!GpsEnabled()) {
-            initialize();
-        } else {
-            mapView = findViewById(R.id.mapView);
-            mapView.setTileSource(TileSourceFactory.MAPNIK);
-            mapView.setBuiltInZoomControls(true);
-            mapView.setMultiTouchControls(true);
-            IMapController mapController = mapView.getController();
-            mapController.setZoom(19.5);
-
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
-            Location location = getLastKnownLocation();
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            } else {
-                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-            }
-//            E/long: 51.7134364        E/lat: 32.7031978
-            Log.e("long", String.valueOf(longitude));
-            Log.e("lat", String.valueOf(latitude));
-            GeoPoint startPoint = new GeoPoint(latitude, longitude);
-            mapController.setCenter(startPoint);
-            MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
-            locationOverlay.enableMyLocation();
-            mapView.getOverlays().add(locationOverlay);
-            conversion = new CoordinateConversion();
-            initializePlace();
-        }
-    }
-
     void initializePlace() {
         placesPoints = new ArrayList<>();
         indexArray = new ArrayList<>();
         isShown = new ArrayList<>();
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         examinerDuties = daoExaminerDuties.ExaminerDuties();
@@ -326,20 +352,15 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        toolbar.setNavigationOnClickListener(view1 -> {
-            drawer.openDrawer(Gravity.START);
-        });
+        toolbar.setNavigationOnClickListener(view1 -> drawer.openDrawer(Gravity.START));
     }
 
     void getXY(String billId) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
-        GetXY getXY = new GetXY();
-        GetXYIncomplete incomplete = new GetXYIncomplete();
-        GetError error = new GetError();
         Call<Place> call = iAbfaService.getXY(billId);
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
-                getXY, incomplete, error);
+                new GetXY(), new GetXYIncomplete(), new GetError());
     }
 
     private void addPlace(GeoPoint p) {
@@ -430,13 +451,6 @@ public class MainActivity extends AppCompatActivity
         mapView.invalidate();
     }
 
-    void setImageViewClickListener() {
-        binding.imageViewDownload.setOnClickListener(onClickListener);
-        binding.imageViewUpload.setOnClickListener(onClickListener);
-        binding.imageViewPaper.setOnClickListener(onClickListener);
-        binding.imageViewExit.setOnClickListener(onClickListener);
-        binding.imageViewForm.setOnClickListener(onClickListener);
-    }
 
     @Override
     public void onBackPressed() {
@@ -575,12 +589,12 @@ public class MainActivity extends AppCompatActivity
         Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
-        Download download = new Download();
-        HttpClientWrapperOld.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new Download(), new DownloadIncomplete(), new GetError());
     }
 
     void send() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
@@ -596,12 +610,154 @@ public class MainActivity extends AppCompatActivity
             String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
             Retrofit retrofit = NetworkHelper.getInstance(true, token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-            SendCalculation sendCalculation = new SendCalculation();
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-            HttpClientWrapperOld.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
+                    new SendCalculationIncomplete(), new GetError());
 
         } else
             Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
+        DaoImages daoImages = dataBase.daoImages();
+        images = daoImages.getImages();
+        if (images.size() > 0) {
+            attemptLogin();
+        }
+    }
+
+    void attemptLogin() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+        Call<Login> call = abfaService.login2("test_u2", "pspihp");
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
+                this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
+    }
+
+    void uploadImage(Images images) {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+        images = loadImage(images);
+        if (images != null) {
+            MultipartBody.Part body = bitmapToFile(images.getBitmap(), images.getAddress());
+            Call<UploadImage> call;
+            if (images.getTrackingNumber().length() > 0)
+                call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, images.getImageId(), images.getTrackingNumber());
+            else
+                call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, images.getImageId(), images.getBillId());
+            imageId = images.getImageId();
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+                    new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
+        }
+    }
+
+    Images loadImage(Images images) {
+        try {
+            File f = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
+            f = new File(f, images.getAddress());
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            images.setBitmap(b);
+            return images;
+        } catch (
+                FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    MultipartBody.Part bitmapToFile(Bitmap bitmap, String fileNameToSave) {
+        if (fileNameToSave == null) {
+            String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
+            fileNameToSave = "JPEG_" + timeStamp + "_";
+        }
+        File f = new File(context.getCacheDir(), fileNameToSave);
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Convert bitmap to byte array
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+        byte[] bitmapData = bos.toByteArray();
+        //write the bytes in file
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fos != null) {
+                fos.write(bitmapData);
+                fos.flush();
+                fos.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), f);
+        return MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
+    }
+
+    static class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
+
+        @Override
+        public void executeIncomplete(Response<Login> response) {
+            Log.e("Login incomplete", response.toString());
+        }
+    }
+
+    static class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
+        @Override
+        public void executeIncomplete(Response<UploadImage> response) {
+            Log.e("UploadImageDoc error", response.toString());
+        }
+    }
+
+    static class DownloadIncomplete implements ICallbackIncomplete<Input> {
+        @Override
+        public void executeIncomplete(Response<Input> response) {
+            Log.e("Download Incomplete", response.toString());
+        }
+    }
+
+    static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+            Log.e("SendCalculation Error", response.toString());
+        }
+    }
+
+    static class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+        }
+    }
+
+    class LoginDocument implements ICallback<Login> {
+        @Override
+        public void execute(Login loginFeedBack) {
+            if (loginFeedBack.isSuccess()) {
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
+                        loginFeedBack.getData().getToken());
+                uploadImage(images.get(0));
+            }
+        }
+    }
+
+    class UploadImageDoc implements ICallback<UploadImage> {
+        @Override
+        public void execute(UploadImage responseBody) {
+            DaoImages daoImages = dataBase.daoImages();
+            daoImages.deleteByID(imageId);
+            imageCounter = imageCounter + 1;
+            if (imageCounter < images.size()) {
+                uploadImage(images.get(imageCounter));
+            }
+        }
     }
 
     class Download implements ICallback<Input> {
@@ -613,7 +769,7 @@ public class MainActivity extends AppCompatActivity
                 examinerDutiesList.get(i).setRequestDictionaryString(
                         gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
             }
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+            dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                     .allowMainThreadQueries().build();
 
             DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
@@ -660,7 +816,7 @@ public class MainActivity extends AppCompatActivity
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+            dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                     .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             for (CalculationUserInput calculationUserInput : calculationUserInputList) {
@@ -700,7 +856,7 @@ public class MainActivity extends AppCompatActivity
                 else getXY(examinerDuties.get(counter).getNeighbourBillId());
             }
             if (counter == examinerDuties.size())
-                setActionBarTitle("خانه");
+                setActionBarTitle(getString(R.string.home));
         }
     }
 
@@ -715,26 +871,10 @@ public class MainActivity extends AppCompatActivity
                 else getXY(examinerDuties.get(counter).getNeighbourBillId());
             }
             if (counter == examinerDuties.size())
-                setActionBarTitle("خانه");
+                setActionBarTitle(getString(R.string.home));
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             Log.e("GetXYIncomplete", error);
-        }
-    }
-
-    class GetError implements ICallbackError {
-        @Override
-        public void executeError(Throwable t) {
-//            counter = counter + 1;
-//            if (counter < examinerDuties.size()) {
-//                if (examinerDuties.get(counter).getBillId() != null
-//                        && examinerDuties.get(counter).getBillId().length() > 0)
-//                    getXY(examinerDuties.get(counter).getBillId());
-//                else getXY(examinerDuties.get(counter).getNeighbourBillId());
-//            }
-//            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-//            String error = customErrorHandlingNew.getErrorMessageTotal(t);
-//            Log.e("GetXYError", error);
         }
     }
 }
