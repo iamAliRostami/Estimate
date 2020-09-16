@@ -3,6 +3,7 @@ package com.leon.estimate.Infrastructure;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.GISToken;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Input;
@@ -228,5 +229,7 @@ public interface IAbfaService {
     Call<SimpleMessage> SetExaminationInfo(
             @Body CalculationUserInput calculationUserInput);
 
+    @GET("/MoshtarakinApi/Gis/V1/Token/jesuschrist")
+    Call<GISToken> getGISToken();
 }
 
