@@ -47,7 +47,9 @@ public class HighQualityFragment extends DialogFragment {
                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             }
             title = getArguments().getString(BundleEnum.TITLE.getValue());
-            Log.e("title", title);
+            if (title != null) {
+                Log.e("title", title);
+            }
         }
     }
 

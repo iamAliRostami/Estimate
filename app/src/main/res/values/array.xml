@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string-array name="menu_jens_loole">
+        <item>چدن</item>
+        <item>پلی اتیلن</item>
+    </string-array>
+    <string-array name="menu_qotr_loole">
+        <item tools:ignore="TypographyFractions">1/2</item>
+        <item tools:ignore="TypographyFractions">3/4</item>
+        <item>1</item>
+        <item>1.2</item>
+        <item>1.5</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+    </string-array>
+</resources>

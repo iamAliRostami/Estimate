@@ -6,6 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,12 +49,12 @@ public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private Context context;
+    FormFragmentBinding binding;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    FormFragmentBinding binding;
 
     public FormFragment() {
 
@@ -87,6 +90,7 @@ public class FormFragment extends Fragment {
     private void initialize() {
         new initializeSpinners().execute();
         setOnEditTextSodurDateClickListener();
+//        setOnEditTextTedadTejariTextChangeListener();
     }
 
     public CalculationUserInput setOnButtonNextClickListener() {
@@ -94,6 +98,31 @@ public class FormFragment extends Fragment {
             return prepareField();
         }
         return null;
+    }
+
+    void setOnEditTextTedadTejariTextChangeListener() {
+        binding.editTextTedadTejari.addTextChangedListener(new TextWatcher() {
+            int tejari;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tejari = Integer.parseInt(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.e("tejari", String.valueOf(tejari));
+                binding.linearLayoutTejari.setVisibility(View.GONE);
+                if (tejari > 0) {
+                    binding.linearLayoutTejari.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -135,6 +164,8 @@ public class FormFragment extends Fragment {
         calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
         calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
         calculationUserInput.ensheabQeireDaem = binding.checkbox3.isChecked();
+        FormActivity.karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
+        FormActivity.noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
         return calculationUserInput;
     }
 
@@ -290,7 +321,7 @@ public class FormFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(Integer... integers) {
-            initializeSpinner();
+            Objects.requireNonNull(getActivity()).runOnUiThread(FormFragment.this::initializeSpinner);
             return null;
         }
 

@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.provider.Settings;
@@ -32,7 +31,6 @@ import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.R;
-import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
@@ -71,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 .concat(BuildConfig.VERSION_NAME));
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
-        String deviceId = Build.SERIAL;
+//        String deviceId = Build.SERIAL;
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
         binding.imageViewPerson.setImageResource(R.drawable.img_profile);
@@ -196,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setEditTextUsernameOnFocusChangeListener() {
         binding.editTextUsername.setOnFocusChangeListener((view, b) -> {
             binding.editTextUsername.setHint("");
@@ -209,6 +208,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setEditTextPasswordOnFocusChangeListener() {
         binding.editTextPassword.setOnFocusChangeListener((view, b) -> {
             binding.editTextPassword.setHint("");
@@ -224,11 +224,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setImageViewOnClickListener() {
         binding.imageViewPassword.setOnClickListener(view -> {
-            if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
-                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
-            else
-                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER |
-                        InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+//            if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
+//                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+//            else
+//            binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER |
+//                    InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_TEXT) {
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
         });
     }
 
@@ -281,7 +286,8 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN.getValue(), loginFeedBack.getAccess_token());
                 sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME.getValue(), username);
-                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
+//                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
+                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), password);
                 sharedPreferenceManager.putData(SharedReferenceKeys.REFRESH_TOKEN.getValue(), loginFeedBack.getRefresh_token());
                 GpsEnabled();
             }
@@ -348,5 +354,4 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         initialize();
     }
-
 }

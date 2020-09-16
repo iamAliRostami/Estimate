@@ -18,9 +18,7 @@ import androidx.room.Room;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.Infrastructure.ICallbackError;
-import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInput;
@@ -29,12 +27,13 @@ import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
+import com.leon.estimate.Tables.SecondForm;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
-import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.FormActivityBinding;
 import com.leon.estimate.fragments.FormFragment;
 import com.leon.estimate.fragments.MapFragment;
 import com.leon.estimate.fragments.PersonalFragment;
+import com.leon.estimate.fragments.SecondFormFragment;
 import com.leon.estimate.fragments.ServicesFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -42,18 +41,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import retrofit2.Response;
-
 public class FormActivity extends AppCompatActivity {
+    public static String karbari, noeVagozari, shenasname;
     public static List<RequestDictionary> requestDictionaries;
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
+    public static SecondForm secondForm;
     Context context;
     String trackNumber, json;
+    @SuppressLint("StaticFieldLeak")
+    public static FormActivity activity;
     int pageNumber = 1;
     MyDatabase dataBase;
     DaoExaminerDuties daoExaminerDuties;
     FormActivityBinding binding;
+    byte[] bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class FormActivity extends AppCompatActivity {
         binding = FormActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
+        activity = this;
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             new SerializeJson().execute(getIntent());
@@ -114,27 +117,39 @@ public class FormActivity extends AppCompatActivity {
                     if (formFragment != null)
                         calculationUserInputTemp = formFragment.setOnButtonNextClickListener();
                     if (calculationUserInputTemp != null) {
-                        binding.buttonNext.setText(R.string.save_info);
                         prepareFromForm();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragment, new MapFragment());
+                        fragmentTransaction.replace(R.id.fragment, new SecondFormFragment());
                         fragmentTransaction.commit();
                         pageNumber = pageNumber + 1;
                     }
                     break;
                 case 4:
+                    SecondFormFragment secondFormFragment = (SecondFormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    if (secondFormFragment != null) {
+                        secondForm = secondFormFragment.setOnButtonNextClickListener();
+                    }
+                    if (secondForm != null) {
+                        binding.buttonNext.setText(R.string.save_info);
+                        pageNumber = pageNumber + 1;
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment, new MapFragment());
+                        fragmentTransaction.commit();
+                    }
+                    break;
+                case 5:
                     MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.fragment);
                     Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
                     if (mapFragment != null) {
-                        intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(),
-                                convertBitmapToByte(mapFragment.convertMapToBitmap()));
+                        bitmap = convertBitmapToByte(mapFragment.convertMapToBitmap());
+                        intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
                     }
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                     intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
                     intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                     prepareToSend();
                     startActivity(intent);
-                    finish();
+//                    finish();
                     break;
             }
         });
@@ -155,9 +170,14 @@ public class FormActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     break;
                 case 4:
-                    binding.buttonNext.setText(R.string.next);
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment, new FormFragment());
+                    fragmentTransaction.commit();
+                    break;
+                case 5:
+                    binding.buttonNext.setText(R.string.next);
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, new SecondFormFragment());
                     fragmentTransaction.commit();
                     break;
             }
@@ -247,21 +267,6 @@ public class FormActivity extends AppCompatActivity {
         fillCalculationUserInput();
         updateCalculationUserInput();
         updateExamination();
-
-//        SharedPreferenceManager sharedPreferenceManager =
-//                new SharedPreferenceManager(getApplicationContext(),
-//                        SharedReferenceNames.ACCOUNT.getValue());
-//        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-//        Retrofit retrofit = NetworkHelper.getInstance(true, token);
-//        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-//        SendCalculation sendCalculation = new SendCalculation();
-//        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
-//        GetError error = new GetError();
-//        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-//        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
-//        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-//        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
-//                sendCalculation, incomplete, error);
     }
 
     void fillCalculationUserInput() {
@@ -284,26 +289,11 @@ public class FormActivity extends AppCompatActivity {
 
     void updateExamination() {
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-//        daoExaminerDuties.updateExamination(true, trackNumber);
         daoExaminerDuties.insert(examinerDuties.updateExaminerDuties(calculationUserInput));
     }
 
     public void setActionBarTitle(String title) {
         Objects.requireNonNull(getSupportActionBar()).setTitle(title);
-    }
-
-    class SendCalculation implements ICallback<SimpleMessage> {
-        @Override
-        public void execute(SimpleMessage simpleMessage) {
-            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
-        }
-    }
-
-    class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
-        @Override
-        public void executeIncomplete(Response<SimpleMessage> response) {
-        }
     }
 
     @Override

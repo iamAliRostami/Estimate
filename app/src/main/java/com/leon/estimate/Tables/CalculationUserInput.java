@@ -5,6 +5,12 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "CalculationUserInput", indices = @Index(value = {"trackNumber"}, unique = true))
@@ -157,5 +163,14 @@ public class CalculationUserInput {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ArrayList<RequestDictionary> setSelectedServices(CalculationUserInput calculationUserInput) {
+        String json = calculationUserInput.selectedServicesString;
+        Gson gson = new GsonBuilder().create();
+        Type userListType = new TypeToken<ArrayList<RequestDictionary>>() {
+        }.getType();
+        ArrayList<RequestDictionary> requestDictionaryArrayList = gson.fromJson(json, userListType);
+        return requestDictionaryArrayList;
     }
 }

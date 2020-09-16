@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.leon.estimate.activities.FormActivity.shenasname;
+
 
 public class PersonalFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
@@ -82,6 +84,7 @@ public class PersonalFragment extends Fragment {
         calculationUserInput.mobile = binding.editTextMobile.getText().toString();
         calculationUserInput.address = binding.editTextAddress.getText().toString();
         calculationUserInput.description = binding.editTextDescription.getText().toString();
+        shenasname = binding.editTextShenasname.getText().toString();
         return calculationUserInput;
     }
 
@@ -140,7 +143,7 @@ public class PersonalFragment extends Fragment {
             binding.editTextFamily.setText(FormActivity.examinerDuties.getSureName().trim());
         binding.editTextNationNumber.setText(FormActivity.examinerDuties.getNationalId());
         binding.editTextFatherName.setText(FormActivity.examinerDuties.getFatherName());
-        binding.editTextDescription.setText(FormActivity.examinerDuties.getDescription());
+        binding.editTextDescription.setText(FormActivity.examinerDuties.getDescription().trim());
         binding.editTextPhone.setText(FormActivity.examinerDuties.getPhoneNumber());
         binding.editTextMobile.setText(FormActivity.examinerDuties.getMobile());
         binding.editTextEshterak.setText(Objects.requireNonNull(

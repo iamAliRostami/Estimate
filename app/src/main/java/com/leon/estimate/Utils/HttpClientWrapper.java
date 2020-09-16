@@ -62,7 +62,7 @@ public class HttpClientWrapper {
 
     }
 
-    private static boolean isOnline(Context context) {
+    public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return Objects.requireNonNull(cm).getActiveNetworkInfo() != null &&
                 Objects.requireNonNull(cm.getActiveNetworkInfo()).isConnectedOrConnecting();

@@ -64,9 +64,9 @@
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/activity_mid_margin"
                         android:layout_weight="1"
-                        android:spinnerMode="dialog"
                         android:paddingTop="@dimen/activity_medium_padding"
                         android:paddingBottom="@dimen/activity_medium_padding"
+                        android:spinnerMode="dialog"
                         android:textStyle="bold" />
 
                     <TextView
@@ -83,7 +83,6 @@
                         tools:ignore="RtlHardcoded" />
 
                     <Spinner
-                        android:spinnerMode="dialog"
                         android:id="@+id/spinner2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -92,7 +91,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding" />
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:spinnerMode="dialog" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -251,7 +251,6 @@
                         tools:ignore="RtlHardcoded" />
 
                     <Spinner
-                        android:spinnerMode="dialog"
                         android:id="@+id/spinner3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -260,7 +259,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding" />
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:spinnerMode="dialog" />
 
 
                     <TextView
@@ -502,11 +502,113 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linearLayoutTejari"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <!--TODO-->
+                    <ListView
+                        android:id="@+id/listViewZarfiatQarardadi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="NestedScrolling"
+                        tools:listitem="@layout/item_zarfiat_qarardadi" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/activity_mid_padding"
+                        tools:ignore="UselessLeaf,UselessParent">
+
+                        <ImageView
+                            android:id="@+id/imageViewPlus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/img_plus"
+                            tools:ignore="ContentDescription" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:weightSum="7">
+
+                            <Spinner
+                                android:id="@+id/spinner5"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:gravity="center"
+                                android:spinnerMode="dialog"
+                                tools:ignore="NestedWeights" />
+
+                            <EditText
+                                android:id="@+id/editTextNoeShoql"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/activity_mid_margin"
+                                android:layout_marginRight="@dimen/activity_mid_margin"
+                                android:layout_weight="2"
+                                android:background="@drawable/border_gray_1"
+                                android:gravity="center"
+                                android:hint="@string/noe_shoql"
+                                android:inputType="text"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="Autofill,TextFields" />
+
+                            <EditText
+                                android:id="@+id/editTextVahed"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/activity_mid_margin"
+                                android:layout_marginRight="@dimen/activity_mid_margin"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_gray_1"
+                                android:gravity="center"
+                                android:hint="@string/tedad_vahed"
+                                android:inputType="numberSigned"
+                                tools:ignore="Autofill,TextFields" />
+
+                            <EditText
+                                android:id="@+id/editTextVahedMohasebe"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/activity_mid_margin"
+                                android:layout_marginRight="@dimen/activity_mid_margin"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_gray_1"
+                                android:gravity="center"
+                                android:hint="@string/vahed_mohasebe"
+                                android:inputType="numberSigned"
+                                tools:ignore="Autofill,TextFields" />
+
+                            <EditText
+                                android:id="@+id/editTextR2"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/activity_mid_margin"
+                                android:layout_marginRight="@dimen/activity_mid_margin"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_gray_1"
+                                android:gravity="center"
+                                android:hint="@string/a_2"
+                                android:inputType="numberSigned"
+                                tools:ignore="Autofill,TextFields" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="4">
-
 
                     <TextView
                         android:layout_width="0dp"
@@ -522,7 +624,6 @@
                         tools:ignore="RtlHardcoded" />
 
                     <Spinner
-                        android:spinnerMode="dialog"
                         android:id="@+id/spinner4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -531,7 +632,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding" />
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:spinnerMode="dialog" />
 
                     <TextView
                         android:layout_width="0dp"

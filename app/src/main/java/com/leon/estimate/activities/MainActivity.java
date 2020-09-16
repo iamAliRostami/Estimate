@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity
             }
             br.close();
         } catch (IOException ignored) {
+            Log.e("Error", ignored.toString());
         }
         String json = text.toString();
         Log.e("json", json);
@@ -333,7 +334,9 @@ public class MainActivity extends AppCompatActivity
         examinerDutiesReady = new ArrayList<>();
         if (examinerDuties != null && examinerDuties.size() > 0) {
             setActionBarTitle("در حال جانمایی میسرها...");
-            getXY(examinerDuties.get(0).getBillId());
+            if (examinerDuties.get(0).getBillId() != null)
+                getXY(examinerDuties.get(0).getBillId());
+            else getXY(examinerDuties.get(0).getNeighbourBillId());
         }
     }
 
@@ -450,7 +453,6 @@ public class MainActivity extends AppCompatActivity
         mapView.getOverlays().add(roadOverlay);
         mapView.invalidate();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -626,7 +628,11 @@ public class MainActivity extends AppCompatActivity
     void attemptLogin() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-        Call<Login> call = abfaService.login2("test_u2", "pspihp");
+//        Call<Login> call = abfaService.login2("isf1_up3", "isf1_up3$321");//TODO
+//        Call<Login> call = abfaService.login2("test_u1", "pspihp");
+        Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
+                SharedReferenceKeys.USERNAME.getValue()),
+                sharedPreferenceManager.getStringData(SharedReferenceKeys.PASSWORD.getValue()));
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
                 this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
     }
@@ -702,11 +708,34 @@ public class MainActivity extends AppCompatActivity
         return MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
     }
 
+    class LoginDocument implements ICallback<Login> {
+        @Override
+        public void execute(Login loginFeedBack) {
+            if (loginFeedBack.isSuccess()) {
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
+                        loginFeedBack.getData().getToken());
+                uploadImage(images.get(0));
+            }
+        }
+    }
+
     static class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
 
         @Override
         public void executeIncomplete(Response<Login> response) {
             Log.e("Login incomplete", response.toString());
+        }
+    }
+
+    class UploadImageDoc implements ICallback<UploadImage> {
+        @Override
+        public void execute(UploadImage responseBody) {
+            DaoImages daoImages = dataBase.daoImages();
+            daoImages.deleteByID(imageId);
+            imageCounter = imageCounter + 1;
+            if (imageCounter < images.size()) {
+                uploadImage(images.get(imageCounter));
+            }
         }
     }
 
@@ -731,88 +760,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    static class GetError implements ICallbackError {
-        @Override
-        public void executeError(Throwable t) {
-        }
-    }
-
-    class LoginDocument implements ICallback<Login> {
-        @Override
-        public void execute(Login loginFeedBack) {
-            if (loginFeedBack.isSuccess()) {
-                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
-                        loginFeedBack.getData().getToken());
-                uploadImage(images.get(0));
-            }
-        }
-    }
-
-    class UploadImageDoc implements ICallback<UploadImage> {
-        @Override
-        public void execute(UploadImage responseBody) {
-            DaoImages daoImages = dataBase.daoImages();
-            daoImages.deleteByID(imageId);
-            imageCounter = imageCounter + 1;
-            if (imageCounter < images.size()) {
-                uploadImage(images.get(imageCounter));
-            }
-        }
-    }
-
-    class Download implements ICallback<Input> {
-        @Override
-        public void execute(Input input) {
-            List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
-            for (int i = 0; i < examinerDutiesList.size(); i++) {
-                Gson gson = new Gson();
-                examinerDutiesList.get(i).setRequestDictionaryString(
-                        gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-            }
-            dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                    .allowMainThreadQueries().build();
-
-            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-            List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-            for (int i = 0; i < examinerDutiesList.size(); i++) {
-                examinerDutiesList.get(i).setTrackNumber(
-                        examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-                examinerDutiesList.get(i).setRadif(
-                        examinerDutiesList.get(i).getRadif().replace(".0", ""));
-                ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-                for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                    ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                    if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
-                        examinerDutiesList.remove(i);
-                        j = examinerDutiesListTemp.size();
-                        i--;
-                    }
-                }
-            }
-            daoExaminerDuties.insertAll(examinerDutiesList);
-
-            DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
-            daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-
-            DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
-            daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-
-            DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-            daoServiceDictionary.insertAll(input.getServiceDictionary());
-
-            DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
-            daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-
-            Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
-            DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
-            daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-
-            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
-                    input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
-                    getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-        }
-    }
-
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
@@ -822,6 +769,63 @@ public class MainActivity extends AppCompatActivity
             for (CalculationUserInput calculationUserInput : calculationUserInputList) {
                 trackNumber = calculationUserInput.trackNumber;
                 daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+            }
+        }
+    }
+
+    class Download implements ICallback<Input> {
+        @Override
+        public void execute(Input input) {
+            if (input != null) {
+                List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
+                for (int i = 0; i < examinerDutiesList.size(); i++) {
+                    Gson gson = new Gson();
+                    examinerDutiesList.get(i).setRequestDictionaryString(
+                            gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+                }
+                dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                        .allowMainThreadQueries().build();
+
+                DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+                List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+                for (int i = 0; i < examinerDutiesList.size(); i++) {
+                    examinerDutiesList.get(i).setTrackNumber(
+                            examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+                    examinerDutiesList.get(i).setRadif(
+                            examinerDutiesList.get(i).getRadif().replace(".0", ""));
+                    ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+                    for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                        ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
+                            examinerDutiesList.remove(i);
+                            j = examinerDutiesListTemp.size();
+                            i--;
+                        }
+                    }
+                }
+                daoExaminerDuties.insertAll(examinerDutiesList);
+
+                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+
+                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+
+                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+                daoServiceDictionary.insertAll(input.getServiceDictionary());
+
+                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+
+                Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
+                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+
+                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
+                        input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
+                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -841,7 +845,7 @@ public class MainActivity extends AppCompatActivity
                         break;
                     }
                 }
-                if (isUnique) {
+                if (isUnique && counter < examinerDuties.size()) {
                     isShown.add(false);
                     indexArray.add(counter);
                     examinerDutiesReady.add(examinerDuties.get(counter));
@@ -875,6 +879,13 @@ public class MainActivity extends AppCompatActivity
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             Log.e("GetXYIncomplete", error);
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            setActionBarTitle(getString(R.string.home));
         }
     }
 }

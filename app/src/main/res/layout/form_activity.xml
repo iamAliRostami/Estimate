@@ -24,9 +24,9 @@
         android:background="@drawable/border_red_2"
         android:paddingLeft="@dimen/activity_medium_padding"
         android:paddingRight="@dimen/activity_medium_padding"
+        android:textSize="@dimen/textSizeLarge"
         android:text="@string/previous"
         android:textColor="@color/white"
-        android:textSize="@dimen/textSizeLarge"
         tools:ignore="RelativeOverlap,RtlHardcoded" />
 
     <Button

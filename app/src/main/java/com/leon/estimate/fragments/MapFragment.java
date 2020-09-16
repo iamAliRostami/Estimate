@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +27,6 @@ import com.leon.estimate.databinding.MapFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
@@ -53,7 +49,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private double longitude;
     private LocationManager locationManager;
     private int polygonIndex;
-    private int placeIndex;
+    private int place1Index, place2Index;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     MapFragmentBinding binding;
     private Context context;
@@ -93,7 +89,8 @@ public class MapFragment extends Fragment implements LocationListener {
         initializeMap();
         binding.imageViewRefresh.setOnClickListener(view -> {
             binding.mapView.getOverlays().clear();
-            placeIndex = 0;
+            place1Index = 0;
+            place2Index = 0;
             polygonIndex = 0;
             polygonPoint.removeAll(polygonPoint);
             initializeMap();
@@ -103,23 +100,6 @@ public class MapFragment extends Fragment implements LocationListener {
     public Bitmap convertMapToBitmap() {
         binding.mapView.setDrawingCacheEnabled(true);
         return binding.mapView.getDrawingCache(true);
-    }
-
-    @SuppressLint("ObsoleteSdkInt")
-    public void addRouteOverlay(GeoPoint startPoint, GeoPoint endPoint) {
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-
-        RoadManager roadManager = new OSRMRoadManager(context);
-        ArrayList<GeoPoint> wayPoints = new ArrayList<>();
-        wayPoints.add(startPoint);
-        wayPoints.add(endPoint);
-        Road road = roadManager.getRoad(wayPoints);
-        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-        binding.mapView.getOverlays().add(roadOverlay);
-        binding.mapView.invalidate();
     }
 
     @SuppressLint("MissingPermission")
@@ -140,7 +120,6 @@ public class MapFragment extends Fragment implements LocationListener {
             locationManager.requestLocationUpdates(bestProvider, 0, 0, this);
         }
         GeoPoint startPoint = new GeoPoint(latitude, longitude);
-//        startPoint = new GeoPoint(48.8583, 2.2944);
         mapController.setCenter(startPoint);
         MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), binding.mapView);
         locationOverlay.enableMyLocation();
@@ -148,31 +127,38 @@ public class MapFragment extends Fragment implements LocationListener {
         binding.mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-//                Log.e("location1", p.toString());
                 createPolygon(p);
                 return false;
             }
-
             @Override
             public boolean longPressHelper(GeoPoint p) {
-//                Log.e("location2", p.toString());
                 addPlace(p);
                 return false;
             }
         }));
-//        addRouteOverlay(startPoint, new GeoPoint(48.8583, 2.2944));
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void addPlace(GeoPoint p) {
         GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
         Marker startMarker = new Marker(binding.mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        if (placeIndex != 0) {//TODO crash on paging...
-            binding.mapView.getOverlays().remove(placeIndex);
+        if (place1Index != 0 && place2Index == 0) {//TODO crash on paging...
+            startMarker.setIcon(getResources().getDrawable(R.drawable.map_siphon_drop_point));
+            binding.mapView.getOverlays().add(startMarker);
+            place2Index = binding.mapView.getOverlays().size() - 2;
+        } else if (place2Index != 0) {
+            binding.mapView.getOverlays().remove(place1Index);
+            binding.mapView.getOverlays().remove(place2Index);
+            place1Index = 0;
+            place2Index = 0;
         }
-        binding.mapView.getOverlays().add(startMarker);
-        placeIndex = binding.mapView.getOverlays().size() - 1;
+        if (place1Index == 0) {
+            startMarker.setIcon(getResources().getDrawable(R.drawable.map_water_drop_point));
+            binding.mapView.getOverlays().add(startMarker);
+            place1Index = binding.mapView.getOverlays().size() - 1;
+        }
     }
 
     private void createPolygon(GeoPoint geoPoint) {
@@ -181,10 +167,6 @@ public class MapFragment extends Fragment implements LocationListener {
             binding.mapView.getOverlays().remove(polygonIndex);
         }
         binding.mapView.getOverlays().add(line);
-//        ArrayList<GeoPoint> pts = new ArrayList<>(polygonPoint);
-//        pts.add(geoPoint);
-//        pts.add(pts.get(0));
-//        line.setPoints(pts);
         polygonPoint.add(geoPoint);
         polygonPoint.add(polygonPoint.get(0));
         line.setPoints(polygonPoint);

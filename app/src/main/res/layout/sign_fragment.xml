@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/export"
+    android:layoutDirection="rtl"
+    tools:context="com.leon.estimate.fragments.SignFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_accepted"
+        android:layout_marginLeft="@dimen/activity_large_margin"
+        android:layout_marginRight="@dimen/activity_large_margin"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_medium_padding"
+        android:paddingRight="@dimen/activity_medium_padding"
+        android:weightSum="2">
+
+        <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/signature_view2"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="@dimen/activity_medium_margin"
+            android:layout_marginRight="@dimen/activity_mid_margin"
+            android:layout_marginBottom="@dimen/activity_medium_margin"
+            android:layout_weight="1"
+            sign:enableSignature="true"
+            sign:penColor="@color/black"
+            sign:penSize="5dp"
+            tools:ignore="RtlHardcoded" />
+
+        <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/signature_view1"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="@dimen/activity_medium_margin"
+            android:layout_weight="1"
+            sign:enableSignature="true"
+            sign:penColor="@color/black"
+            sign:penSize="5dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_accepted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_mid_padding"
+        android:background="@drawable/border_green_2"
+        android:paddingLeft="@dimen/activity_medium_padding"
+        android:paddingRight="@dimen/activity_medium_padding"
+        android:text="@string/accepted"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeLarge"
+        tools:ignore="ObsoleteLayoutParam,RelativeOverlap,RtlHardcoded" />
+
+    <Button
+        android:id="@+id/button_denial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_mid_padding"
+        android:background="@drawable/border_red_2"
+        android:paddingLeft="@dimen/activity_medium_padding"
+        android:paddingRight="@dimen/activity_medium_padding"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeLarge"
+        tools:ignore="ObsoleteLayoutParam,RtlHardcoded" />
+</RelativeLayout>
