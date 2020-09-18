@@ -28,9 +28,13 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.GISInfo;
 import com.leon.estimate.Tables.GISToken;
 import com.leon.estimate.Tables.Place;
 import com.leon.estimate.Utils.CoordinateConversion;
+import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
+import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
+import com.leon.estimate.Utils.GIS.CustomGeoJSON;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.activities.FormActivity;
@@ -38,9 +42,11 @@ import com.leon.estimate.databinding.MapFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
@@ -58,12 +64,13 @@ import retrofit2.Retrofit;
 import static android.content.Context.LOCATION_SERVICE;
 import static com.leon.estimate.activities.FormActivity.examinerDuties;
 
-
 public class MapFragment extends Fragment implements LocationListener {
     private static final String ARG_PARAM2 = "param2";
+    String token, billId;
     CoordinateConversion conversion;
     private LocationManager locationManager;
     private double latitude, longitude;
+    double[] latLong;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     private int polygonIndex, place1Index, place2Index, place3Index;
     MapFragmentBinding binding;
@@ -142,8 +149,9 @@ public class MapFragment extends Fragment implements LocationListener {
         conversion = new CoordinateConversion();
 
         if (examinerDuties.getBillId() != null)
-            getXY(examinerDuties.getBillId());
-        else getXY(examinerDuties.getNeighbourBillId());
+            billId = examinerDuties.getBillId();
+        else billId = examinerDuties.getNeighbourBillId();
+        getXY(billId);
         getGISToken();
         binding.mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
@@ -252,10 +260,86 @@ public class MapFragment extends Fragment implements LocationListener {
                 new GetGISToken(), new GetGISTokenIncomplete(), new GetError());
     }
 
+    void getGis(int i) {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
+        Call<String> call;
+        if (i == 1) {
+            call = iAbfaService.getGisWaterPipe(new GISInfo("jesuschrist", token, billId,
+                    latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                    new GetGISMultiLine(), new GetGISIncomplete(), new GetError());
+        } else if (i == 2) {
+            call = iAbfaService.getGisWaterTransfer(new GISInfo("jesuschrist", token, billId,
+                    latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                    new GetGISMultiLine(), new GetGISIncomplete(), new GetError());
+        } else if (i == 3) {
+            call = iAbfaService.getGisSanitationTransfer(new GISInfo("jesuschrist", token, billId,
+                    latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                    new GetGISMultiLine(), new GetGISIncomplete(), new GetError());
+        } else {
+            call = iAbfaService.getGisParcels(new GISInfo("jesuschrist", token, billId,
+                    latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                    new GetGISMultiPolygon(), new GetGISIncomplete(), new GetError());
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGISMultiPolygon implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+//            s = s.replace("window._EsriLeafletCallbacks.c5(", "");
+//            s = s.substring(0, s.length() - 2);
+//            Gson gsonArc = new GsonBuilder().setLenient().create();
+//            CustomArcGISJSON customArcGISJSON = gsonArc.fromJson(s, CustomArcGISJSON.class);
+//            Gson gsonGeo = new Gson();
+//            String json = gsonGeo.toJson(customGeoJSON);
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+            KmlDocument kmlDocument = new KmlDocument();
+            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                    binding.mapView, null, null, kmlDocument);
+            binding.mapView.getOverlays().add(geoJsonOverlay);
+            binding.mapView.invalidate();
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGISMultiLine implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "LineString");
+            KmlDocument kmlDocument = new KmlDocument();
+            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                    binding.mapView, null, null, kmlDocument);
+            binding.mapView.getOverlays().add(geoJsonOverlay);
+            binding.mapView.invalidate();
+        }
+    }
+
+    class GetGISIncomplete implements ICallbackIncomplete<String> {
+        @Override
+        public void executeIncomplete(Response<String> response) {
+
+        }
+    }
+
     class GetGISToken implements ICallback<GISToken> {
         @Override
         public void execute(GISToken gisToken) {
-
+            token = gisToken.getToken();
+            if (latLong != null) {
+                getGis(0);
+//            getGis(1);
+//            getGis(2);
+//            getGis(3);
+            }
         }
     }
 
@@ -272,7 +356,7 @@ public class MapFragment extends Fragment implements LocationListener {
             if (place.getX() != 0 && place.getY() != 0) {
                 String utm = "39 S ".concat(String.valueOf(place.getX())).concat(" ")
                         .concat(String.valueOf(place.getY()));
-                double[] latLong = conversion.utm2LatLon(utm);
+                latLong = conversion.utm2LatLon(utm);
                 addUserPlace(new GeoPoint(latLong[0], latLong[1]));
             }
         }

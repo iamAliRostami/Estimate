@@ -63,6 +63,8 @@ import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.GISInfo;
+import com.leon.estimate.Tables.GISToken;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.Login;
@@ -73,6 +75,10 @@ import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomProgressBar;
+import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
+import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
+import com.leon.estimate.Utils.GIS.CustomGeoJSON;
+import com.leon.estimate.Utils.GIS.MyKmlStyle;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -81,6 +87,7 @@ import com.leon.estimate.databinding.MainActivityBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -89,6 +96,7 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
@@ -830,6 +838,52 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    void getGISToken() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
+        Call<GISToken> call = iAbfaService.getGISToken();
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new GetGISToken(), new GetGISTokenIncomplete(), new GetError());
+    }
+
+    class GetXYIncomplete implements ICallbackIncomplete<Place> {
+        @Override
+        public void executeIncomplete(Response<Place> response) {
+            counter = counter + 1;
+            if (counter < examinerDuties.size()) {
+                if (examinerDuties.get(counter).getBillId() != null
+                        && examinerDuties.get(counter).getBillId().length() > 0)
+                    getXY(examinerDuties.get(counter).getBillId());
+                else getXY(examinerDuties.get(counter).getNeighbourBillId());
+            }
+            if (counter == examinerDuties.size())
+                setActionBarTitle(getString(R.string.home));
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            Log.e("GetXYIncomplete", error);
+        }
+    }
+
+    void getGis(String token, int i) {
+        Retrofit retrofit = NetworkHelper.getInstanceMap();
+        IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
+        Call<String> call;
+        if (i == 1)
+            call = iAbfaService.getGisSanitationTransfer(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
+                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
+        else if (i == 2)
+            call = iAbfaService.getGisWaterPipe(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
+                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
+        else if (i == 3)
+            call = iAbfaService.getGisWaterTransfer(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
+                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
+        else
+            call = iAbfaService.getGisParcels(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
+                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new GetGIS(), new GetGISIncomplete(), new GetError());
+    }
+
     class GetXY implements ICallback<Place> {
         @Override
         public void execute(Place place) {
@@ -853,6 +907,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             counter = counter + 1;
+//            getGISToken();
             if (counter < examinerDuties.size()) {
                 if (examinerDuties.get(counter).getBillId() != null
                         && examinerDuties.get(counter).getBillId().length() > 0)
@@ -861,31 +916,56 @@ public class MainActivity extends AppCompatActivity
             }
             if (counter == examinerDuties.size())
                 setActionBarTitle(getString(R.string.home));
-        }
-    }
-
-    class GetXYIncomplete implements ICallbackIncomplete<Place> {
-        @Override
-        public void executeIncomplete(Response<Place> response) {
-            counter = counter + 1;
-            if (counter < examinerDuties.size()) {
-                if (examinerDuties.get(counter).getBillId() != null
-                        && examinerDuties.get(counter).getBillId().length() > 0)
-                    getXY(examinerDuties.get(counter).getBillId());
-                else getXY(examinerDuties.get(counter).getNeighbourBillId());
-            }
-            if (counter == examinerDuties.size())
-                setActionBarTitle(getString(R.string.home));
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            Log.e("GetXYIncomplete", error);
         }
     }
 
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
+            Log.e("Error", Objects.requireNonNull(t.getMessage()));
             setActionBarTitle(getString(R.string.home));
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGIS implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+            KmlDocument kmlDocument = new KmlDocument();
+            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+
+            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                    mapView, null, new MyKmlStyle(), kmlDocument);
+            mapView.getOverlays().add(geoJsonOverlay);
+            mapView.invalidate();
+        }
+    }
+
+    class GetGISIncomplete implements ICallbackIncomplete<String> {
+        @Override
+        public void executeIncomplete(Response<String> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorIncomplete", response.errorBody().toString());
+            }
+        }
+    }
+
+    class GetGISToken implements ICallback<GISToken> {
+        @Override
+        public void execute(GISToken gisToken) {
+            getGis(gisToken.getToken(), 0);
+            getGis(gisToken.getToken(), 1);
+            getGis(gisToken.getToken(), 2);
+            getGis(gisToken.getToken(), 3);
+        }
+    }
+
+    class GetGISTokenIncomplete implements ICallbackIncomplete<GISToken> {
+        @Override
+        public void executeIncomplete(Response<GISToken> response) {
+
         }
     }
 }

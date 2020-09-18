@@ -3,6 +3,7 @@ package com.leon.estimate.Infrastructure;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.GISInfo;
 import com.leon.estimate.Tables.GISToken;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
@@ -22,6 +23,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -231,5 +233,18 @@ public interface IAbfaService {
 
     @GET("/MoshtarakinApi/Gis/V1/Token/jesuschrist")
     Call<GISToken> getGISToken();
+
+    @Headers("Content-Type: application/json")
+    @POST("/MoshtarakinApi/Gis/V1/Parcels")
+    Call<String> getGisParcels(@Body GISInfo gisInfo);
+
+    @POST("/MoshtarakinApi/Gis/V1/WaterPipe")
+    Call<String> getGisWaterPipe(@Body GISInfo gisInfo);
+
+    @POST("/MoshtarakinApi/Gis/V1/WaterTransfer")
+    Call<String> getGisWaterTransfer(@Body GISInfo gisInfo);
+
+    @POST("/MoshtarakinApi/Gis/V1/SanitationTransfer")
+    Call<String> getGisSanitationTransfer(@Body GISInfo gisInfo);
 }
 

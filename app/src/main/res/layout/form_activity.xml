@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
@@ -14,6 +15,59 @@
         android:layout_height="match_parent"
         android:layout_above="@id/buttonNext" />
 
+    <RelativeLayout
+        android:id="@+id/relativeLayoutMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/buttonNext"
+        android:layoutDirection="rtl"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/activity_large_margin"
+            android:gravity="center"
+            android:text="@string/location"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeHuge"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:padding="@dimen/activity_medium_padding"
+            android:text="@string/map_description"
+            android:textSize="@dimen/textSizeMedium" />
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/textViewDescription"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:background="@drawable/border_gray_1"
+            android:padding="@dimen/activity_mid_padding" />
+
+        <ImageView
+            android:id="@+id/imageViewRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewDescription"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/refresh"
+            app:srcCompat="@drawable/refresh"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/buttonPrevious"
         android:layout_width="wrap_content"
@@ -24,9 +78,9 @@
         android:background="@drawable/border_red_2"
         android:paddingLeft="@dimen/activity_medium_padding"
         android:paddingRight="@dimen/activity_medium_padding"
-        android:textSize="@dimen/textSizeLarge"
         android:text="@string/previous"
         android:textColor="@color/white"
+        android:textSize="@dimen/textSizeLarge"
         tools:ignore="RelativeOverlap,RtlHardcoded" />
 
     <Button

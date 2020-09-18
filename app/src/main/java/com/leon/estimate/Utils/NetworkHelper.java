@@ -15,6 +15,7 @@ import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by Leon on 12/9/2017.
@@ -61,6 +62,24 @@ public final class NetworkHelper {
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(token))
                 .addConverterFactory(GsonConverterFactory.create(gson))
+//                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        return retrofit;
+    }
+
+    public static Retrofit getInstanceMap() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+        String baseUrl = DifferentCompanyManager.getBaseUrl(
+                DifferentCompanyManager.getActiveCompanyName());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(NetworkHelper.getHttpClient(""))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .addConverterFactory(MoshiConverterFactory.create().asLenient())
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         return retrofit;
     }
