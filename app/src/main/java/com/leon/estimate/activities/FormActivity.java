@@ -60,7 +60,6 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -545,18 +544,24 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         if (i == 1) {
             call = iAbfaService.getGisWaterPipe(new GISInfo("jesuschrist", token, billId,
                     latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                    new GetGISWaterPipe(), new GetGISIncomplete(), new GetError());
         } else if (i == 2) {
             call = iAbfaService.getGisWaterTransfer(new GISInfo("jesuschrist", token, billId,
                     latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                    new GetGISWaterTransfer(), new GetGISIncomplete(), new GetError());
         } else if (i == 3) {
             call = iAbfaService.getGisSanitationTransfer(new GISInfo("jesuschrist", token, billId,
                     latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                    new GetGISSanitationTransfer(), new GetGISIncomplete(), new GetError());
         } else {
             call = iAbfaService.getGisParcels(new GISInfo("jesuschrist", token, billId,
                     latLong[0], latLong[1]));
+            HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
+                    new GetGISParcels(), new GetGISIncomplete(), new GetError());
         }
-        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
-                new GetGISMultiPolygon(), new GetGISIncomplete(), new GetError());
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -594,37 +599,67 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    class GetGISMultiPolygon implements ICallback<String> {
+    class GetGISSanitationTransfer implements ICallback<String> {
         @Override
         public void execute(String s) {
-//            Log.e("json", s);
             CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
             kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-            counter = counter + 1;
-            MyKmlStyle.color = counter;
+
+            MyKmlStyle.color = 4;
             FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    binding.mapView, null, null, kmlDocument);
-            MapView mapView = findViewById(R.id.mapView);
-            mapView.getOverlays().add(geoJsonOverlay);
-            mapView.invalidate();
+                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+            binding.mapView.getOverlays().add(geoJsonOverlay);
+            binding.mapView.invalidate();
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    class GetGISMultiLine implements ICallback<String> {
+    class GetGISWaterTransfer implements ICallback<String> {
         @Override
         public void execute(String s) {
             CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "LineString");
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
             kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+            MyKmlStyle.color = 3;
             FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    binding.mapView, null, null, kmlDocument);
-            MapView mapView = findViewById(R.id.mapView);
-            mapView.getOverlays().add(geoJsonOverlay);
-            mapView.invalidate();
+                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+            binding.mapView.getOverlays().add(geoJsonOverlay);
+            binding.mapView.invalidate();
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGISWaterPipe implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+            KmlDocument kmlDocument = new KmlDocument();
+            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+            MyKmlStyle.color = 2;
+            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+            binding.mapView.getOverlays().add(geoJsonOverlay);
+            binding.mapView.invalidate();
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGISParcels implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+            KmlDocument kmlDocument = new KmlDocument();
+            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+            MyKmlStyle.color = 1;
+            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+            binding.mapView.getOverlays().add(geoJsonOverlay);
+            binding.mapView.invalidate();
         }
     }
 
