@@ -47,10 +47,10 @@ public class SearchFragment extends DialogFragment {
     void initialize() {
         sharedPreferenceManager = new SharedPreferenceManager(MyApplication.getContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
-        binding.buttonAccepted.setOnClickListener(v -> {
+        binding.buttonSearch.setOnClickListener(v -> {
 
         });
-        binding.buttonDenial.setOnClickListener(v -> dismiss());
+        binding.buttonClear.setOnClickListener(v -> dismiss());
     }
 
     @Override
