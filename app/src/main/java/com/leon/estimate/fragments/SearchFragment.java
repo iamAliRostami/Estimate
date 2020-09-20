@@ -16,8 +16,6 @@ import com.leon.estimate.databinding.SearchFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class SearchFragment extends DialogFragment {
     SearchFragmentBinding binding;
     SharedPreferenceManager sharedPreferenceManager;
@@ -57,11 +55,10 @@ public class SearchFragment extends DialogFragment {
 
     @Override
     public void onResume() {
-        WindowManager.LayoutParams params = Objects.requireNonNull(
-                Objects.requireNonNull(getDialog()).getWindow()).getAttributes();
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        Objects.requireNonNull(getDialog().getWindow()).setAttributes(params);
+        getDialog().getWindow().setAttributes(params);
         super.onResume();
     }
 }
