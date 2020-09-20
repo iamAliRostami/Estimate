@@ -506,14 +506,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <!--TODO-->
-                    <ListView
-                        android:id="@+id/listViewZarfiatQarardadi"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewMotherChild"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:ignore="NestedScrolling"
-                        tools:listitem="@layout/item_zarfiat_qarardadi" />
+                        tools:listitem="@layout/item_mother_child" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -589,7 +588,7 @@
                                 tools:ignore="Autofill,TextFields" />
 
                             <EditText
-                                android:id="@+id/editTextR2"
+                                android:id="@+id/editTextA2"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="@dimen/activity_mid_margin"

@@ -16,34 +16,6 @@
         android:visibility="visible"
         tools:ignore="ContentDescription" />
 
-    <!--    <LinearLayout-->
-    <!--        android:id="@+id/linearLayoutSignTitle"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_above="@id/linearLayoutSign"-->
-    <!--        android:layout_marginLeft="@dimen/activity_large_margin"-->
-    <!--        android:layout_marginRight="@dimen/activity_large_margin"-->
-    <!--        android:gravity="bottom"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        android:paddingLeft="@dimen/activity_medium_padding"-->
-    <!--        android:paddingRight="@dimen/activity_medium_padding"-->
-    <!--        android:weightSum="2">-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="@string/sign_arziab"-->
-    <!--            android:textSize="@dimen/textSizeMedium" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="@string/sign_motaqazi"-->
-    <!--            android:textSize="@dimen/textSizeMedium" />-->
-    <!--    </LinearLayout>-->
-
     <LinearLayout
         android:id="@+id/linearLayoutSign"
         android:layout_width="match_parent"

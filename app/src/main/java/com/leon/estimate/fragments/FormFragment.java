@@ -4,6 +4,7 @@ package com.leon.estimate.fragments;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,7 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.gson.Gson;
@@ -30,11 +34,13 @@ import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.KarbariDictionary;
+import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.activities.FormActivity;
+import com.leon.estimate.adapters.MotherChildAdapter;
 import com.leon.estimate.databinding.FormFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
@@ -55,6 +61,7 @@ public class FormFragment extends Fragment {
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
+    MotherChildAdapter motherChildAdapter;
 
     public FormFragment() {
 
@@ -90,7 +97,41 @@ public class FormFragment extends Fragment {
     private void initialize() {
         new initializeSpinners().execute();
         setOnEditTextSodurDateClickListener();
-//        setOnEditTextTedadTejariTextChangeListener();
+        setOnEditTextTedadTejariTextChangeListener();
+        setOnImageViewPlusClickListener();
+        FormActivity.motherChildren = new ArrayList<>();
+        //FormActivity.motherChildren.add(new MotherChild("s","s",1,2,3));
+
+    }
+
+    void setOnImageViewPlusClickListener() {
+        binding.imageViewPlus.setOnClickListener(v -> {
+            //todo check empty
+            if (checkIsNoEmpty(binding.editTextVahed) && checkIsNoEmpty(binding.editTextNoeShoql)
+                    && checkIsNoEmpty(binding.editTextVahedMohasebe) && checkIsNoEmpty(binding.editTextA2)) {
+                String karbari = karbariDictionaries.get(binding.spinner5.getSelectedItemPosition()).getTitle();
+                String noeShoql = binding.editTextNoeShoql.getText().toString();
+                int tedadVahed = Integer.parseInt(binding.editTextVahed.getText().toString());
+                int vahedMohasebe = Integer.parseInt(binding.editTextVahedMohasebe.getText().toString());
+                int a = Integer.parseInt(binding.editTextA2.getText().toString());
+                MotherChild motherChild = new MotherChild(karbari, noeShoql, tedadVahed, vahedMohasebe, a);
+                FormActivity.motherChildren.add(motherChild);
+                if (FormActivity.motherChildren.size() == 1) {
+                    motherChildAdapter = new MotherChildAdapter(context);
+                    binding.recyclerViewMotherChild.setAdapter(motherChildAdapter);
+                    //motherChildAdapter.notifyDataSetChanged();
+                    binding.recyclerViewMotherChild.setLayoutManager(new LinearLayoutManager(getActivity()) {
+                        @Override
+                        public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
+                                                                     @NonNull View child,
+                                                                     @NonNull Rect rect, boolean immediate) {
+                            return false;
+                        }
+                    });
+                }
+                motherChildAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     public CalculationUserInput setOnButtonNextClickListener() {
@@ -111,7 +152,8 @@ public class FormFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tejari = Integer.parseInt(s.toString());
+                if (s.length() > 0)
+                    tejari = Integer.parseInt(s.toString());
             }
 
             @Override
@@ -185,8 +227,8 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(binding.editTextTedadTakhfif)
                 && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
                 && checkIsNoEmpty(binding.editTextPariNumber)
-                && checkIsNoEmpty(binding.editTextPelak)
-                && checkIsNoEmpty(binding.editTextSodurDate);
+//                && checkIsNoEmpty(binding.editTextSodurDate)
+                && checkIsNoEmpty(binding.editTextPelak);
     }
 
     boolean checkIsNoEmpty(EditText editText) {
@@ -223,6 +265,7 @@ public class FormFragment extends Fragment {
             counter = counter + 1;
         }
         binding.spinner1.setAdapter(createArrayAdapter(arrayListSpinner));
+        binding.spinner5.setAdapter(createArrayAdapter(arrayListSpinner));
 //        binding.spinner1.setSelection(FormActivity1.examinerDuties.getKarbariId());
         binding.spinner1.setSelection(selected);
     }

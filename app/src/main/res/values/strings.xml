@@ -7,7 +7,7 @@
     <string name="exit">خروج</string>
     <string name="form">فرم</string>
     <string name="form1">فرم اولیه</string>
-    <string name="form2">فرم ثانویه</string>
+    <string name="form2">فرم امکان فنی</string>
     <string name="owner">مالک</string>
     <string name="phone_number">تلفن</string>
     <string name="request_type">نوع تقاضا</string>
@@ -135,7 +135,7 @@
     <string name="aian_kol">اعیان کل</string>
     <string name="aian_non_maskouni">اعیان غیرمسکونی</string>
     <string name="tedad_tejari">تعداد واحد تجاری</string>
-    <string name="arzesh_mantaghe">ارزش منطقه</string>
+    <string name="arzesh_mantaghe">ارزش دارایی</string>
     <string name="qotre_ensheab">قطر انشعاب</string>
     <string name="noe_takhfif">نوع تخفیف</string>
     <string name="adame_takhfif_fazelab">عدم تخفیف فاضلاب</string>
@@ -192,4 +192,6 @@
     <string name="sign_arziab">محل امضای ارزیاب</string>
     <string name="sign_motaqazi">محل امضای متقاضی</string>
     <string name="request_sign">محل امضای ارزیاب و متقاضی باید پر شود.</string>
+    <string name="zero">0</string>
+    <string name="search">جستجو</string>
 </resources>

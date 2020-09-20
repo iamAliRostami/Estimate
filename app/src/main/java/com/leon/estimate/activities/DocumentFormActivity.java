@@ -40,7 +40,6 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
@@ -54,7 +53,6 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
-import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentFormActivityBinding;
 import com.leon.estimate.fragments.HighQualityFragment;
@@ -174,9 +172,8 @@ public class DocumentFormActivity extends AppCompatActivity {
         context = this;
         sharedPreferenceManager = new SharedPreferenceManager(context,
                 SharedReferenceNames.ACCOUNT.getValue());
-        if (getIntent().getExtras() != null) {
-            getExtra();
-        }
+
+        getExtra();
         if (checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -190,14 +187,16 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     void getExtra() {
-        billId = Objects.requireNonNull(
-                getIntent().getExtras()).getString(BundleEnum.BILL_ID.getValue());
+        if (getIntent().getExtras() != null) {
+            billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
 //        billId = "1136481816311";
-        trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
-        isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
-        byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
-        if (bytes != null) {
-            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
+            isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
+//            if (getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue()) != null)
+            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
+            if (bytes != null) {
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            }
         }
     }
 
@@ -215,7 +214,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         if (HttpClientWrapper.isOnline(context))
             attemptLogin();
         else {
-            Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -233,14 +232,11 @@ public class DocumentFormActivity extends AppCompatActivity {
     void attemptLogin() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-//        Call<Login> call = abfaService.login2("isf1_up3", "isf1_up3$321");//TODO
-//        Call<Login> call = abfaService.login2("test_u1", "pspihp");
-        String password = SharedReferenceKeys.PASSWORD.getValue();
         Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.USERNAME.getValue()), sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.PASSWORD.getValue()));
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
-                this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
+                this, new LoginDocument(), new LoginDocumentIncomplete(), new GetErrorRedirect());
     }
 
     void getImageTitles() {
@@ -248,36 +244,35 @@ public class DocumentFormActivity extends AppCompatActivity {
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<ImageDataTitle> call = abfaService.getTitle(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()));
-        GetImageTitles getImageTitles = new GetImageTitles();
-        GetImageTitlesIncomplete incomplete = new GetImageTitlesIncomplete();
-        GetError error = new GetError();
-        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(),
-                this, getImageTitles, incomplete, error);
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
+                this, new GetImageTitles(), new GetImageTitlesIncomplete(), new GetErrorRedirect());
     }
 
     void getImageThumbnailList() {
+        binding.progressBar.setVisibility(View.VISIBLE);
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
-        Call<ImageDataThumbnail> call = getImage.getDocsListThumbnail(sharedPreferenceManager
-                .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), billId);
-        GetImageThumbnailList imageDoc = new GetImageThumbnailList();
-        GetError error = new GetError();
-        GetImageThumbnailListIncomplete incomplete = new GetImageThumbnailListIncomplete();
+
+        Call<ImageDataThumbnail> call;
+        if (isNew)
+            call = getImage.getDocsListThumbnail(sharedPreferenceManager
+                    .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), trackNumber);
+        else
+            call = getImage.getDocsListThumbnail(sharedPreferenceManager
+                    .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), billId);
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
-                imageDoc, incomplete, error);
+                new GetImageThumbnailList(), new GetImageThumbnailListIncomplete(), new GetError());
     }
 
     void getImageThumbnail(String uri) {
+        binding.progressBar.setVisibility(View.VISIBLE);
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
                 new com.leon.estimate.Tables.Uri(uri));
-        GetImageDoc imageDoc = new GetImageDoc();
-        GetError error = new GetError();
-        GetImageDocIncomplete incomplete = new GetImageDocIncomplete();
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
-                imageDoc, incomplete, error);
+                new GetImageDoc(), new GetImageDocIncomplete(), new GetError());
     }
 
     void uploadImage(int docId, Bitmap bitmap) {
@@ -292,7 +287,7 @@ public class DocumentFormActivity extends AppCompatActivity {
             call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
                     SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, billId);
 
-        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
                 new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
     }
 
@@ -310,7 +305,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         }
         //Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
         byte[] bitmapData = bos.toByteArray();
         //write the bytes in file
         FileOutputStream fos = null;
@@ -498,7 +493,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                     .setTopTitleColor(getResources().getColor(topTitleColor))
                     .setPositiveButtonColor(getResources().getColor(positiveButtonColor))
                     .setPositiveButton(positiveButtonText, v -> {
-                        Log.e("click", "positive");
                         Intent intent = new Intent(getApplicationContext(), CreateImageActivity.class);
                         intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                         intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
@@ -512,22 +506,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                         startActivity(intent);
                         FormActivity.activity.finish();
                         finish();
-//                        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-//                        Retrofit retrofit = NetworkHelper.getInstance(true, token);
-//                        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-//
-//                        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-//                        daoExaminerDuties.updateExamination(true, trackNumber);
-//
-//                        SendCalculation sendCalculation = new SendCalculation();
-//                        SendCalculationIncomplete incomplete = new SendCalculationIncomplete();
-//                        GetError error = new GetError();
-//
-//                        ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-//                        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
-//                        Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-//                        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
-//                                sendCalculation, incomplete, error);
                     });
             inline(negativeButtonText, negativeButtonColor);
         }
@@ -571,8 +549,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                 Toast.makeText(DocumentFormActivity.this,
                         DocumentFormActivity.this.getString(R.string.error_call_backup),
                         Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
-//                DocumentFormActivity.this.startActivity(intent);
                 finish();
             }
         }
@@ -584,8 +560,6 @@ public class DocumentFormActivity extends AppCompatActivity {
             Toast.makeText(DocumentFormActivity.this,
                     DocumentFormActivity.this.getString(R.string.error_not_auth),
                     Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
-//            DocumentFormActivity.this.startActivity(intent);
             finish();
         }
     }
@@ -600,15 +574,13 @@ public class DocumentFormActivity extends AppCompatActivity {
                     getImageTitles();
                     getImageThumbnailList();
                 } else {
-                    Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_LONG).show();
                     finish();
                 }
             } else {
                 Toast.makeText(DocumentFormActivity.this,
                         DocumentFormActivity.this.getString(R.string.error_not_auth),
                         Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
-//                DocumentFormActivity.this.startActivity(intent);
                 finish();
             }
         }
@@ -620,10 +592,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         public void executeIncomplete(Response<Login> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
-
             Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
-//            DocumentFormActivity.this.startActivity(intent);
             finish();
         }
     }
@@ -633,16 +602,17 @@ public class DocumentFormActivity extends AppCompatActivity {
         public void execute(ImageDataThumbnail responseBody) {
             if (responseBody.isSuccess()) {
                 imageDataThumbnail = responseBody.getData();
-                for (ImageDataThumbnail.Data data : imageDataThumbnail) {
-                    imageDataThumbnailUri.add(data.getImg());
-                }
-                if (imageDataThumbnailUri.size() > 0)
-                    getImageThumbnail(imageDataThumbnail.get(0).getImg());
+                if (imageDataThumbnail != null) {
+                    for (ImageDataThumbnail.Data data : imageDataThumbnail) {
+                        imageDataThumbnailUri.add(data.getImg());
+                    }
+                    if (imageDataThumbnailUri.size() > 0)
+                        getImageThumbnail(imageDataThumbnail.get(0).getImg());
+                    else binding.progressBar.setVisibility(View.GONE);
+                } else binding.progressBar.setVisibility(View.GONE);
             } else {
                 Toast.makeText(DocumentFormActivity.this,
                         DocumentFormActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
-                DocumentFormActivity.this.startActivity(intent);
                 finish();
             }
         }
@@ -652,13 +622,13 @@ public class DocumentFormActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<ImageDataThumbnail> response) {
-            Log.e("Error", response.toString());
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
                     DocumentFormActivity.this.getString(R.string.dear_user),
                     DocumentFormActivity.this.getString(R.string.download_document),
                     DocumentFormActivity.this.getString(R.string.accepted));
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -672,6 +642,7 @@ public class DocumentFormActivity extends AppCompatActivity {
             images.add(image);
             imageViewAdapter.notifyDataSetChanged();
             counter = counter + 1;
+            binding.progressBar.setVisibility(View.GONE);
             if (imageDataThumbnail.size() > counter) {
                 getImageThumbnail(imageDataThumbnail.get(counter).getImg());
             }
@@ -688,6 +659,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                     DocumentFormActivity.this.getString(R.string.dear_user),
                     DocumentFormActivity.this.getString(R.string.download_document),
                     DocumentFormActivity.this.getString(R.string.accepted));
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -727,24 +699,13 @@ public class DocumentFormActivity extends AppCompatActivity {
         }
     }
 
-    class SendCalculation implements ICallback<SimpleMessage> {
+    class GetErrorRedirect implements ICallbackError {
         @Override
-        public void execute(SimpleMessage simpleMessage) {
-            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
-
-        }
-    }
-
-    class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
-        @Override
-        public void executeIncomplete(Response<SimpleMessage> response) {
+        public void executeError(Throwable t) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
-                    DocumentFormActivity.this.getString(R.string.dear_user),
-                    DocumentFormActivity.this.getString(R.string.login),
-                    DocumentFormActivity.this.getString(R.string.accepted));
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
@@ -754,9 +715,7 @@ public class DocumentFormActivity extends AppCompatActivity {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(DocumentFormActivity.this, ListActivity.class);
-//            DocumentFormActivity.this.startActivity(intent);
-            finish();
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 

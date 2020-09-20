@@ -34,6 +34,7 @@ import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.Images;
+import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.UploadImage;
@@ -195,13 +196,14 @@ public class CreateImageActivity extends AppCompatActivity {
 
         float yCoordinate = (float) src.getHeight() * 8 / 144;
 
-        float xCoordinate = (float) src.getWidth() * 30 / 36;
+        float xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(examinerDuties.getTrackNumber(), xCoordinate, yCoordinate, tPaint);
 
-        xCoordinate = (float) src.getWidth() * 22 / 36;
-        cs.drawText(examinerDuties.getBillId(), xCoordinate, yCoordinate, tPaint);
-        if (examinerDuties.getBillId().length() < 1)
+        xCoordinate = (float) src.getWidth() * 21 / 36;
+        if (examinerDuties.getBillId() == null || examinerDuties.getBillId().length() < 1)
             cs.drawText(examinerDuties.getNeighbourBillId(), xCoordinate, yCoordinate, tPaint);
+        else
+            cs.drawText(examinerDuties.getBillId(), xCoordinate, yCoordinate, tPaint);
 
         xCoordinate = (float) src.getWidth() * 16 / 36;
         cs.drawText(examinerDuties.getZoneTitle(), xCoordinate, yCoordinate, tPaint);
@@ -225,7 +227,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(examinerDuties.getFatherName(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 20 / 36;
         cs.drawText(examinerDuties.getPhoneNumber(), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 12 / 36;
+        xCoordinate = (float) src.getWidth() * 11 / 36;
         cs.drawText(examinerDuties.getMobile(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(examinerDuties.getPostalCode(), xCoordinate, yCoordinate, tPaint);
@@ -235,10 +237,10 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(examinerDuties.getAddress(), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 31 / 144;
-        xCoordinate = (float) src.getWidth() * 30 / 36;
+        xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(examinerDuties.getServiceGroup(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 27 / 144;
+        yCoordinate = (float) src.getHeight() * 28 / 144;
         xCoordinate = (float) src.getWidth() * 3 / 36;
         String request = "";
         ArrayList<RequestDictionary> requestDictionaries = calculationUserInput.setSelectedServices(calculationUserInput);
@@ -290,6 +292,23 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(String.valueOf(examinerDuties.getZarfiatQarardadi()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 7 / 36;
         cs.drawText(String.valueOf(examinerDuties.getArzeshMelk()), xCoordinate, yCoordinate, tPaint);
+
+        //TODO
+        for (int i = 0; i < FormActivity.motherChildren.size(); i++) {
+            MotherChild motherChild = FormActivity.motherChildren.get(i);
+            yCoordinate = (float) src.getHeight() * (61 + i * 3) / 144;
+            xCoordinate = (float) src.getWidth() * 25 / 36;
+            cs.drawText(motherChild.karbari, xCoordinate, yCoordinate, tPaint);
+            xCoordinate = (float) src.getWidth() * 16 / 36;
+            cs.drawText(motherChild.noeShoql, xCoordinate, yCoordinate, tPaint);
+            xCoordinate = (float) src.getWidth() * 11 / 36;
+            cs.drawText(String.valueOf(motherChild.tedadVahed), xCoordinate, yCoordinate, tPaint);
+            xCoordinate = (float) src.getWidth() * 7 / 36;
+            cs.drawText(String.valueOf(motherChild.vahedMohasebe), xCoordinate, yCoordinate, tPaint);
+            xCoordinate = (float) src.getWidth() * 3 / 36;
+            cs.drawText(String.valueOf(motherChild.a), xCoordinate, yCoordinate, tPaint);
+        }
+
 
         yCoordinate = (float) src.getHeight() * 92 / 144;
         xCoordinate = (float) src.getWidth() * 23 / 36;

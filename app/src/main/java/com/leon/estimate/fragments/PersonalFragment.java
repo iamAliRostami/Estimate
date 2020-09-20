@@ -121,11 +121,11 @@ public class PersonalFragment extends Fragment {
             focusView = binding.editTextPostalCode;
             focusView.requestFocus();
             return false;
-        } else if (binding.editTextPhone.getText().toString().length() < 8) {
-            binding.editTextPhone.setError(getString(R.string.error_format));
-            focusView = binding.editTextPhone;
-            focusView.requestFocus();
-            return false;
+//        } else if (binding.editTextPhone.getText().toString().length() < 8) {
+//            binding.editTextPhone.setError(getString(R.string.error_format));
+//            focusView = binding.editTextPhone;
+//            focusView.requestFocus();
+//            return false;
         } else if (binding.editTextMobile.getText().toString().length() < 11) {
             binding.editTextMobile.setError(getString(R.string.error_format));
             focusView = binding.editTextMobile;

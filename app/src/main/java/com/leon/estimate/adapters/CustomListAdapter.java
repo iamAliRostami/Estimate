@@ -78,7 +78,10 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
         viewHolder.textViewNotificationMobile.setText(examinerDuties.getNotificationMobile());
         viewHolder.textViewMoshtarakMobile.setText(examinerDuties.getMoshtarakMobile());
-        viewHolder.textViewNeighbourBillId.setText(examinerDuties.getNeighbourBillId());
+        if (examinerDuties.getBillId() != null)
+            viewHolder.textViewBillId.setText(examinerDuties.getBillId());
+        else
+            viewHolder.textViewBillId.setText(examinerDuties.getNeighbourBillId());
 
         viewHolder.textViewName.setGravity(1);
         viewHolder.textViewPeymayesh.setGravity(1);
@@ -89,7 +92,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         viewHolder.textViewTrackNumber.setGravity(1);
         viewHolder.textViewNotificationMobile.setGravity(1);
         viewHolder.textViewMoshtarakMobile.setGravity(1);
-        viewHolder.textViewNeighbourBillId.setGravity(1);
+        viewHolder.textViewBillId.setGravity(1);
 
         size++;
     }
@@ -119,7 +122,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         TextView textViewTrackNumber;
         TextView textViewNotificationMobile;
         TextView textViewMoshtarakMobile;
-        TextView textViewNeighbourBillId;
+        TextView textViewBillId;
         TextView textViewRadif;
 
         @SuppressLint("NewApi")
@@ -133,7 +136,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
             textViewTrackNumber = itemView.findViewById(R.id.textViewTrackNumber);
             textViewNotificationMobile = itemView.findViewById(R.id.textViewNotificationMobile);
             textViewMoshtarakMobile = itemView.findViewById(R.id.textViewMoshtarakMobile);
-            textViewNeighbourBillId = itemView.findViewById(R.id.textViewNeighbourBillId);
+            textViewBillId = itemView.findViewById(R.id.textViewNeighbourBillId);
             textViewRadif = itemView.findViewById(R.id.textViewRadif);
         }
     }

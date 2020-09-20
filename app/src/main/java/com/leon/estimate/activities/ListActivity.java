@@ -7,10 +7,13 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -22,6 +25,7 @@ import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.adapters.CustomListAdapter;
 import com.leon.estimate.databinding.ListActivityBinding;
+import com.leon.estimate.fragments.SearchFragment;
 
 import java.util.List;
 
@@ -83,6 +87,23 @@ public class ListActivity extends AppCompatActivity {
             });
         }
         dialog.dismiss();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_search) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            SearchFragment signFragment = SearchFragment.newInstance("trackNumber");
+            signFragment.show(fragmentTransaction, "");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

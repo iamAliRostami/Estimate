@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.GISInfo;
 import com.leon.estimate.Tables.GISToken;
+import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Place;
 import com.leon.estimate.Tables.RequestDictionary;
@@ -58,6 +60,7 @@ import com.leon.estimate.fragments.ServicesFragment;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.kml.KmlDocument;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.FolderOverlay;
@@ -83,6 +86,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
     public static SecondForm secondForm;
+    public static ArrayList<MotherChild> motherChildren;
     Context context;
     String trackNumber, json;
     @SuppressLint("StaticFieldLeak")
@@ -109,7 +113,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         setContentView(binding.getRoot());
         activity = this;
         context = this;
-//        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             new SerializeJson().execute(getIntent());
@@ -123,6 +127,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         calculationUserInputTemp = new CalculationUserInput();
         new GetDBData().execute();
         setOnButtonClickListener();
+        binding.progressBar.setVisibility(View.VISIBLE);
         binding.imageViewRefresh.setOnClickListener(view -> {
             binding.mapView.getOverlays().clear();
             place1Index = 0;
@@ -198,9 +203,13 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
                     bitmap = convertBitmapToByte(convertMapToBitmap());
                     intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
-
+//                    if (bitmap != null) {
+//                    }
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
-                    intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+                    if (examinerDuties.getBillId() != null)
+                        intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+                    else
+                        intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getNeighbourBillId());
                     intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                     prepareToSend();
                     startActivity(intent);
@@ -612,6 +621,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     binding.mapView, null, new MyKmlStyle(), kmlDocument);
             binding.mapView.getOverlays().add(geoJsonOverlay);
             binding.mapView.invalidate();
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -681,7 +691,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 getGis(1);
                 getGis(2);
                 getGis(3);
-            }
+            } else
+                binding.progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -703,6 +714,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 latLong = conversion.utm2LatLon(utm);
                 addUserPlace(new GeoPoint(latLong[0], latLong[1]));
                 getGISToken();
+            } else {
+                binding.progressBar.setVisibility(View.GONE);
             }
         }
     }
@@ -722,4 +735,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             Log.e("GetError", Objects.requireNonNull(t.getMessage()));
         }
     }
+
+
 }
