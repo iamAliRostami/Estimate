@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
@@ -73,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="3">
 
         <TextView
             android:id="@+id/textViewPeymayesh"
@@ -93,30 +94,6 @@
             android:background="@color/white" />
 
         <TextView
-            android:id="@+id/textViewAddress"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_mid_margin"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeMedium"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/white" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <TextView
             android:id="@+id/textViewNotificationMobile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -126,7 +103,8 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/textSizeMedium"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="NestedWeights" />
 
         <LinearLayout
             android:layout_width="2dp"
@@ -144,8 +122,23 @@
             android:textColor="@color/white"
             android:textSize="@dimen/textSizeMedium"
             android:textStyle="bold" />
-
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/activity_mid_margin"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeMedium"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -156,52 +149,120 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="3"
+        tools:ignore="DisableBaselineAlignment">
 
-        <TextView
-            android:id="@+id/textViewRadif"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_mid_margin"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeMedium"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:gravity="center"
+                android:text="@string/radif"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/white" />
+
+            <TextView
+                android:id="@+id/textViewRadif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:background="@color/white" />
 
-        <TextView
-            android:id="@+id/textViewTrackNumber"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_mid_margin"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeMedium"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:gravity="center"
+                android:text="@string/shomare_peygiri"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/white" />
+
+            <TextView
+                android:id="@+id/textViewTrackNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:background="@color/white" />
 
-        <TextView
-            android:id="@+id/textViewNeighbourBillId"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_mid_margin"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/textSizeMedium"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewBillIdTilte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:gravity="center"
+                android:text="@string/bill_id"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/white" />
+
+            <TextView
+                android:id="@+id/textViewBillId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

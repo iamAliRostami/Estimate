@@ -152,7 +152,12 @@ public class PersonalFragment extends Fragment {
         binding.editTextRadif.setText(FormActivity.examinerDuties.getRadif());
 
         binding.textViewZone.setText(FormActivity.examinerDuties.getZoneTitle());
-        binding.textViewBillId.setText(FormActivity.examinerDuties.getBillId());
+        if (FormActivity.examinerDuties.getBillId() != null && FormActivity.examinerDuties.getBillId().length() > 0)
+            binding.textViewBillId.setText(FormActivity.examinerDuties.getBillId());
+        else {
+            binding.textViewBillId.setText(FormActivity.examinerDuties.getNeighbourBillId());
+            binding.textViewBillIdTitle.setText(getString(R.string.neighbour_bill_id));
+        }
         binding.textViewTrackNumber.setText(FormActivity.examinerDuties.getTrackNumber());
     }
 

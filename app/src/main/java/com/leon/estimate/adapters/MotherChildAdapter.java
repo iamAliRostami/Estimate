@@ -43,7 +43,6 @@ public class MotherChildAdapter extends RecyclerView.Adapter<MotherChildAdapter.
         holder.textViewNoeShoql.setText(String.valueOf(motherChild.noeShoql));
         holder.textViewTedadVahed.setText(String.valueOf(motherChild.tedadVahed));
         holder.textViewVahedMohasebe.setText(String.valueOf(motherChild.vahedMohasebe));
-
     }
 
     @Override

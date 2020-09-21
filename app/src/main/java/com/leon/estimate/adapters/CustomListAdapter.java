@@ -19,16 +19,21 @@ import com.leon.estimate.activities.FormActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder> {
     private Context context;
     private List<ExaminerDuties> examinerDuties;
+    private ArrayList<ExaminerDuties> tempExaminerDuties;
     private int size = 0;
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
         this.examinerDuties = examinerDuties;
+        this.tempExaminerDuties = new ArrayList<>();
+        this.tempExaminerDuties.addAll(examinerDuties);
     }
 
     @SuppressLint("InflateParams")
@@ -44,12 +49,12 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         ViewHolder holder = new ViewHolder(view);
 
         holder.itemView.setOnClickListener(view1 -> {
-            if (examinerDuties.get(i).isPeymayesh()) {
+            if (tempExaminerDuties.get(i).isPeymayesh()) {
                 Toast.makeText(context, context.getText(R.string.is_peymayesh), Toast.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent(context, FormActivity.class);
-                intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.get(i).getTrackNumber());
-                intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.get(i).getRequestDictionaryString());
+                intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), tempExaminerDuties.get(i).getTrackNumber());
+                intent.putExtra(BundleEnum.SERVICES.getValue(), tempExaminerDuties.get(i).getRequestDictionaryString());
                 context.startActivity(intent);
             }
         });
@@ -60,7 +65,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     @SuppressLint({"NewApi", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ExaminerDuties examinerDuties = this.examinerDuties.get(i);
+        ExaminerDuties examinerDuties = getItem(i);
 
         viewHolder.textViewName.setText(examinerDuties.getNameAndFamily());
         if (examinerDuties.isPeymayesh()) {
@@ -80,9 +85,10 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         viewHolder.textViewMoshtarakMobile.setText(examinerDuties.getMoshtarakMobile());
         if (examinerDuties.getBillId() != null)
             viewHolder.textViewBillId.setText(examinerDuties.getBillId());
-        else
+        else {
             viewHolder.textViewBillId.setText(examinerDuties.getNeighbourBillId());
-
+            viewHolder.textViewBillIdTitle.setText(context.getString(R.string.neighbour_bill_id));
+        }
         viewHolder.textViewName.setGravity(1);
         viewHolder.textViewPeymayesh.setGravity(1);
         viewHolder.textViewExaminationDay.setGravity(1);
@@ -97,10 +103,97 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         size++;
     }
 
+    public void filter(String billId, String trackingNumber, String name, String family,
+                       String nationId, String mobile) {
+        billId = billId.toLowerCase(Locale.getDefault());
+        trackingNumber = trackingNumber.toLowerCase(Locale.getDefault());
+        name = name.toLowerCase(Locale.getDefault());
+        family = family.toLowerCase(Locale.getDefault());
+        nationId = nationId.toLowerCase(Locale.getDefault());
+        mobile = mobile.toLowerCase(Locale.getDefault());
+        tempExaminerDuties.clear();
+        ArrayList<ExaminerDuties> list = new ArrayList<>(examinerDuties);
+        if (billId.length() == 0)
+            tempExaminerDuties.addAll(list);
+        else {
+            for (ExaminerDuties examinerDuty : list) {
+                if (((examinerDuty.getBillId() != null
+                        && examinerDuty.getBillId().toLowerCase(Locale.getDefault()).contains(billId))
+                        || (examinerDuty.getNeighbourBillId() != null
+                        && examinerDuty.getNeighbourBillId().toLowerCase(Locale.getDefault()).contains(billId)))
+                ) {
+                    tempExaminerDuties.remove(examinerDuty);
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+            list.clear();
+            list.addAll(tempExaminerDuties);
+        }
+        if (trackingNumber.length() > 0) {
+            tempExaminerDuties.clear();
+            for (ExaminerDuties examinerDuty : list) {
+                if (examinerDuty.getTrackNumber() != null &&
+                        examinerDuty.getTrackNumber().toLowerCase(Locale.getDefault()).contains(trackingNumber)) {
+                    tempExaminerDuties.remove(examinerDuty);
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+            list.clear();
+            list.addAll(tempExaminerDuties);
+        }
+        if (name.length() > 0) {
+            tempExaminerDuties.clear();
+            for (ExaminerDuties examinerDuty : list) {
+                if (examinerDuty.getNameAndFamily() != null &&
+                        examinerDuty.getNameAndFamily().toLowerCase(Locale.getDefault()).contains(name)) {
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+            list.clear();
+            list.addAll(tempExaminerDuties);
+        }
+
+        if (family.length() > 0) {
+            tempExaminerDuties.clear();
+            for (ExaminerDuties examinerDuty : list) {
+                if (examinerDuty.getNameAndFamily() != null &&
+                        examinerDuty.getNameAndFamily().toLowerCase(Locale.getDefault()).contains(family)) {
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+            list.clear();
+            list.addAll(tempExaminerDuties);
+        }
+        if (nationId.length() > 0) {
+            tempExaminerDuties.clear();
+            for (ExaminerDuties examinerDuty : list) {
+                if (examinerDuty.getNationalId() != null &&
+                        examinerDuty.getNationalId().toLowerCase(Locale.getDefault()).contains(nationId)) {
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+            list.clear();
+            list.addAll(tempExaminerDuties);
+        }
+        if (mobile.length() > 0) {
+            tempExaminerDuties.clear();
+            for (ExaminerDuties examinerDuty : list) {
+                if ((examinerDuty.getMobile() != null &&
+                        examinerDuty.getMobile().toLowerCase(Locale.getDefault()).contains(mobile))
+                        || (examinerDuty.getMoshtarakMobile() != null &&
+                        examinerDuty.getMoshtarakMobile().toLowerCase(Locale.getDefault()).contains(mobile))
+                        || (examinerDuty.getNotificationMobile() != null &&
+                        examinerDuty.getNotificationMobile().toLowerCase(Locale.getDefault()).contains(mobile))) {
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
-        return examinerDuties.size();
+        return tempExaminerDuties.size();
     }
 
     @Override
@@ -113,6 +206,11 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         return position;
     }
 
+    //    @Override
+    public ExaminerDuties getItem(int position) {
+        return tempExaminerDuties.get(position);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName;
         TextView textViewPeymayesh;
@@ -123,6 +221,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         TextView textViewNotificationMobile;
         TextView textViewMoshtarakMobile;
         TextView textViewBillId;
+        TextView textViewBillIdTitle;
         TextView textViewRadif;
 
         @SuppressLint("NewApi")
@@ -136,7 +235,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
             textViewTrackNumber = itemView.findViewById(R.id.textViewTrackNumber);
             textViewNotificationMobile = itemView.findViewById(R.id.textViewNotificationMobile);
             textViewMoshtarakMobile = itemView.findViewById(R.id.textViewMoshtarakMobile);
-            textViewBillId = itemView.findViewById(R.id.textViewNeighbourBillId);
+            textViewBillId = itemView.findViewById(R.id.textViewBillId);
+            textViewBillIdTitle = itemView.findViewById(R.id.textViewBillIdTilte);
             textViewRadif = itemView.findViewById(R.id.textViewRadif);
         }
     }

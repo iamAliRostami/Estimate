@@ -32,7 +32,8 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
     Context context;
     List<ExaminerDuties> examinerDuties;
-    CustomListAdapter customAdapter;
+    @SuppressLint("StaticFieldLeak")
+    public static CustomListAdapter customAdapter;
     ProgressDialog dialog;
     ListActivityBinding binding;
 
@@ -100,8 +101,10 @@ public class ListActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menu_search) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            SearchFragment signFragment = SearchFragment.newInstance("trackNumber");
+            SearchFragment signFragment = SearchFragment.newInstance();
             signFragment.show(fragmentTransaction, "");
+        } else if (id == R.id.menu_clear) {
+            customAdapter.filter("", "", "", "", "", "");
         }
         return super.onOptionsItemSelected(item);
     }

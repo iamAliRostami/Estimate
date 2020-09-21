@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -491,6 +492,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
+        line.setColor(Color.YELLOW);
         if (polygonIndex != 0) {//TODO crash on paging...
             binding.mapView.getOverlays().remove(polygonIndex);
         }

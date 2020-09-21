@@ -8,27 +8,19 @@ import android.view.WindowManager;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.SharedReferenceNames;
-import com.leon.estimate.MyApplication;
-import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.activities.ListActivity;
 import com.leon.estimate.databinding.SearchFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 public class SearchFragment extends DialogFragment {
     SearchFragmentBinding binding;
-    SharedPreferenceManager sharedPreferenceManager;
 
     public SearchFragment() {
     }
 
-    public static SearchFragment newInstance(String param1) {
-        SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putString(BundleEnum.TRACK_NUMBER.getValue(), param1);
-        fragment.setArguments(args);
-        return fragment;
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
     }
 
     @Override
@@ -45,12 +37,18 @@ public class SearchFragment extends DialogFragment {
     }
 
     void initialize() {
-        sharedPreferenceManager = new SharedPreferenceManager(MyApplication.getContext(),
-                SharedReferenceNames.ACCOUNT.getValue());
         binding.buttonSearch.setOnClickListener(v -> {
-
+            if (ListActivity.customAdapter != null) {
+                ListActivity.customAdapter.filter(binding.editTextBillId.getText().toString(),
+                        binding.editTextTrackNumber.getText().toString(),
+                        binding.editTextName.getText().toString(),
+                        binding.editTextFamily.getText().toString(),
+                        binding.editTextNationNumber.getText().toString(),
+                        binding.editTextMobile.getText().toString()
+                );
+            }
+            dismiss();
         });
-        binding.buttonClear.setOnClickListener(v -> dismiss());
     }
 
     @Override

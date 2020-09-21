@@ -109,6 +109,7 @@
     <string name="noe_vagozari">نوع واگذاری</string>
     <string name="arse_kol">عرصه کل</string>
     <string name="bill_id">شناسه قبض</string>
+    <string name="neighbour_bill_id">شناسه قبض همسایه</string>
     <string name="other_number">تعداد واحد سایر</string>
     <string name="postal_code">کد پستی</string>
     <string name="canceled">عملیات متوقف شد.</string>
@@ -121,7 +122,7 @@
     <string name="next">بعدی</string>
     <string name="previous">قبلی</string>
     <string name="moshakhasat_melk">مشخصات ملک</string>
-    <string name="second_form">فرم ثانویه</string>
+    <string name="second_form">اطلاعات امکان فنی</string>
     <string name="moshakhasat_malek">مشخصات مالک</string>
     <string name="crop">برش</string>
     <string name="choose_document">انتخاب مدرک</string>
@@ -135,7 +136,7 @@
     <string name="aian_kol">اعیان کل</string>
     <string name="aian_non_maskouni">اعیان غیرمسکونی</string>
     <string name="tedad_tejari">تعداد واحد تجاری</string>
-    <string name="arzesh_mantaghe">ارزش دارایی</string>
+    <string name="arzesh_mantaghe">ارزش معاملاتی</string>
     <string name="qotre_ensheab">قطر انشعاب</string>
     <string name="noe_takhfif">نوع تخفیف</string>
     <string name="adame_takhfif_fazelab">عدم تخفیف فاضلاب</string>
@@ -195,4 +196,5 @@
     <string name="zero">0</string>
     <string name="search">جستجو</string>
     <string name="clear">پاک کردن</string>
+    <string name="all">همه</string>
 </resources>

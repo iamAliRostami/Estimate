@@ -119,7 +119,6 @@ public class FormFragment extends Fragment {
                 if (FormActivity.motherChildren.size() == 1) {
                     motherChildAdapter = new MotherChildAdapter(context);
                     binding.recyclerViewMotherChild.setAdapter(motherChildAdapter);
-                    //motherChildAdapter.notifyDataSetChanged();
                     binding.recyclerViewMotherChild.setLayoutManager(new LinearLayoutManager(getActivity()) {
                         @Override
                         public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
@@ -129,6 +128,8 @@ public class FormFragment extends Fragment {
                         }
                     });
                 }
+//                binding.recyclerViewMotherChild.getLayoutParams().height =
+//                        100 * FormActivity.motherChildren.size();
                 motherChildAdapter.notifyDataSetChanged();
             }
         });
@@ -226,9 +227,9 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(binding.editTextArzeshMelk)
                 && checkIsNoEmpty(binding.editTextTedadTakhfif)
                 && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
-                && checkIsNoEmpty(binding.editTextPariNumber)
+                && checkIsNoEmpty(binding.editTextPariNumber);
 //                && checkIsNoEmpty(binding.editTextSodurDate)
-                && checkIsNoEmpty(binding.editTextPelak);
+//                && checkIsNoEmpty(binding.editTextPelak);
     }
 
     boolean checkIsNoEmpty(EditText editText) {

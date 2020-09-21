@@ -11,7 +11,6 @@
         android:layout_margin="@dimen/activity_mid_margin"
         android:background="@drawable/border_gray_1"
         android:orientation="horizontal"
-        android:padding="@dimen/activity_mid_padding"
         tools:ignore="UselessLeaf,UselessParent">
 
         <ImageView
@@ -25,18 +24,21 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="7">
 
             <TextView
+                android:id="@+id/textViewKarbari"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/user_type"
-                android:id="@+id/textViewKarbari"
                 android:textColor="@color/blue4"
-                android:textSize="@dimen/textSizeLarge"
+                android:textSize="@dimen/textSizeMedium"
                 tools:ignore="NestedWeights" />
 
             <TextView
@@ -44,40 +46,44 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/noe_shoql"
                 android:textColor="@color/blue4"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeMedium" />
 
             <TextView
                 android:id="@+id/textViewTedadVahed"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/tedad_vahed"
                 android:textColor="@color/blue4"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeMedium" />
 
             <TextView
                 android:id="@+id/textViewVahedMohasebe"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/vahed_mohasebe"
                 android:textColor="@color/blue4"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeMedium" />
 
             <TextView
                 android:id="@+id/textViewA2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/a_2"
                 android:textColor="@color/blue4"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="@dimen/textSizeMedium" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
