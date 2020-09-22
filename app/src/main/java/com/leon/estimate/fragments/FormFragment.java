@@ -128,9 +128,11 @@ public class FormFragment extends Fragment {
                         }
                     });
                 }
-//                binding.recyclerViewMotherChild.getLayoutParams().height =
-//                        100 * FormActivity.motherChildren.size();
                 motherChildAdapter.notifyDataSetChanged();
+                binding.editTextA2.setText("");
+                binding.editTextNoeShoql.setText("");
+                binding.editTextVahed.setText("");
+                binding.editTextVahedMohasebe.setText("");
             }
         });
     }
