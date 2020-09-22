@@ -87,6 +87,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
     public static SecondForm secondForm;
+    public static boolean estelamShahrdari, parvane, motaqazi;
     public static ArrayList<MotherChild> motherChildren;
     Context context;
     String trackNumber, json;

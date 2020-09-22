@@ -4,10 +4,10 @@ public class MotherChild {
     public String karbari;
     public String noeShoql;
     public int tedadVahed;
-    public int vahedMohasebe;
-    public int a;
+    public String vahedMohasebe;
+    public String a;
 
-    public MotherChild(String karbari, String noeShoql, int tedadVahed, int vahedMohasebe, int a) {
+    public MotherChild(String karbari, String noeShoql, int tedadVahed, String vahedMohasebe, String a) {
         this.karbari = karbari;
         this.noeShoql = noeShoql;
         this.tedadVahed = tedadVahed;

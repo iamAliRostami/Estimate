@@ -112,8 +112,8 @@ public class FormFragment extends Fragment {
                 String karbari = karbariDictionaries.get(binding.spinner5.getSelectedItemPosition()).getTitle();
                 String noeShoql = binding.editTextNoeShoql.getText().toString();
                 int tedadVahed = Integer.parseInt(binding.editTextVahed.getText().toString());
-                int vahedMohasebe = Integer.parseInt(binding.editTextVahedMohasebe.getText().toString());
-                int a = Integer.parseInt(binding.editTextA2.getText().toString());
+                String vahedMohasebe = binding.editTextVahedMohasebe.getText().toString();
+                String a = binding.editTextA2.getText().toString();
                 MotherChild motherChild = new MotherChild(karbari, noeShoql, tedadVahed, vahedMohasebe, a);
                 FormActivity.motherChildren.add(motherChild);
                 if (FormActivity.motherChildren.size() == 1) {
@@ -206,9 +206,12 @@ public class FormFragment extends Fragment {
         calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
         calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
         calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
-        calculationUserInput.ensheabQeireDaem = binding.checkbox3.isChecked();
+        calculationUserInput.ensheabQeireDaem = binding.checkbox1.isChecked();
         FormActivity.karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
         FormActivity.noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
+        FormActivity.estelamShahrdari = binding.checkbox3.isChecked();
+        FormActivity.parvane = binding.checkbox4.isChecked();
+        FormActivity.motaqazi = binding.checkbox2.isChecked();
         return calculationUserInput;
     }
 
@@ -340,7 +343,7 @@ public class FormFragment extends Fragment {
         binding.editTextSodurDate.setText(FormActivity.examinerDuties.getExaminationDay());
         binding.editTextPelak.setText(FormActivity.examinerDuties.getPostalCode());
 
-        binding.checkbox3.setChecked(FormActivity.examinerDuties.isEnsheabQeirDaem());
+        binding.checkbox1.setChecked(FormActivity.examinerDuties.isEnsheabQeirDaem());
     }
 
     ArrayAdapter<String> createArrayAdapter(List<String> arrayListSpinner) {

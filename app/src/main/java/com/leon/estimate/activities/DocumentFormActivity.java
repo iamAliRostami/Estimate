@@ -156,10 +156,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                 getString(R.string.dear_user), getString(R.string.final_accepted),
                 getString(R.string.yes), getString(R.string.no),
                 R.color.red1, R.color.green2, R.color.yellow1, R.color.white);
-
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        SignFragment signFragment = SignFragment.newInstance(trackNumber);
-//        signFragment.show(fragmentTransaction, binding.spinnerTitle.getSelectedItem().toString());
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -170,6 +166,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         binding = DocumentFormActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
+//        Log.e("cursor", "here");
         sharedPreferenceManager = new SharedPreferenceManager(context,
                 SharedReferenceNames.ACCOUNT.getValue());
 
@@ -189,8 +186,9 @@ public class DocumentFormActivity extends AppCompatActivity {
     void getExtra() {
         if (getIntent().getExtras() != null) {
             billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
-//        billId = "1136481816311";
+//            billId = "981276127616526512";//TODO
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
+//            trackNumber = "98439483748374";//TODO
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
 //            if (getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue()) != null)
             byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
@@ -305,7 +303,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         }
         //Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70 /*ignored for PNG*/, bos);
         byte[] bitmapData = bos.toByteArray();
         //write the bytes in file
         FileOutputStream fos = null;
@@ -557,6 +555,9 @@ public class DocumentFormActivity extends AppCompatActivity {
     class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
         @Override
         public void executeIncomplete(Response<ImageDataTitle> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorTitleIncomplete", response.errorBody().toString());
+            }
             Toast.makeText(DocumentFormActivity.this,
                     DocumentFormActivity.this.getString(R.string.error_not_auth),
                     Toast.LENGTH_LONG).show();
@@ -622,6 +623,9 @@ public class DocumentFormActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<ImageDataThumbnail> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
+            }
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
@@ -653,6 +657,9 @@ public class DocumentFormActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<ResponseBody> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
+            }
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
@@ -689,6 +696,9 @@ public class DocumentFormActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
+            }
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
@@ -702,6 +712,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     class GetErrorRedirect implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
+            Log.e("Error", Objects.requireNonNull(t.getMessage()));
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();

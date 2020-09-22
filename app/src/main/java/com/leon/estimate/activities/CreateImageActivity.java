@@ -123,7 +123,7 @@ public class CreateImageActivity extends AppCompatActivity {
         tPaint.setStyle(Paint.Style.FILL);
         tPaint.setColor(Color.BLACK);
 
-        float yCoordinate = (float) bitmap.getHeight() * 113 / 144;
+        float yCoordinate = (float) bitmap.getHeight() * 117 / 144;
         float xCoordinate = (float) bitmap.getWidth() * 22 / 36;
 
         cs.drawBitmap(bitmap, 0f, 0f, null);
@@ -219,7 +219,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(shenasname, xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 12 / 36;
         cs.drawText(examinerDuties.getFirstName(), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 3 / 36;
+        xCoordinate = (float) src.getWidth() * 2 / 36;
         cs.drawText(examinerDuties.getSureName(), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 17 / 144;
@@ -227,8 +227,8 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(examinerDuties.getFatherName(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 20 / 36;
         cs.drawText(examinerDuties.getPhoneNumber(), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 11 / 36;
-        cs.drawText(examinerDuties.getMobile(), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 21 / 72;
+        cs.drawText(examinerDuties.getNotificationMobile(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(examinerDuties.getPostalCode(), xCoordinate, yCoordinate, tPaint);
 
@@ -351,6 +351,23 @@ public class CreateImageActivity extends AppCompatActivity {
             cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 8 / 36;
         cs.drawText(secondForm.getNoeMasrafString(), xCoordinate, yCoordinate, tPaint);
+
+
+        yCoordinate = (float) src.getHeight() * 107 / 144;
+        xCoordinate = (float) src.getWidth() * 25 / 36;
+        if (FormActivity.estelamShahrdari)
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 19 / 36;
+        cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        if (FormActivity.parvane)
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 4 / 36;
+        if (FormActivity.motaqazi)
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+
 
         return dest;
     }

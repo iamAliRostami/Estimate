@@ -189,7 +189,7 @@
     <string name="noe_shoql">نوع شغل</string>
     <string name="tedad_vahed">واحد</string>
     <string name="vahed_mohasebe">واحد م</string>
-    <string name="a_2">مساحت</string>
+    <string name="a_2">مقدار</string>
     <string name="sign_arziab">محل امضای ارزیاب</string>
     <string name="sign_motaqazi">محل امضای متقاضی</string>
     <string name="request_sign">محل امضای ارزیاب و متقاضی باید پر شود.</string>
@@ -197,4 +197,7 @@
     <string name="search">جستجو</string>
     <string name="clear">پاک کردن</string>
     <string name="all">همه</string>
+    <string name="estelam_shahrdari">استعلام شهرداری</string>
+    <string name="ezharat_motaqazi">اظهارات متقاضی</string>
+    <string name="parvane">پروانه</string>
 </resources>
