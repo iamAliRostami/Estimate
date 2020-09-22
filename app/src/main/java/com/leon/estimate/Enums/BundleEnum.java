@@ -23,6 +23,7 @@ public enum BundleEnum {
     CURRENT_PAGE("number"),
     IMAGE_BITMAP("image_bitmap"),
     REQUEST("request"),
+    ZONE_ID("zone_id"),
     SERVICES("services");
 
     private final String value;

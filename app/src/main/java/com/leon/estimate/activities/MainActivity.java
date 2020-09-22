@@ -60,6 +60,7 @@ import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
+import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity
         }
 //        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
 //                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_22_23).build();
+//                .addMigrations(MyDatabase.MIGRATION_23_24).build();
 //        readData();
     }
 
@@ -254,6 +255,8 @@ public class MainActivity extends AppCompatActivity
         daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+        DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+        daoResultDictionary.insertAll(input.getResultDictionary());
     }
 
     void initialize() {
@@ -825,10 +828,12 @@ public class MainActivity extends AppCompatActivity
                 DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
                 daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
 
-                Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
                 DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
                 daoKarbariDictionary.insertAll(input.getKarbariDictionary());
 
+                Log.e("size", String.valueOf(input.getResultDictionary().size()));
+                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+                daoResultDictionary.insertAll(input.getResultDictionary());
                 new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
                         input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
                         getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));

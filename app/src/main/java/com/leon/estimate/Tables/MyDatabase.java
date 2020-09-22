@@ -8,7 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
-        RequestDictionary.class, Images.class, MapScreen.class}, version = 23, exportSchema = false)
+        RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class},
+        version = 24, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
     public static final Migration MIGRATION_22_23 = new Migration(22, 23) {
         @Override
@@ -27,19 +28,16 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
-    public static final Migration MIGRATION_17_18 = new Migration(17, 18) {
+    public static final Migration MIGRATION_23_24 = new Migration(23, 24) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE my_table_copy( \n" +
-                    "    id INTEGER, \n" +
-                    "    lang INTEGER,\n" +
-                    "    data TEXT,\n" +
-                    "    PRIMARY KEY (id, lang)\n" +
-                    ");\n");
-//            database.execSQL("INSERT INTO my_table_copy (id, lang, data)\n" +
-//                    "   SELECT id, lang, data FROM my_table;\n");
-            database.execSQL("DROP TABLE my_table;\n");
-            database.execSQL("ALTER TABLE my_table_copy RENAME TO my_table;");
+            database.execSQL("CREATE TABLE \"ResultDictionary\" (\n" +
+                    "\t\"id\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                    "\t\"title\"\tTEXT,\n" +
+                    "\t\"isSelected\"\tINTEGER,\n" +
+                    "\t\"isDisabled\"\tINTEGER,\n" +
+                    "\t\"hasSms\"\tINTEGER\n" +
+                    ");");
         }
     };
 
@@ -151,5 +149,7 @@ public abstract class MyDatabase extends RoomDatabase {
     public abstract DaoTaxfifDictionary daoTaxfifDictionary();
 
     public abstract DaoServiceDictionary daoServiceDictionary();
+
+    public abstract DaoResultDictionary daoResultDictionary();
 
 }

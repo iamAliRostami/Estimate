@@ -725,8 +725,8 @@
                     android:textSize="@dimen/textSizeLarge"
                     tools:ignore="RtlHardcoded" />
 
-                <EditText
-                    android:id="@+id/editTextArzeshMelk"
+                <TextView
+                    android:id="@+id/textViewArzeshMelk"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -734,7 +734,6 @@
                     android:layout_weight="1"
                     android:background="@drawable/border_gray_1"
                     android:gravity="center"
-                    android:inputType="number"
                     android:lines="1"
                     android:maxLines="1"
                     android:paddingTop="@dimen/activity_medium_padding"

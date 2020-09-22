@@ -10,6 +10,15 @@ public class Input {
     List<TaxfifDictionary> taxfifDictionary;
     List<ServiceDictionary> serviceDictionary;
     List<ExaminerDuties> examinerDuties;
+    List<ResultDictionary> resultDictionary;
+
+    public List<ResultDictionary> getResultDictionary() {
+        return resultDictionary;
+    }
+
+    public void setResultDictionary(List<ResultDictionary> resultDictionary) {
+        this.resultDictionary = resultDictionary;
+    }
 
     public List<QotrEnsheabDictionary> getQotrEnsheabDictionary() {
         return qotrEnsheabDictionary;

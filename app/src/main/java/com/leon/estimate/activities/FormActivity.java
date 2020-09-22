@@ -88,24 +88,21 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
     public static SecondForm secondForm;
     public static boolean estelamShahrdari, parvane, motaqazi;
+    public static int value;
     public static ArrayList<MotherChild> motherChildren;
     Context context;
-    String trackNumber, json;
     @SuppressLint("StaticFieldLeak")
     public static FormActivity activity;
     MyDatabase dataBase;
-    DaoExaminerDuties daoExaminerDuties;
     FormActivityBinding binding;
     byte[] bitmap;
-    String token, billId;
+    String token, billId, trackNumber, json;
     CoordinateConversion conversion;
     double[] latLong;
-    int counter;
     private LocationManager locationManager;
     private double latitude, longitude;
-    int pageNumber = 1;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-    private int polygonIndex, place1Index, place2Index, place3Index;
+    private int polygonIndex, place1Index, place2Index, place3Index, pageNumber = 1, counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -584,7 +581,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         protected String doInBackground(Integer... integers) {
             dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                     .allowMainThreadQueries().build();
-            daoExaminerDuties = dataBase.daoExaminerDuties();
+            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
             examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, new PersonalFragment());

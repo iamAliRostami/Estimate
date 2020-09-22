@@ -16,9 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -98,6 +101,7 @@ public class FormFragment extends Fragment {
         new initializeSpinners().execute();
         setOnEditTextSodurDateClickListener();
         setOnEditTextTedadTejariTextChangeListener();
+        setOnTextViewArezeshdaraeiClickListener();
         setOnImageViewPlusClickListener();
         FormActivity.motherChildren = new ArrayList<>();
         //FormActivity.motherChildren.add(new MotherChild("s","s",1,2,3));
@@ -142,6 +146,18 @@ public class FormFragment extends Fragment {
             return prepareField();
         }
         return null;
+    }
+
+    void setOnTextViewArezeshdaraeiClickListener() {
+        binding.textViewArzeshMelk.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction;
+            if (fragmentManager != null) {
+                fragmentTransaction = fragmentManager.beginTransaction();
+                ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
+                valueFragment.show(fragmentTransaction, "");
+            }
+        });
     }
 
     void setOnEditTextTedadTejariTextChangeListener() {
@@ -201,7 +217,7 @@ public class FormFragment extends Fragment {
         calculationUserInput.tedadSaier = Integer.parseInt(binding.editTextTedadSaier.getText().toString());
         calculationUserInput.tedadTaxfif = Integer.parseInt(binding.editTextTedadTakhfif.getText().toString());
         calculationUserInput.zarfiatQarardadi = Integer.parseInt(binding.editTextZarfiatQaradadi.getText().toString());
-        calculationUserInput.arzeshMelk = Integer.parseInt(binding.editTextArzeshMelk.getText().toString());
+        calculationUserInput.arzeshMelk = Integer.parseInt(binding.textViewArzeshMelk.getText().toString());
         calculationUserInput.parNumber = binding.editTextPariNumber.getText().toString();
 
         calculationUserInput.karbariId = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
@@ -229,12 +245,23 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(binding.editTextTedadMaskooni)
                 && checkIsNoEmpty(binding.editTextTedadTejari)
                 && checkIsNoEmpty(binding.editTextTedadSaier)
-                && checkIsNoEmpty(binding.editTextArzeshMelk)
+                && checkIsNoEmpty(binding.textViewArzeshMelk)
                 && checkIsNoEmpty(binding.editTextTedadTakhfif)
                 && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
                 && checkIsNoEmpty(binding.editTextPariNumber);
 //                && checkIsNoEmpty(binding.editTextSodurDate)
 //                && checkIsNoEmpty(binding.editTextPelak);
+    }
+
+    boolean checkIsNoEmpty(TextView textView) {
+        View focusView;
+        if (textView.getText().toString().length() < 1) {
+            textView.setError(getString(R.string.error_empty));
+            focusView = textView;
+            focusView.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     boolean checkIsNoEmpty(EditText editText) {
@@ -338,7 +365,7 @@ public class FormFragment extends Fragment {
         binding.editTextTedadMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getTedadMaskooni()));
         binding.editTextTedadTejari.setText(String.valueOf(FormActivity.examinerDuties.getTedadTejari()));
         binding.editTextTedadSaier.setText(String.valueOf(FormActivity.examinerDuties.getTedadSaier()));
-        binding.editTextArzeshMelk.setText(String.valueOf(FormActivity.examinerDuties.getArzeshMelk()));
+        binding.textViewArzeshMelk.setText(String.valueOf(FormActivity.examinerDuties.getArzeshMelk()));
         binding.editTextTedadTakhfif.setText(String.valueOf(FormActivity.examinerDuties.getTedadTaxfif()));
         binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity.examinerDuties.getZarfiatQarardadi()));
         binding.editTextPariNumber.setText(FormActivity.examinerDuties.getParNumber());

@@ -1,5 +1,6 @@
 package com.leon.estimate.Infrastructure;
 
+import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
@@ -246,5 +247,9 @@ public interface IAbfaService {
 
     @POST("/MoshtarakinApi/Gis/V1/SanitationTransfer")
     Call<String> getGisSanitationTransfer(@Body GISInfo gisInfo);
+
+
+    @GET("/moshtarakinApi/ExaminationManager/GetArzeshDaraii?")
+    Call<Arzeshdaraei> getArzeshDaraii(@Query("zoneId") int zoneId);
 }
 
