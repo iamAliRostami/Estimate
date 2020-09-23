@@ -200,4 +200,16 @@
     <string name="estelam_shahrdari">استعلام شهرداری</string>
     <string name="ezharat_motaqazi">اظهارات متقاضی</string>
     <string name="parvane">پروانه</string>
+    <string name="nerkh_paye">نرخ پایه</string>
+    <string name="gozar">گذر</string>
+    <string name="block">بلوک</string>
+    <string name="miangin_arzesh">میانگین ارزش معاملاتی</string>
+    <string name="tedad_vahed_1">تعداد واحد</string>
+    <string name="maskooni">مسکونی</string>
+    <string name="tejari">تجاری</string>
+    <string name="edari_dolati">اداری-دولتی</string>
+    <string name="omoumi">عمومی و عام المنفعه</string>
+    <string name="sanati">صنعتی</string>
+    <string name="hotel">هتل</string>
+    <string name="counting">محاسبه</string>
 </resources>

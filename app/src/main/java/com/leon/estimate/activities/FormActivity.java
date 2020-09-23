@@ -35,6 +35,7 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
@@ -87,6 +88,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
     public static SecondForm secondForm;
+    public static Arzeshdaraei arzeshdaraei;
     public static boolean estelamShahrdari, parvane, motaqazi;
     public static int value;
     public static ArrayList<MotherChild> motherChildren;

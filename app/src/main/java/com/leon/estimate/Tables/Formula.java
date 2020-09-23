@@ -1,15 +1,15 @@
 package com.leon.estimate.Tables;
 
 public class Formula {
-    public int id;
-    public int zoneId;
-    public int gozarFrom;
-    public int gozarTo;
+    public double id;
+    public double zoneId;
+    public double gozarFrom;
+    public double gozarTo;
     public String gozarTitle;
-    public int maskooniZ;
-    public int tejariZ;
-    public int edariDolatiZ;
-    public int khadamatiZ;
-    public int sanatiZ;
-    public int sayerZ;
+    public double maskooniZ;
+    public double tejariZ;
+    public double edariDolatiZ;
+    public double khadamatiZ;
+    public double sanatiZ;
+    public double sayerZ;
 }

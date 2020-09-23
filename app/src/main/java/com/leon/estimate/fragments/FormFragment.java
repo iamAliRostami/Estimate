@@ -1,6 +1,5 @@
 package com.leon.estimate.fragments;
 
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,8 +28,17 @@ import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.DialogType;
+import com.leon.estimate.Enums.ProgressType;
+import com.leon.estimate.Enums.SharedReferenceKeys;
+import com.leon.estimate.Enums.SharedReferenceNames;
+import com.leon.estimate.Infrastructure.IAbfaService;
+import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
@@ -42,6 +51,11 @@ import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
+import com.leon.estimate.Utils.CustomDialog;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.adapters.MotherChildAdapter;
 import com.leon.estimate.databinding.FormFragmentBinding;
@@ -53,6 +67,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
@@ -104,8 +122,6 @@ public class FormFragment extends Fragment {
         setOnTextViewArezeshdaraeiClickListener();
         setOnImageViewPlusClickListener();
         FormActivity.motherChildren = new ArrayList<>();
-        //FormActivity.motherChildren.add(new MotherChild("s","s",1,2,3));
-
     }
 
     void setOnImageViewPlusClickListener() {
@@ -150,13 +166,14 @@ public class FormFragment extends Fragment {
 
     void setOnTextViewArezeshdaraeiClickListener() {
         binding.textViewArzeshMelk.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction;
-            if (fragmentManager != null) {
-                fragmentTransaction = fragmentManager.beginTransaction();
-                ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
-                valueFragment.show(fragmentTransaction, "");
-            }
+//            FragmentManager fragmentManager = getFragmentManager();
+//            FragmentTransaction fragmentTransaction;
+//            if (fragmentManager != null) {
+//                fragmentTransaction = fragmentManager.beginTransaction();
+//                ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
+//                valueFragment.show(fragmentTransaction, "");
+//            }
+            getArzeshdaraei();
         });
     }
 
@@ -415,6 +432,55 @@ public class FormFragment extends Fragment {
         protected void onPostExecute(Integer s) {
             super.onPostExecute(s);
             dialog.dismiss();
+        }
+    }
+
+    void getArzeshdaraei() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context,
+                SharedReferenceNames.ACCOUNT.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(true,
+                sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
+        final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
+        Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(
+                FormActivity.examinerDuties.getZoneId()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new GetArzeshdaraei(), new GetArzeshdaraeiIncomplete(), new GetError());
+    }
+
+    class GetArzeshdaraei implements ICallback<Arzeshdaraei> {
+        @Override
+        public void execute(Arzeshdaraei arzeshdaraeiResponse) {
+            FormActivity.arzeshdaraei = arzeshdaraeiResponse;
+            if (FormActivity.arzeshdaraei != null) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction;
+                if (fragmentManager != null) {
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
+                    valueFragment.show(fragmentTransaction, "");
+                }
+            }
+        }
+    }
+
+    class GetArzeshdaraeiIncomplete implements ICallbackIncomplete<Arzeshdaraei> {
+        @Override
+        public void executeIncomplete(Response<Arzeshdaraei> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, context, error,
+                    getString(R.string.dear_user),
+                    getString(R.string.login),
+                    getString(R.string.accepted));
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show();
         }
     }
 }

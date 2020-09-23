@@ -59,7 +59,7 @@
         android:id="@+id/button_accepted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_mid_padding"
         android:background="@drawable/border_green_2"
@@ -70,11 +70,23 @@
         android:textSize="@dimen/textSizeLarge"
         tools:ignore="ObsoleteLayoutParam,RelativeOverlap,RtlHardcoded" />
 
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="right"
+        android:layout_margin="@dimen/activity_mid_margin"
+        android:layout_toRightOf="@id/button_accepted"
+        android:gravity="right"
+        android:spinnerMode="dialog"
+        tools:ignore="RtlHardcoded" />
+
     <Button
         android:id="@+id/button_denial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_mid_padding"
         android:background="@drawable/border_red_2"

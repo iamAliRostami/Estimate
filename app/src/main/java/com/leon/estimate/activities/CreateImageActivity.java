@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,10 +36,12 @@ import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoImages;
+import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
+import com.leon.estimate.Tables.ResultDictionary;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
@@ -48,6 +53,8 @@ import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.CreateImageActivityBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,6 +63,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.MediaType;
@@ -76,6 +84,7 @@ public class CreateImageActivity extends AppCompatActivity {
     Context context;
     CreateImageActivityBinding binding;
     Bitmap bitmap;
+    List<ResultDictionary> resultDictionaries;
     MyDatabase dataBase;
     SharedPreferenceManager sharedPreferenceManager;
     String trackNumber, billId, imageFileName;
@@ -97,9 +106,37 @@ public class CreateImageActivity extends AppCompatActivity {
                 SharedReferenceNames.ACCOUNT.getValue());
         dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
+
+        DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+        resultDictionaries = daoResultDictionary.getResults();
+        initializeSpinner();
         new CreateImage(context).execute();
         binding.buttonDenial.setOnClickListener(v -> finish());
         setOnAcceptedButtonClickListener();
+    }
+
+    void initializeSpinner() {
+        List<String> arrayListSpinner = new ArrayList<>();
+        for (ResultDictionary resultDictionary : resultDictionaries) {
+            arrayListSpinner.add(resultDictionary.getTitle());
+        }
+        binding.spinner1.setAdapter(createArrayAdapter(arrayListSpinner));
+    }
+
+    ArrayAdapter<String> createArrayAdapter(List<String> arrayListSpinner) {
+        return new ArrayAdapter<String>(context,
+                R.layout.dropdown_menu_popup_item, arrayListSpinner) {
+            @NotNull
+            @Override
+            public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                final CheckedTextView textView = view.findViewById(android.R.id.text1);
+                textView.setChecked(true);
+                textView.setTextSize(context.getResources().getDimension(R.dimen.textSizeSmall));
+                textView.setTextColor(getResources().getColor(R.color.black));
+                return view;
+            }
+        };
     }
 
     void setOnAcceptedButtonClickListener() {
@@ -217,7 +254,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(examinerDuties.getNationalId(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 19 / 36;
         cs.drawText(shenasname, xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 12 / 36;
+        xCoordinate = (float) src.getWidth() * 11 / 36;
         cs.drawText(examinerDuties.getFirstName(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 2 / 36;
         cs.drawText(examinerDuties.getSureName(), xCoordinate, yCoordinate, tPaint);

@@ -1,13 +1,13 @@
 package com.leon.estimate.Tables;
 
 public class Block {
-    public int id;
-    public int zoneId;
+    public double id;
+    public double zoneId;
     public String blockId;
-    public int maskooni;
-    public int tejari;
-    public int edariDolati;
-    public int khadamati;
-    public int sanati;
-    public int sayer;
+    public double maskooni;
+    public double tejari;
+    public double edariDolati;
+    public double khadamati;
+    public double sanati;
+    public double sayer;
 }
