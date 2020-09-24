@@ -212,4 +212,8 @@
     <string name="sanati">صنعتی</string>
     <string name="hotel">هتل</string>
     <string name="counting">محاسبه</string>
+    <string name="request">ثبت درخواست</string>
+    <string name="after_sale_services">خدمات پس از فروش</string>
+    <string name="sale_new">انشعاب جدید</string>
+    <string name="send_request">ثبت درخواست</string>
 </resources>

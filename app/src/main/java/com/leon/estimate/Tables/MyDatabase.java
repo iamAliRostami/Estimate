@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
         RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class},
-        version = 24, exportSchema = false)
+        version = 25, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
     public static final Migration MIGRATION_22_23 = new Migration(22, 23) {
         @Override
@@ -28,16 +28,10 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
-    public static final Migration MIGRATION_23_24 = new Migration(23, 24) {
+    public static final Migration MIGRATION_24_25 = new Migration(23, 24) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE \"ResultDictionary\" (\n" +
-                    "\t\"id\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
-                    "\t\"title\"\tTEXT,\n" +
-                    "\t\"isSelected\"\tINTEGER,\n" +
-                    "\t\"isDisabled\"\tINTEGER,\n" +
-                    "\t\"hasSms\"\tINTEGER\n" +
-                    ");");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column resultId INTEGER;");
         }
     };
 

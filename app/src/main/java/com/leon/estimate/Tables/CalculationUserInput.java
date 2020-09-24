@@ -69,6 +69,8 @@ public class CalculationUserInput {
     public String description;
     boolean sent;
 
+    public int resultId;
+
     public boolean isSent() {
         return sent;
     }

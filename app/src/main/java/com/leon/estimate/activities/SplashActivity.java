@@ -2,6 +2,7 @@ package com.leon.estimate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -65,10 +66,23 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
-        binding.imageViewSplashScreen.setImageDrawable(null);
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 
     @Override
@@ -76,10 +90,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     protected void onResume() {

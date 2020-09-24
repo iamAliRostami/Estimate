@@ -15,6 +15,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -162,6 +163,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.imageViewUpload:
                 send();
                 break;
+            case R.id.imageViewRequest:
+                intent = new Intent(getApplicationContext(), MotherChildActivity.class);
+                startActivity(intent);
+                break;
             case R.id.imageViewPaper:
                 intent = new Intent(getApplicationContext(), TakeOtherPhotoActivity.class);
                 startActivity(intent);
@@ -196,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         }
 //        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
 //                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_23_24).build();
+//                .addMigrations(MyDatabase.MIGRATION_24_25).build();
 //        readData();
     }
 
@@ -972,5 +977,23 @@ public class MainActivity extends AppCompatActivity
         public void executeIncomplete(Response<GISToken> response) {
 
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }

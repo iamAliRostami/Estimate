@@ -156,19 +156,14 @@ public class ValueFragment extends DialogFragment {
 
             if ((block.maskooni * formula.maskooniZ) > 20000)
                 countMaskooni = (block.maskooni * formula.maskooniZ);
-
             if ((block.tejari * formula.tejariZ) > 20000)
                 countTejari = (block.tejari * formula.tejariZ);
-
             if ((block.edariDolati * formula.edariDolatiZ) > 20000)
                 countEdariDolati = (block.edariDolati * formula.edariDolatiZ);
-
             if ((block.sanati * formula.sanatiZ) > 20000)
                 countSanati = (block.sanati * formula.sanatiZ);
-
             if ((block.khadamati * formula.khadamatiZ) > 20000)
                 countKhadamati = (block.khadamati * formula.khadamatiZ);
-
             if ((block.sayer * formula.sayerZ) > 20000)
                 countSayer = (block.sayer * formula.sayerZ);
 

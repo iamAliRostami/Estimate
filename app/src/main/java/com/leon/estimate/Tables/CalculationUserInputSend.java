@@ -53,6 +53,8 @@ public class CalculationUserInputSend {
     public String address;
     public String description;
 
+    public int resultId;
+
     public CalculationUserInputSend(String trackingId, String trackNumber, int requestType,
                                     String parNumber, String billId, String radif, int zoneId,
                                     String notificationMobile, int karbariId, int qotrEnsheabId,
@@ -205,6 +207,7 @@ public class CalculationUserInputSend {
         this.adamTaxfifAb = calculationUserInput.adamTaxfifAb;
         this.adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
         this.address = calculationUserInput.address;
+        this.resultId = calculationUserInput.resultId;
         setSelectedServices(calculationUserInput);
     }
 

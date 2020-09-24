@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -214,18 +215,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                     prepareToSend();
                     startActivity(intent);
-//                    MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.fragment);
-//                    Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
-//                    if (mapFragment != null) {
-//                        bitmap = convertBitmapToByte(mapFragment.convertMapToBitmap());
-//                        intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
-//                    }
-//                    intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
-//                    intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
-//                    intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
-//                    prepareToSend();
-//                    startActivity(intent);
-//                    finish();
                     break;
             }
         });
@@ -738,5 +727,21 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
 }

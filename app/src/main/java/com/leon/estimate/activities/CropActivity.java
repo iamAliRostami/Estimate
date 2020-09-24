@@ -13,6 +13,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
@@ -145,6 +146,7 @@ public class CropActivity extends AppCompatActivity {
             }
         }
     }
+
     private void setProgressBar(boolean isShow) {
         RelativeLayout rlContainer = findViewById(R.id.rlContainer);
         setViewInteract(rlContainer, !isShow);
@@ -202,7 +204,7 @@ public class CropActivity extends AppCompatActivity {
         binding.imageView.setImageBitmap(scaledBitmap);
 
         Bitmap tempBitmap = ((BitmapDrawable) binding.imageView.getDrawable()).getBitmap();
-        Map<Integer, PointF> pointFs = null;
+        Map<Integer, PointF> pointFs;
         try {
             pointFs = getEdgePoints(tempBitmap);
             binding.polygonView.setPoints(pointFs);
@@ -327,5 +329,23 @@ public class CropActivity extends AppCompatActivity {
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -203,6 +204,7 @@ public class CreateImageActivity extends AppCompatActivity {
         GetError error = new GetError();
 
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+        calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
@@ -580,5 +582,23 @@ public class CreateImageActivity extends AppCompatActivity {
             Toast.makeText(CreateImageActivity.this, error, Toast.LENGTH_LONG).show();
 //            finish();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }
