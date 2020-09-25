@@ -451,7 +451,9 @@ public class FormFragment extends Fragment {
         @Override
         public void execute(Arzeshdaraei arzeshdaraeiResponse) {
             FormActivity.arzeshdaraei = arzeshdaraeiResponse;
-            if (FormActivity.arzeshdaraei != null) {
+            if (FormActivity.arzeshdaraei != null && FormActivity.arzeshdaraei.formulas != null &&
+                    FormActivity.arzeshdaraei.formulas.size() > 0 && FormActivity.arzeshdaraei.blocks != null
+                    && FormActivity.arzeshdaraei.blocks.size() > 0) {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 if (fragmentManager != null) {
@@ -459,6 +461,12 @@ public class FormFragment extends Fragment {
                     ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
                     valueFragment.show(fragmentTransaction, "");
                 }
+            } else {
+                new CustomDialog(DialogType.Yellow, context,
+                        context.getString(R.string.error_change_server),
+                        getString(R.string.dear_user),
+                        getString(R.string.arzesh_mantaghe),
+                        getString(R.string.accepted));
             }
         }
     }
@@ -470,7 +478,7 @@ public class FormFragment extends Fragment {
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, context, error,
                     getString(R.string.dear_user),
-                    getString(R.string.login),
+                    getString(R.string.arzesh_mantaghe),
                     getString(R.string.accepted));
         }
     }
