@@ -13,6 +13,7 @@ import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.LoginFeedBack;
 import com.leon.estimate.Tables.LoginInfo;
 import com.leon.estimate.Tables.Place;
+import com.leon.estimate.Tables.Request;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Tables.Uri;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -248,8 +249,14 @@ public interface IAbfaService {
     @POST("/MoshtarakinApi/Gis/V1/SanitationTransfer")
     Call<String> getGisSanitationTransfer(@Body GISInfo gisInfo);
 
-
     @GET("/moshtarakinApi/ExaminationManager/GetArzeshDaraii?")
     Call<Arzeshdaraei> getArzeshDaraii(@Query("zoneId") int zoneId);
+
+    @POST("/moshtarakinApi/ExaminationManager/RegisterNew")
+    Call<SimpleMessage> sendRequestNew(@Body Request request);
+
+    @POST("/moshtarakinApi/ExaminationManager/RegisterAS")
+    Call<SimpleMessage> sendRequestAfterSale(@Body Request request);
+
 }
 

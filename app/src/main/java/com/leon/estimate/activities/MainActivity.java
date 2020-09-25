@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity
         binding.imageViewPaper.setOnClickListener(onClickListener);
         binding.imageViewExit.setOnClickListener(onClickListener);
         binding.imageViewForm.setOnClickListener(onClickListener);
+        binding.imageViewRequest.setOnClickListener(onClickListener);
     }
 
     @SuppressLint("MissingPermission")
@@ -762,9 +763,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    static class DownloadIncomplete implements ICallbackIncomplete<Input> {
+    class DownloadIncomplete implements ICallbackIncomplete<Input> {
         @Override
         public void executeIncomplete(Response<Input> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, context, error,
+                    getString(R.string.dear_user),
+                    getString(R.string.login),
+                    getString(R.string.accepted));
             Log.e("Download Incomplete", response.toString());
         }
     }

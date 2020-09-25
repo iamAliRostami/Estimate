@@ -1,23 +1,67 @@
 package com.leon.estimate.activities;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
+import com.google.gson.Gson;
+import com.leon.estimate.Enums.DialogType;
+import com.leon.estimate.Enums.ProgressType;
+import com.leon.estimate.Enums.SharedReferenceKeys;
+import com.leon.estimate.Enums.SharedReferenceNames;
+import com.leon.estimate.Infrastructure.IAbfaService;
+import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.DaoKarbariDictionary;
+import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
+import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
+import com.leon.estimate.Tables.DaoResultDictionary;
+import com.leon.estimate.Tables.DaoServiceDictionary;
+import com.leon.estimate.Tables.DaoTaxfifDictionary;
+import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.Input;
+import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Tables.Request;
+import com.leon.estimate.Utils.CustomDialog;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.MotherChildActivityBinding;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MotherChildActivity extends AppCompatActivity {
     MotherChildActivityBinding binding;
-    boolean isNew = false;
+    boolean isNew = true;
+    MyDatabase dataBase;
+    Context context;
+    String billId, nationNumber, mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = MotherChildActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        context = this;
         initialize();
     }
 
@@ -29,8 +73,9 @@ public class MotherChildActivity extends AppCompatActivity {
     void setOnButtonClickListener() {
         binding.buttonSendRequest.setOnClickListener(v -> {
             boolean cancel = false;
-            String billId = binding.editTextBillId.getText().toString();
-            String nationNumber = binding.editTextNationNumber.getText().toString();
+            billId = binding.editTextBillId.getText().toString();
+            nationNumber = binding.editTextNationNumber.getText().toString();
+            mobile = binding.editTextMobile.getText().toString();
             if (billId.length() < 6) {
                 View focusView;
                 binding.editTextBillId.setError(getString(R.string.error_format));
@@ -38,48 +83,81 @@ public class MotherChildActivity extends AppCompatActivity {
                 focusView.requestFocus();
                 cancel = true;
             }
-            if (!cancel && nationNumber.length() < 10) {
+            if (!cancel && mobile.length() < 11) {
                 View focusView;
                 binding.editTextNationNumber.setError(getString(R.string.error_format));
-                focusView = binding.editTextNationNumber;
+                focusView = binding.editTextMobile;
                 focusView.requestFocus();
                 cancel = true;
             }
-            if (!cancel && !isNew)
+            if (!cancel && isNew) {
                 if ((checkIsNoEmpty(binding.editTextAddress) ||
-                        checkIsNoEmpty(binding.editTextNationNumber) ||
                         checkIsNoEmpty(binding.editTextFamily) ||
                         checkIsNoEmpty(binding.editTextName))) {
                     cancel = true;
 
                 }
+                if (!cancel && nationNumber.length() < 10) {
+                    View focusView;
+                    binding.editTextNationNumber.setError(getString(R.string.error_format));
+                    focusView = binding.editTextNationNumber;
+                    focusView.requestFocus();
+                    cancel = true;
+                }
+            }
             if (!cancel) {
                 if (isNew)
                     sendNewRequest();
-                else senAfterSaleRequest();
+                else
+                    senAfterSaleRequest();
             }
         });
-    }
-
-    void sendNewRequest() {
-    }
-
-    void senAfterSaleRequest() {
     }
 
     void setOnRadioGroupClickListener() {
         binding.radioGroupRequestType.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radioButtonNew) {
                 isNew = true;
-                binding.linearLayoutName.setVisibility(View.GONE);
-                binding.linearLayoutNation.setVisibility(View.GONE);
-            } else {
-                isNew = false;
                 binding.linearLayoutName.setVisibility(View.VISIBLE);
                 binding.linearLayoutNation.setVisibility(View.VISIBLE);
+            } else {
+                isNew = false;
+                binding.linearLayoutName.setVisibility(View.GONE);
+                binding.linearLayoutNation.setVisibility(View.GONE);
             }
         });
     }
+
+    void sendNewRequest() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
+                getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        final IAbfaService sendRequest = retrofit.create(IAbfaService.class);
+        ArrayList<Integer> selectedServices = new ArrayList<>();
+        selectedServices.add(1);
+        selectedServices.add(2);
+        Call<SimpleMessage> call = sendRequest.sendRequestNew(new Request(billId, selectedServices,
+                binding.editTextName.getText().toString(),
+                binding.editTextFamily.getText().toString(), mobile, nationNumber,
+                binding.editTextAddress.getText().toString()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new SendRequest(), new SendRequestIncomplete(), new GetError());
+    }
+
+    void senAfterSaleRequest() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
+                getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        final IAbfaService sendRequest = retrofit.create(IAbfaService.class);
+        ArrayList<Integer> selectedServices = new ArrayList<>();
+        selectedServices.add(7);
+        Call<SimpleMessage> call = sendRequest.sendRequestAfterSale(new Request(selectedServices, billId, mobile));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new SendRequest(), new SendRequestIncomplete(), new GetError());
+    }
+
 
     boolean checkIsNoEmpty(EditText editText) {
         View focusView;
@@ -90,5 +168,132 @@ public class MotherChildActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    void download() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
+                getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+        String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        final IAbfaService getKardex = retrofit.create(IAbfaService.class);
+        Call<Input> call = getKardex.getMyWorks();
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new Download(), new DownloadIncomplete(), new GetError());
+    }
+
+    static class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+        }
+    }
+
+    class SendRequest implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            binding.editTextAddress.setText("");
+            binding.editTextFamily.setText("");
+            binding.editTextName.setText("");
+            binding.editTextMobile.setText("");
+            binding.editTextNationNumber.setText("");
+            binding.editTextBillId.setText("");
+            new CustomDialog(DialogType.Green, context, simpleMessage.getMessage(),
+                    getString(R.string.dear_user), getString(R.string.receive),
+                    getString(R.string.accepted));
+            download();
+        }
+    }
+
+    class SendRequestIncomplete implements ICallbackIncomplete<SimpleMessage> {
+
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+            Log.e("error", String.valueOf(response));
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            if (response.code() == 400) {
+                if (response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        error = jObjError.getString("message");
+                    } catch (Exception e) {
+                        Log.e("error", e.toString());
+                    }
+                }
+            }
+            new CustomDialog(DialogType.Green, context, error,
+                    getString(R.string.dear_user), getString(R.string.receive),
+                    getString(R.string.accepted));
+        }
+    }
+
+    class Download implements ICallback<Input> {
+        @Override
+        public void execute(Input input) {
+            if (input != null) {
+                List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
+                for (int i = 0; i < examinerDutiesList.size(); i++) {
+                    Gson gson = new Gson();
+                    examinerDutiesList.get(i).setRequestDictionaryString(
+                            gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+                }
+                dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                        .allowMainThreadQueries().build();
+
+                DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+                List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+                for (int i = 0; i < examinerDutiesList.size(); i++) {
+                    examinerDutiesList.get(i).setTrackNumber(
+                            examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+                    examinerDutiesList.get(i).setRadif(
+                            examinerDutiesList.get(i).getRadif().replace(".0", ""));
+                    ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+                    for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                        ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
+                            examinerDutiesList.remove(i);
+                            j = examinerDutiesListTemp.size();
+                            i--;
+                        }
+                    }
+                }
+                daoExaminerDuties.insertAll(examinerDutiesList);
+
+                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+
+                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+
+                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+                daoServiceDictionary.insertAll(input.getServiceDictionary());
+
+                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+
+                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+
+                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+                daoResultDictionary.insertAll(input.getResultDictionary());
+//                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
+//                        input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
+//                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+//            } else {11396282116314
+//                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    class DownloadIncomplete implements ICallbackIncomplete<Input> {
+        @Override
+        public void executeIncomplete(Response<Input> response) {
+            Log.e("Download Incomplete", response.toString());
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, context, "به صفحه اصلی رفته و بارگیری نمایید.",
+                    getString(R.string.dear_user),
+                    getString(R.string.login),
+                    getString(R.string.accepted));
+        }
     }
 }

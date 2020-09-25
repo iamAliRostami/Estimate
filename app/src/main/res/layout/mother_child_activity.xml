@@ -48,6 +48,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:padding="@dimen/activity_medium_padding"
+                android:checkedButton="@id/radioButtonNew"
                 android:weightSum="2">
 
                 <RadioButton
@@ -57,7 +58,6 @@
                     android:layout_weight="1"
                     android:text="@string/sale_new"
                     android:textSize="@dimen/textSizeMedium" />
-
                 <RadioButton
                     android:id="@+id/radioButtonAfterSale"
                     android:layout_width="wrap_content"
@@ -65,6 +65,7 @@
                     android:layout_weight="1"
                     android:text="@string/after_sale_services"
                     android:textSize="@dimen/textSizeMedium" />
+
             </RadioGroup>
         </LinearLayout>
 
@@ -120,7 +121,7 @@
                 tools:ignore="RtlHardcoded" />
 
             <EditText
-                android:id="@+id/editTextSifoon125"
+                android:id="@+id/editTextMobile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
