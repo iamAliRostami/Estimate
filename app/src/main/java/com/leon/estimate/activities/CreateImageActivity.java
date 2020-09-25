@@ -95,6 +95,7 @@ public class CreateImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = CreateImageActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getExtra();
