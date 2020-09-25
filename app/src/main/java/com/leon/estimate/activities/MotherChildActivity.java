@@ -197,7 +197,7 @@ public class MotherChildActivity extends AppCompatActivity {
             binding.editTextNationNumber.setText("");
             binding.editTextBillId.setText("");
             new CustomDialog(DialogType.Green, context, simpleMessage.getMessage(),
-                    getString(R.string.dear_user), getString(R.string.receive),
+                    getString(R.string.dear_user), getString(R.string.request),
                     getString(R.string.accepted));
             download();
         }
@@ -221,7 +221,7 @@ public class MotherChildActivity extends AppCompatActivity {
                 }
             }
             new CustomDialog(DialogType.Green, context, error,
-                    getString(R.string.dear_user), getString(R.string.receive),
+                    getString(R.string.dear_user), getString(R.string.request),
                     getString(R.string.accepted));
         }
     }
@@ -288,11 +288,9 @@ public class MotherChildActivity extends AppCompatActivity {
         @Override
         public void executeIncomplete(Response<Input> response) {
             Log.e("Download Incomplete", response.toString());
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, context, "به صفحه اصلی رفته و بارگیری نمایید.",
                     getString(R.string.dear_user),
-                    getString(R.string.login),
+                    getString(R.string.request),
                     getString(R.string.accepted));
         }
     }
