@@ -225,7 +225,6 @@
                     android:singleLine="true"
                     tools:ignore="Autofill,LabelFor" />
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -268,6 +267,248 @@
                     android:layout_marginBottom="@dimen/activity_mid_margin"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:text="@string/zarfiat_qaradadi"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextZarfiatQaradadi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLength="8"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/parvane"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding">
+
+                    <CheckBox
+                        android:id="@+id/checkbox4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/parvane_number"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextPariNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="phone"
+                    android:lines="1"
+                    android:maxLength="8"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/estelam_shahrdari"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding">
+
+                    <CheckBox
+                        android:id="@+id/checkbox3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/sodur_date"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextSodurDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:editable="false"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:lines="1"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,Deprecated,LabelFor,TextFields" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/ezharat_motaqazi"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding">
+
+                    <CheckBox
+                        android:id="@+id/checkbox2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/pelak"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextPelak"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLength="8"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor,TooManyViews" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
                     android:text="@string/arse_kol"
                     android:textColor="@color/blue4"
                     android:textSize="@dimen/textSizeLarge"
@@ -275,113 +516,6 @@
 
                 <EditText
                     android:id="@+id/editTextArese"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/ayan_maskooni"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextAianMaskooni"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/aian_non_maskouni"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-
-                <EditText
-                    android:id="@+id/editTextAianNonMaskooni"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/aian_kol"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextAianKol"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -444,6 +578,36 @@
                     android:layout_marginBottom="@dimen/activity_mid_margin"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:text="@string/aian_kol"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextAianKol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
                     android:text="@string/tedad_tejari"
                     android:textColor="@color/blue4"
                     android:textSize="@dimen/textSizeLarge"
@@ -467,37 +631,7 @@
                     android:singleLine="true"
                     tools:ignore="Autofill,LabelFor" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/other_number"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextTedadSaier"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
             </LinearLayout>
-
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/linearLayoutTejari"
@@ -604,12 +738,150 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerViewMotherChild"
+                        android:id="@+id/recyclerViewTejariha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:listitem="@layout/item_mother_child" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/other_number"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextTedadSaier"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/ayan_maskooni"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <EditText
+                    android:id="@+id/editTextAianMaskooni"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/arzesh_mantaghe"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:id="@+id/textViewArzeshMelk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/aian_non_maskouni"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+
+                <EditText
+                    android:id="@+id/editTextAianNonMaskooni"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_gray_1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding"
+                    android:singleLine="true"
+                    tools:ignore="Autofill,LabelFor" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -679,74 +951,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/zarfiat_qaradadi"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextZarfiatQaradadi"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:lines="1"
-                    android:maxLength="8"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/arzesh_mantaghe"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/textViewArzeshMelk"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:weightSum="4"
+                tools:ignore="TooManyViews">
 
                 <TextView
                     android:layout_width="0dp"
@@ -775,206 +981,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/ezharat_motaqazi"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding">
-
-                    <CheckBox
-                        android:id="@+id/checkbox2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/estelam_shahrdari"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding">
-
-                    <CheckBox
-                        android:id="@+id/checkbox3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/parvane"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding">
-
-                    <CheckBox
-                        android:id="@+id/checkbox4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/parvane_number"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextPariNumber"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="phone"
-                    android:lines="1"
-                    android:maxLength="8"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/sodur_date"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextSodurDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:editable="false"
-                    android:gravity="center"
-                    android:inputType="none"
-                    android:lines="1"
-                    android:maxLength="10"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,Deprecated,LabelFor,TextFields" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/activity_mid_margin"
-                    android:layout_marginBottom="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/pelak"
-                    android:textColor="@color/blue4"
-                    android:textSize="@dimen/textSizeLarge"
-                    tools:ignore="RtlHardcoded" />
-
-                <EditText
-                    android:id="@+id/editTextPelak"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:lines="1"
-                    android:maxLength="8"
-                    android:maxLines="1"
-                    android:paddingTop="@dimen/activity_medium_padding"
-                    android:paddingBottom="@dimen/activity_medium_padding"
-                    android:singleLine="true"
-                    tools:ignore="Autofill,LabelFor" />
 
             </LinearLayout>
         </LinearLayout>

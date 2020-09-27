@@ -46,18 +46,18 @@ import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.KarbariDictionary;
-import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
+import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.activities.FormActivity;
-import com.leon.estimate.adapters.MotherChildAdapter;
+import com.leon.estimate.adapters.TejarihaAdapter;
 import com.leon.estimate.databinding.FormFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
@@ -82,7 +82,7 @@ public class FormFragment extends Fragment {
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    MotherChildAdapter motherChildAdapter;
+    TejarihaAdapter tejarihaAdapter;
 
     public FormFragment() {
 
@@ -104,7 +104,7 @@ public class FormFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_melk)));
+                context.getString(R.string.app_name).concat(" / ").concat("صفحه سوم"));
     }
 
     @Override
@@ -121,7 +121,16 @@ public class FormFragment extends Fragment {
         setOnEditTextTedadTejariTextChangeListener();
         setOnTextViewArezeshdaraeiClickListener();
         setOnImageViewPlusClickListener();
-        FormActivity.motherChildren = new ArrayList<>();
+        tejarihaAdapter = new TejarihaAdapter(context);
+        binding.recyclerViewTejariha.setAdapter(tejarihaAdapter);
+        binding.recyclerViewTejariha.setLayoutManager(new LinearLayoutManager(getActivity()) {
+            @Override
+            public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
+                                                         @NonNull View child,
+                                                         @NonNull Rect rect, boolean immediate) {
+                return false;
+            }
+        });
     }
 
     void setOnImageViewPlusClickListener() {
@@ -134,21 +143,10 @@ public class FormFragment extends Fragment {
                 int tedadVahed = Integer.parseInt(binding.editTextVahed.getText().toString());
                 String vahedMohasebe = binding.editTextVahedMohasebe.getText().toString();
                 String a = binding.editTextA2.getText().toString();
-                MotherChild motherChild = new MotherChild(karbari, noeShoql, tedadVahed, vahedMohasebe, a);
-                FormActivity.motherChildren.add(motherChild);
-                if (FormActivity.motherChildren.size() == 1) {
-                    motherChildAdapter = new MotherChildAdapter(context);
-                    binding.recyclerViewMotherChild.setAdapter(motherChildAdapter);
-                    binding.recyclerViewMotherChild.setLayoutManager(new LinearLayoutManager(getActivity()) {
-                        @Override
-                        public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
-                                                                     @NonNull View child,
-                                                                     @NonNull Rect rect, boolean immediate) {
-                            return false;
-                        }
-                    });
-                }
-                motherChildAdapter.notifyDataSetChanged();
+                Tejariha tejariha = new Tejariha(karbari, noeShoql, tedadVahed, vahedMohasebe, a,
+                        FormActivity.examinerDuties.getTrackNumber());
+                FormActivity.tejarihas.add(tejariha);
+                tejarihaAdapter.notifyDataSetChanged();
                 binding.editTextA2.setText("");
                 binding.editTextNoeShoql.setText("");
                 binding.editTextVahed.setText("");
@@ -166,13 +164,6 @@ public class FormFragment extends Fragment {
 
     void setOnTextViewArezeshdaraeiClickListener() {
         binding.textViewArzeshMelk.setOnClickListener(v -> {
-//            FragmentManager fragmentManager = getFragmentManager();
-//            FragmentTransaction fragmentTransaction;
-//            if (fragmentManager != null) {
-//                fragmentTransaction = fragmentManager.beginTransaction();
-//                ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
-//                valueFragment.show(fragmentTransaction, "");
-//            }
             getArzeshdaraei();
         });
     }
@@ -244,9 +235,9 @@ public class FormFragment extends Fragment {
         calculationUserInput.ensheabQeireDaem = binding.checkbox1.isChecked();
         FormActivity.karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
         FormActivity.noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
-        FormActivity.estelamShahrdari = binding.checkbox3.isChecked();
-        FormActivity.parvane = binding.checkbox4.isChecked();
-        FormActivity.motaqazi = binding.checkbox2.isChecked();
+        FormActivity.examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
+        FormActivity.examinerDuties.setParvane(binding.checkbox4.isChecked());
+        FormActivity.examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
         return calculationUserInput;
     }
 
@@ -390,6 +381,10 @@ public class FormFragment extends Fragment {
         binding.editTextPelak.setText(FormActivity.examinerDuties.getPostalCode());
 
         binding.checkbox1.setChecked(FormActivity.examinerDuties.isEnsheabQeirDaem());
+        binding.checkbox2.setChecked(FormActivity.examinerDuties.isMotaqazi());
+        binding.checkbox3.setChecked(FormActivity.examinerDuties.isEstelamShahrdari());
+        binding.checkbox4.setChecked(FormActivity.examinerDuties.isParvane());
+
     }
 
     ArrayAdapter<String> createArrayAdapter(List<String> arrayListSpinner) {
@@ -441,6 +436,7 @@ public class FormFragment extends Fragment {
         Retrofit retrofit = NetworkHelper.getInstance(true,
                 sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
         final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
+        Log.e("zone", FormActivity.examinerDuties.getZoneId());
         Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(
                 FormActivity.examinerDuties.getZoneId()));
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,

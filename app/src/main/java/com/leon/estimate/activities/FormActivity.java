@@ -40,14 +40,15 @@ import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.DaoTejariha;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.GISInfo;
 import com.leon.estimate.Tables.GISToken;
-import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Place;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.SecondForm;
+import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
 import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
@@ -84,15 +85,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FormActivity extends AppCompatActivity implements LocationListener {
-    public static String karbari, noeVagozari, shenasname;
+    public static String karbari, noeVagozari;//, shenasname;
     public static List<RequestDictionary> requestDictionaries;
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
     public static SecondForm secondForm;
     public static Arzeshdaraei arzeshdaraei;
-    public static boolean estelamShahrdari, parvane, motaqazi;
     public static int value;
-    public static ArrayList<MotherChild> motherChildren;
+    public static ArrayList<Tejariha> tejarihas;
+    public static ArrayList<Integer> valueInteger;
     Context context;
     @SuppressLint("StaticFieldLeak")
     public static FormActivity activity;
@@ -105,7 +106,10 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
     private double latitude, longitude;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-    private int polygonIndex, place1Index, place2Index, place3Index, pageNumber = 1, counter;
+    private int polygonIndex;
+    private int place1Index;
+    private int place2Index;
+    private int pageNumber = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +129,18 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
     @SuppressLint("ClickableViewAccessibility")
     void initialize() {
+        valueInteger = new ArrayList<>();
+        valueInteger.add(0);
+        valueInteger.add(0);
+        valueInteger.add(0);
+        valueInteger.add(0);
+        valueInteger.add(0);
+        valueInteger.add(0);
+        valueInteger.add(0);
+        valueInteger.add(0);
         calculationUserInput = new CalculationUserInput();
         calculationUserInputTemp = new CalculationUserInput();
+        tejarihas = new ArrayList<>();
         new GetDBData().execute();
         setOnButtonClickListener();
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -190,23 +204,19 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                         secondForm = secondFormFragment.setOnButtonNextClickListener();
                     }
                     if (secondForm != null) {
+                        examinerDuties.updateExaminerDuties(secondForm);
                         binding.buttonNext.setText(R.string.save_info);
                         pageNumber = pageNumber + 1;
                         binding.fragment.setVisibility(View.GONE);
                         binding.relativeLayoutMap.setVisibility(View.VISIBLE);
                         setActionBarTitle(
-                                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.location)));
-//                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                        fragmentTransaction.replace(R.id.fragment, new MapFragment());
-//                        fragmentTransaction.commit();
+                                context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
                     }
                     break;
                 case 5:
                     Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
                     bitmap = convertBitmapToByte(convertMapToBitmap());
                     intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
-//                    if (bitmap != null) {
-//                    }
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                     if (examinerDuties.getBillId() != null)
                         intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
@@ -310,6 +320,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         calculationUserInput.mobile = calculationUserInputTemp.mobile;
         calculationUserInput.address = calculationUserInputTemp.address;
         calculationUserInput.description = calculationUserInputTemp.description;
+        calculationUserInput.shenasname = calculationUserInputTemp.shenasname;
 
         examinerDuties.setNationalId(calculationUserInputTemp.nationalId);
         examinerDuties.setFirstName(calculationUserInputTemp.firstName);
@@ -334,6 +345,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         fillCalculationUserInput();
         updateCalculationUserInput();
         updateExamination();
+        updateTejariha();
     }
 
     void fillCalculationUserInput() {
@@ -357,6 +369,12 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     void updateExamination() {
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         daoExaminerDuties.insert(examinerDuties.updateExaminerDuties(calculationUserInput));
+    }
+
+    void updateTejariha() {
+        DaoTejariha daoTejariha = dataBase.daoTejariha();
+        for (int i = 0; i < tejarihas.size(); i++)
+            daoTejariha.insertTejariha(tejarihas.get(i));
     }
 
     public void setActionBarTitle(String title) {
@@ -574,6 +592,23 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     .allowMainThreadQueries().build();
             DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
             examinerDuties = daoExaminerDuties.unreadExaminerDutiesByTrackNumber(trackNumber);
+            secondForm = new SecondForm(examinerDuties.getFaseleKhakiA(),
+                    examinerDuties.getFaseleKhakiF(), examinerDuties.getFaseleAsphaultA(),
+                    examinerDuties.getFaseleAsphaultF(), examinerDuties.getFaseleSangA(),
+                    examinerDuties.getFaseleSangF(), examinerDuties.getFaseleOtherA(),
+                    examinerDuties.getFaseleOtherF(), examinerDuties.getQotrLooleS(),
+                    examinerDuties.getJensLooleS(), examinerDuties.getNoeMasrafI(),
+                    examinerDuties.getNoeMasrafS(), examinerDuties.isVaziatNasbPompI(),
+                    examinerDuties.getOmqeZirzamin(), examinerDuties.isEtesalZirzamin(),
+                    examinerDuties.getOmqeZirzamin(), examinerDuties.isChahAbBaran(),
+                    examinerDuties.isEzhaNazarA(), examinerDuties.isEzhaNazarF(),
+                    examinerDuties.getQotrLooleI(), examinerDuties.getJensLooleI(),
+                    examinerDuties.isLooleA(), examinerDuties.isLooleF(),
+                    examinerDuties.getMasrafDescription(), examinerDuties.getChahDescription()
+            );
+            DaoTejariha daoTejariha = dataBase.daoTejariha();
+            List<Tejariha> tejarihatemp = daoTejariha.getTejarihaByTrackNumber(examinerDuties.getTrackNumber());
+            tejarihas.addAll(tejarihatemp);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, new PersonalFragment());
             fragmentTransaction.commit();

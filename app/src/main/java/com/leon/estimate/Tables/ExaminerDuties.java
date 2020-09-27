@@ -65,8 +65,70 @@ public class ExaminerDuties {
     boolean isEnsheabQeirDaem;
     boolean hasRadif;
     String requestDictionaryString;
+    String shenasname;
+
+    int faseleKhakiA;
+    int faseleKhakiF;
+    int faseleAsphaultA;
+    int faseleAsphaultF;
+    int faseleSangA;
+    int faseleSangF;
+    int faseleOtherA;
+    int faseleOtherF;
+    boolean ezhaNazarA;
+    boolean ezhaNazarF;
+    int qotrLooleI;
+    int jensLooleI;
+    String qotrLooleS;
+    String jensLooleS;
+    boolean looleA;
+    boolean looleF;
+    int noeMasrafI;
+    String noeMasrafS;
+    boolean vaziatNasbPompI;
+    int omqeZirzamin;
+    boolean etesalZirzamin;
+    int omqFazelab;
+    boolean chahAbBaran;
+
+    boolean estelamShahrdari, parvane, motaqazi;
+
+    String chahDescription;
+    String masrafDescription;
+
     @Ignore
     ArrayList<RequestDictionary> requestDictionary;
+
+    public ExaminerDuties updateExaminerDuties(SecondForm secondForm) {
+        faseleKhakiA = secondForm.khakiAb;
+        faseleKhakiF = secondForm.khakiFazelab;
+        faseleAsphaultA = secondForm.asphalutAb;
+        faseleAsphaultF = secondForm.asphalutFazelab;
+        faseleSangA = secondForm.sangFarshAb;
+        faseleSangF = secondForm.sangFarshFazelab;
+        faseleOtherA = secondForm.otherAb;
+        faseleOtherF = secondForm.otherFazelab;
+        ezhaNazarA = secondForm.ezhaNazarA;
+        ezhaNazarF = secondForm.ezhaNazarF;
+        qotrLooleI = secondForm.qotreLooleI;
+        jensLooleI = secondForm.jenseLooleI;
+        qotrLooleS = secondForm.qotreLoole;
+        jensLooleS = secondForm.jenseLoole;
+        looleA = secondForm.looleA;
+        looleF = secondForm.looleF;
+        noeMasrafI = secondForm.noeMasraf;
+        noeMasrafS = secondForm.noeMasrafString;
+        vaziatNasbPompI = secondForm.vaziatNasbePomp;
+        omqeZirzamin = secondForm.omqeZirzamin;
+        omqFazelab = secondForm.omqFazelab;
+
+        etesalZirzamin = secondForm.etesalZirzamin;
+        chahAbBaran = secondForm.chahAbBaran;
+
+        chahDescription = secondForm.chahDescription;
+        masrafDescription = secondForm.masrafDescription;
+        return this;
+    }
 
     public ExaminerDuties updateExaminerDuties(CalculationUserInput calculationUserInput) {
         trackNumber = calculationUserInput.trackNumber;
@@ -110,8 +172,41 @@ public class ExaminerDuties {
         adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
         isEnsheabQeirDaem = calculationUserInput.ensheabQeireDaem;
         requestDictionaryString = calculationUserInput.selectedServicesString;
+        shenasname = calculationUserInput.shenasname;
 //        isPeymayesh = true;
         return this;
+    }
+
+    public boolean isEstelamShahrdari() {
+        return estelamShahrdari;
+    }
+
+    public void setEstelamShahrdari(boolean estelamShahrdari) {
+        this.estelamShahrdari = estelamShahrdari;
+    }
+
+    public boolean isParvane() {
+        return parvane;
+    }
+
+    public void setParvane(boolean parvane) {
+        this.parvane = parvane;
+    }
+
+    public boolean isMotaqazi() {
+        return motaqazi;
+    }
+
+    public void setMotaqazi(boolean motaqazi) {
+        this.motaqazi = motaqazi;
+    }
+
+    public String getShenasname() {
+        return shenasname;
+    }
+
+    public void setShenasname(String shenasname) {
+        this.shenasname = shenasname;
     }
 
     public String getExaminationId() {
@@ -540,6 +635,214 @@ public class ExaminerDuties {
 
     public String getRequestDictionaryString() {
         return requestDictionaryString;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getFaseleKhakiA() {
+        return faseleKhakiA;
+    }
+
+    public void setFaseleKhakiA(int faseleKhakiA) {
+        this.faseleKhakiA = faseleKhakiA;
+    }
+
+    public int getFaseleKhakiF() {
+        return faseleKhakiF;
+    }
+
+    public void setFaseleKhakiF(int faseleKhakiF) {
+        this.faseleKhakiF = faseleKhakiF;
+    }
+
+    public String getChahDescription() {
+        return chahDescription;
+    }
+
+    public void setChahDescription(String chahDescription) {
+        this.chahDescription = chahDescription;
+    }
+
+    public String getMasrafDescription() {
+        return masrafDescription;
+    }
+
+    public void setMasrafDescription(String masrafDescription) {
+        this.masrafDescription = masrafDescription;
+    }
+
+    public int getFaseleAsphaultA() {
+        return faseleAsphaultA;
+    }
+
+    public void setFaseleAsphaultA(int faseleAsphaultA) {
+        this.faseleAsphaultA = faseleAsphaultA;
+    }
+
+    public int getFaseleAsphaultF() {
+        return faseleAsphaultF;
+    }
+
+    public void setFaseleAsphaultF(int faseleAsphaultF) {
+        this.faseleAsphaultF = faseleAsphaultF;
+    }
+
+    public int getFaseleSangA() {
+        return faseleSangA;
+    }
+
+    public void setFaseleSangA(int faseleSangA) {
+        this.faseleSangA = faseleSangA;
+    }
+
+    public int getFaseleSangF() {
+        return faseleSangF;
+    }
+
+    public void setFaseleSangF(int faseleSangF) {
+        this.faseleSangF = faseleSangF;
+    }
+
+    public int getFaseleOtherA() {
+        return faseleOtherA;
+    }
+
+    public void setFaseleOtherA(int faseleOtherA) {
+        this.faseleOtherA = faseleOtherA;
+    }
+
+    public int getFaseleOtherF() {
+        return faseleOtherF;
+    }
+
+    public void setFaseleOtherF(int faseleOtherF) {
+        this.faseleOtherF = faseleOtherF;
+    }
+
+    public boolean isEzhaNazarA() {
+        return ezhaNazarA;
+    }
+
+    public void setEzhaNazarA(boolean ezhaNazarA) {
+        this.ezhaNazarA = ezhaNazarA;
+    }
+
+    public boolean isEzhaNazarF() {
+        return ezhaNazarF;
+    }
+
+    public void setEzhaNazarF(boolean ezhaNazarF) {
+        this.ezhaNazarF = ezhaNazarF;
+    }
+
+    public int getQotrLooleI() {
+        return qotrLooleI;
+    }
+
+    public void setQotrLooleI(int qotrLooleI) {
+        this.qotrLooleI = qotrLooleI;
+    }
+
+    public int getJensLooleI() {
+        return jensLooleI;
+    }
+
+    public void setJensLooleI(int jensLooleI) {
+        this.jensLooleI = jensLooleI;
+    }
+
+    public String getQotrLooleS() {
+        return qotrLooleS;
+    }
+
+    public void setQotrLooleS(String qotrLooleS) {
+        this.qotrLooleS = qotrLooleS;
+    }
+
+    public String getJensLooleS() {
+        return jensLooleS;
+    }
+
+    public void setJensLooleS(String jensLooleS) {
+        this.jensLooleS = jensLooleS;
+    }
+
+    public boolean isLooleA() {
+        return looleA;
+    }
+
+    public void setLooleA(boolean looleA) {
+        this.looleA = looleA;
+    }
+
+    public boolean isLooleF() {
+        return looleF;
+    }
+
+    public void setLooleF(boolean looleF) {
+        this.looleF = looleF;
+    }
+
+    public int getNoeMasrafI() {
+        return noeMasrafI;
+    }
+
+    public void setNoeMasrafI(int noeMasrafI) {
+        this.noeMasrafI = noeMasrafI;
+    }
+
+    public String getNoeMasrafS() {
+        return noeMasrafS;
+    }
+
+    public void setNoeMasrafS(String noeMasrafS) {
+        this.noeMasrafS = noeMasrafS;
+    }
+
+    public boolean isVaziatNasbPompI() {
+        return vaziatNasbPompI;
+    }
+
+    public void setVaziatNasbPompI(boolean vaziatNasbPompI) {
+        this.vaziatNasbPompI = vaziatNasbPompI;
+    }
+
+    public int getOmqeZirzamin() {
+        return omqeZirzamin;
+    }
+
+    public void setOmqeZirzamin(int omqeZirzamin) {
+        this.omqeZirzamin = omqeZirzamin;
+    }
+
+    public boolean isEtesalZirzamin() {
+        return etesalZirzamin;
+    }
+
+    public void setEtesalZirzamin(boolean etesalZirzamin) {
+        this.etesalZirzamin = etesalZirzamin;
+    }
+
+    public int getOmqFazelab() {
+        return omqFazelab;
+    }
+
+    public void setOmqFazelab(int omqFazelab) {
+        this.omqFazelab = omqFazelab;
+    }
+
+    public boolean isChahAbBaran() {
+        return chahAbBaran;
+    }
+
+    public void setChahAbBaran(boolean chahAbBaran) {
+        this.chahAbBaran = chahAbBaran;
     }
 
     public void setRequestDictionaryString(String requestDictionaryString) {

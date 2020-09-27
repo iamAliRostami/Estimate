@@ -95,7 +95,7 @@ public class MapFragment extends Fragment implements LocationListener {
         super.onCreate(savedInstanceState);
         context = getActivity();
         ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.location)));
+                context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
     }
 

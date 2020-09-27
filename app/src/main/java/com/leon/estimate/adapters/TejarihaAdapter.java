@@ -9,45 +9,56 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.MotherChild;
+import com.leon.estimate.Tables.DaoTejariha;
+import com.leon.estimate.Tables.MyDatabase;
+import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.activities.FormActivity;
 
-public class MotherChildAdapter extends RecyclerView.Adapter<MotherChildAdapter.ViewHolder> {
+public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHolder> {
     private Context context;
+    private MyDatabase dataBase;
 
-    public MotherChildAdapter(Context context) {
+    public TejarihaAdapter(Context context) {
         this.context = context;
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .allowMainThreadQueries().build();
     }
 
     @NonNull
     @Override
-    public MotherChildAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TejarihaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.item_mother_child, parent, false);
-        MotherChildAdapter.ViewHolder holder = new MotherChildAdapter.ViewHolder(view);
+        TejarihaAdapter.ViewHolder holder = new TejarihaAdapter.ViewHolder(view);
         holder.imageViewMinus.setOnClickListener(v -> {
-            FormActivity.motherChildren.remove(viewType);
+            Tejariha tejariha = FormActivity.tejarihas.get(viewType);
+            DaoTejariha daoTejariha = dataBase.daoTejariha();
+            daoTejariha.delete(tejariha.id);
+            FormActivity.tejarihas.remove(viewType);
             notifyDataSetChanged();
+
         });
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MotherChildAdapter.ViewHolder holder, int position) {
-        MotherChild motherChild = FormActivity.motherChildren.get(position);
-        holder.textViewKarbari.setText(motherChild.karbari);
-        holder.textViewA2.setText(String.valueOf(motherChild.a));
-        holder.textViewNoeShoql.setText(String.valueOf(motherChild.noeShoql));
-        holder.textViewTedadVahed.setText(String.valueOf(motherChild.tedadVahed));
-        holder.textViewVahedMohasebe.setText(String.valueOf(motherChild.vahedMohasebe));
+    public void onBindViewHolder(@NonNull TejarihaAdapter.ViewHolder holder, int position) {
+        Tejariha tejariha = FormActivity.tejarihas.get(position);
+        holder.textViewKarbari.setText(tejariha.karbari);
+        holder.textViewA2.setText(String.valueOf(tejariha.a));
+        holder.textViewNoeShoql.setText(String.valueOf(tejariha.noeShoql));
+        holder.textViewTedadVahed.setText(String.valueOf(tejariha.tedadVahed));
+        holder.textViewVahedMohasebe.setText(String.valueOf(tejariha.vahedMohasebe));
     }
 
     @Override
     public int getItemCount() {
-        return FormActivity.motherChildren.size();
+        return FormActivity.tejarihas.size();
     }
 
     @Override

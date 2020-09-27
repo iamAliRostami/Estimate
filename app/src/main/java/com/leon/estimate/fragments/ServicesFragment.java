@@ -77,7 +77,7 @@ public class ServicesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.services)));
+                context.getString(R.string.app_name).concat(" / ").concat("صفحه دوم"));
     }
 
     private void initialize() {

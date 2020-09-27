@@ -8,30 +8,71 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
-        RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class},
-        version = 25, exportSchema = false)
+        RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class, Tejariha.class},
+        version = 32, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_22_23 = new Migration(22, 23) {
+    public static final Migration MIGRATION_29_30 = new Migration(22, 23) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE ImagesTemp (" +
-                    "imageId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "address TEXT, " +
-                    "billId TEXT, " +
-                    "trackingNumber  TEXT, " +
-                    "peygiri  TEXT, " +
-                    "docId INTEGER, " +
-                    "Sent INTEGER" +
+//            database.execSQL("CREATE TABLE \"Tejariha\" (\n" +
+//                    "\t\"id\"\tINTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+//                    "\t\"trackNumber\"\tINTEGER,\n" +
+//                    "\t\"a\"\tTEXT,\n" +
+//                    "\t\"karbari\"\tTEXT,\n" +
+//                    "\t\"noeShoql\"\tTEXT,\n" +
+//                    "\t\"tedadVahed\"\tINTEGER,\n" +
+//                    "\t\"vahedMohasebe\"\tTEXT,\n" +
+//                    "\t\"tozihat\"\tTEXT\n" +
+//                    ");");
+
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  etesalZirzamin INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
+            database.execSQL("CREATE TABLE \"ImagesTemp\" (\n" +
+                    "\t\"imageId\"\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "\t\"address\"\tTEXT,\n" +
+                    "\t\"billId\"\tTEXT,\n" +
+                    "\t\"trackingNumber\"\tTEXT,\n" +
+                    "\t\"peygiri\"\tTEXT,\n" +
+                    "\t\"docId\"\tINTEGER,\n" +
+                    "\t\"Sent\"\tINTEGER\n" +
                     ");");
             database.execSQL("DROP TABLE Images;");
             database.execSQL("ALTER TABLE ImagesTemp RENAME TO Images;");
         }
     };
 
-    public static final Migration MIGRATION_24_25 = new Migration(23, 24) {
+    public static final Migration MIGRATION_31_32 = new Migration(27, 28) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column resultId INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column estelamShahrdari INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column parvane INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column motaqazi INTEGER;");
+//            database.execSQL("Alter TABLE \"chahDescription\" Add column parvane TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Rename column olqFazelab to omqFazelab ;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column shenasname TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleKhakiA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleKhakiF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleAsphaultA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleAsphaultF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleSangA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleSangF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleOtherA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleOtherF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column ezhaNazarA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column ezhaNazarF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  qotrLooleI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column jensLooleI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column qotrLooleS TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  jensLooleS TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column looleA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  looleF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column noeMasrafI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column noeMasrafS TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  vaziatNasbPompI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column omqeZirzamin INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  etesalZirzamin INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column olqFazelab INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
         }
     };
 
@@ -125,6 +166,8 @@ public abstract class MyDatabase extends RoomDatabase {
     };
 
     public abstract DaoImages daoImages();
+
+    public abstract DaoTejariha daoTejariha();
 
     public abstract DaoMapScreen daoMapScreen();
 

@@ -79,6 +79,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         viewHolder.textViewExaminationDay.setText(examinerDuties.getExaminationDay());
         viewHolder.textViewServiceGroup.setText(examinerDuties.getServiceGroup());
         viewHolder.textViewAddress.setText(examinerDuties.getAddress().trim());
+//        viewHolder.textViewRadif.setText(examinerDuties.getZoneId());
         viewHolder.textViewRadif.setText(examinerDuties.getRadif());
         viewHolder.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
         viewHolder.textViewNotificationMobile.setText(examinerDuties.getNotificationMobile());

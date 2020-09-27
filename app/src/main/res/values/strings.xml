@@ -134,7 +134,7 @@
     <string name="parvane_number">شماره پروانه</string>
     <string name="pelak">شماره پلاک ثبتی</string>
     <string name="aian_kol">اعیان کل</string>
-    <string name="aian_non_maskouni">اعیان غیرمسکونی</string>
+    <string name="aian_non_maskouni">اعیان تجاری</string>
     <string name="tedad_tejari">تعداد واحد تجاری</string>
     <string name="arzesh_mantaghe">ارزش معاملاتی</string>
     <string name="qotre_ensheab">قطر انشعاب</string>
@@ -147,7 +147,7 @@
     <string name="_031">031</string>
     <string name="shenasname">شماره شناسنامه</string>
     <string name="family">نام خانوادگی</string>
-    <string name="radif">شماره ردیف</string>
+    <string name="radif">ردیف</string>
     <string name="_09">09</string>
     <string name="description">توضیحات</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -216,4 +216,9 @@
     <string name="after_sale_services">خدمات پس از فروش</string>
     <string name="sale_new">انشعاب جدید</string>
     <string name="send_request">ثبت درخواست</string>
+    <string name="ten_zero">0000000000</string>
+    <string name="loole_ab">لوله آب</string>
+    <string name="loole_fazelab">لوله فاضلاب</string>
+    <string name="ezhar_ab">اظهار نظر واحد آب</string>
+    <string name="ezhar_fazelab">اظهار نظر واحد فاضلاب</string>
 </resources>

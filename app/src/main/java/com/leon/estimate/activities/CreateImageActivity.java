@@ -39,10 +39,10 @@ import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.Images;
-import com.leon.estimate.Tables.MotherChild;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.ResultDictionary;
+import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
@@ -53,6 +53,7 @@ import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.CreateImageActivityBinding;
+import com.sardari.daterangepicker.utils.PersianCalendar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,7 +80,6 @@ import static com.leon.estimate.activities.FormActivity.examinerDuties;
 import static com.leon.estimate.activities.FormActivity.karbari;
 import static com.leon.estimate.activities.FormActivity.noeVagozari;
 import static com.leon.estimate.activities.FormActivity.secondForm;
-import static com.leon.estimate.activities.FormActivity.shenasname;
 
 public class CreateImageActivity extends AppCompatActivity {
     Context context;
@@ -115,6 +115,8 @@ public class CreateImageActivity extends AppCompatActivity {
         new CreateImage(context).execute();
         binding.buttonDenial.setOnClickListener(v -> finish());
         setOnAcceptedButtonClickListener();
+        binding.imageViewRefresh1.setOnClickListener(v -> binding.signatureView1.clearCanvas());
+        binding.imageViewRefresh2.setOnClickListener(v -> binding.signatureView2.clearCanvas());
     }
 
     void initializeSpinner() {
@@ -162,7 +164,7 @@ public class CreateImageActivity extends AppCompatActivity {
         tPaint.setStyle(Paint.Style.FILL);
         tPaint.setColor(Color.BLACK);
 
-        float yCoordinate = (float) bitmap.getHeight() * 117 / 144;
+        float yCoordinate = (float) bitmap.getHeight() * 120 / 144;
         float xCoordinate = (float) bitmap.getWidth() * 22 / 36;
 
         cs.drawBitmap(bitmap, 0f, 0f, null);
@@ -174,6 +176,8 @@ public class CreateImageActivity extends AppCompatActivity {
         binding.imageViewExport.setVisibility(View.VISIBLE);
         binding.signatureView1.setVisibility(View.GONE);
         binding.signatureView2.setVisibility(View.GONE);
+        binding.imageViewRefresh1.setVisibility(View.GONE);
+        binding.imageViewRefresh2.setVisibility(View.GONE);
     }
 
     void uploadImage() {
@@ -222,7 +226,7 @@ public class CreateImageActivity extends AppCompatActivity {
     }
 
     Bitmap createImage() {
-        int small = 40;
+        int small = 35;
         Bitmap src = BitmapFactory.decodeResource(getResources(), R.drawable.export);
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cs = new Canvas(dest);
@@ -234,12 +238,11 @@ public class CreateImageActivity extends AppCompatActivity {
         tPaint.setColor(Color.BLACK);
         tPaint.setTextSize(small);
 
-        float yCoordinate = (float) src.getHeight() * 8 / 144;
-
+        float yCoordinate = (float) src.getHeight() * 7 / 144;
         float xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(examinerDuties.getTrackNumber(), xCoordinate, yCoordinate, tPaint);
 
-        xCoordinate = (float) src.getWidth() * 21 / 36;
+        xCoordinate = (float) src.getWidth() * 22 / 36;
         if (examinerDuties.getBillId() == null || examinerDuties.getBillId().length() < 1)
             cs.drawText(examinerDuties.getNeighbourBillId(), xCoordinate, yCoordinate, tPaint);
         else
@@ -252,35 +255,35 @@ public class CreateImageActivity extends AppCompatActivity {
         xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(examinerDuties.getRadif(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 13 / 144;
+        yCoordinate = (float) src.getHeight() * 23 / 288;
         xCoordinate = (float) src.getWidth() * 26 / 36;
         cs.drawText(examinerDuties.getNationalId(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 17 / 36;
-        cs.drawText(shenasname, xCoordinate, yCoordinate, tPaint);
+        cs.drawText(examinerDuties.getShenasname(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 11 / 36;
         cs.drawText(examinerDuties.getFirstName(), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 2 / 36;
+        xCoordinate = (float) src.getWidth() * 5 / 72;
         cs.drawText(examinerDuties.getSureName(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 17 / 144;
+        yCoordinate = (float) src.getHeight() * 29 / 288;
         xCoordinate = (float) src.getWidth() * 28 / 36;
         cs.drawText(examinerDuties.getFatherName(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 21 / 36;
         cs.drawText(examinerDuties.getPhoneNumber(), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 11 / 36;
         cs.drawText(examinerDuties.getNotificationMobile(), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 2 / 36;
+        xCoordinate = (float) src.getWidth() * 5 / 72;
         cs.drawText(examinerDuties.getPostalCode(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 22 / 144;
+        yCoordinate = (float) src.getHeight() * 17 / 144;
         xCoordinate = (float) src.getWidth() * 8 / 36;
         cs.drawText(examinerDuties.getAddress(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 31 / 144;
+        yCoordinate = (float) src.getHeight() * 24 / 144;
         xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(examinerDuties.getServiceGroup(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 28 / 144;
+        yCoordinate = (float) src.getHeight() * 22 / 144;
         xCoordinate = (float) src.getWidth() * 2 / 36;
         String request = "";
         ArrayList<RequestDictionary> requestDictionaries = calculationUserInput.setSelectedServices(calculationUserInput);
@@ -289,15 +292,21 @@ public class CreateImageActivity extends AppCompatActivity {
                 request = request.concat(requestDictionary.getTitle()).concat("، ");
         }
         request = String.valueOf(request.subSequence(0, request.length() - 2));
-        cs.drawText(request, xCoordinate, yCoordinate, tPaint);
+        if (request.length() > 75) {
+            String temp = request.substring(75);
+            cs.drawText(request.substring(0, 75), xCoordinate, yCoordinate, tPaint);
+            yCoordinate = (float) src.getHeight() * 24 / 144;
+            cs.drawText(temp, xCoordinate, yCoordinate, tPaint);
+        } else
+            cs.drawText(request, xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 37 / 144;
-        xCoordinate = (float) src.getWidth() * 23 / 36;
-        cs.drawText(karbari, xCoordinate, yCoordinate, tPaint);//TODO
+        yCoordinate = (float) src.getHeight() * 29 / 144;
+        xCoordinate = (float) src.getWidth() * 20 / 36;
+        cs.drawText(karbari, xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 3 / 36;
-        cs.drawText(noeVagozari, xCoordinate, yCoordinate, tPaint);//TODO
+        cs.drawText(noeVagozari, xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 41 / 144;
+        yCoordinate = (float) src.getHeight() * 63 / 288;
         xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(String.valueOf(examinerDuties.getQotrEnsheabId()), xCoordinate, yCoordinate, tPaint);//TODO
         xCoordinate = (float) src.getWidth() * 21 / 36;
@@ -311,46 +320,46 @@ public class CreateImageActivity extends AppCompatActivity {
         xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(String.valueOf(examinerDuties.getSifoon200()), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 44 / 144;
-        xCoordinate = (float) src.getWidth() * 25 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getAianMaskooni()), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 15 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getAianNonMaskooni()), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 4 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getAianKol()), xCoordinate, yCoordinate, tPaint);
-
-        yCoordinate = (float) src.getHeight() * 48 / 144;
+        yCoordinate = (float) src.getHeight() * 70 / 288;
         xCoordinate = (float) src.getWidth() * 25 / 36;
         cs.drawText(String.valueOf(examinerDuties.getTedadTejari()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 15 / 36;
+        cs.drawText(String.valueOf(examinerDuties.getAianNonMaskooni()), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 4 / 36;
+        cs.drawText(String.valueOf(examinerDuties.getZarfiatQarardadi()), xCoordinate, yCoordinate, tPaint);
+
+        yCoordinate = (float) src.getHeight() * 77 / 288;
+        xCoordinate = (float) src.getWidth() * 25 / 36;
+        cs.drawText(String.valueOf(examinerDuties.getAianMaskooni()), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 15 / 36;
         cs.drawText(String.valueOf(examinerDuties.getTedadMaskooni()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 4 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getTedadSaier()), xCoordinate, yCoordinate, tPaint);
-
-        yCoordinate = (float) src.getHeight() * 52 / 144;
-        xCoordinate = (float) src.getWidth() * 23 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getZarfiatQarardadi()), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 7 / 36;
         cs.drawText(String.valueOf(examinerDuties.getArzeshMelk()), xCoordinate, yCoordinate, tPaint);
 
+        yCoordinate = (float) src.getHeight() * 83 / 288;
+        xCoordinate = (float) src.getWidth() * 25 / 36;
+        cs.drawText(String.valueOf(examinerDuties.getAianKol()), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 15 / 36;
+        cs.drawText(String.valueOf(examinerDuties.getTedadSaier()), xCoordinate, yCoordinate, tPaint);
+
         //TODO
-        for (int i = 0; i < FormActivity.motherChildren.size(); i++) {
-            MotherChild motherChild = FormActivity.motherChildren.get(i);
-            yCoordinate = (float) src.getHeight() * (61 + i * 3) / 144;
-            xCoordinate = (float) src.getWidth() * 25 / 36;
-            cs.drawText(motherChild.karbari, xCoordinate, yCoordinate, tPaint);
-            xCoordinate = (float) src.getWidth() * 19 / 36;
-            cs.drawText(motherChild.noeShoql, xCoordinate, yCoordinate, tPaint);
-            xCoordinate = (float) src.getWidth() * 16 / 36;
-            cs.drawText(String.valueOf(motherChild.tedadVahed), xCoordinate, yCoordinate, tPaint);
-            xCoordinate = (float) src.getWidth() * 7 / 36;
-            cs.drawText(String.valueOf(motherChild.vahedMohasebe), xCoordinate, yCoordinate, tPaint);
-            xCoordinate = (float) src.getWidth() * 2 / 36;
-            cs.drawText(String.valueOf(motherChild.a), xCoordinate, yCoordinate, tPaint);
-        }
+        if (examinerDuties.getTedadTejari() > 0)
+            for (int i = 0; i < FormActivity.tejarihas.size(); i++) {
+                Tejariha tejariha = FormActivity.tejarihas.get(i);
+                yCoordinate = (float) src.getHeight() * (49 + i * 3) / 144;
+                xCoordinate = (float) src.getWidth() * 53 / 72;
+                cs.drawText(tejariha.karbari, xCoordinate, yCoordinate, tPaint);
+                xCoordinate = (float) src.getWidth() * 43 / 72;
+                cs.drawText(tejariha.noeShoql, xCoordinate, yCoordinate, tPaint);
+                xCoordinate = (float) src.getWidth() * 18 / 36;
+                cs.drawText(String.valueOf(tejariha.tedadVahed), xCoordinate, yCoordinate, tPaint);
+                xCoordinate = (float) src.getWidth() * 19 / 72;
+                cs.drawText(String.valueOf(tejariha.vahedMohasebe), xCoordinate, yCoordinate, tPaint);
+                xCoordinate = (float) src.getWidth() * 5 / 72;
+                cs.drawText(String.valueOf(tejariha.a), xCoordinate, yCoordinate, tPaint);
+            }
 
-
-        yCoordinate = (float) src.getHeight() * 92 / 144;
+        yCoordinate = (float) src.getHeight() * 147 / 288;
         xCoordinate = (float) src.getWidth() * 23 / 36;
         cs.drawText(String.valueOf(secondForm.getKhakiAb()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 17 / 36;
@@ -360,29 +369,29 @@ public class CreateImageActivity extends AppCompatActivity {
         xCoordinate = (float) src.getWidth() * 4 / 36;
         cs.drawText(String.valueOf(secondForm.getOtherAb()), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 96 / 144;
+        yCoordinate = (float) src.getHeight() * 152 / 288;
         xCoordinate = (float) src.getWidth() * 23 / 36;
         cs.drawText(String.valueOf(secondForm.getKhakiFazelab()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 17 / 36;
         cs.drawText(String.valueOf(secondForm.getAsphalutFazelab()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 10 / 36;
-        cs.drawText(String.valueOf(secondForm.getSangFarshFazekab()), xCoordinate, yCoordinate, tPaint);
+        cs.drawText(String.valueOf(secondForm.getSangFarshFazelab()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 4 / 36;
         cs.drawText(String.valueOf(secondForm.getOtherFazelab()), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 99 / 144;
+        yCoordinate = (float) src.getHeight() * 158 / 288;
         xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(String.valueOf(secondForm.getQotreLoole()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 21 / 36;
         cs.drawText(secondForm.getJenseLoole(), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 10 / 36;
+        xCoordinate = (float) src.getWidth() * 11 / 36;
         cs.drawText(getString(R.string.monaseb), xCoordinate, yCoordinate, tPaint);
         if (!secondForm.isVaziatNasbePomp())
             cs.drawText(getString(R.string.namonaseb), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(String.valueOf(secondForm.getOmqFazelab()), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 103 / 144;
+        yCoordinate = (float) src.getHeight() * 164 / 288;
         xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(String.valueOf(secondForm.getOmqeZirzamin()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 19 / 36;
@@ -393,22 +402,74 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(secondForm.getNoeMasrafString(), xCoordinate, yCoordinate, tPaint);
 
 
-        yCoordinate = (float) src.getHeight() * 107 / 144;
+        yCoordinate = (float) src.getHeight() * 169 / 288;
         xCoordinate = (float) src.getWidth() * 25 / 36;
-        if (FormActivity.estelamShahrdari)
+        if (secondForm.isEzhaNazarF())
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 31 / 72;
+        if (secondForm.isEzhaNazarA())
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+
+        xCoordinate = (float) src.getWidth() * 10 / 36;
+        if (secondForm.isLooleA())
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 3 / 36;
+        if (secondForm.isLooleF())
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+
+
+        yCoordinate = (float) src.getHeight() * 175 / 288;
+        xCoordinate = (float) src.getWidth() * 27 / 36;
+        if (secondForm.isChahAbBaran())
             cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
         else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 19 / 36;
-        cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
-        if (FormActivity.parvane)
+        if (examinerDuties.isEstelamShahrdari())
+            cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
+        else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
+        xCoordinate = (float) src.getWidth() * 12 / 36;
+        if (examinerDuties.isParvane())
             cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
         else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 4 / 36;
-        if (FormActivity.motaqazi)
+        if (examinerDuties.isMotaqazi())
             cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
         else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
 
+        yCoordinate = (float) src.getHeight() * 188 / 288;
+        xCoordinate = (float) src.getWidth() * 3 / 36;
+        if (secondForm.getMasrafDescription().length() > 80) {
+            cs.drawText(secondForm.getMasrafDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+            yCoordinate = (float) src.getHeight() * 193 / 288;
+            cs.drawText(secondForm.getMasrafDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+        } else
+            cs.drawText(secondForm.getMasrafDescription(), xCoordinate, yCoordinate, tPaint);
 
+        yCoordinate = (float) src.getHeight() * 202 / 288;
+
+        if (secondForm.getChahDescription().length() > 80) {
+            cs.drawText(secondForm.getChahDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+            yCoordinate = (float) src.getHeight() * 207 / 288;
+            cs.drawText(secondForm.getChahDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+        } else
+            cs.drawText(secondForm.getChahDescription(), xCoordinate, yCoordinate, tPaint);
+
+        yCoordinate = (float) src.getHeight() * 216 / 288;
+        if (examinerDuties.getDescription().length() > 80) {
+            cs.drawText(examinerDuties.getDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+            yCoordinate = (float) src.getHeight() * 221 / 288;
+            cs.drawText(examinerDuties.getDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+        } else
+            cs.drawText(examinerDuties.getDescription(), xCoordinate, yCoordinate, tPaint);
+
+        yCoordinate = (float) src.getHeight() * 238 / 288;
+        xCoordinate = (float) src.getWidth() * 20 / 36;
+        PersianCalendar persianCalendar = new PersianCalendar();
+        cs.drawText(persianCalendar.getPersianLongDate(), xCoordinate, yCoordinate, tPaint);
         return dest;
     }
 

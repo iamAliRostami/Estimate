@@ -22,8 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-import static com.leon.estimate.activities.FormActivity.shenasname;
-
 
 public class PersonalFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
@@ -49,7 +47,7 @@ public class PersonalFragment extends Fragment {
         Context context = getActivity();
         if (context != null) {
             ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                    context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_malek)));
+                    context.getString(R.string.app_name).concat(" / ").concat("صفحه اول"));
         }
     }
 
@@ -84,7 +82,7 @@ public class PersonalFragment extends Fragment {
         calculationUserInput.mobile = binding.editTextMobile.getText().toString();
         calculationUserInput.address = binding.editTextAddress.getText().toString();
         calculationUserInput.description = binding.editTextDescription.getText().toString();
-        shenasname = binding.editTextShenasname.getText().toString();
+        calculationUserInput.shenasname = binding.editTextShenasname.getText().toString();
         return calculationUserInput;
     }
 
@@ -159,6 +157,7 @@ public class PersonalFragment extends Fragment {
             binding.textViewBillIdTitle.setText(getString(R.string.neighbour_bill_id));
         }
         binding.textViewTrackNumber.setText(FormActivity.examinerDuties.getTrackNumber());
+        binding.editTextShenasname.setText(FormActivity.examinerDuties.getShenasname());
     }
 
     @Override

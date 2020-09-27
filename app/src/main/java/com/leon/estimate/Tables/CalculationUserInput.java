@@ -68,6 +68,7 @@ public class CalculationUserInput {
     public String address;
     public String description;
     boolean sent;
+    public String shenasname;
 
     public int resultId;
 
@@ -172,7 +173,6 @@ public class CalculationUserInput {
         Gson gson = new GsonBuilder().create();
         Type userListType = new TypeToken<ArrayList<RequestDictionary>>() {
         }.getType();
-        ArrayList<RequestDictionary> requestDictionaryArrayList = gson.fromJson(json, userListType);
-        return requestDictionaryArrayList;
+        return gson.fromJson(json, userListType);
     }
 }

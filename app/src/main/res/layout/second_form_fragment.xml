@@ -87,12 +87,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:text="@string/zero"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
 
@@ -125,12 +125,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:text="@string/zero"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
                     </LinearLayout>
@@ -170,12 +170,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:text="@string/zero"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
 
@@ -208,13 +208,82 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:text="@string/zero"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            tools:ignore="DisableBaselineAlignment">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/ezhar_ab"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <CheckBox
+                                android:id="@+id/checkBoxVahedAb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:text="@string/omq_shabake_fazelab"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge" />
+
+                            <EditText
+                                android:id="@+id/editTextOmqFazelab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor,NestedWeights" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -268,12 +337,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:text="@string/zero"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
 
@@ -306,12 +375,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:text="@string/zero"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
                     </LinearLayout>
@@ -353,10 +422,10 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
-                                android:text="@string/zero"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
 
@@ -391,13 +460,45 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/border_white_1"
                                 android:gravity="center"
-                                android:text="@string/zero"
                                 android:inputType="numberSigned"
                                 android:paddingTop="@dimen/activity_medium_padding"
                                 android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
+
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_medium_padding"
+                            android:gravity="right"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/ezhar_fazelab"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="NestedWeights,RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxVahedFazelab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            tools:ignore="Autofill,LabelFor" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -456,7 +557,6 @@
                                 tools:ignore="NestedWeights" />
                         </LinearLayout>
 
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -491,6 +591,60 @@
                                 android:spinnerMode="dialog"
                                 tools:ignore="NestedWeights" />
                         </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="@string/loole_ab"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxLooleAb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/activity_medium_padding"
+                            android:text="@string/have"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeMedium" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="@string/loole_fazelab"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxLooleFazelab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/activity_medium_padding"
+                            android:text="@string/have"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeMedium" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -672,12 +826,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:text="@string/zero"
                         android:background="@drawable/border_white_1"
                         android:gravity="center"
                         android:inputType="numberSigned"
                         android:paddingTop="@dimen/activity_medium_padding"
                         android:paddingBottom="@dimen/activity_medium_padding"
+                        android:text="@string/zero"
                         tools:ignore="Autofill,LabelFor" />
 
                     <TextView
@@ -703,36 +857,6 @@
                         android:textSize="@dimen/textSizeMedium" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_mid_margin"
-                    android:background="@drawable/border_gray_2"
-                    android:orientation="horizontal"
-                    android:weightSum="4">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_medium_margin"
-                        android:text="@string/omq_shabake_fazelab"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
-
-                    <EditText
-                        android:id="@+id/editTextOmqFazelab"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_white_1"
-                        android:gravity="center"
-                        android:text="@string/zero"
-                        android:inputType="numberSigned"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        tools:ignore="Autofill,LabelFor" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
