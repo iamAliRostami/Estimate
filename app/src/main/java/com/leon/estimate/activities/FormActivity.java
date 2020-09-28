@@ -85,7 +85,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FormActivity extends AppCompatActivity implements LocationListener {
-    public static String karbari, noeVagozari;//, shenasname;
+    public static String karbari, noeVagozari;
     public static List<RequestDictionary> requestDictionaries;
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
@@ -333,6 +333,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         examinerDuties.setMobile(calculationUserInputTemp.mobile);//TODO 3 mobile
         examinerDuties.setAddress(calculationUserInputTemp.address);
         examinerDuties.setDescription(calculationUserInputTemp.description);
+        examinerDuties.setShenasname(calculationUserInputTemp.shenasname);
     }
 
     private byte[] convertBitmapToByte(Bitmap bitmap) {

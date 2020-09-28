@@ -221,4 +221,7 @@
     <string name="loole_fazelab">لوله فاضلاب</string>
     <string name="ezhar_ab">اظهار نظر واحد آب</string>
     <string name="ezhar_fazelab">اظهار نظر واحد فاضلاب</string>
+    <string name="last_address">آخرین آدرس</string>
+    <string name="start_date">تاریخ ارزیابی</string>
+    <string name="ta">تا</string>
 </resources>

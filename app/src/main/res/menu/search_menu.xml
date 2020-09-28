@@ -7,6 +7,12 @@
         android:orderInCategory="200"
         android:title="@string/all"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_last"
+        android:orderInCategory="200"
+        android:title="@string/last_address"
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_search"
         android:orderInCategory="200"

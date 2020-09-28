@@ -2,7 +2,6 @@ package com.leon.estimate.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,8 +88,6 @@ public class PersonalFragment extends Fragment {
     private boolean prepareForm() {
         return checkIsNoEmpty(binding.editTextName)
                 && checkIsNoEmpty(binding.editTextFamily)
-//                && checkIsNoEmpty(binding.editTextEshterak)
-//                && checkIsNoEmpty(binding.editTextRadif)
                 && checkIsNoEmpty(binding.editTextAddress)
                 && checkOtherIsNoEmpty();
     }
@@ -119,11 +116,6 @@ public class PersonalFragment extends Fragment {
             focusView = binding.editTextPostalCode;
             focusView.requestFocus();
             return false;
-//        } else if (binding.editTextPhone.getText().toString().length() < 8) {
-//            binding.editTextPhone.setError(getString(R.string.error_format));
-//            focusView = binding.editTextPhone;
-//            focusView.requestFocus();
-//            return false;
         } else if (binding.editTextMobile.getText().toString().length() < 11) {
             binding.editTextMobile.setError(getString(R.string.error_format));
             focusView = binding.editTextMobile;
@@ -157,7 +149,7 @@ public class PersonalFragment extends Fragment {
             binding.textViewBillIdTitle.setText(getString(R.string.neighbour_bill_id));
         }
         binding.textViewTrackNumber.setText(FormActivity.examinerDuties.getTrackNumber());
-        binding.editTextShenasname.setText(FormActivity.examinerDuties.getShenasname());
+        binding.editTextShenasname.setText(FormActivity.examinerDuties.getShenasname());//TODO
     }
 
     @Override
@@ -173,7 +165,6 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("onResume", "happened");
         initializeField();
     }
 }

@@ -10,9 +10,7 @@ public enum SharedReferenceKeys {
     TOKEN("token"),
     TOKEN_FOR_FILE("token_for_file"),
     REFRESH_TOKEN("refresh_token"),
-    THEME_STABLE("theme_stable"),
-    THEME_TEMPORARY("theme_temporary"),
-    BILL_COUNTER("bill_counter");
+    TRACK_NUMBER("track_number");
 
     private final String value;
 

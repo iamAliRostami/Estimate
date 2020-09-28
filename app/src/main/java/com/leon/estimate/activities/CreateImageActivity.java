@@ -164,12 +164,12 @@ public class CreateImageActivity extends AppCompatActivity {
         tPaint.setStyle(Paint.Style.FILL);
         tPaint.setColor(Color.BLACK);
 
-        float yCoordinate = (float) bitmap.getHeight() * 120 / 144;
-        float xCoordinate = (float) bitmap.getWidth() * 22 / 36;
+        float yCoordinate = (float) bitmap.getHeight() * 125 / 144;
+        float xCoordinate = (float) bitmap.getWidth() * 20 / 36;
 
         cs.drawBitmap(bitmap, 0f, 0f, null);
         cs.drawBitmap(bitmap2, xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) bitmap.getWidth() * 6 / 36;
+        xCoordinate = (float) bitmap.getWidth() * 3 / 36;
         cs.drawBitmap(bitmap1, xCoordinate, yCoordinate, tPaint);
         bitmap = dest;
         binding.imageViewExport.setImageBitmap(bitmap);
@@ -242,7 +242,7 @@ public class CreateImageActivity extends AppCompatActivity {
         float xCoordinate = (float) src.getWidth() * 29 / 36;
         cs.drawText(examinerDuties.getTrackNumber(), xCoordinate, yCoordinate, tPaint);
 
-        xCoordinate = (float) src.getWidth() * 22 / 36;
+        xCoordinate = (float) src.getWidth() * 43 / 72;
         if (examinerDuties.getBillId() == null || examinerDuties.getBillId().length() < 1)
             cs.drawText(examinerDuties.getNeighbourBillId(), xCoordinate, yCoordinate, tPaint);
         else
@@ -284,7 +284,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(examinerDuties.getServiceGroup(), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 22 / 144;
-        xCoordinate = (float) src.getWidth() * 2 / 36;
+        xCoordinate = (float) src.getWidth() * 3 / 36;
         String request = "";
         ArrayList<RequestDictionary> requestDictionaries = calculationUserInput.setSelectedServices(calculationUserInput);
         for (RequestDictionary requestDictionary : requestDictionaries) {
@@ -292,9 +292,9 @@ public class CreateImageActivity extends AppCompatActivity {
                 request = request.concat(requestDictionary.getTitle()).concat("، ");
         }
         request = String.valueOf(request.subSequence(0, request.length() - 2));
-        if (request.length() > 75) {
-            String temp = request.substring(75);
-            cs.drawText(request.substring(0, 75), xCoordinate, yCoordinate, tPaint);
+        if (request.length() > 70) {
+            String temp = request.substring(70);
+            cs.drawText(request.substring(0, 70), xCoordinate, yCoordinate, tPaint);
             yCoordinate = (float) src.getHeight() * 24 / 144;
             cs.drawText(temp, xCoordinate, yCoordinate, tPaint);
         } else
@@ -366,7 +366,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(String.valueOf(secondForm.getAsphalutAb()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 10 / 36;
         cs.drawText(String.valueOf(secondForm.getSangFarshAb()), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 4 / 36;
+        xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(String.valueOf(secondForm.getOtherAb()), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 152 / 288;
@@ -376,11 +376,11 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(String.valueOf(secondForm.getAsphalutFazelab()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 10 / 36;
         cs.drawText(String.valueOf(secondForm.getSangFarshFazelab()), xCoordinate, yCoordinate, tPaint);
-        xCoordinate = (float) src.getWidth() * 4 / 36;
+        xCoordinate = (float) src.getWidth() * 3 / 36;
         cs.drawText(String.valueOf(secondForm.getOtherFazelab()), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 158 / 288;
-        xCoordinate = (float) src.getWidth() * 29 / 36;
+        xCoordinate = (float) src.getWidth() * 57 / 72;
         cs.drawText(String.valueOf(secondForm.getQotreLoole()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 21 / 36;
         cs.drawText(secondForm.getJenseLoole(), xCoordinate, yCoordinate, tPaint);
@@ -392,7 +392,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(String.valueOf(secondForm.getOmqFazelab()), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 164 / 288;
-        xCoordinate = (float) src.getWidth() * 29 / 36;
+        xCoordinate = (float) src.getWidth() * 57 / 72;
         cs.drawText(String.valueOf(secondForm.getOmqeZirzamin()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 19 / 36;
         cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);

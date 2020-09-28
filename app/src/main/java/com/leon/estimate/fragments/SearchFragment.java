@@ -10,6 +10,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.leon.estimate.activities.ListActivity;
 import com.leon.estimate.databinding.SearchFragmentBinding;
+import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
+import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,10 +46,23 @@ public class SearchFragment extends DialogFragment {
                         binding.editTextName.getText().toString(),
                         binding.editTextFamily.getText().toString(),
                         binding.editTextNationNumber.getText().toString(),
-                        binding.editTextMobile.getText().toString()
+                        binding.editTextMobile.getText().toString(),
+                        binding.textViewStartDate.getText().toString()
                 );
             }
             dismiss();
+        });
+        binding.textViewStartDate.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity());
+            datePickerDialog.setSelectionMode(DateRangeCalendarView.SelectionMode.Single);
+            datePickerDialog.setDisableDaysAgo(false);
+            datePickerDialog.setTextSizeTitle(10.0f);
+            datePickerDialog.setTextSizeWeek(12.0f);
+            datePickerDialog.setTextSizeDate(14.0f);
+            datePickerDialog.setCanceledOnTouchOutside(true);
+            datePickerDialog.setOnSingleDateSelectedListener(date ->
+                    binding.textViewStartDate.setText(date.getPersianShortDate()));
+            datePickerDialog.showDialog();
         });
     }
 

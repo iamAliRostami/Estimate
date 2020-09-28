@@ -220,6 +220,46 @@
                 android:singleLine="true"
                 tools:ignore="Autofill,LabelFor" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutForm"
+        android:layout_margin="@dimen/activity_mid_padding"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/activity_mid_margin"
+            android:layout_marginBottom="@dimen/activity_mid_margin"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="@string/start_date"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeLarge"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/textViewStartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_mid_margin"
+            android:layout_weight="1"
+            android:background="@drawable/border_gray_1"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingTop="@dimen/activity_medium_padding"
+            android:paddingBottom="@dimen/activity_medium_padding"
+            android:singleLine="true"
+            tools:ignore="Autofill,InefficientWeight,LabelFor" />
     </LinearLayout>
 
     <Button

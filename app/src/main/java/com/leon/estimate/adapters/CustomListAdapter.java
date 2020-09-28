@@ -13,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.SharedReferenceKeys;
+import com.leon.estimate.Enums.SharedReferenceNames;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.activities.FormActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +58,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
                 Intent intent = new Intent(context, FormActivity.class);
                 intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), tempExaminerDuties.get(i).getTrackNumber());
                 intent.putExtra(BundleEnum.SERVICES.getValue(), tempExaminerDuties.get(i).getRequestDictionaryString());
+                SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context, SharedReferenceNames.ACCOUNT.getValue());
+                sharedPreferenceManager.putData(SharedReferenceKeys.TRACK_NUMBER.getValue(), tempExaminerDuties.get(i).getTrackNumber());
                 context.startActivity(intent);
             }
         });
@@ -105,7 +110,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     }
 
     public void filter(String billId, String trackingNumber, String name, String family,
-                       String nationId, String mobile) {
+                       String nationId, String mobile, String date) {
         billId = billId.toLowerCase(Locale.getDefault());
         trackingNumber = trackingNumber.toLowerCase(Locale.getDefault());
         name = name.toLowerCase(Locale.getDefault());
@@ -185,6 +190,18 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
                         examinerDuty.getMoshtarakMobile().toLowerCase(Locale.getDefault()).contains(mobile))
                         || (examinerDuty.getNotificationMobile() != null &&
                         examinerDuty.getNotificationMobile().toLowerCase(Locale.getDefault()).contains(mobile))) {
+                    tempExaminerDuties.add(examinerDuty);
+                }
+            }
+            list.clear();
+            list.addAll(tempExaminerDuties);
+        }
+        if (date.length() > 0) {
+            tempExaminerDuties.clear();
+            date = date.substring(2);
+            for (ExaminerDuties examinerDuty : list) {
+                if ((examinerDuty.getExaminationDay() != null &&
+                        examinerDuty.getExaminationDay().toLowerCase(Locale.getDefault()).contains(date))) {
                     tempExaminerDuties.add(examinerDuty);
                 }
             }
