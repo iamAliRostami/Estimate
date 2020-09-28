@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ارزیابی</string>
+    <string name="app_name">ارزیابی آبفا</string>
     <string name="downloadDetails">بارگیری</string>
     <string name="upload">بارگذاری</string>
     <string name="upload_image">بارگذاری عکس</string>
