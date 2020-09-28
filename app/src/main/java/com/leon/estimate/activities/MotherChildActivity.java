@@ -181,9 +181,15 @@ public class MotherChildActivity extends AppCompatActivity {
                 new Download(), new DownloadIncomplete(), new GetError());
     }
 
-    static class GetError implements ICallbackError {
+    class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            new CustomDialog(DialogType.YellowRedirect, MotherChildActivity.this, error,
+                    MotherChildActivity.this.getString(R.string.dear_user),
+                    MotherChildActivity.this.getString(R.string.login),
+                    MotherChildActivity.this.getString(R.string.accepted));
         }
     }
 
@@ -196,7 +202,7 @@ public class MotherChildActivity extends AppCompatActivity {
             binding.editTextMobile.setText("");
             binding.editTextNationNumber.setText("");
             binding.editTextBillId.setText("");
-            new CustomDialog(DialogType.Green, context, simpleMessage.getMessage(),
+            new CustomDialog(DialogType.Yellow, context, simpleMessage.getMessage(),
                     getString(R.string.dear_user), getString(R.string.request),
                     getString(R.string.accepted));
             download();
@@ -220,7 +226,7 @@ public class MotherChildActivity extends AppCompatActivity {
                     }
                 }
             }
-            new CustomDialog(DialogType.Green, context, error,
+            new CustomDialog(DialogType.Yellow, context, error,
                     getString(R.string.dear_user), getString(R.string.request),
                     getString(R.string.accepted));
         }
@@ -275,11 +281,6 @@ public class MotherChildActivity extends AppCompatActivity {
 
                 DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
                 daoResultDictionary.insertAll(input.getResultDictionary());
-//                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
-//                        input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
-//                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-//            } else {11396282116314
-//                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
             }
         }
     }
