@@ -40,10 +40,13 @@ import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationUserInput;
+import com.leon.estimate.Tables.DaoBlock;
+import com.leon.estimate.Tables.DaoFormula;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
+import com.leon.estimate.Tables.DaoZarib;
 import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.KarbariDictionary;
 import com.leon.estimate.Tables.MyDatabase;
@@ -164,7 +167,23 @@ public class FormFragment extends Fragment {
 
     void setOnTextViewArezeshdaraeiClickListener() {
         binding.textViewArzeshMelk.setOnClickListener(v -> {
-            getArzeshdaraei();
+            if (FormActivity.arzeshdaraei != null
+                    && FormActivity.arzeshdaraei.blocks != null
+                    && FormActivity.arzeshdaraei.blocks.size() > 0
+                    && FormActivity.arzeshdaraei.formulas != null
+                    && FormActivity.arzeshdaraei.formulas.size() > 0
+                    && FormActivity.arzeshdaraei.zaribs != null
+                    && FormActivity.arzeshdaraei.zaribs.size() > 0) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction;
+                if (fragmentManager != null) {
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
+                    valueFragment.show(fragmentTransaction, "");
+                }
+            } else {
+                getArzeshdaraei();
+            }
         });
     }
 
@@ -450,6 +469,15 @@ public class FormFragment extends Fragment {
             if (FormActivity.arzeshdaraei != null && FormActivity.arzeshdaraei.formulas != null &&
                     FormActivity.arzeshdaraei.formulas.size() > 0 && FormActivity.arzeshdaraei.blocks != null
                     && FormActivity.arzeshdaraei.blocks.size() > 0) {
+                DaoFormula daoFormula = dataBase.daoFormula();
+                DaoBlock daoBlock = dataBase.daoBlock();
+                DaoZarib daoZarib = dataBase.daoZarib();
+                for (int i = 0; i < FormActivity.arzeshdaraei.formulas.size(); i++)
+                    daoFormula.insertFormula(FormActivity.arzeshdaraei.formulas.get(i));
+                for (int i = 0; i < FormActivity.arzeshdaraei.blocks.size(); i++)
+                    daoBlock.insertBlock(FormActivity.arzeshdaraei.blocks.get(i));
+                for (int i = 0; i < FormActivity.arzeshdaraei.zaribs.size(); i++)
+                    daoZarib.insertZarib(FormActivity.arzeshdaraei.zaribs.get(i));
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 if (fragmentManager != null) {

@@ -8,36 +8,41 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
-        RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class, Tejariha.class},
-        version = 32, exportSchema = false)
+        RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class,
+        Tejariha.class, Zarib.class, Formula.class, Block.class},
+        version = 35, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_29_30 = new Migration(22, 23) {
+    public static final Migration MIGRATION_34_35 = new Migration(34, 35) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-//            database.execSQL("CREATE TABLE \"Tejariha\" (\n" +
-//                    "\t\"id\"\tINTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
-//                    "\t\"trackNumber\"\tINTEGER,\n" +
-//                    "\t\"a\"\tTEXT,\n" +
-//                    "\t\"karbari\"\tTEXT,\n" +
-//                    "\t\"noeShoql\"\tTEXT,\n" +
-//                    "\t\"tedadVahed\"\tINTEGER,\n" +
-//                    "\t\"vahedMohasebe\"\tTEXT,\n" +
-//                    "\t\"tozihat\"\tTEXT\n" +
-//                    ");");
-
-            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  etesalZirzamin INTEGER;");
-            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
-            database.execSQL("CREATE TABLE \"ImagesTemp\" (\n" +
-                    "\t\"imageId\"\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                    "\t\"address\"\tTEXT,\n" +
-                    "\t\"billId\"\tTEXT,\n" +
-                    "\t\"trackingNumber\"\tTEXT,\n" +
-                    "\t\"peygiri\"\tTEXT,\n" +
-                    "\t\"docId\"\tINTEGER,\n" +
-                    "\t\"Sent\"\tINTEGER\n" +
+            database.execSQL("CREATE TABLE \"FormulaTemp\" (\n" +
+                    "\t\"id\"\tINTEGER,\n" +
+                    "\t\"zoneId\"\tINTEGER,\n" +
+                    "\t\"gozarFrom\"\tREAL,\n" +
+                    "\t\"gozarTo\"\tREAL,\n" +
+                    "\t\"gozarTitle\"\tTEXT,\n" +
+                    "\t\"maskooniZ\"\tREAL,\n" +
+                    "\t\"TejraiZ\"\tREAL,\n" +
+                    "\t\"edariDolatiZ\"\tREAL,\n" +
+                    "\t\"khadamatiZ\"\tREAL,\n" +
+                    "\t\"sanatiZ\"\tREAL,\n" +
+                    "\t\"sayerZ\"\tREAL,\n" +
+                    "\tPRIMARY KEY(\"id\")\n" +
                     ");");
-            database.execSQL("DROP TABLE Images;");
-            database.execSQL("ALTER TABLE ImagesTemp RENAME TO Images;");
+            database.execSQL("DROP TABLE Formula;");
+            database.execSQL("ALTER TABLE FormulaTemp RENAME TO Formula;");
+
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  etesalZirzamin INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
+//            database.execSQL("CREATE TABLE \"ImagesTemp\" (\n" +
+//                    "\t\"imageId\"\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+//                    "\t\"address\"\tTEXT,\n" +
+//                    "\t\"billId\"\tTEXT,\n" +
+//                    "\t\"trackingNumber\"\tTEXT,\n" +
+//                    "\t\"peygiri\"\tTEXT,\n" +
+//                    "\t\"docId\"\tINTEGER,\n" +
+//                    "\t\"Sent\"\tINTEGER\n" +
+//                    ");");
         }
     };
 
@@ -75,12 +80,6 @@ public abstract class MyDatabase extends RoomDatabase {
 //            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
         }
     };
-
-    public abstract DaoCalculation daoCalculateCalculation();
-
-    public abstract DaoCalculateInfo daoCalculateInfo();
-
-    public abstract DaoCalculationUserInput daoCalculationUserInput();
 
     public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
@@ -165,6 +164,13 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
+
+    public abstract DaoCalculation daoCalculateCalculation();
+
+    public abstract DaoCalculateInfo daoCalculateInfo();
+
+    public abstract DaoCalculationUserInput daoCalculationUserInput();
+
     public abstract DaoImages daoImages();
 
     public abstract DaoTejariha daoTejariha();
@@ -188,5 +194,11 @@ public abstract class MyDatabase extends RoomDatabase {
     public abstract DaoServiceDictionary daoServiceDictionary();
 
     public abstract DaoResultDictionary daoResultDictionary();
+
+    public abstract DaoZarib daoZarib();
+
+    public abstract DaoBlock daoBlock();
+
+    public abstract DaoFormula daoFormula();
 
 }

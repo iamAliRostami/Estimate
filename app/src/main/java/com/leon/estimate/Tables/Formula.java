@@ -1,8 +1,14 @@
 package com.leon.estimate.Tables;
 
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "Formula", indices = @Index(value = {"id"}, unique = true))
 public class Formula {
-    public double id;
-    public double zoneId;
+    @PrimaryKey
+    public int id;
+    public int zoneId;
     public double gozarFrom;
     public double gozarTo;
     public String gozarTitle;

@@ -1,8 +1,14 @@
 package com.leon.estimate.Tables;
 
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "Zarib", indices = @Index(value = {"id"}, unique = true))
 public class Zarib {
+    @PrimaryKey
     public double id;
-    public double zoneId;
+    public int zoneId;
     public double maskkoniZ1;
     public double tejariZ1;
     public double edariDolatiZ1;
