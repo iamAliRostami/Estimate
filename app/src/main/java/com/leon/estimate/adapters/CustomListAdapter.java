@@ -23,6 +23,7 @@ import com.leon.estimate.activities.FormActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +35,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
+        Collections.sort(examinerDuties, (o1, o2) -> o2.getExaminationDay().compareTo(
+                o1.getExaminationDay()));
         this.examinerDuties = examinerDuties;
         this.tempExaminerDuties = new ArrayList<>();
         this.tempExaminerDuties.addAll(examinerDuties);
