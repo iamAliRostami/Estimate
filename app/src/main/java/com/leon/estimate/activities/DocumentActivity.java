@@ -216,7 +216,6 @@ public class DocumentActivity extends AppCompatActivity {
                 ).check();
     }
 
-
     class LoginDocument implements ICallback<Login> {
         @Override
         public void execute(Login loginFeedBack) {
