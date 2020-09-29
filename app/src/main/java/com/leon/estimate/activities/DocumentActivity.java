@@ -11,9 +11,6 @@ import android.os.Debug;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -46,8 +43,6 @@ import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivityBinding;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -259,27 +254,10 @@ public class DocumentActivity extends AppCompatActivity {
         @Override
         public void execute(ImageDataTitle imageDataTitle) {
             if (imageDataTitle.isSuccess()) {
-                int selected = 0, counter = 0;
                 DocumentFormActivity.imageDataTitle = imageDataTitle;
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
-                    if (dataTitle.getTitle().equals("کروکی"))
-                        selected = counter;
-                    counter = counter + 1;
                     arrayListTitle.add(dataTitle.getTitle());
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
-                        R.layout.dropdown_menu_popup_item, arrayListTitle) {
-                    @NotNull
-                    @Override
-                    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                        View view = super.getView(position, convertView, parent);
-                        final CheckedTextView textView = view.findViewById(android.R.id.text1);
-                        textView.setChecked(true);
-                        textView.setTextSize(context.getResources().getDimension(R.dimen.textSizeSmall));
-                        textView.setTextColor(getResources().getColor(R.color.black));
-                        return view;
-                    }
-                };
                 loadImage();
             } else {
                 Toast.makeText(DocumentActivity.this,
