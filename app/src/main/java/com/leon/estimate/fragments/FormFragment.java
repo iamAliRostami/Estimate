@@ -77,7 +77,6 @@ import retrofit2.Retrofit;
 
 public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
-
     private Context context;
     FormFragmentBinding binding;
     private MyDatabase dataBase;
@@ -88,7 +87,6 @@ public class FormFragment extends Fragment {
     TejarihaAdapter tejarihaAdapter;
 
     public FormFragment() {
-
     }
 
     public static FormFragment newInstance(ExaminerDuties examinerDuties, String param2) {
@@ -246,19 +244,18 @@ public class FormFragment extends Fragment {
         calculationUserInput.zarfiatQarardadi = Integer.parseInt(binding.editTextZarfiatQaradadi.getText().toString());
         calculationUserInput.arzeshMelk = Integer.parseInt(binding.textViewArzeshMelk.getText().toString());
         calculationUserInput.parNumber = binding.editTextPariNumber.getText().toString();
-
         calculationUserInput.karbariId = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
         calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
         calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
         calculationUserInput.ensheabQeireDaem = binding.checkbox1.isChecked();
+
         FormActivity.karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
         FormActivity.noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
         FormActivity.examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
         FormActivity.examinerDuties.setParvane(binding.checkbox4.isChecked());
         FormActivity.examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
         FormActivity.examinerDuties.setPelak(Integer.parseInt(binding.editTextPelak.getText().toString()));
-        FormActivity.examinerDuties.setNoeVagozariId(noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId());
         return calculationUserInput;
     }
 

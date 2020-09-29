@@ -307,12 +307,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         examinerDuties.setZarfiatQarardadi(calculationUserInputTemp.zarfiatQarardadi);
         examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
         examinerDuties.setParNumber(calculationUserInputTemp.parNumber);
-
         examinerDuties.setKarbariId(calculationUserInputTemp.karbariId);
         examinerDuties.setQotrEnsheabId(calculationUserInputTemp.qotrEnsheabId);
         examinerDuties.setTaxfifId(calculationUserInputTemp.taxfifId);
-
         examinerDuties.setEnsheabQeirDaem(calculationUserInputTemp.ensheabQeireDaem);
+        examinerDuties.setNoeVagozariId(calculationUserInputTemp.noeVagozariId);
     }
 
     void prepareFromPersonal() {
