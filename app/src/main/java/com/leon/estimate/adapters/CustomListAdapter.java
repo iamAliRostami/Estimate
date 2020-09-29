@@ -227,7 +227,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         return position;
     }
 
-    //    @Override
     public ExaminerDuties getItem(int position) {
         return tempExaminerDuties.get(position);
     }
