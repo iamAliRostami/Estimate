@@ -7,217 +7,42 @@
     android:layoutDirection="rtl"
     tools:context="com.leon.estimate.activities.DocumentActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_medium_margin"
+        android:orientation="vertical"
+        tools:ignore="ScrollViewSize">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:ignore="ScrollViewSize">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                tools:ignore="DisableBaselineAlignment">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_large_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/image_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:src="@drawable/icon_finder_camera"
-                        tools:ignore="ContentDescription" />
-
-                    <Button
-                        android:id="@+id/button_pick1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_large_margin"
-                        android:background="@drawable/border_blue_1"
-                        android:padding="@dimen/activity_medium_padding"
-                        android:text="@string/pick_an_image"
-                        android:textSize="@dimen/textSizeMedium"
-                        tools:ignore="MissingConstraints" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_large_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:src="@drawable/icon_finder_camera"
-                        tools:ignore="ContentDescription" />
-
-                    <Button
-                        android:id="@+id/button_pick2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_large_margin"
-                        android:background="@drawable/border_blue_1"
-                        android:padding="@dimen/activity_medium_padding"
-                        android:text="@string/pick_an_image"
-                        android:textSize="@dimen/textSizeMedium"
-                        tools:ignore="MissingConstraints" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                tools:ignore="DisableBaselineAlignment">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_large_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:src="@drawable/icon_finder_camera"
-                        tools:ignore="ContentDescription" />
-
-                    <Button
-                        android:id="@+id/button_pick3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_large_margin"
-                        android:background="@drawable/border_blue_1"
-                        android:padding="@dimen/activity_medium_padding"
-                        android:text="@string/pick_an_image"
-                        android:textSize="@dimen/textSizeMedium"
-                        tools:ignore="MissingConstraints" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_large_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:src="@drawable/icon_finder_camera"
-                        tools:ignore="ContentDescription" />
-
-                    <Button
-                        android:id="@+id/button_pick4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_large_margin"
-                        android:background="@drawable/border_blue_1"
-                        android:padding="@dimen/activity_medium_padding"
-                        android:text="@string/pick_an_image"
-                        android:textSize="@dimen/textSizeMedium"
-                        tools:ignore="MissingConstraints" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                tools:ignore="DisableBaselineAlignment">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_large_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:src="@drawable/icon_finder_camera"
-                        tools:ignore="ContentDescription" />
-
-                    <Button
-                        android:id="@+id/button_pick5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_large_margin"
-                        android:background="@drawable/border_blue_1"
-                        android:padding="@dimen/activity_medium_padding"
-                        android:text="@string/pick_an_image"
-                        android:textSize="@dimen/textSizeMedium"
-                        tools:ignore="MissingConstraints" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_large_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:src="@drawable/icon_finder_camera"
-                        tools:ignore="ContentDescription" />
-
-                    <Button
-                        android:id="@+id/button_pick6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/activity_large_margin"
-                        android:background="@drawable/border_blue_1"
-                        android:padding="@dimen/activity_medium_padding"
-                        android:text="@string/pick_an_image"
-                        android:textSize="@dimen/textSizeMedium"
-                        tools:ignore="MissingConstraints" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageViewMap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_large_margin"
-                android:background="@drawable/border_2"
-                android:weightSum="2"
-                tools:ignore="ContentDescription" />
+                android:layout_gravity="center"
+                android:padding="@dimen/activity_medium_padding"
+                android:text="@string/document_received"
+                android:textSize="@dimen/textSizeMedium" />
         </LinearLayout>
-    </ScrollView>
+
+        <GridView
+            android:id="@+id/gridViewImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/border_gray_1"
+            android:gravity="center"
+            android:nestedScrollingEnabled="true"
+            android:numColumns="2"
+            tools:ignore="NestedScrolling,ScrollViewSize,UnusedAttribute"
+            tools:listitem="@layout/item_image" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

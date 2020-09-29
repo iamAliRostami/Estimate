@@ -1,77 +1,79 @@
 package com.leon.estimate.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Environment;
-import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.DialogType;
+import com.leon.estimate.Enums.ProgressType;
+import com.leon.estimate.Enums.SharedReferenceKeys;
+import com.leon.estimate.Enums.SharedReferenceNames;
+import com.leon.estimate.Infrastructure.IAbfaService;
+import com.leon.estimate.Infrastructure.ICallback;
+import com.leon.estimate.Infrastructure.ICallbackError;
+import com.leon.estimate.Infrastructure.ICallbackIncomplete;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoImages;
+import com.leon.estimate.Tables.ImageDataThumbnail;
+import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Images;
+import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.Utils.CustomDialog;
+import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.HttpClientWrapper;
+import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivityBinding;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 
 public class DocumentActivity extends AppCompatActivity {
-
-    static String imageFileName;
-    private final int image1 = 1;
-    private final int image2 = 2;
-    private final int image3 = 3;
-    private final int image4 = 4;
-    private final int image5 = 5;
-    private final int image6 = 6;
-    private final int image7 = 7;
-    private final int CAMERA_REQUEST = 1888;
-    private final int GALLERY_REQUEST = 1888;
-    private final int IMAGE_CROP_REQUEST = 1234;
-    private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
-    String mCurrentPhotoPath;
     Context context;
-    boolean replace = false;
-    int imageCode;
-    Bitmap bitmap;
-    ImageView[] imageViews;
-    Button[] buttonPicks;
+    static ImageDataTitle imageDataTitle;
+    String trackNumber, billId;
+    boolean isNew;
+    ImageViewAdapter imageViewAdapter;
+    int counter = 0;
+    MyDatabase dataBase;
+    ArrayList<Images> images;
+    ArrayList<ImageDataThumbnail.Data> imageDataThumbnail;
+    ArrayList<String> imageDataThumbnailUri = new ArrayList<>(), arrayListTitle = new ArrayList<>();
+    SharedPreferenceManager sharedPreferenceManager;
     DocumentActivityBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -82,10 +84,9 @@ public class DocumentActivity extends AppCompatActivity {
         binding = DocumentActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
-        if (getIntent().getExtras() != null) {
-            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
-            bitmap = BitmapFactory.decodeByteArray(bytes, 0, Objects.requireNonNull(bytes).length);
-        }
+        sharedPreferenceManager = new SharedPreferenceManager(context,
+                SharedReferenceNames.ACCOUNT.getValue());
+        getExtra();
         if (checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -98,210 +99,100 @@ public class DocumentActivity extends AppCompatActivity {
         }
     }
 
-    View.OnClickListener onClickListener = v -> {
-        Log.e("ID", String.valueOf(v.getId()));
-        switch (v.getId()) {
-            case R.id.button_pick:
-            case R.id.image_view:
-                imageCode = image1;
-                break;
-            case R.id.button_pick2:
-            case R.id.imageView2:
-                imageCode = image2;
-                break;
-            case R.id.button_pick3:
-            case R.id.imageView3:
-                imageCode = image3;
-                break;
-            case R.id.button_pick4:
-            case R.id.imageView4:
-                imageCode = image4;
-                break;
-            case R.id.button_pick5:
-            case R.id.imageView5:
-                imageCode = image5;
-                break;
-            case R.id.button_pick6:
-            case R.id.imageView6:
-                imageCode = image6;
-                break;
+    void getExtra() {
+        if (getIntent().getExtras() != null) {
+            billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
+            trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
+            isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(DocumentActivity.this);
-        builder.setTitle("Carbon");
-        builder.setMessage("تصویر را از کجا انتخاب میکنید؟");
-        builder.setPositiveButton("گالری", (dialog, which) -> {
-            dialog.dismiss();
-            Intent intent = new Intent("android.intent.action.PICK");
-            intent.setType("image/*");
-            startActivityForResult(intent, GALLERY_REQUEST);
-        });
-        builder.setNegativeButton("دوربین", (dialog, which) -> {
-            dialog.dismiss();
-            Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-            if (cameraIntent.resolveActivity(DocumentActivity.this.getPackageManager()) != null) {
-                File photoFile = null;
-                try {
-                    photoFile = DocumentActivity.this.createImageFile();
-                } catch (IOException e) {
-                    Log.e("Main", "IOException");
-                }
-                if (photoFile != null) {
-                    StrictMode.VmPolicy.Builder builder1 = new StrictMode.VmPolicy.Builder();
-                    StrictMode.setVmPolicy(builder1.build());
-                    cameraIntent.putExtra("output", Uri.fromFile(photoFile));
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                }
-            }
-
-        });
-        builder.setNeutralButton("", (dialog, which) -> dialog.dismiss());
-        builder.create().show();
-    };
+    }
 
     void initialize() {
-        initializeButtons();
-        initializeImageViews();
-        loadImage();
-    }
-
-    void initializeButtons() {
-        binding.buttonPick1.setOnClickListener(onClickListener);
-        binding.buttonPick2.setOnClickListener(onClickListener);
-        binding.buttonPick3.setOnClickListener(onClickListener);
-        binding.buttonPick4.setOnClickListener(onClickListener);
-        binding.buttonPick5.setOnClickListener(onClickListener);
-        binding.buttonPick6.setOnClickListener(onClickListener);
-        buttonPicks = new Button[6];
-        buttonPicks[0] = binding.buttonPick1;
-        buttonPicks[1] = binding.buttonPick2;
-        buttonPicks[2] = binding.buttonPick3;
-        buttonPicks[3] = binding.buttonPick4;
-        buttonPicks[4] = binding.buttonPick5;
-        buttonPicks[5] = binding.buttonPick6;
-    }
-
-    void initializeImageViews() {
-        binding.imageView.setOnClickListener(onClickListener);
-        binding.imageView2.setOnClickListener(onClickListener);
-        binding.imageView3.setOnClickListener(onClickListener);
-        binding.imageView4.setOnClickListener(onClickListener);
-        binding.imageView5.setOnClickListener(onClickListener);
-        binding.imageView6.setOnClickListener(onClickListener);
-        binding.imageViewMap.setImageBitmap(bitmap);
-        imageCode = image7;
-        saveImage(bitmap);
-        imageViews = new ImageView[6];
-        imageViews[0] = binding.imageView;
-        imageViews[1] = binding.imageView2;
-        imageViews[2] = binding.imageView3;
-        imageViews[3] = binding.imageView4;
-        imageViews[4] = binding.imageView5;
-        imageViews[5] = binding.imageView6;
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            Bitmap bitmap;
-            try {
-                Uri uri = data.getData();
-                Objects.requireNonNull(uri);
-                InputStream inputStream = this.getContentResolver().openInputStream(Objects.requireNonNull(selectedImage));
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                ScannerConstants.bitmapSelectedImage = bitmap;
-                this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            ContentResolver contentResolver = this.getContentResolver();
-            try {
-                ScannerConstants.bitmapSelectedImage = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
-        } else if (requestCode == IMAGE_CROP_REQUEST && resultCode == RESULT_OK) {
-//            ScannerConstants.bitmapSelectedImage = ((BitmapDrawable) imageView1.getDrawable()).getBitmap();
-            this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
-                    IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
-        } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
-            imageViews[imageCode - 1].setImageBitmap(ScannerConstants.bitmapSelectedImage);
-            buttonPicks[imageCode - 1].setText("تغییر مدرک ".concat(String.valueOf(imageCode)));
-            saveTempBitmap(ScannerConstants.bitmapSelectedImage);
-            if (ScannerConstants.bitmapSelectedImage != null) {
-                Toast.makeText(this, "انجام شد", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public void saveTempBitmap(Bitmap bitmap) {
-        if (isExternalStorageWritable()) {
-            saveImage(bitmap);
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .allowMainThreadQueries().build();
+        images = new ArrayList<>();
+        imageViewAdapter = new ImageViewAdapter(context, images);
+        binding.gridViewImage.setAdapter(imageViewAdapter);
+        imageDataThumbnailUri = new ArrayList<>();
+        if (HttpClientWrapper.isOnline(context)) {
+            attemptLogin();
         } else {
-            Log.e("error", "isExternalStorageWritable");
+            Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_LONG).show();
+            finish();
         }
     }
+
+    void attemptLogin() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+        Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
+                SharedReferenceKeys.USERNAME.getValue()), sharedPreferenceManager.getStringData(
+                SharedReferenceKeys.PASSWORD.getValue()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
+                this, new LoginDocument(), new LoginDocumentIncomplete(), new GetErrorRedirect());
+    }
+
+    void getImageTitles() {
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+        Call<ImageDataTitle> call = abfaService.getTitle(sharedPreferenceManager.getStringData(
+                SharedReferenceKeys.TOKEN_FOR_FILE.getValue()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
+                this, new GetImageTitles(), new GetImageTitlesIncomplete(), new GetErrorRedirect());
+    }
+
+    void getImageThumbnailList() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+
+        Call<ImageDataThumbnail> call;
+        if (isNew)
+            call = getImage.getDocsListThumbnail(sharedPreferenceManager
+                    .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), trackNumber);
+        else
+            call = getImage.getDocsListThumbnail(sharedPreferenceManager
+                    .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), billId);
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+                new GetImageThumbnailList(), new GetImageThumbnailListIncomplete(), new GetError());
+    }
+
+    void getImageThumbnail(String uri) {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+        Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
+                SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
+                new com.leon.estimate.Tables.Uri(uri));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), this,
+                new GetImageDoc(), new GetImageDocIncomplete(), new GetError());
+    }
+
 
     void loadImage() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                .allowMainThreadQueries().build();
         DaoImages daoImages = dataBase.daoImages();
-//        List<Images> images = daoImages.getImages();
-        for (int i = 1; i <= 6; i++) {
-            List<Images> images = daoImages.getImagesByImageCode(String.valueOf(i));
-            if (images.size() > 0)
-                try {
-                    File f = new File(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES), "AbfaCamera");
-                    f = new File(f, images.get(images.size() - 1).getAddress());
-                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                    imageViews[i - 1].setImageBitmap(b);
-                    buttonPicks[i - 1].setText("تغییر مدرک ".concat(String.valueOf(i)));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-        }
-    }
-
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    void saveImage(Bitmap bitmapImage) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "AbfaCamera");
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return;
-            }
-        }
-        String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_" + ".jpg";
-        File file = new File(mediaStorageDir, imageFileName);
-        if (file.exists()) file.delete();
+        List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
+        Log.e("size", String.valueOf(imagesList.size()));
         try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, "MyDatabase")
-                    .allowMainThreadQueries().build();
-            DaoImages daoImages = dataBase.daoImages();
-            Images images = new Images(imageFileName, String.valueOf(imageCode), "peygiri",
-                    "", "");
-            daoImages.insertImage(images);
-        } catch (Exception e) {
-            Log.e("error", Objects.requireNonNull(e.getMessage()));
+            for (int i = 0; i < imagesList.size(); i++) {
+                File f = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES), "AbfaCamera");
+                f = new File(f, imagesList.get(i).getAddress());
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                imagesList.get(i).setBitmap(b);
+                for (int j = 0; j < imageDataTitle.getData().size(); j++) {
+                    if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
+                        imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
+                }
+                images.add(imagesList.get(i));
+                imageViewAdapter.notifyDataSetChanged();
+            }
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+            Log.e("error", e.toString());
         }
     }
+
 
     public final void askPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
@@ -330,19 +221,181 @@ public class DocumentActivity extends AppCompatActivity {
                 ).check();
     }
 
-    @SuppressLint({"SimpleDateFormat"})
-    private File createImageFile() throws IOException {
-        String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        ScannerConstants.fileName = imageFileName;
-        DocumentActivity.imageFileName = imageFileName;
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        StringBuilder stringBuilder = (new StringBuilder()).append("file:");
-        Objects.requireNonNull(image);
-        this.mCurrentPhotoPath = stringBuilder.append(image.getAbsolutePath()).toString();
-        return image;
+
+    class LoginDocument implements ICallback<Login> {
+        @Override
+        public void execute(Login loginFeedBack) {
+            if (loginFeedBack.isSuccess()) {
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
+                        loginFeedBack.getData().getToken());
+                if (HttpClientWrapper.isOnline(context)) {
+                    getImageTitles();
+                    getImageThumbnailList();
+                } else {
+                    Toast.makeText(context, R.string.turn_internet_on, Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            } else {
+                Toast.makeText(DocumentActivity.this,
+                        DocumentActivity.this.getString(R.string.error_not_auth),
+                        Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
     }
+
+    class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
+
+        @Override
+        public void executeIncomplete(Response<Login> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            Toast.makeText(DocumentActivity.this, error, Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    class GetImageTitles implements ICallback<ImageDataTitle> {
+        @Override
+        public void execute(ImageDataTitle imageDataTitle) {
+            if (imageDataTitle.isSuccess()) {
+                int selected = 0, counter = 0;
+                DocumentFormActivity.imageDataTitle = imageDataTitle;
+                for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
+                    if (dataTitle.getTitle().equals("کروکی"))
+                        selected = counter;
+                    counter = counter + 1;
+                    arrayListTitle.add(dataTitle.getTitle());
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context,
+                        R.layout.dropdown_menu_popup_item, arrayListTitle) {
+                    @NotNull
+                    @Override
+                    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        final CheckedTextView textView = view.findViewById(android.R.id.text1);
+                        textView.setChecked(true);
+                        textView.setTextSize(context.getResources().getDimension(R.dimen.textSizeSmall));
+                        textView.setTextColor(getResources().getColor(R.color.black));
+                        return view;
+                    }
+                };
+                loadImage();
+            } else {
+                Toast.makeText(DocumentActivity.this,
+                        DocumentActivity.this.getString(R.string.error_call_backup),
+                        Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    class GetImageTitlesIncomplete implements ICallbackIncomplete<ImageDataTitle> {
+        @Override
+        public void executeIncomplete(Response<ImageDataTitle> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorTitleIncomplete", response.errorBody().toString());
+            }
+            Toast.makeText(DocumentActivity.this,
+                    DocumentActivity.this.getString(R.string.error_not_auth),
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    class GetImageThumbnailList implements ICallback<ImageDataThumbnail> {
+        @Override
+        public void execute(ImageDataThumbnail responseBody) {
+            if (responseBody.isSuccess()) {
+                imageDataThumbnail = responseBody.getData();
+                if (imageDataThumbnail != null) {
+                    for (ImageDataThumbnail.Data data : imageDataThumbnail) {
+                        imageDataThumbnailUri.add(data.getImg());
+                    }
+                    if (imageDataThumbnailUri.size() > 0)
+                        getImageThumbnail(imageDataThumbnail.get(0).getImg());
+                    else binding.progressBar.setVisibility(View.GONE);
+                } else binding.progressBar.setVisibility(View.GONE);
+            } else {
+                Toast.makeText(DocumentActivity.this,
+                        DocumentActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    class GetImageThumbnailListIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
+
+        @Override
+        public void executeIncomplete(Response<ImageDataThumbnail> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
+            }
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, DocumentActivity.this, error,
+                    DocumentActivity.this.getString(R.string.dear_user),
+                    DocumentActivity.this.getString(R.string.download_document),
+                    DocumentActivity.this.getString(R.string.accepted));
+            binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    class GetImageDoc implements ICallback<ResponseBody> {
+        @Override
+        public void execute(ResponseBody responseBody) {
+            Bitmap bmp = BitmapFactory.decodeStream(responseBody.byteStream());
+            Images image = new Images(billId, trackNumber,
+                    imageDataThumbnail.get(counter).getTitle_name(),
+                    imageDataThumbnailUri.get(counter), bmp, false);
+            images.add(image);
+            imageViewAdapter.notifyDataSetChanged();
+            counter = counter + 1;
+            binding.progressBar.setVisibility(View.GONE);
+            if (imageDataThumbnail.size() > counter) {
+                getImageThumbnail(imageDataThumbnail.get(counter).getImg());
+            }
+        }
+    }
+
+    class GetImageDocIncomplete implements ICallbackIncomplete<ResponseBody> {
+
+        @Override
+        public void executeIncomplete(Response<ResponseBody> response) {
+            if (response.errorBody() != null) {
+                Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
+            }
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, DocumentActivity.this, error,
+                    DocumentActivity.this.getString(R.string.dear_user),
+                    DocumentActivity.this.getString(R.string.download_document),
+                    DocumentActivity.this.getString(R.string.accepted));
+            binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    class GetErrorRedirect implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            Log.e("Error", Objects.requireNonNull(t.getMessage()));
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(DocumentActivity.this, error, Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageTotal(t);
+            Toast.makeText(DocumentActivity.this, error, Toast.LENGTH_LONG).show();
+            binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void onBackPressed() {

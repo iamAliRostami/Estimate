@@ -334,15 +334,15 @@ public class CreateImageActivity extends AppCompatActivity {
 
         yCoordinate = (float) src.getHeight() * 70 / 288;
         xCoordinate = (float) src.getWidth() * 25 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getTedadTejari()), xCoordinate, yCoordinate, tPaint);
+        cs.drawText(String.valueOf(examinerDuties.getAianMaskooni()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 15 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getAianNonMaskooni()), xCoordinate, yCoordinate, tPaint);
+        cs.drawText(String.valueOf(examinerDuties.getTedadTejari()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 4 / 36;
         cs.drawText(String.valueOf(examinerDuties.getZarfiatQarardadi()), xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 77 / 288;
         xCoordinate = (float) src.getWidth() * 25 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getAianMaskooni()), xCoordinate, yCoordinate, tPaint);
+        cs.drawText(String.valueOf(examinerDuties.getAianNonMaskooni()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 15 / 36;
         cs.drawText(String.valueOf(examinerDuties.getTedadMaskooni()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 4 / 36;

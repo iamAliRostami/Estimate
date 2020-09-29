@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -69,6 +71,7 @@ import com.leon.estimate.fragments.PersonalFragment;
 import com.leon.estimate.fragments.SecondFormFragment;
 import com.leon.estimate.fragments.ServicesFragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.config.Configuration;
@@ -777,9 +780,30 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.document_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_document) {
+            Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
+            intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
+            if (examinerDuties.getBillId() != null)
+                intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+            else
+                intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getNeighbourBillId());
+            intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        bitmap = null;
         Log.e("on", "resume");
     }
 
@@ -800,5 +824,4 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         Runtime.getRuntime().maxMemory();
         Debug.getNativeHeapAllocatedSize();
     }
-
 }
