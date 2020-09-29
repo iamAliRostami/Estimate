@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +61,7 @@ import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentFormActivityBinding;
 import com.leon.estimate.fragments.HighQualityFragment;
+import com.sardari.daterangepicker.utils.PersianCalendar;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.jetbrains.annotations.NotNull;
@@ -152,12 +157,10 @@ public class DocumentFormActivity extends AppCompatActivity {
             }
         }
     };
-    View.OnClickListener onAcceptedClickListener = view -> {
-        new ShowDialogue(getString(R.string.accepted_question),
-                getString(R.string.dear_user), getString(R.string.final_accepted),
-                getString(R.string.yes), getString(R.string.no),
-                R.color.red1, R.color.green2, R.color.yellow1, R.color.white);
-    };
+    View.OnClickListener onAcceptedClickListener = view -> new ShowDialogue(getString(R.string.accepted_question),
+            getString(R.string.dear_user), getString(R.string.final_accepted),
+            getString(R.string.yes), getString(R.string.no),
+            R.color.red1, R.color.green2, R.color.yellow1, R.color.white);
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -167,10 +170,8 @@ public class DocumentFormActivity extends AppCompatActivity {
         binding = DocumentFormActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         context = this;
-//        Log.e("cursor", "here");
         sharedPreferenceManager = new SharedPreferenceManager(context,
                 SharedReferenceNames.ACCOUNT.getValue());
-
         getExtra();
         if (checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ||
@@ -187,15 +188,13 @@ public class DocumentFormActivity extends AppCompatActivity {
     void getExtra() {
         if (getIntent().getExtras() != null) {
             billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
-//            billId = "981276127616526512";//TODO
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
-//            trackNumber = "98439483748374";//TODO
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
-//            if (getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue()) != null)
-            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
-            if (bytes != null) {
-                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            }
+//            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
+//            if (bytes != null) {
+//                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//            }
+            bitmap = ScannerConstants.bitmapMapImage;
         }
     }
 
@@ -221,11 +220,34 @@ public class DocumentFormActivity extends AppCompatActivity {
     void initializeImageView() {
         binding.imageView.setOnClickListener(onPickClickListener);
         if (bitmap != null) {
+            bitmap = createImage(bitmap);
             binding.imageView.setImageBitmap(bitmap);
             ScannerConstants.bitmapSelectedImage = bitmap;
             binding.buttonUpload.setVisibility(View.VISIBLE);
         }
         binding.imageView.setOnClickListener(onImageViewClickListener);
+    }
+
+    Bitmap createImage(Bitmap src) {
+        int small = 50;
+//        Bitmap src = BitmapFactory.decodeResource(getResources(), R.drawable.export);
+        Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas cs = new Canvas(dest);
+        cs.drawBitmap(src, 0f, 0f, null);
+
+        Paint tPaint = new Paint();
+        tPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), MyApplication.fontName));
+        tPaint.setStyle(Paint.Style.FILL);
+        tPaint.setColor(Color.BLACK);
+        tPaint.setTextSize(small);
+
+        float yCoordinate = (float) src.getHeight() * 15 / 144;
+        float xCoordinate = (float) src.getWidth() * 6 / 36;
+
+        PersianCalendar persianCalendar = new PersianCalendar();
+        cs.drawText(persianCalendar.getPersianLongDateAndTime(), xCoordinate, yCoordinate, tPaint);
+
+        return dest;
     }
 
     void attemptLogin() {
@@ -446,6 +468,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
             if (ScannerConstants.bitmapSelectedImage != null) {
+                ScannerConstants.bitmapSelectedImage = createImage(ScannerConstants.bitmapSelectedImage);
                 binding.imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
                 binding.buttonUpload.setVisibility(View.VISIBLE);
                 Toast.makeText(this, R.string.done, Toast.LENGTH_LONG).show();

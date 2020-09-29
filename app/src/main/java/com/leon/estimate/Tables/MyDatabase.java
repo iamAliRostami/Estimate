@@ -10,11 +10,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
         RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class,
         Tejariha.class, Zarib.class, Formula.class, Block.class},
-        version = 36, exportSchema = false)
+        version = 37, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_35_36 = new Migration(34, 35) {
+    public static final Migration MIGRATION_36_37 = new Migration(34, 35) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  sanad INTEGER;");
 //            database.execSQL("CREATE TABLE \"FormulaTemp\" (\n" +
 //                    "\t\"id\"\tINTEGER,\n" +
 //                    "\t\"zoneId\"\tINTEGER,\n" +
@@ -32,8 +33,7 @@ public abstract class MyDatabase extends RoomDatabase {
 //            database.execSQL("DROP TABLE Formula;");
 //            database.execSQL("ALTER TABLE FormulaTemp RENAME TO Formula;");
 
-            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  noeVagozariId INTEGER;");
-            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column pelak INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column pelak INTEGER;");
 //            database.execSQL("CREATE TABLE \"ImagesTemp\" (\n" +
 //                    "\t\"imageId\"\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
 //                    "\t\"address\"\tTEXT,\n" +

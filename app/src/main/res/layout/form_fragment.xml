@@ -982,6 +982,33 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/activity_mid_margin"
+                    android:layout_marginBottom="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/document"
+                    android:textColor="@color/blue4"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:ignore="RtlHardcoded" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/activity_medium_padding"
+                    android:paddingBottom="@dimen/activity_medium_padding">
+
+                    <CheckBox
+                        android:id="@+id/checkbox5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

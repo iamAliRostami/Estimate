@@ -63,7 +63,7 @@ public class HighQualityFragment extends DialogFragment {
     }
 
     void initialize() {
-        binding.imageViewHighQuality.setImageBitmap(bitmap);
+        binding.photoView.setImageBitmap(bitmap);
     }
 
     @Override

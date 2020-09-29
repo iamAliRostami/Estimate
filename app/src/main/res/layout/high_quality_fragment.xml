@@ -4,9 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.leon.estimate.fragments.HighQualityFragment">
 
-    <ImageView
-        android:id="@+id/imageViewHighQuality"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photo_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="ContentDescription" />
+        android:layout_height="wrap_content" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageViewHighQuality"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        tools:ignore="ContentDescription" />-->
 </FrameLayout>

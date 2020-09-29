@@ -92,6 +92,7 @@ public class ExaminerDuties {
     boolean chahAbBaran;
     public int noeVagozariId;
     public int pelak;
+    boolean sanad;
 
     boolean estelamShahrdari, parvane, motaqazi;
 
@@ -177,6 +178,14 @@ public class ExaminerDuties {
         shenasname = calculationUserInput.shenasname;
 //        isPeymayesh = true;
         return this;
+    }
+
+    public boolean isSanad() {
+        return sanad;
+    }
+
+    public void setSanad(boolean sanad) {
+        this.sanad = sanad;
     }
 
     public int getNoeVagozariId() {

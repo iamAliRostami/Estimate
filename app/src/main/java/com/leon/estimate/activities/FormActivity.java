@@ -62,6 +62,7 @@ import com.leon.estimate.Utils.GIS.CustomGeoJSON;
 import com.leon.estimate.Utils.GIS.MyKmlStyle;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
+import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.databinding.FormActivityBinding;
 import com.leon.estimate.fragments.FormFragment;
 import com.leon.estimate.fragments.PersonalFragment;
@@ -221,8 +222,9 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     break;
                 case 5:
                     Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
-                    bitmap = convertBitmapToByte(convertMapToBitmap());
-                    intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
+//                    bitmap = convertBitmapToByte(convertMapToBitmap());
+//                    intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
+                    ScannerConstants.bitmapMapImage = convertMapToBitmap();
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                     if (examinerDuties.getBillId() != null)
                         intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
@@ -343,7 +345,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
     private byte[] convertBitmapToByte(Bitmap bitmap) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
         return bos.toByteArray();
     }
 
@@ -387,10 +389,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @SuppressLint("StaticFieldLeak")
     class SerializeJson extends AsyncTask<Intent, String, String> {
@@ -423,6 +421,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     }
 
     public Bitmap convertMapToBitmap() {
+        binding.mapView.destroyDrawingCache();
         binding.mapView.setDrawingCacheEnabled(true);
         return binding.mapView.getDrawingCache(true);
     }
@@ -778,6 +777,13 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        bitmap = null;
+        Log.e("on", "resume");
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         Runtime.getRuntime().totalMemory();
@@ -794,4 +800,5 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         Runtime.getRuntime().maxMemory();
         Debug.getNativeHeapAllocatedSize();
     }
+
 }

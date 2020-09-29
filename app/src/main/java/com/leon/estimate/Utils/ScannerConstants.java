@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 public class ScannerConstants {
     public static Bitmap bitmapSelectedImage;
+    public static Bitmap bitmapMapImage;
     public static String fileName;
     public static String cropText = "برش", backText = "بازگشت",
             imageError = "هیچ تصویری انتخاب نشده است ، لطفاً دوباره امتحان کنید.",

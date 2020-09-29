@@ -20,6 +20,7 @@ import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import com.leon.estimate.Enums.BundleEnum;
@@ -53,6 +54,7 @@ import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.CreateImageActivityBinding;
+import com.leon.estimate.fragments.HighQualityFragment;
 import com.sardari.daterangepicker.utils.PersianCalendar;
 
 import org.jetbrains.annotations.NotNull;
@@ -117,6 +119,16 @@ public class CreateImageActivity extends AppCompatActivity {
         setOnAcceptedButtonClickListener();
         binding.imageViewRefresh1.setOnClickListener(v -> binding.signatureView1.clearCanvas());
         binding.imageViewRefresh2.setOnClickListener(v -> binding.signatureView2.clearCanvas());
+        binding.imageViewExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                HighQualityFragment highQualityFragment = HighQualityFragment.newInstance(
+                        bitmap, "imageSign");
+                highQualityFragment.show(fragmentTransaction, "imageSign");
+
+            }
+        });
     }
 
     void initializeSpinner() {

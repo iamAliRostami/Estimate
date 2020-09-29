@@ -256,6 +256,7 @@ public class FormFragment extends Fragment {
         FormActivity.examinerDuties.setParvane(binding.checkbox4.isChecked());
         FormActivity.examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
         FormActivity.examinerDuties.setPelak(Integer.parseInt(binding.editTextPelak.getText().toString()));
+        FormActivity.examinerDuties.setSanad(binding.checkbox5.isChecked());
         return calculationUserInput;
     }
 
@@ -400,6 +401,7 @@ public class FormFragment extends Fragment {
         binding.checkbox2.setChecked(FormActivity.examinerDuties.isMotaqazi());
         binding.checkbox3.setChecked(FormActivity.examinerDuties.isEstelamShahrdari());
         binding.checkbox4.setChecked(FormActivity.examinerDuties.isParvane());
+        binding.checkbox5.setChecked(FormActivity.examinerDuties.isSanad());
 
     }
 
