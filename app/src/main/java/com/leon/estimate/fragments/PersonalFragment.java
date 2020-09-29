@@ -131,14 +131,16 @@ public class PersonalFragment extends Fragment {
             binding.editTextName.setText(FormActivity.examinerDuties.getFirstName().trim());
         if (FormActivity.examinerDuties.getSureName() != null)
             binding.editTextFamily.setText(FormActivity.examinerDuties.getSureName().trim());
-        binding.editTextNationNumber.setText(FormActivity.examinerDuties.getNationalId());
+        if (FormActivity.examinerDuties.getNationalId().length() == 10)
+            binding.editTextNationNumber.setText(FormActivity.examinerDuties.getNationalId());
         binding.editTextFatherName.setText(FormActivity.examinerDuties.getFatherName());
         binding.editTextDescription.setText(FormActivity.examinerDuties.getDescription().trim());
         binding.editTextPhone.setText(FormActivity.examinerDuties.getPhoneNumber());
         binding.editTextMobile.setText(FormActivity.examinerDuties.getMobile());
         binding.editTextEshterak.setText(Objects.requireNonNull(
                 FormActivity.examinerDuties.getEshterak().trim()));
-        binding.editTextPostalCode.setText(FormActivity.examinerDuties.getPostalCode());
+        if (FormActivity.examinerDuties.getPostalCode().length() == 10)
+            binding.editTextPostalCode.setText(FormActivity.examinerDuties.getPostalCode());
         binding.editTextRadif.setText(FormActivity.examinerDuties.getRadif());
 
         binding.textViewZone.setText(FormActivity.examinerDuties.getZoneTitle());

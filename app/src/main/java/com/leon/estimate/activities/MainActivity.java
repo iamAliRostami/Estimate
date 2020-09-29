@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         }
         Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .fallbackToDestructiveMigration()
-                .addMigrations(MyDatabase.MIGRATION_34_35).build();
+                .addMigrations(MyDatabase.MIGRATION_35_36).build();
 //        readData();
     }
 

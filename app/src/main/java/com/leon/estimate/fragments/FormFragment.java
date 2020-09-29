@@ -257,6 +257,8 @@ public class FormFragment extends Fragment {
         FormActivity.examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
         FormActivity.examinerDuties.setParvane(binding.checkbox4.isChecked());
         FormActivity.examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
+        FormActivity.examinerDuties.setPelak(Integer.parseInt(binding.editTextPelak.getText().toString()));
+        FormActivity.examinerDuties.setNoeVagozariId(noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId());
         return calculationUserInput;
     }
 
@@ -360,7 +362,7 @@ public class FormFragment extends Fragment {
             counter++;
         }
         binding.spinner2.setAdapter(createArrayAdapter(arrayListSpinner));
-        binding.spinner2.setSelection(select);
+        binding.spinner2.setSelection(FormActivity.examinerDuties.noeVagozariId);
     }
 
     private void initializeQotrEnsheabSpinner() {
@@ -397,7 +399,7 @@ public class FormFragment extends Fragment {
         binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity.examinerDuties.getZarfiatQarardadi()));
         binding.editTextPariNumber.setText(FormActivity.examinerDuties.getParNumber());
         binding.editTextSodurDate.setText(FormActivity.examinerDuties.getExaminationDay());
-        binding.editTextPelak.setText(FormActivity.examinerDuties.getPostalCode());
+        binding.editTextPelak.setText(String.valueOf(FormActivity.examinerDuties.getPelak()));
 
         binding.checkbox1.setChecked(FormActivity.examinerDuties.isEnsheabQeirDaem());
         binding.checkbox2.setChecked(FormActivity.examinerDuties.isMotaqazi());

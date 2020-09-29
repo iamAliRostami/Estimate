@@ -69,7 +69,8 @@ public class CalculationUserInput {
     public String description;
     boolean sent;
     public String shenasname;
-
+    @Ignore
+    int pelak;
     public int resultId;
 
     public boolean isSent() {

@@ -10,30 +10,30 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
         RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class,
         Tejariha.class, Zarib.class, Formula.class, Block.class},
-        version = 35, exportSchema = false)
+        version = 36, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_34_35 = new Migration(34, 35) {
+    public static final Migration MIGRATION_35_36 = new Migration(34, 35) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE \"FormulaTemp\" (\n" +
-                    "\t\"id\"\tINTEGER,\n" +
-                    "\t\"zoneId\"\tINTEGER,\n" +
-                    "\t\"gozarFrom\"\tREAL,\n" +
-                    "\t\"gozarTo\"\tREAL,\n" +
-                    "\t\"gozarTitle\"\tTEXT,\n" +
-                    "\t\"maskooniZ\"\tREAL,\n" +
-                    "\t\"TejraiZ\"\tREAL,\n" +
-                    "\t\"edariDolatiZ\"\tREAL,\n" +
-                    "\t\"khadamatiZ\"\tREAL,\n" +
-                    "\t\"sanatiZ\"\tREAL,\n" +
-                    "\t\"sayerZ\"\tREAL,\n" +
-                    "\tPRIMARY KEY(\"id\")\n" +
-                    ");");
-            database.execSQL("DROP TABLE Formula;");
-            database.execSQL("ALTER TABLE FormulaTemp RENAME TO Formula;");
+//            database.execSQL("CREATE TABLE \"FormulaTemp\" (\n" +
+//                    "\t\"id\"\tINTEGER,\n" +
+//                    "\t\"zoneId\"\tINTEGER,\n" +
+//                    "\t\"gozarFrom\"\tREAL,\n" +
+//                    "\t\"gozarTo\"\tREAL,\n" +
+//                    "\t\"gozarTitle\"\tTEXT,\n" +
+//                    "\t\"maskooniZ\"\tREAL,\n" +
+//                    "\t\"TejraiZ\"\tREAL,\n" +
+//                    "\t\"edariDolatiZ\"\tREAL,\n" +
+//                    "\t\"khadamatiZ\"\tREAL,\n" +
+//                    "\t\"sanatiZ\"\tREAL,\n" +
+//                    "\t\"sayerZ\"\tREAL,\n" +
+//                    "\tPRIMARY KEY(\"id\")\n" +
+//                    ");");
+//            database.execSQL("DROP TABLE Formula;");
+//            database.execSQL("ALTER TABLE FormulaTemp RENAME TO Formula;");
 
-//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  etesalZirzamin INTEGER;");
-//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  noeVagozariId INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column pelak INTEGER;");
 //            database.execSQL("CREATE TABLE \"ImagesTemp\" (\n" +
 //                    "\t\"imageId\"\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
 //                    "\t\"address\"\tTEXT,\n" +

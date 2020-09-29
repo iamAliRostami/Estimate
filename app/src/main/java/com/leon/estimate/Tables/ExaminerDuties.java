@@ -90,6 +90,8 @@ public class ExaminerDuties {
     boolean etesalZirzamin;
     int omqFazelab;
     boolean chahAbBaran;
+    public int noeVagozariId;
+    public int pelak;
 
     boolean estelamShahrdari, parvane, motaqazi;
 
@@ -175,6 +177,22 @@ public class ExaminerDuties {
         shenasname = calculationUserInput.shenasname;
 //        isPeymayesh = true;
         return this;
+    }
+
+    public int getNoeVagozariId() {
+        return noeVagozariId;
+    }
+
+    public void setNoeVagozariId(int noeVagozariId) {
+        this.noeVagozariId = noeVagozariId;
+    }
+
+    public int getPelak() {
+        return pelak;
+    }
+
+    public void setPelak(int pelak) {
+        this.pelak = pelak;
     }
 
     public boolean isEstelamShahrdari() {
