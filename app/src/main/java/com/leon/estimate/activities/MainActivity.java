@@ -199,9 +199,9 @@ public class MainActivity extends AppCompatActivity
                 initialize();
             }
         }
-        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .fallbackToDestructiveMigration()
-                .addMigrations(MyDatabase.MIGRATION_35_36).build();
+//        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+//                .fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_35_36).build();
 //        readData();
     }
 

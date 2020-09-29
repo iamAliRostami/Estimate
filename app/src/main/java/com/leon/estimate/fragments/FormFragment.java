@@ -275,8 +275,6 @@ public class FormFragment extends Fragment {
                 && checkIsNoEmpty(binding.editTextTedadTakhfif)
                 && checkIsNoEmpty(binding.editTextZarfiatQaradadi)
                 && checkIsNoEmpty(binding.editTextPariNumber);
-//                && checkIsNoEmpty(binding.editTextSodurDate)
-//                && checkIsNoEmpty(binding.editTextPelak);
     }
 
     boolean checkIsNoEmpty(TextView textView) {
