@@ -58,7 +58,7 @@ public class CustomErrorHandling extends Exception {
     String getErrorMessageTotal(Throwable throwable) {
         String errorMessage;
         if (throwable instanceof IOException) {
-            errorMessage = context.getString(R.string.error_IO);
+            errorMessage = context.getString(R.string.error_connection);
             return errorMessage;
         } else if (throwable instanceof SocketTimeoutException) {
             errorMessage = context.getString(R.string.error_Socket);

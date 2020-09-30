@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     private int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
     private String username, password;
-    private View viewFocus;
     private Context context;
 
     @Override
@@ -232,6 +231,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setButtonOnClickListener() {
         binding.buttonLogin.setOnClickListener(view -> {
+            View viewFocus;
             boolean cancel = false;
             username = binding.editTextUsername.getText().toString();
             password = binding.editTextPassword.getText().toString();

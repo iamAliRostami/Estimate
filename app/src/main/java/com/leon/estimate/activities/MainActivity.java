@@ -65,8 +65,6 @@ import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
-import com.leon.estimate.Tables.GISInfo;
-import com.leon.estimate.Tables.GISToken;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.Login;
@@ -77,10 +75,6 @@ import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomProgressBar;
-import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
-import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
-import com.leon.estimate.Utils.GIS.CustomGeoJSON;
-import com.leon.estimate.Utils.GIS.MyKmlStyle;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -89,7 +83,6 @@ import com.leon.estimate.databinding.MainActivityBinding;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -98,7 +91,6 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
@@ -135,11 +127,11 @@ public class MainActivity extends AppCompatActivity
     MainActivityBinding binding;
     String trackNumber;
     DrawerLayout drawer;
-    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0, imageId, imageCounter = 0;
     Polyline roadOverlay;
     MapView mapView;
     Context context;
     CoordinateConversion conversion;
+    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0, imageId, imageCounter = 0;
     ArrayList<Integer> indexArray;
     ArrayList<GeoPoint> wayPoints, placesPoints;
     List<ExaminerDuties> examinerDuties, examinerDutiesReady;
@@ -183,29 +175,12 @@ public class MainActivity extends AppCompatActivity
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         context = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
-        sharedPreferenceManager = new SharedPreferenceManager(context,
-                SharedReferenceNames.ACCOUNT.getValue());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED ||
-                    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED
-            ) {
-                askPermission();
-            } else {
-                Configuration.getInstance().load(context,
-                        PreferenceManager.getDefaultSharedPreferences(context));
-                setContentView(binding.getRoot());
-                initialize();
-            }
-        }
+        checkPermission();
 //        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-//                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_36_37).build();
-//        readData();
+//                .fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_36_37).build();
     }
 
-    public void readData() {
+    void readData() {
         File sdcard = Environment.getExternalStorageDirectory();
         File file = new File(sdcard, "json.txt");
         StringBuilder text = new StringBuilder();
@@ -269,12 +244,33 @@ public class MainActivity extends AppCompatActivity
         daoResultDictionary.insertAll(input.getResultDictionary());
     }
 
+    void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED
+            ) {
+                askPermission();
+            } else {
+                Configuration.getInstance().load(context,
+                        PreferenceManager.getDefaultSharedPreferences(context));
+                setContentView(binding.getRoot());
+                initialize();
+            }
+        }
+    }
+
     void initialize() {
         toolbar = findViewById(R.id.toolbar);
         drawer = findViewById(R.id.drawer_layout);
         setActionBarTitle(getString(R.string.home));
         drawer.openDrawer(GravityCompat.START);
+        sharedPreferenceManager = new SharedPreferenceManager(context,
+                SharedReferenceNames.ACCOUNT.getValue());
         setImageViewClickListener();
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .allowMainThreadQueries().build();
         initializeMap();
     }
 
@@ -314,7 +310,8 @@ public class MainActivity extends AppCompatActivity
             Log.e("lat", String.valueOf(latitude));
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
             mapController.setCenter(startPoint);
-            MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+            MyLocationNewOverlay locationOverlay =
+                    new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
             locationOverlay.enableMyLocation();
             mapView.getOverlays().add(locationOverlay);
             conversion = new CoordinateConversion();
@@ -326,7 +323,7 @@ public class MainActivity extends AppCompatActivity
         Location l = null;
         LocationManager mLocationManager = (LocationManager)
                 getApplicationContext().getSystemService(LOCATION_SERVICE);
-        assert mLocationManager != null;
+//        assert mLocationManager != null;
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
@@ -348,8 +345,6 @@ public class MainActivity extends AppCompatActivity
         placesPoints = new ArrayList<>();
         indexArray = new ArrayList<>();
         isShown = new ArrayList<>();
-        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         examinerDuties = daoExaminerDuties.ExaminerDuties();
         examinerDutiesReady = new ArrayList<>();
@@ -393,20 +388,15 @@ public class MainActivity extends AppCompatActivity
         Marker startMarker = new Marker(mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-//        MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-//                org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
         MarkerInfoWindow infoWindow = new MarkerInfoWindow(
                 R.layout.custom_info_window, mapView);
         startMarker.setInfoWindow(infoWindow);
         startMarker.setOnMarkerClickListener((marker, mapView) -> {
-            //TODO start index from 1
             int overlayIndex = mapView.getOverlayManager().indexOf(startMarker) / 2;
             ExaminerDuties examinerDuties = examinerDutiesReady.get(overlayIndex);
-            Log.e("name", examinerDuties.getNameAndFamily());
             InfoWindow.closeAllInfoWindowsOn(mapView);
             infoWindow.close();
-            if (isShown.get(overlayIndex)/* && mapView.getOverlayManager().indexOf(startMarker) == wayIndex*/) {
+            if (isShown.get(overlayIndex)) {
                 mapView.getOverlays().remove(roadOverlay);
                 if (examinerDuties.isPeymayesh()) {
                     Toast.makeText(context, R.string.is_peymayesh, Toast.LENGTH_LONG).show();
@@ -428,7 +418,6 @@ public class MainActivity extends AppCompatActivity
                 isShown.set(i, false);
             isShown.set(overlayIndex, !isShown.get(overlayIndex));
             wayIndex = mapView.getOverlayManager().indexOf(startMarker);
-            Log.e("index", String.valueOf(wayIndex));
             return false;
         });
         mapView.getOverlayManager().add(startMarker);
@@ -445,8 +434,6 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         }));
-        int placeIndex = mapView.getOverlays().size() - 1;
-        Log.e("placeIndex", String.valueOf(placeIndex));
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -465,29 +452,8 @@ public class MainActivity extends AppCompatActivity
         wayPoints.add(endPoint);
         Road road = roadManager.getRoad(wayPoints);
         roadOverlay = RoadManager.buildRoadOverlay(road);
-        roadOverlay.setOnClickListener((polyline, mapView, eventPos) -> {
-//            mapView.getOverlays().remove(polyline);
-//            InfoWindow.closeAllInfoWindowsOn(mapView);
-//            isShown = !isShown;
-            return false;
-        });
         mapView.getOverlays().add(roadOverlay);
         mapView.invalidate();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                HttpClientWrapper.call.cancel();
-                super.onBackPressed();
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        }
     }
 
     @Override
@@ -617,8 +583,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     void send() {
-        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
         if (calculationUserInputList.size() > 0) {
@@ -636,7 +600,6 @@ public class MainActivity extends AppCompatActivity
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
                     new SendCalculationIncomplete(), new GetError());
-
         } else
             Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
         DaoImages daoImages = dataBase.daoImages();
@@ -649,8 +612,6 @@ public class MainActivity extends AppCompatActivity
     void attemptLogin() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-//        Call<Login> call = abfaService.login2("isf1_up3", "isf1_up3$321");//TODO
-//        Call<Login> call = abfaService.login2("test_u1", "pspihp");
         Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.USERNAME.getValue()),
                 sharedPreferenceManager.getStringData(SharedReferenceKeys.PASSWORD.getValue()));
@@ -767,36 +728,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class DownloadIncomplete implements ICallbackIncomplete<Input> {
-        @Override
-        public void executeIncomplete(Response<Input> response) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, context, error,
-                    getString(R.string.dear_user),
-                    getString(R.string.login),
-                    getString(R.string.accepted));
-            Log.e("Download Incomplete", response.toString());
-        }
-    }
-
-    static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
-        @Override
-        public void executeIncomplete(Response<SimpleMessage> response) {
-            Log.e("SendCalculation Error", response.toString());
-        }
-    }
-
-    class SendCalculation implements ICallback<SimpleMessage> {
-        @Override
-        public void execute(SimpleMessage simpleMessage) {
-            dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                    .allowMainThreadQueries().build();
-            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-            for (CalculationUserInput calculationUserInput : calculationUserInputList) {
-                trackNumber = calculationUserInput.trackNumber;
-                daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
             }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
         }
     }
 
@@ -810,9 +753,6 @@ public class MainActivity extends AppCompatActivity
                     examinerDutiesList.get(i).setRequestDictionaryString(
                             gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
                 }
-                dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                        .allowMainThreadQueries().build();
-
                 DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
                 List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
                 for (int i = 0; i < examinerDutiesList.size(); i++) {
@@ -831,23 +771,16 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 daoExaminerDuties.insertAll(examinerDutiesList);
-
                 DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
                 daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-
                 DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
                 daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-
                 DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
                 daoServiceDictionary.insertAll(input.getServiceDictionary());
-
                 DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
                 daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-
                 DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
                 daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-
-                Log.e("size", String.valueOf(input.getResultDictionary().size()));
                 DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
                 daoResultDictionary.insertAll(input.getResultDictionary());
                 new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
@@ -859,12 +792,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    void getGISToken() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
-        IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
-        Call<GISToken> call = iAbfaService.getGISToken();
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
-                new GetGISToken(), new GetGISTokenIncomplete(), new GetError());
+    static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+            Log.e("SendCalculation Error", response.toString());
+        }
+    }
+
+    class SendCalculation implements ICallback<SimpleMessage> {
+        @Override
+        public void execute(SimpleMessage simpleMessage) {
+            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+            for (CalculationUserInput calculationUserInput : calculationUserInputList) {
+                trackNumber = calculationUserInput.trackNumber;
+                daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+            }
+        }
     }
 
     class GetXYIncomplete implements ICallbackIncomplete<Place> {
@@ -883,26 +826,6 @@ public class MainActivity extends AppCompatActivity
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             Log.e("GetXYIncomplete", error);
         }
-    }
-
-    void getGis(String token, int i) {
-        Retrofit retrofit = NetworkHelper.getInstanceMap();
-        IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
-        Call<String> call;
-        if (i == 1)
-            call = iAbfaService.getGisSanitationTransfer(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
-                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
-        else if (i == 2)
-            call = iAbfaService.getGisWaterPipe(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
-                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
-        else if (i == 3)
-            call = iAbfaService.getGisWaterTransfer(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
-                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
-        else
-            call = iAbfaService.getGisParcels(new GISInfo("jesuschrist", token, examinerDuties.get(0).getBillId(),
-                    placesPoints.get(0).getLatitude(), placesPoints.get(0).getLongitude()));
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
-                new GetGIS(), new GetGISIncomplete(), new GetError());
     }
 
     class GetXY implements ICallback<Place> {
@@ -928,7 +851,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             counter = counter + 1;
-//            getGISToken();
             if (counter < examinerDuties.size()) {
                 if (examinerDuties.get(counter).getBillId() != null
                         && examinerDuties.get(counter).getBillId().length() > 0)
@@ -948,45 +870,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    class GetGIS implements ICallback<String> {
+    class DownloadIncomplete implements ICallbackIncomplete<Input> {
         @Override
-        public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-
-            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    mapView, null, new MyKmlStyle(), kmlDocument);
-            mapView.getOverlays().add(geoJsonOverlay);
-            mapView.invalidate();
-        }
-    }
-
-    class GetGISIncomplete implements ICallbackIncomplete<String> {
-        @Override
-        public void executeIncomplete(Response<String> response) {
-            if (response.errorBody() != null) {
-                Log.e("ErrorIncomplete", response.errorBody().toString());
-            }
-        }
-    }
-
-    class GetGISToken implements ICallback<GISToken> {
-        @Override
-        public void execute(GISToken gisToken) {
-            getGis(gisToken.getToken(), 0);
-            getGis(gisToken.getToken(), 1);
-            getGis(gisToken.getToken(), 2);
-            getGis(gisToken.getToken(), 3);
-        }
-    }
-
-    class GetGISTokenIncomplete implements ICallbackIncomplete<GISToken> {
-        @Override
-        public void executeIncomplete(Response<GISToken> response) {
-
+        public void executeIncomplete(Response<Input> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, context, error,
+                    getString(R.string.dear_user),
+                    getString(R.string.download),
+                    getString(R.string.accepted));
+            Log.e("Download Incomplete", response.toString());
         }
     }
 
