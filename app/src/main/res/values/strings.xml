@@ -41,7 +41,7 @@
     <string name="error_empty_all">همه فیلد ها خالی است.</string>
     <string name="error_short_length">.این فیلد کوتاه است</string>
     <string name="error_similar">شماره پرونده و شماره اشتراک مطابق نیستند.</string>
-    <string name="error_IO">خطا در جابجای اطلاعات، لطفا مجدد تلاش کنید</string>
+    <string name="error_IO">خطا در جابجای اطلاعات، اتصالات خود را بررسی و مجدد تلاش کنید</string>
     <string name="error_upload">در بارگذاری اطلاعات خطایی پدید آمد.</string>
     <string name="error_Socket">خطادر ارتباط با سرور، لطفا تنظیمات شبکه خود را بررسی و مجدد تلاش کنید</string>
     <string name="error_disconnected">برقراری ارتباط حین جابجایی اطلاعات با خطا مواجه شد</string>

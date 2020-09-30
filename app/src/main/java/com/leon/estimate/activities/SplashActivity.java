@@ -14,7 +14,7 @@ import com.leon.estimate.databinding.SplashActivityBinding;
 public class SplashActivity extends AppCompatActivity {
 
     private boolean splashLoaded = false;
-    SplashActivityBinding binding;
+    private SplashActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
             initialize();
             startSplash();
         } else {
-            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
             finish();
@@ -37,8 +37,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        int splashResourceId = R.drawable.img_splash;
-        binding.imageViewSplashScreen.setImageResource(splashResourceId);
+        binding.imageViewSplashScreen.setImageResource(R.drawable.img_splash);
     }
 
     private void startSplash() {
@@ -51,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } finally {
                     splashLoaded = true;
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -79,6 +78,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        binding.shimmerViewContainer.setShimmer(null);
+        binding.imageViewSplashScreen.setImageDrawable(null);
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();

@@ -130,7 +130,7 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
-    public double latitude, longitude;
+    double latitude, longitude;
     LocationManager locationManager;
     MainActivityBinding binding;
     String trackNumber;
@@ -252,14 +252,19 @@ public class MainActivity extends AppCompatActivity
         daoExaminerDuties.insertAll(examinerDutiesList);
         DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
         daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+
         DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
         daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+
         DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
         daoServiceDictionary.insertAll(input.getServiceDictionary());
+
         DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
         daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+
         DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
         daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+
         DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
         daoResultDictionary.insertAll(input.getResultDictionary());
     }
@@ -293,7 +298,6 @@ public class MainActivity extends AppCompatActivity
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
             mapController.setZoom(19.5);
-
             locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
