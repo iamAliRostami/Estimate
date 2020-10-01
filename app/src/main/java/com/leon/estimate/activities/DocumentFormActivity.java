@@ -99,7 +99,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888, GALLERY_REQUEST = 1888;
     Context context;
     String mCurrentPhotoPath, trackNumber, billId;
-    boolean isNew;//, isMap = false;
+    boolean isNew;
     Bitmap bitmap;
     ImageViewAdapter imageViewAdapter;
     int counter = 0;
@@ -192,10 +192,6 @@ public class DocumentFormActivity extends AppCompatActivity {
             billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
-//            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
-//            if (bytes != null) {
-//                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//            }
             bitmap = Constants.bitmapMapImage;
         }
     }

@@ -122,15 +122,12 @@ public class CreateImageActivity extends AppCompatActivity {
         setOnAcceptedButtonClickListener();
         binding.imageViewRefresh1.setOnClickListener(v -> binding.signatureView1.clearCanvas());
         binding.imageViewRefresh2.setOnClickListener(v -> binding.signatureView2.clearCanvas());
-        binding.imageViewExport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                HighQualityFragment highQualityFragment = HighQualityFragment.newInstance(
-                        bitmap, "imageSign");
-                highQualityFragment.show(fragmentTransaction, "imageSign");
+        binding.imageViewExport.setOnClickListener(v -> {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            HighQualityFragment highQualityFragment = HighQualityFragment.newInstance(
+                    bitmap, "imageSign");
+            highQualityFragment.show(fragmentTransaction, "imageSign");
 
-            }
         });
     }
 
@@ -637,8 +634,6 @@ public class CreateImageActivity extends AppCompatActivity {
                         CreateImageActivity.this.getString(R.string.dear_user),
                         CreateImageActivity.this.getString(R.string.upload_image),
                         CreateImageActivity.this.getString(R.string.accepted));
-//                Toast.makeText(CreateImageActivity.this,
-//                        CreateImageActivity.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
             }
         }
     }
