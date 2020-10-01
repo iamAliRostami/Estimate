@@ -35,11 +35,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.leon.estimate.Utils.Constants.customAdapter;
+
 public class ListActivity extends AppCompatActivity {
     Context context;
     List<ExaminerDuties> examinerDuties;
-    @SuppressLint("StaticFieldLeak")
-    public static CustomListAdapter customAdapter;
+    //    @SuppressLint("StaticFieldLeak")
+//    public static CustomListAdapter customAdapter;
     ProgressDialog dialog;
     ListActivityBinding binding;
 

@@ -75,6 +75,12 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.arzeshdaraei;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.karbari;
+import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.tejarihas;
+
 public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private Context context;
@@ -145,8 +151,8 @@ public class FormFragment extends Fragment {
                 String vahedMohasebe = binding.editTextVahedMohasebe.getText().toString();
                 String a = binding.editTextA2.getText().toString();
                 Tejariha tejariha = new Tejariha(karbari, noeShoql, tedadVahed, vahedMohasebe, a,
-                        FormActivity.examinerDuties.getTrackNumber());
-                FormActivity.tejarihas.add(tejariha);
+                        examinerDuties.getTrackNumber());
+                tejarihas.add(tejariha);
                 tejarihaAdapter.notifyDataSetChanged();
                 binding.editTextA2.setText("");
                 binding.editTextNoeShoql.setText("");
@@ -165,18 +171,18 @@ public class FormFragment extends Fragment {
 
     void setOnTextViewArezeshdaraeiClickListener() {
         binding.textViewArzeshMelk.setOnClickListener(v -> {
-            if (FormActivity.arzeshdaraei != null
-                    && FormActivity.arzeshdaraei.blocks != null
-                    && FormActivity.arzeshdaraei.blocks.size() > 0
-                    && FormActivity.arzeshdaraei.formulas != null
-                    && FormActivity.arzeshdaraei.formulas.size() > 0
-                    && FormActivity.arzeshdaraei.zaribs != null
-                    && FormActivity.arzeshdaraei.zaribs.size() > 0) {
+            if (arzeshdaraei != null
+                    && arzeshdaraei.blocks != null
+                    && arzeshdaraei.blocks.size() > 0
+                    && arzeshdaraei.formulas != null
+                    && arzeshdaraei.formulas.size() > 0
+                    && arzeshdaraei.zaribs != null
+                    && arzeshdaraei.zaribs.size() > 0) {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 if (fragmentManager != null) {
                     fragmentTransaction = fragmentManager.beginTransaction();
-                    ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
+                    ValueFragment valueFragment = ValueFragment.newInstance(examinerDuties.getZoneId());
                     valueFragment.show(fragmentTransaction, "");
                 }
             } else {
@@ -250,13 +256,13 @@ public class FormFragment extends Fragment {
         calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
         calculationUserInput.ensheabQeireDaem = binding.checkbox1.isChecked();
 
-        FormActivity.karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
-        FormActivity.noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
-        FormActivity.examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
-        FormActivity.examinerDuties.setParvane(binding.checkbox4.isChecked());
-        FormActivity.examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
-        FormActivity.examinerDuties.setPelak(Integer.parseInt(binding.editTextPelak.getText().toString()));
-        FormActivity.examinerDuties.setSanad(binding.checkbox5.isChecked());
+        karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
+        noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
+        examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
+        examinerDuties.setParvane(binding.checkbox4.isChecked());
+        examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
+        examinerDuties.setPelak(Integer.parseInt(binding.editTextPelak.getText().toString()));
+        examinerDuties.setSanad(binding.checkbox5.isChecked());
         return calculationUserInput;
     }
 
@@ -317,7 +323,7 @@ public class FormFragment extends Fragment {
         int selected = 0, counter = 0;
         for (KarbariDictionary karbariDictionary : karbariDictionaries) {
             arrayListSpinner.add(karbariDictionary.getTitle());
-            if (karbariDictionary.getId() == FormActivity.examinerDuties.getKarbariId()) {
+            if (karbariDictionary.getId() == examinerDuties.getKarbariId()) {
                 selected = counter;
             }
             counter = counter + 1;
@@ -335,7 +341,7 @@ public class FormFragment extends Fragment {
         int selected = 0, counter = 0;
         for (TaxfifDictionary taxfifDictionary : taxfifDictionaries) {
             arrayListSpinner.add(taxfifDictionary.getTitle());
-            if (taxfifDictionary.getId() == FormActivity.examinerDuties.getTaxfifId()) {
+            if (taxfifDictionary.getId() == examinerDuties.getTaxfifId()) {
                 selected = counter;
             }
             counter = counter + 1;
@@ -358,7 +364,7 @@ public class FormFragment extends Fragment {
             counter++;
         }
         binding.spinner2.setAdapter(createArrayAdapter(arrayListSpinner));
-        binding.spinner2.setSelection(FormActivity.examinerDuties.noeVagozariId);
+        binding.spinner2.setSelection(examinerDuties.noeVagozariId);
     }
 
     private void initializeQotrEnsheabSpinner() {
@@ -368,7 +374,7 @@ public class FormFragment extends Fragment {
         int counter = 0, selected = 0;
         for (QotrEnsheabDictionary qotrEnsheabDictionary : qotrEnsheabDictionaries) {
             arrayListSpinner.add(qotrEnsheabDictionary.getTitle());
-            if (FormActivity.examinerDuties.getQotrEnsheabId() == qotrEnsheabDictionary.getId()) {
+            if (examinerDuties.getQotrEnsheabId() == qotrEnsheabDictionary.getId()) {
                 selected = counter;
             }
             counter = counter + 1;
@@ -379,29 +385,29 @@ public class FormFragment extends Fragment {
     }
 
     private void initializeField() {
-        binding.editTextSifoon100.setText(String.valueOf(FormActivity.examinerDuties.getSifoon100()));
-        binding.editTextSifoon125.setText(String.valueOf(FormActivity.examinerDuties.getSifoon125()));
-        binding.editTextSifoon150.setText(String.valueOf(FormActivity.examinerDuties.getSifoon150()));
-        binding.editTextSifoon200.setText(String.valueOf(FormActivity.examinerDuties.getSifoon200()));
-        binding.editTextArese.setText(String.valueOf(FormActivity.examinerDuties.getArse()));
-        binding.editTextAianKol.setText(String.valueOf(FormActivity.examinerDuties.getAianKol()));
-        binding.editTextAianMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getAianMaskooni()));
-        binding.editTextAianNonMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getAianNonMaskooni()));
-        binding.editTextTedadMaskooni.setText(String.valueOf(FormActivity.examinerDuties.getTedadMaskooni()));
-        binding.editTextTedadTejari.setText(String.valueOf(FormActivity.examinerDuties.getTedadTejari()));
-        binding.editTextTedadSaier.setText(String.valueOf(FormActivity.examinerDuties.getTedadSaier()));
-        binding.textViewArzeshMelk.setText(String.valueOf(FormActivity.examinerDuties.getArzeshMelk()));
-        binding.editTextTedadTakhfif.setText(String.valueOf(FormActivity.examinerDuties.getTedadTaxfif()));
-        binding.editTextZarfiatQaradadi.setText(String.valueOf(FormActivity.examinerDuties.getZarfiatQarardadi()));
-        binding.editTextPariNumber.setText(FormActivity.examinerDuties.getParNumber());
-        binding.editTextSodurDate.setText(FormActivity.examinerDuties.getExaminationDay());
-        binding.editTextPelak.setText(String.valueOf(FormActivity.examinerDuties.getPelak()));
+        binding.editTextSifoon100.setText(String.valueOf(examinerDuties.getSifoon100()));
+        binding.editTextSifoon125.setText(String.valueOf(examinerDuties.getSifoon125()));
+        binding.editTextSifoon150.setText(String.valueOf(examinerDuties.getSifoon150()));
+        binding.editTextSifoon200.setText(String.valueOf(examinerDuties.getSifoon200()));
+        binding.editTextArese.setText(String.valueOf(examinerDuties.getArse()));
+        binding.editTextAianKol.setText(String.valueOf(examinerDuties.getAianKol()));
+        binding.editTextAianMaskooni.setText(String.valueOf(examinerDuties.getAianMaskooni()));
+        binding.editTextAianNonMaskooni.setText(String.valueOf(examinerDuties.getAianNonMaskooni()));
+        binding.editTextTedadMaskooni.setText(String.valueOf(examinerDuties.getTedadMaskooni()));
+        binding.editTextTedadTejari.setText(String.valueOf(examinerDuties.getTedadTejari()));
+        binding.editTextTedadSaier.setText(String.valueOf(examinerDuties.getTedadSaier()));
+        binding.textViewArzeshMelk.setText(String.valueOf(examinerDuties.getArzeshMelk()));
+        binding.editTextTedadTakhfif.setText(String.valueOf(examinerDuties.getTedadTaxfif()));
+        binding.editTextZarfiatQaradadi.setText(String.valueOf(examinerDuties.getZarfiatQarardadi()));
+        binding.editTextPariNumber.setText(examinerDuties.getParNumber());
+        binding.editTextSodurDate.setText(examinerDuties.getExaminationDay());
+        binding.editTextPelak.setText(String.valueOf(examinerDuties.getPelak()));
 
-        binding.checkbox1.setChecked(FormActivity.examinerDuties.isEnsheabQeirDaem());
-        binding.checkbox2.setChecked(FormActivity.examinerDuties.isMotaqazi());
-        binding.checkbox3.setChecked(FormActivity.examinerDuties.isEstelamShahrdari());
-        binding.checkbox4.setChecked(FormActivity.examinerDuties.isParvane());
-        binding.checkbox5.setChecked(FormActivity.examinerDuties.isSanad());
+        binding.checkbox1.setChecked(examinerDuties.isEnsheabQeirDaem());
+        binding.checkbox2.setChecked(examinerDuties.isMotaqazi());
+        binding.checkbox3.setChecked(examinerDuties.isEstelamShahrdari());
+        binding.checkbox4.setChecked(examinerDuties.isParvane());
+        binding.checkbox5.setChecked(examinerDuties.isSanad());
 
     }
 
@@ -454,9 +460,9 @@ public class FormFragment extends Fragment {
         Retrofit retrofit = NetworkHelper.getInstance(true,
                 sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
         final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
-        Log.e("zone", FormActivity.examinerDuties.getZoneId());
+        Log.e("zone", examinerDuties.getZoneId());
         Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(
-                FormActivity.examinerDuties.getZoneId()));
+                examinerDuties.getZoneId()));
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
                 new GetArzeshdaraei(), new GetArzeshdaraeiIncomplete(), new GetError());
     }
@@ -464,24 +470,24 @@ public class FormFragment extends Fragment {
     class GetArzeshdaraei implements ICallback<Arzeshdaraei> {
         @Override
         public void execute(Arzeshdaraei arzeshdaraeiResponse) {
-            FormActivity.arzeshdaraei = arzeshdaraeiResponse;
-            if (FormActivity.arzeshdaraei != null && FormActivity.arzeshdaraei.formulas != null &&
-                    FormActivity.arzeshdaraei.formulas.size() > 0 && FormActivity.arzeshdaraei.blocks != null
-                    && FormActivity.arzeshdaraei.blocks.size() > 0) {
+            arzeshdaraei = arzeshdaraeiResponse;
+            if (arzeshdaraei != null && arzeshdaraei.formulas != null &&
+                    arzeshdaraei.formulas.size() > 0 && arzeshdaraei.blocks != null
+                    && arzeshdaraei.blocks.size() > 0) {
                 DaoFormula daoFormula = dataBase.daoFormula();
                 DaoBlock daoBlock = dataBase.daoBlock();
                 DaoZarib daoZarib = dataBase.daoZarib();
-                for (int i = 0; i < FormActivity.arzeshdaraei.formulas.size(); i++)
-                    daoFormula.insertFormula(FormActivity.arzeshdaraei.formulas.get(i));
-                for (int i = 0; i < FormActivity.arzeshdaraei.blocks.size(); i++)
-                    daoBlock.insertBlock(FormActivity.arzeshdaraei.blocks.get(i));
-                for (int i = 0; i < FormActivity.arzeshdaraei.zaribs.size(); i++)
-                    daoZarib.insertZarib(FormActivity.arzeshdaraei.zaribs.get(i));
+                for (int i = 0; i < arzeshdaraei.formulas.size(); i++)
+                    daoFormula.insertFormula(arzeshdaraei.formulas.get(i));
+                for (int i = 0; i < arzeshdaraei.blocks.size(); i++)
+                    daoBlock.insertBlock(arzeshdaraei.blocks.get(i));
+                for (int i = 0; i < arzeshdaraei.zaribs.size(); i++)
+                    daoZarib.insertZarib(arzeshdaraei.zaribs.get(i));
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 if (fragmentManager != null) {
                     fragmentTransaction = fragmentManager.beginTransaction();
-                    ValueFragment valueFragment = ValueFragment.newInstance(FormActivity.examinerDuties.getZoneId());
+                    ValueFragment valueFragment = ValueFragment.newInstance(examinerDuties.getZoneId());
                     valueFragment.show(fragmentTransaction, "");
                 }
             } else {

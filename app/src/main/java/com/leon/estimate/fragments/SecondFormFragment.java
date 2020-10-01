@@ -21,6 +21,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.secondForm;
+
 public class SecondFormFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -58,40 +61,40 @@ public class SecondFormFragment extends Fragment {
 
     void initialize() {
         binding.spinnerLoole.setAdapter(createArrayAdapter(getResources().getStringArray(R.array.menu_qotr_loole)));
-        binding.spinnerLoole.setSelection(FormActivity.secondForm.getQotreLooleI());
+        binding.spinnerLoole.setSelection(secondForm.getQotreLooleI());
         binding.spinnerLooleJens.setAdapter(createArrayAdapter(getResources().getStringArray(R.array.menu_jens_loole)));
-        binding.spinnerLooleJens.setSelection(FormActivity.secondForm.getJenseLooleI());
+        binding.spinnerLooleJens.setSelection(secondForm.getJenseLooleI());
 
-        binding.editTextKhaki.setText(String.valueOf(FormActivity.secondForm.getKhakiAb()));
-        binding.editTextAsphalt.setText(String.valueOf(FormActivity.secondForm.getAsphalutAb()));
-        binding.editTextSange.setText(String.valueOf(FormActivity.secondForm.getSangFarshAb()));
-        binding.editTextOther.setText(String.valueOf(FormActivity.secondForm.getOtherAb()));
-        binding.editTextKhakiFazelab.setText(String.valueOf(FormActivity.secondForm.getKhakiFazelab()));
-        binding.editTextAsphaltFazelab.setText(String.valueOf(FormActivity.secondForm.getAsphalutFazelab()));
-        binding.editTextSangeFazelab.setText(String.valueOf(FormActivity.secondForm.getSangFarshFazelab()));
-        binding.editTextOtherFazelab.setText(String.valueOf(FormActivity.secondForm.getOtherFazelab()));
-        binding.editTextOmqFazelab.setText(String.valueOf(FormActivity.secondForm.getOmqFazelab()));
-        binding.checkBoxVahedAb.setChecked(FormActivity.secondForm.isEzhaNazarA());
-        binding.checkBoxVahedFazelab.setChecked(FormActivity.secondForm.isEzhaNazarF());
+        binding.editTextKhaki.setText(String.valueOf(secondForm.getKhakiAb()));
+        binding.editTextAsphalt.setText(String.valueOf(secondForm.getAsphalutAb()));
+        binding.editTextSange.setText(String.valueOf(secondForm.getSangFarshAb()));
+        binding.editTextOther.setText(String.valueOf(secondForm.getOtherAb()));
+        binding.editTextKhakiFazelab.setText(String.valueOf(secondForm.getKhakiFazelab()));
+        binding.editTextAsphaltFazelab.setText(String.valueOf(secondForm.getAsphalutFazelab()));
+        binding.editTextSangeFazelab.setText(String.valueOf(secondForm.getSangFarshFazelab()));
+        binding.editTextOtherFazelab.setText(String.valueOf(secondForm.getOtherFazelab()));
+        binding.editTextOmqFazelab.setText(String.valueOf(secondForm.getOmqFazelab()));
+        binding.checkBoxVahedAb.setChecked(secondForm.isEzhaNazarA());
+        binding.checkBoxVahedFazelab.setChecked(secondForm.isEzhaNazarF());
 
-        binding.checkBoxLooleAb.setChecked(FormActivity.secondForm.isLooleA());
-        binding.checkBoxLooleFazelab.setChecked(FormActivity.secondForm.isLooleF());
-        binding.radioButtonNormal.setChecked(FormActivity.secondForm.isVaziatNasbePomp());
-        binding.radioButtonANormalPomp.setChecked(!FormActivity.secondForm.isVaziatNasbePomp());
-        binding.editTextOmqZirzamin.setText(String.valueOf(FormActivity.secondForm.getOmqeZirzamin()));
-        if (FormActivity.examinerDuties.getNoeMasrafI() == 0)
+        binding.checkBoxLooleAb.setChecked(secondForm.isLooleA());
+        binding.checkBoxLooleFazelab.setChecked(secondForm.isLooleF());
+        binding.radioButtonNormal.setChecked(secondForm.isVaziatNasbePomp());
+        binding.radioButtonANormalPomp.setChecked(!secondForm.isVaziatNasbePomp());
+        binding.editTextOmqZirzamin.setText(String.valueOf(secondForm.getOmqeZirzamin()));
+        if (examinerDuties.getNoeMasrafI() == 0)
             binding.radioButtonNormal.setChecked(true);
-        else if (FormActivity.examinerDuties.getNoeMasrafI() == 1)
+        else if (examinerDuties.getNoeMasrafI() == 1)
             binding.radioButtonSakht.setChecked(true);
-        else if (FormActivity.examinerDuties.getNoeMasrafI() == 2)
+        else if (examinerDuties.getNoeMasrafI() == 2)
             binding.radioButtonService.setChecked(true);
-        else if (FormActivity.examinerDuties.getNoeMasrafI() == 3)
+        else if (examinerDuties.getNoeMasrafI() == 3)
             binding.radioButtonMedical.setChecked(true);
-        binding.checkBoxEtesalZirzamin.setChecked(FormActivity.secondForm.isEtesalZirzamin());
-        binding.checkBoxChahAbBaran.setChecked(FormActivity.secondForm.isChahAbBaran());//TODO
+        binding.checkBoxEtesalZirzamin.setChecked(secondForm.isEtesalZirzamin());
+        binding.checkBoxChahAbBaran.setChecked(secondForm.isChahAbBaran());//TODO
 
-        binding.editTextDescriptionChahAbBaran.setText(FormActivity.secondForm.getChahDescription());
-        binding.editTextNoeMasrafDescription.setText(FormActivity.secondForm.getMasrafDescription());
+        binding.editTextDescriptionChahAbBaran.setText(secondForm.getChahDescription());
+        binding.editTextNoeMasrafDescription.setText(secondForm.getMasrafDescription());
 
     }
 

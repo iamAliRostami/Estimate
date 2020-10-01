@@ -202,7 +202,7 @@ public class MotherChildActivity extends AppCompatActivity {
             binding.editTextMobile.setText("");
             binding.editTextNationNumber.setText("");
             binding.editTextBillId.setText("");
-            new CustomDialog(DialogType.Yellow, context, simpleMessage.getMessage(),
+            new CustomDialog(DialogType.Green, context, simpleMessage.getMessage(),
                     getString(R.string.dear_user), getString(R.string.request),
                     getString(R.string.accepted));
             download();

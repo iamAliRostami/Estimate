@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 
 public class PersonalFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
@@ -126,32 +128,32 @@ public class PersonalFragment extends Fragment {
     }
 
     private void initializeField() {
-        binding.editTextAddress.setText(FormActivity.examinerDuties.getAddress());
-        if (FormActivity.examinerDuties.getFirstName() != null)
-            binding.editTextName.setText(FormActivity.examinerDuties.getFirstName().trim());
-        if (FormActivity.examinerDuties.getSureName() != null)
-            binding.editTextFamily.setText(FormActivity.examinerDuties.getSureName().trim());
-        if (FormActivity.examinerDuties.getNationalId().length() == 10)
-            binding.editTextNationNumber.setText(FormActivity.examinerDuties.getNationalId());
-        binding.editTextFatherName.setText(FormActivity.examinerDuties.getFatherName());
-        binding.editTextDescription.setText(FormActivity.examinerDuties.getDescription().trim());
-        binding.editTextPhone.setText(FormActivity.examinerDuties.getPhoneNumber());
-        binding.editTextMobile.setText(FormActivity.examinerDuties.getMobile());
+        binding.editTextAddress.setText(examinerDuties.getAddress());
+        if (examinerDuties.getFirstName() != null)
+            binding.editTextName.setText(examinerDuties.getFirstName().trim());
+        if (examinerDuties.getSureName() != null)
+            binding.editTextFamily.setText(examinerDuties.getSureName().trim());
+        if (examinerDuties.getNationalId().length() == 10)
+            binding.editTextNationNumber.setText(examinerDuties.getNationalId());
+        binding.editTextFatherName.setText(examinerDuties.getFatherName());
+        binding.editTextDescription.setText(examinerDuties.getDescription().trim());
+        binding.editTextPhone.setText(examinerDuties.getPhoneNumber());
+        binding.editTextMobile.setText(examinerDuties.getMobile());
         binding.editTextEshterak.setText(Objects.requireNonNull(
-                FormActivity.examinerDuties.getEshterak().trim()));
-        if (FormActivity.examinerDuties.getPostalCode().length() == 10)
-            binding.editTextPostalCode.setText(FormActivity.examinerDuties.getPostalCode());
-        binding.editTextRadif.setText(FormActivity.examinerDuties.getRadif());
+                examinerDuties.getEshterak().trim()));
+        if (examinerDuties.getPostalCode().length() == 10)
+            binding.editTextPostalCode.setText(examinerDuties.getPostalCode());
+        binding.editTextRadif.setText(examinerDuties.getRadif());
 
-        binding.textViewZone.setText(FormActivity.examinerDuties.getZoneTitle());
-        if (FormActivity.examinerDuties.getBillId() != null && FormActivity.examinerDuties.getBillId().length() > 0)
-            binding.textViewBillId.setText(FormActivity.examinerDuties.getBillId());
+        binding.textViewZone.setText(examinerDuties.getZoneTitle());
+        if (examinerDuties.getBillId() != null && examinerDuties.getBillId().length() > 0)
+            binding.textViewBillId.setText(examinerDuties.getBillId());
         else {
-            binding.textViewBillId.setText(FormActivity.examinerDuties.getNeighbourBillId());
+            binding.textViewBillId.setText(examinerDuties.getNeighbourBillId());
             binding.textViewBillIdTitle.setText(getString(R.string.neighbour_bill_id));
         }
-        binding.textViewTrackNumber.setText(FormActivity.examinerDuties.getTrackNumber());
-        binding.editTextShenasname.setText(FormActivity.examinerDuties.getShenasname());//TODO
+        binding.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
+        binding.editTextShenasname.setText(examinerDuties.getShenasname());//TODO
     }
 
     @Override

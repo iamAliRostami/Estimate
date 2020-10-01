@@ -743,53 +743,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class Download implements ICallback<Input> {
-        @Override
-        public void execute(Input input) {
-            if (input != null) {
-                List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
-                for (int i = 0; i < examinerDutiesList.size(); i++) {
-                    Gson gson = new Gson();
-                    examinerDutiesList.get(i).setRequestDictionaryString(
-                            gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-                }
-                DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-                List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-                for (int i = 0; i < examinerDutiesList.size(); i++) {
-                    examinerDutiesList.get(i).setTrackNumber(
-                            examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-                    examinerDutiesList.get(i).setRadif(
-                            examinerDutiesList.get(i).getRadif().replace(".0", ""));
-                    ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-                    for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                        ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
-                            examinerDutiesList.remove(i);
-                            j = examinerDutiesListTemp.size();
-                            i--;
-                        }
-                    }
-                }
-                daoExaminerDuties.insertAll(examinerDutiesList);
-                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
-                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
-                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-                daoServiceDictionary.insertAll(input.getServiceDictionary());
-                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
-                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
-                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
-                daoResultDictionary.insertAll(input.getResultDictionary());
-                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
-                        input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
-                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
-            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
         }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
     }
 
     static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
@@ -884,8 +849,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HttpClientWrapper.call.cancel();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        HttpClientWrapper.call.cancel();
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();
@@ -895,9 +872,60 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        HttpClientWrapper.call.cancel();
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();
         Debug.getNativeHeapAllocatedSize();
+    }
+
+    class Download implements ICallback<Input> {
+        @Override
+        public void execute(Input input) {
+            if (input != null) {
+                List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
+                for (int i = 0; i < examinerDutiesList.size(); i++) {
+                    Gson gson = new Gson();
+                    examinerDutiesList.get(i).setRequestDictionaryString(
+                            gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+                }
+                DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+                List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+                for (int i = 0; i < examinerDutiesList.size(); i++) {
+                    examinerDutiesList.get(i).setTrackNumber(
+                            examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+                    examinerDutiesList.get(i).setRadif(
+                            examinerDutiesList.get(i).getRadif().replace(".0", ""));
+                    ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+                    for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                        ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
+                                || examinerDuties.getZoneId().equals("0")) {
+                            examinerDutiesList.remove(i);
+                            j = examinerDutiesListTemp.size();
+                            i--;
+                        }
+                    }
+                }
+                daoExaminerDuties.insertAll(examinerDutiesList);
+                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+                daoServiceDictionary.insertAll(input.getServiceDictionary());
+                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+                daoResultDictionary.insertAll(input.getResultDictionary());
+                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
+                        input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
+                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

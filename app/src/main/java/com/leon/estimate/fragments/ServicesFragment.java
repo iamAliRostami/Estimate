@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.leon.estimate.Utils.Constants.requestDictionaries;
+
 public class ServicesFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     ServicesFragmentBinding binding;
@@ -52,13 +54,13 @@ public class ServicesFragment extends Fragment {
         for (int i = 0; i < checkBoxAdapter.requestDictionaries.size(); i++) {
             if (checkBoxAdapter.requestDictionaries.get(i).isSelected())
                 counter = counter + 1;
-            FormActivity.requestDictionaries.get(i).setSelected(
+            requestDictionaries.get(i).setSelected(
                     checkBoxAdapter.requestDictionaries.get(i).isSelected());
         }
         if (counter > 0) {
-            calculationUserInput.selectedServicesObject = FormActivity.requestDictionaries;
+            calculationUserInput.selectedServicesObject = requestDictionaries;
             Gson gson = new GsonBuilder().create();
-            calculationUserInput.selectedServicesString = gson.toJson(FormActivity.requestDictionaries);
+            calculationUserInput.selectedServicesString = gson.toJson(requestDictionaries);
 
             return calculationUserInput;
         } else return null;
@@ -86,7 +88,7 @@ public class ServicesFragment extends Fragment {
 
     @SuppressLint("NewApi")
     private void initializeServicesCheckBox() {
-        checkBoxAdapter = new CheckBoxAdapter(context, FormActivity.requestDictionaries);
+        checkBoxAdapter = new CheckBoxAdapter(context, requestDictionaries);
         binding.gridView.setAdapter(checkBoxAdapter);
     }
 

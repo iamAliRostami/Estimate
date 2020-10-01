@@ -45,6 +45,7 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
+import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
@@ -52,11 +53,11 @@ import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.UploadImage;
+import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
-import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentFormActivityBinding;
@@ -88,7 +89,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static com.leon.estimate.activities.FormActivity.examinerDuties;
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 public class DocumentFormActivity extends AppCompatActivity {
 
@@ -144,15 +146,15 @@ public class DocumentFormActivity extends AppCompatActivity {
         binding.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_finder_camera));
         uploadImage(imageDataTitle.getData().get(
                 binding.spinnerTitle.getSelectedItemPosition()).getId(),
-                ScannerConstants.bitmapSelectedImage);
+                Constants.bitmapSelectedImage);
     };
     View.OnClickListener onImageViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (ScannerConstants.bitmapSelectedImage != null) {
+            if (Constants.bitmapSelectedImage != null) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 HighQualityFragment highQualityFragment = HighQualityFragment.newInstance(
-                        ScannerConstants.bitmapSelectedImage, binding.spinnerTitle.getSelectedItem().toString());
+                        Constants.bitmapSelectedImage, binding.spinnerTitle.getSelectedItem().toString());
                 highQualityFragment.show(fragmentTransaction, binding.spinnerTitle.getSelectedItem().toString());
             }
         }
@@ -188,13 +190,15 @@ public class DocumentFormActivity extends AppCompatActivity {
     void getExtra() {
         if (getIntent().getExtras() != null) {
             billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
+//            billId = "9849834938984398";
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
+//            trackNumber = "98989898899898";
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
 //            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
 //            if (bytes != null) {
 //                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 //            }
-            bitmap = ScannerConstants.bitmapMapImage;
+            bitmap = Constants.bitmapMapImage;
         }
     }
 
@@ -222,15 +226,15 @@ public class DocumentFormActivity extends AppCompatActivity {
         if (bitmap != null) {
             bitmap = createImage(bitmap);
             binding.imageView.setImageBitmap(bitmap);
-            ScannerConstants.bitmapSelectedImage = bitmap;
+            Constants.bitmapSelectedImage = bitmap;
             binding.buttonUpload.setVisibility(View.VISIBLE);
         }
         binding.imageView.setOnClickListener(onImageViewClickListener);
     }
 
+    @SuppressLint("SimpleDateFormat")
     Bitmap createImage(Bitmap src) {
         int small = 50;
-//        Bitmap src = BitmapFactory.decodeResource(getResources(), R.drawable.export);
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cs = new Canvas(dest);
         cs.drawBitmap(src, 0f, 0f, null);
@@ -238,14 +242,16 @@ public class DocumentFormActivity extends AppCompatActivity {
         Paint tPaint = new Paint();
         tPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), MyApplication.fontName));
         tPaint.setStyle(Paint.Style.FILL);
-        tPaint.setColor(Color.BLACK);
+        tPaint.setColor(Color.YELLOW);
         tPaint.setTextSize(small);
 
         float yCoordinate = (float) src.getHeight() * 15 / 144;
         float xCoordinate = (float) src.getWidth() * 6 / 36;
 
         PersianCalendar persianCalendar = new PersianCalendar();
-        cs.drawText(persianCalendar.getPersianLongDateAndTime(), xCoordinate, yCoordinate, tPaint);
+        String dateWaterMark = " - ".concat(persianCalendar.getPersianLongDate());
+        String timeWaterMark = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
+        cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
 
         return dest;
     }
@@ -447,7 +453,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                 InputStream inputStream = this.getContentResolver().openInputStream(
                         Objects.requireNonNull(selectedImage));
                 bitmap = BitmapFactory.decodeStream(inputStream);
-                ScannerConstants.bitmapSelectedImage = bitmap;
+                Constants.bitmapSelectedImage = bitmap;
                 this.startActivityForResult(new Intent(this, CropActivity.class),
                         IMAGE_CROP_REQUEST);
             } catch (Exception e) {
@@ -456,7 +462,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             ContentResolver contentResolver = this.getContentResolver();
             try {
-                ScannerConstants.bitmapSelectedImage = MediaStore.Images.Media.getBitmap(
+                Constants.bitmapSelectedImage = MediaStore.Images.Media.getBitmap(
                         contentResolver, Uri.parse(mCurrentPhotoPath));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -467,9 +473,9 @@ public class DocumentFormActivity extends AppCompatActivity {
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
-            if (ScannerConstants.bitmapSelectedImage != null) {
-                ScannerConstants.bitmapSelectedImage = createImage(ScannerConstants.bitmapSelectedImage);
-                binding.imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
+            if (Constants.bitmapSelectedImage != null) {
+                Constants.bitmapSelectedImage = createImage(Constants.bitmapSelectedImage);
+                binding.imageView.setImageBitmap(Constants.bitmapSelectedImage);
                 binding.buttonUpload.setVisibility(View.VISIBLE);
                 Toast.makeText(this, R.string.done, Toast.LENGTH_LONG).show();
             } else {
@@ -508,6 +514,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     class ShowDialogue implements CustomDialog.Inline {
         private LovelyStandardDialog lovelyStandardDialog;
 
+        //TODO
         ShowDialogue(String message, String title, String top, String positiveButtonText, String negativeButtonText,
                      int positiveButtonColor, int negativeButtonColor, int topColor, int topTitleColor) {
             lovelyStandardDialog = new LovelyStandardDialog(context)
@@ -524,6 +531,11 @@ public class DocumentFormActivity extends AppCompatActivity {
                             if (imageDataTitleTemp.getTitle().equals("ارزیابی"))
                                 tempTitleId = imageDataTitleTemp.getId();
                         }
+
+                        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+                        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
+                        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
+
                         intent.putExtra(BundleEnum.TITLE.getValue(), tempTitleId);
                         startActivity(intent);
                         FormActivity.activity.finish();
@@ -703,15 +715,20 @@ public class DocumentFormActivity extends AppCompatActivity {
                                 binding.spinnerTitle.getSelectedItemPosition()).getId()),
                         imageDataTitle.getData().get(
                                 binding.spinnerTitle.getSelectedItemPosition()).getTitle(),
-                        ScannerConstants.bitmapSelectedImage, true);
+                        Constants.bitmapSelectedImage, true);
                 images.add(0, image);
                 imageViewAdapter.notifyDataSetChanged();
                 Toast.makeText(DocumentFormActivity.this,
                         DocumentFormActivity.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
             } else {
-                saveTempBitmap(ScannerConstants.bitmapSelectedImage);
-                Toast.makeText(DocumentFormActivity.this,
-                        DocumentFormActivity.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
+                Log.e("error", responseBody.getError());
+                saveTempBitmap(Constants.bitmapSelectedImage);
+                new CustomDialog(DialogType.Yellow, DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.error_upload).concat("\n")
+                                .concat(responseBody.getError()),
+                        DocumentFormActivity.this.getString(R.string.dear_user),
+                        DocumentFormActivity.this.getString(R.string.upload_image),
+                        DocumentFormActivity.this.getString(R.string.accepted));
             }
         }
     }
@@ -727,9 +744,9 @@ public class DocumentFormActivity extends AppCompatActivity {
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
                     DocumentFormActivity.this.getString(R.string.dear_user),
-                    DocumentFormActivity.this.getString(R.string.login),
+                    DocumentFormActivity.this.getString(R.string.upload_image),
                     DocumentFormActivity.this.getString(R.string.accepted));
-            saveTempBitmap(ScannerConstants.bitmapSelectedImage);
+            saveTempBitmap(Constants.bitmapSelectedImage);
         }
     }
 

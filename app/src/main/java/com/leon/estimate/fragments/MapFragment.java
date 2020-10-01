@@ -62,7 +62,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import static android.content.Context.LOCATION_SERVICE;
-import static com.leon.estimate.activities.FormActivity.examinerDuties;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 public class MapFragment extends Fragment implements LocationListener {
     private static final String ARG_PARAM2 = "param2";

@@ -8,12 +8,13 @@ import android.view.WindowManager;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.leon.estimate.activities.ListActivity;
 import com.leon.estimate.databinding.SearchFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
 import org.jetbrains.annotations.NotNull;
+
+import static com.leon.estimate.Utils.Constants.customAdapter;
 
 public class SearchFragment extends DialogFragment {
     SearchFragmentBinding binding;
@@ -40,8 +41,8 @@ public class SearchFragment extends DialogFragment {
 
     void initialize() {
         binding.buttonSearch.setOnClickListener(v -> {
-            if (ListActivity.customAdapter != null) {
-                ListActivity.customAdapter.filter(binding.editTextBillId.getText().toString(),
+            if (customAdapter != null) {
+                customAdapter.filter(binding.editTextBillId.getText().toString(),
                         binding.editTextTrackNumber.getText().toString(),
                         binding.editTextName.getText().toString(),
                         binding.editTextFamily.getText().toString(),

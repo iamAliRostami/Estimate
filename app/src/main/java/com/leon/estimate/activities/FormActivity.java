@@ -42,12 +42,10 @@ import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.Block;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoBlock;
-import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoFormula;
 import com.leon.estimate.Tables.DaoTejariha;
 import com.leon.estimate.Tables.DaoZarib;
-import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Formula;
 import com.leon.estimate.Tables.GISInfo;
 import com.leon.estimate.Tables.GISToken;
@@ -57,6 +55,7 @@ import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.SecondForm;
 import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Tables.Zarib;
+import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
 import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
@@ -64,7 +63,6 @@ import com.leon.estimate.Utils.GIS.CustomGeoJSON;
 import com.leon.estimate.Utils.GIS.MyKmlStyle;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
-import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.databinding.FormActivityBinding;
 import com.leon.estimate.fragments.FormFragment;
 import com.leon.estimate.fragments.PersonalFragment;
@@ -94,22 +92,29 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.arzeshdaraei;
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.secondForm;
+import static com.leon.estimate.Utils.Constants.tejarihas;
+import static com.leon.estimate.Utils.Constants.valueInteger;
+
 public class FormActivity extends AppCompatActivity implements LocationListener {
-    public static String karbari, noeVagozari;
-    public static List<RequestDictionary> requestDictionaries;
-    public static ExaminerDuties examinerDuties;
-    public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
-    public static SecondForm secondForm;
-    public static Arzeshdaraei arzeshdaraei;
-    public static int value;
-    public static ArrayList<Tejariha> tejarihas;
-    public static ArrayList<Integer> valueInteger;
+    //    public static String karbari, noeVagozari;
+//    public static List<RequestDictionary> requestDictionaries;
+//    public static ExaminerDuties examinerDuties;
+//    public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
+//    public static SecondForm secondForm;
+//    public static Arzeshdaraei arzeshdaraei;
+//    public static int value;
+//    public static ArrayList<Tejariha> tejarihas;
+//    public static ArrayList<Integer> valueInteger;
     Context context;
     @SuppressLint("StaticFieldLeak")
     public static FormActivity activity;
     MyDatabase dataBase;
     FormActivityBinding binding;
-    byte[] bitmap;
     String token, billId, trackNumber, json;
     CoordinateConversion conversion;
     double[] latLong;
@@ -227,7 +232,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
 //                    bitmap = convertBitmapToByte(convertMapToBitmap());
 //                    intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
-                    ScannerConstants.bitmapMapImage = convertMapToBitmap();
+                    Constants.bitmapMapImage = convertMapToBitmap();
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                     if (examinerDuties.getBillId() != null)
                         intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
@@ -340,7 +345,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         examinerDuties.setFatherName(calculationUserInputTemp.fatherName);
         examinerDuties.setPostalCode(calculationUserInput.postalCode);
         examinerDuties.setPhoneNumber(calculationUserInput.phoneNumber);
-        examinerDuties.setMobile(calculationUserInputTemp.mobile);//TODO 3 mobile
+        examinerDuties.setMobile(calculationUserInputTemp.mobile);
         examinerDuties.setAddress(calculationUserInputTemp.address);
         examinerDuties.setDescription(calculationUserInputTemp.description);
         examinerDuties.setShenasname(calculationUserInputTemp.shenasname);
@@ -354,7 +359,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
     void prepareToSend() {
         fillCalculationUserInput();
-        updateCalculationUserInput();
+//        updateCalculationUserInput();
         updateExamination();
         updateTejariha();
     }
@@ -371,11 +376,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         calculationUserInput.setSent(false);
     }
 
-    void updateCalculationUserInput() {
-        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
-        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
-    }
+//    void updateCalculationUserInput() {//TODO
+//        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+//        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
+//        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
+//    }
 
     void updateExamination() {
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
@@ -392,35 +397,27 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
-
-    @SuppressLint("StaticFieldLeak")
-    class SerializeJson extends AsyncTask<Intent, String, String> {
-        ProgressDialog dialog;
-
-        @Override
-        protected String doInBackground(Intent... intents) {
-            json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
-            Gson gson = new GsonBuilder().create();
-            requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
-            return null;
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void addPlace(GeoPoint p) {
+        GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
+        Marker startMarker = new Marker(binding.mapView);
+        startMarker.setPosition(startPoint);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        if (place1Index != 0 && place2Index == 0) {
+            startMarker.setIcon(getResources().getDrawable(R.drawable.map_siphon_drop_point));
+            binding.mapView.getOverlays().add(startMarker);
+            place2Index = binding.mapView.getOverlays().size() - 2;
+        } else if (place2Index != 0) {
+            binding.mapView.getOverlays().remove(place1Index);
+            binding.mapView.getOverlays().remove(place2Index);
+            place1Index = 0;
+            place2Index = 0;
         }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(context);
-            dialog.setMessage(context.getString(R.string.loading_getting_info));
-            dialog.setTitle(context.getString(R.string.loading_connecting));
-            dialog.setCancelable(false);
-            dialog.show();
+        if (place1Index == 0) {
+            startMarker.setIcon(getResources().getDrawable(R.drawable.map_water_drop_point));
+            binding.mapView.getOverlays().add(startMarker);
+            place1Index = binding.mapView.getOverlays().size() - 1;
         }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            dialog.dismiss();
-        }
-
     }
 
     public Bitmap convertMapToBitmap() {
@@ -474,27 +471,34 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }));
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private void addPlace(GeoPoint p) {
-        GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
-        Marker startMarker = new Marker(binding.mapView);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        if (place1Index != 0 && place2Index == 0) {//TODO crash on paging...
-            startMarker.setIcon(getResources().getDrawable(R.drawable.map_siphon_drop_point));
-            binding.mapView.getOverlays().add(startMarker);
-            place2Index = binding.mapView.getOverlays().size() - 2;
-        } else if (place2Index != 0) {
-            binding.mapView.getOverlays().remove(place1Index);
-            binding.mapView.getOverlays().remove(place2Index);
-            place1Index = 0;
-            place2Index = 0;
+    @SuppressLint("StaticFieldLeak")
+    class SerializeJson extends AsyncTask<Intent, String, String> {
+        ProgressDialog dialog;
+
+        @Override
+        protected String doInBackground(Intent... intents) {
+            json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
+            Gson gson = new GsonBuilder().create();
+            Constants.requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
+            return null;
         }
-        if (place1Index == 0) {
-            startMarker.setIcon(getResources().getDrawable(R.drawable.map_water_drop_point));
-            binding.mapView.getOverlays().add(startMarker);
-            place1Index = binding.mapView.getOverlays().size() - 1;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setMessage(context.getString(R.string.loading_getting_info));
+            dialog.setTitle(context.getString(R.string.loading_connecting));
+            dialog.setCancelable(false);
+            dialog.show();
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+        }
+
     }
 
     private void addUserPlace(GeoPoint p) {

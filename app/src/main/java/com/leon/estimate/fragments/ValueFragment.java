@@ -34,7 +34,6 @@ import com.leon.estimate.Tables.Zarib;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
-import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.databinding.ValueFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,8 +45,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.arzeshdaraei;
+import static com.leon.estimate.Utils.Constants.valueInteger;
 import static com.leon.estimate.activities.FormActivity.activity;
-import static com.leon.estimate.activities.FormActivity.arzeshdaraei;
 
 
 public class ValueFragment extends DialogFragment {
@@ -112,14 +112,14 @@ public class ValueFragment extends DialogFragment {
             if (checkIsNoEmpty(binding.editTextMaskooni) || checkIsNoEmpty(binding.editTextEdari)
                     || checkIsNoEmpty(binding.editTextHotel) || checkIsNoEmpty(binding.editTextOmumi)
                     || checkIsNoEmpty(binding.editTextSanati) || checkIsNoEmpty(binding.editTextTejari)) {
-                FormActivity.valueInteger.set(0, maskooni);
-                FormActivity.valueInteger.set(1, tejari);
-                FormActivity.valueInteger.set(2, edari);
-                FormActivity.valueInteger.set(3, omoomi);
-                FormActivity.valueInteger.set(4, sanati);
-                FormActivity.valueInteger.set(5, hotel);
-                FormActivity.valueInteger.set(6, binding.spinner1.getSelectedItemPosition());
-                FormActivity.valueInteger.set(7, binding.spinner2.getSelectedItemPosition());
+                valueInteger.set(0, maskooni);
+                valueInteger.set(1, tejari);
+                valueInteger.set(2, edari);
+                valueInteger.set(3, omoomi);
+                valueInteger.set(4, sanati);
+                valueInteger.set(5, hotel);
+                valueInteger.set(6, binding.spinner1.getSelectedItemPosition());
+                valueInteger.set(7, binding.spinner2.getSelectedItemPosition());
                 counting(true);
             } else
                 Toast.makeText(context, "حداقل یکی از مقادیر را وارد کنید.", Toast.LENGTH_LONG).show();
@@ -204,12 +204,12 @@ public class ValueFragment extends DialogFragment {
     void initializeSpinners() {
         initializeSpinnerBlock();
         initializeSpinnerGozar();
-        binding.editTextMaskooni.setText(String.valueOf(FormActivity.valueInteger.get(0)));
-        binding.editTextTejari.setText(String.valueOf(FormActivity.valueInteger.get(1)));
-        binding.editTextEdari.setText(String.valueOf(FormActivity.valueInteger.get(2)));
-        binding.editTextOmumi.setText(String.valueOf(FormActivity.valueInteger.get(3)));
-        binding.editTextSanati.setText(String.valueOf(FormActivity.valueInteger.get(4)));
-        binding.editTextHotel.setText(String.valueOf(FormActivity.valueInteger.get(5)));
+        binding.editTextMaskooni.setText(String.valueOf(valueInteger.get(0)));
+        binding.editTextTejari.setText(String.valueOf(valueInteger.get(1)));
+        binding.editTextEdari.setText(String.valueOf(valueInteger.get(2)));
+        binding.editTextOmumi.setText(String.valueOf(valueInteger.get(3)));
+        binding.editTextSanati.setText(String.valueOf(valueInteger.get(4)));
+        binding.editTextHotel.setText(String.valueOf(valueInteger.get(5)));
         binding.spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -240,7 +240,7 @@ public class ValueFragment extends DialogFragment {
             arrayListSpinner.add(formula.gozarTitle);
         }
         binding.spinner2.setAdapter(createArrayAdapter(arrayListSpinner));
-        binding.spinner2.setSelection(FormActivity.valueInteger.get(7));
+        binding.spinner2.setSelection(valueInteger.get(7));
     }
 
     void initializeSpinnerBlock() {
@@ -250,7 +250,7 @@ public class ValueFragment extends DialogFragment {
         }
 
         binding.spinner1.setAdapter(createArrayAdapter(arrayListSpinner));
-        binding.spinner1.setSelection(FormActivity.valueInteger.get(6));
+        binding.spinner1.setSelection(valueInteger.get(6));
     }
 
     ArrayAdapter<String> createArrayAdapter(List<String> arrayListSpinner) {

@@ -16,7 +16,8 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoTejariha;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Tejariha;
-import com.leon.estimate.activities.FormActivity;
+
+import static com.leon.estimate.Utils.Constants.tejarihas;
 
 public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHolder> {
     private Context context;
@@ -36,10 +37,10 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
         View view = layoutInflater.inflate(R.layout.item_mother_child, parent, false);
         TejarihaAdapter.ViewHolder holder = new TejarihaAdapter.ViewHolder(view);
         holder.imageViewMinus.setOnClickListener(v -> {
-            Tejariha tejariha = FormActivity.tejarihas.get(viewType);
+            Tejariha tejariha = tejarihas.get(viewType);
             DaoTejariha daoTejariha = dataBase.daoTejariha();
             daoTejariha.delete(tejariha.id);
-            FormActivity.tejarihas.remove(viewType);
+            tejarihas.remove(viewType);
             notifyDataSetChanged();
 
         });
@@ -48,7 +49,7 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull TejarihaAdapter.ViewHolder holder, int position) {
-        Tejariha tejariha = FormActivity.tejarihas.get(position);
+        Tejariha tejariha = tejarihas.get(position);
         holder.textViewKarbari.setText(tejariha.karbari);
         holder.textViewA2.setText(String.valueOf(tejariha.a));
         holder.textViewNoeShoql.setText(String.valueOf(tejariha.noeShoql));
@@ -58,7 +59,7 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return FormActivity.tejarihas.size();
+        return tejarihas.size();
     }
 
     @Override

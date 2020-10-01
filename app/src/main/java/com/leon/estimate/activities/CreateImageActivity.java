@@ -45,12 +45,12 @@ import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.ResultDictionary;
 import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Tables.UploadImage;
+import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomProgressBar;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
-import com.leon.estimate.Utils.ScannerConstants;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
 import com.leon.estimate.databinding.CreateImageActivityBinding;
@@ -77,11 +77,13 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static com.leon.estimate.activities.FormActivity.calculationUserInput;
-import static com.leon.estimate.activities.FormActivity.examinerDuties;
-import static com.leon.estimate.activities.FormActivity.karbari;
-import static com.leon.estimate.activities.FormActivity.noeVagozari;
-import static com.leon.estimate.activities.FormActivity.secondForm;
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.karbari;
+import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.secondForm;
+import static com.leon.estimate.Utils.Constants.tejarihas;
+
 
 public class CreateImageActivity extends AppCompatActivity {
     Context context;
@@ -90,7 +92,8 @@ public class CreateImageActivity extends AppCompatActivity {
     List<ResultDictionary> resultDictionaries;
     MyDatabase dataBase;
     SharedPreferenceManager sharedPreferenceManager;
-    String trackNumber, billId, imageFileName;
+    String trackNumber;
+    String billId;
     boolean isNew;
     int docId;
 
@@ -356,8 +359,8 @@ public class CreateImageActivity extends AppCompatActivity {
 
         //TODO
         if (examinerDuties.getTedadTejari() > 0)
-            for (int i = 0; i < FormActivity.tejarihas.size(); i++) {
-                Tejariha tejariha = FormActivity.tejarihas.get(i);
+            for (int i = 0; i < tejarihas.size(); i++) {
+                Tejariha tejariha = tejarihas.get(i);
                 yCoordinate = (float) src.getHeight() * (49 + i * 3) / 144;
                 xCoordinate = (float) src.getWidth() * 53 / 72;
                 cs.drawText(tejariha.karbari, xCoordinate, yCoordinate, tPaint);
@@ -478,10 +481,13 @@ public class CreateImageActivity extends AppCompatActivity {
         } else
             cs.drawText(examinerDuties.getDescription(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 238 / 288;
+        yCoordinate = (float) src.getHeight() * 241 / 288;
         xCoordinate = (float) src.getWidth() * 20 / 36;
         PersianCalendar persianCalendar = new PersianCalendar();
-        cs.drawText(persianCalendar.getPersianLongDate(), xCoordinate, yCoordinate, tPaint);
+        String dateWaterMark = " - ".concat(persianCalendar.getPersianLongDate());
+        @SuppressLint("SimpleDateFormat")
+        String timeWaterMark = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
+        cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
         return dest;
     }
 
@@ -627,7 +633,7 @@ public class CreateImageActivity extends AppCompatActivity {
                         CreateImageActivity.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                saveTempBitmap(ScannerConstants.bitmapSelectedImage);
+                saveTempBitmap(Constants.bitmapSelectedImage);
                 Toast.makeText(CreateImageActivity.this,
                         CreateImageActivity.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
             }
@@ -644,7 +650,7 @@ public class CreateImageActivity extends AppCompatActivity {
                     CreateImageActivity.this.getString(R.string.dear_user),
                     CreateImageActivity.this.getString(R.string.login),
                     CreateImageActivity.this.getString(R.string.accepted));
-            saveTempBitmap(ScannerConstants.bitmapSelectedImage);
+            saveTempBitmap(Constants.bitmapSelectedImage);
         }
     }
 

@@ -4,6 +4,7 @@ import okhttp3.MultipartBody;
 
 public class UploadImage {
     boolean success;
+    String error;
     String billId;
     String trackingNumber;
     int docId;
@@ -14,6 +15,14 @@ public class UploadImage {
         this.trackingNumber = trackingNumber;
         this.docId = docId;
         this.imageFile = imageFile;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 
     public String getTrackingNumber() {
