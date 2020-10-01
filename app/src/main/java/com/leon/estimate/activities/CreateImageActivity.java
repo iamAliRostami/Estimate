@@ -35,6 +35,8 @@ import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.DaoCalculationUserInput;
+import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.Images;
@@ -214,8 +216,8 @@ public class CreateImageActivity extends AppCompatActivity {
         Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
 
-//        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-//        daoExaminerDuties.updateExamination(true, trackNumber);
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        daoExaminerDuties.updateExamination(true, trackNumber);
 
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
         calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
@@ -229,9 +231,7 @@ public class CreateImageActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             billId = Objects.requireNonNull(
                     getIntent().getExtras()).getString(BundleEnum.BILL_ID.getValue());
-            Log.e("billid", billId);
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
-            Log.e("track", trackNumber);
             docId = getIntent().getExtras().getInt(BundleEnum.TITLE.getValue());
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
         }
@@ -603,8 +603,8 @@ public class CreateImageActivity extends AppCompatActivity {
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
-//            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-//            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
+            DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+            daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
             uploadImage();
 
         }
