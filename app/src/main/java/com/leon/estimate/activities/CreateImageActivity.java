@@ -634,8 +634,14 @@ public class CreateImageActivity extends AppCompatActivity {
                 finish();
             } else {
                 saveTempBitmap(Constants.bitmapSelectedImage);
-                Toast.makeText(CreateImageActivity.this,
-                        CreateImageActivity.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
+                new CustomDialog(DialogType.Yellow, CreateImageActivity.this,
+                        CreateImageActivity.this.getString(R.string.error_upload).concat("\n")
+                                .concat(responseBody.getError()),
+                        CreateImageActivity.this.getString(R.string.dear_user),
+                        CreateImageActivity.this.getString(R.string.upload_image),
+                        CreateImageActivity.this.getString(R.string.accepted));
+//                Toast.makeText(CreateImageActivity.this,
+//                        CreateImageActivity.this.getString(R.string.error_upload), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -648,7 +654,7 @@ public class CreateImageActivity extends AppCompatActivity {
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
                     CreateImageActivity.this.getString(R.string.dear_user),
-                    CreateImageActivity.this.getString(R.string.login),
+                    CreateImageActivity.this.getString(R.string.upload_image),
                     CreateImageActivity.this.getString(R.string.accepted));
             saveTempBitmap(Constants.bitmapSelectedImage);
         }

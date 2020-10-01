@@ -190,9 +190,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     void getExtra() {
         if (getIntent().getExtras() != null) {
             billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
-//            billId = "9849834938984398";
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
-//            trackNumber = "98989898899898";
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
 //            byte[] bytes = getIntent().getByteArrayExtra(BundleEnum.IMAGE_BITMAP.getValue());
 //            if (bytes != null) {
@@ -242,7 +240,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         Paint tPaint = new Paint();
         tPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), MyApplication.fontName));
         tPaint.setStyle(Paint.Style.FILL);
-        tPaint.setColor(Color.YELLOW);
+        tPaint.setColor(Color.RED);
         tPaint.setTextSize(small);
 
         float yCoordinate = (float) src.getHeight() * 15 / 144;
