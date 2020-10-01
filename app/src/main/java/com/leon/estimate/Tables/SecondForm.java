@@ -1,5 +1,7 @@
 package com.leon.estimate.Tables;
 
+import androidx.room.Ignore;
+
 public class SecondForm {
     int khakiAb;
     int khakiFazelab;
@@ -28,6 +30,8 @@ public class SecondForm {
 
     String chahDescription;
     String masrafDescription;
+    @Ignore
+    String eshterak;
 
     public SecondForm(int khakiAb, int khakiFazelab, int asphalutAb, int asphalutFazelab,
                       int sangFarshAb, int sangFarshFazelab, int otherAb, int otherFazelab,
@@ -35,7 +39,7 @@ public class SecondForm {
                       boolean vaziatNasbePomp, int omqeZirzamin, boolean etesalZirzamin,
                       int omqFazelab, boolean chahAbBaran, boolean ezhaNazarA, boolean ezhaNazarF,
                       int qotreLooleI, int jenseLooleI, boolean looleA, boolean looleF,
-                      String masrafDescription, String chahDescription) {
+                      String masrafDescription, String chahDescription, String eshterak) {
 
         this.ezhaNazarA = ezhaNazarA;
         this.ezhaNazarF = ezhaNazarF;
@@ -64,7 +68,16 @@ public class SecondForm {
 
         this.chahDescription = chahDescription;
         this.masrafDescription = masrafDescription;
+        this.eshterak = eshterak;
 
+    }
+
+    public String getEshterak() {
+        return eshterak;
+    }
+
+    public void setEshterak(String eshterak) {
+        this.eshterak = eshterak;
     }
 
     public String getChahDescription() {

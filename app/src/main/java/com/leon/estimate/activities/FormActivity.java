@@ -616,7 +616,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     examinerDuties.isEzhaNazarA(), examinerDuties.isEzhaNazarF(),
                     examinerDuties.getQotrLooleI(), examinerDuties.getJensLooleI(),
                     examinerDuties.isLooleA(), examinerDuties.isLooleF(),
-                    examinerDuties.getMasrafDescription(), examinerDuties.getChahDescription()
+                    examinerDuties.getMasrafDescription(), examinerDuties.getChahDescription(),
+                    examinerDuties.getEshterak()
             );
             DaoTejariha daoTejariha = dataBase.daoTejariha();
             List<Tejariha> tejarihatemp = daoTejariha.getTejarihaByTrackNumber(examinerDuties.getTrackNumber());

@@ -95,7 +95,12 @@ public class SecondFormFragment extends Fragment {
 
         binding.editTextDescriptionChahAbBaran.setText(secondForm.getChahDescription());
         binding.editTextNoeMasrafDescription.setText(secondForm.getMasrafDescription());
-
+        binding.editTextEshterak.setText(secondForm.getEshterak());
+        if (examinerDuties.isNewEnsheab()) {
+            binding.editTextEshterak.setEnabled(true);
+        } else {
+            binding.editTextEshterak.setEnabled(false);
+        }
     }
 
     ArrayAdapter<String> createArrayAdapter(String[] arraySpinner) {
@@ -131,6 +136,7 @@ public class SecondFormFragment extends Fragment {
                 checkIsNoEmpty(binding.editTextSangeFazelab) &&
                 checkIsNoEmpty(binding.editTextOtherFazelab) &&
                 checkIsNoEmpty(binding.editTextOmqZirzamin) &&
+//                checkIsNoEmpty(binding.editTextEshterak) &&
                 checkIsNoEmpty(binding.editTextOmqFazelab);
     }
 
@@ -186,7 +192,8 @@ public class SecondFormFragment extends Fragment {
                 binding.checkBoxLooleAb.isChecked(),
                 binding.checkBoxLooleFazelab.isChecked(),
                 binding.editTextNoeMasrafDescription.getText().toString(),
-                binding.editTextDescriptionChahAbBaran.getText().toString()
+                binding.editTextDescriptionChahAbBaran.getText().toString(),
+                binding.editTextEshterak.getText().toString()
         );
     }
 }

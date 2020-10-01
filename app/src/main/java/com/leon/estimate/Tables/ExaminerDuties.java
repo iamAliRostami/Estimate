@@ -130,6 +130,7 @@ public class ExaminerDuties {
 
         chahDescription = secondForm.chahDescription;
         masrafDescription = secondForm.masrafDescription;
+        eshterak = secondForm.eshterak;
         return this;
     }
 
