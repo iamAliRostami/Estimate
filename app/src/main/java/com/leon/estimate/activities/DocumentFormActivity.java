@@ -522,14 +522,16 @@ public class DocumentFormActivity extends AppCompatActivity {
                     .setPositiveButton(positiveButtonText, v -> {
                         Intent intent = new Intent(getApplicationContext(), CreateImageActivity.class);
                         intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
-                        intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+                        if (examinerDuties.getBillId() != null)
+                            intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+                        else
+                            intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getNeighbourBillId());
                         intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
                         int tempTitleId = 0;
                         for (ImageDataTitle.DataTitle imageDataTitleTemp : imageDataTitle.getData()) {
                             if (imageDataTitleTemp.getTitle().equals("ارزیابی"))
                                 tempTitleId = imageDataTitleTemp.getId();
                         }
-
                         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
                         daoCalculationUserInput.deleteByTrackNumber(trackNumber);
                         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);

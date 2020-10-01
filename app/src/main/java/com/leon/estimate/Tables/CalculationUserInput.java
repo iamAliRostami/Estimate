@@ -79,7 +79,7 @@ public class CalculationUserInput {
 
     public CalculationUserInput() {
     }
-
+    @Ignore
     public CalculationUserInput(String trackingId, String trackNumber, int requestType,
                                 String parNumber, String billId, String radif, int zoneId,
                                 String notificationMobile, int karbariId, int qotrEnsheabId,
