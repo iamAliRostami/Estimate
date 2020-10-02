@@ -888,6 +888,12 @@ public class MainActivity extends AppCompatActivity
                     Gson gson = new Gson();
                     examinerDutiesList.get(i).setRequestDictionaryString(
                             gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+                    Log.e("zoneId ".concat(String.valueOf(i)), examinerDutiesList.get(i).getZoneId());
+                    if (examinerDutiesList.get(i).getZoneId() == null ||
+                            examinerDutiesList.get(i).getZoneId().equals("0")) {
+                        examinerDutiesList.remove(i);
+                        i--;
+                    }
                 }
                 DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
                 List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
@@ -897,6 +903,7 @@ public class MainActivity extends AppCompatActivity
                     examinerDutiesList.get(i).setRadif(
                             examinerDutiesList.get(i).getRadif().replace(".0", ""));
                     ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+                    Log.e("zoneId ".concat(String.valueOf(i)), examinerDuties.getZoneId());
                     for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
                         ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
                         if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())

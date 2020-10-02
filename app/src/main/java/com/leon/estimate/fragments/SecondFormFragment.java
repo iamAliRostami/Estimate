@@ -95,7 +95,7 @@ public class SecondFormFragment extends Fragment {
 
         binding.editTextDescriptionChahAbBaran.setText(secondForm.getChahDescription());
         binding.editTextNoeMasrafDescription.setText(secondForm.getMasrafDescription());
-        binding.editTextEshterak.setText(secondForm.getEshterak());
+        binding.editTextEshterak.setText(secondForm.getEshterak().trim());
         if (examinerDuties.isNewEnsheab()) {
             binding.editTextEshterak.setEnabled(true);
         } else {

@@ -35,6 +35,13 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
+        for (int i = 0; i < examinerDuties.size(); i++) {
+            if (examinerDuties.get(i).getZoneId() == null ||
+                    examinerDuties.get(i).getZoneId().equals("0")) {
+                i--;
+                examinerDuties.remove(i);
+            }
+        }
         Collections.sort(examinerDuties, (o1, o2) -> o2.getExaminationDay().compareTo(
                 o1.getExaminationDay()));
         this.examinerDuties = examinerDuties;
