@@ -255,7 +255,9 @@ public class MotherChildActivity extends AppCompatActivity {
                     ExaminerDuties examinerDuties = examinerDutiesList.get(i);
                     for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
                         ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
+                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
+                                || examinerDuties.getZoneId() == null
+                                || examinerDuties.getZoneId().equals("0")) {
                             examinerDutiesList.remove(i);
                             j = examinerDutiesListTemp.size();
                             i--;

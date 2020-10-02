@@ -743,20 +743,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (counter < examinerDuties.size()) {
-            setActionBarTitle("در حال جانمایی میسرها...");
-            if (examinerDuties.get(counter).getBillId() != null
-                    && examinerDuties.get(counter).getBillId().length() > 0)
-                getXY(examinerDuties.get(counter).getBillId());
-            else getXY(examinerDuties.get(counter).getNeighbourBillId());
-        }
-        if (counter == examinerDuties.size())
-            setActionBarTitle(getString(R.string.home));
-    }
-
     static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
         @Override
         public void executeIncomplete(Response<SimpleMessage> response) {
@@ -846,6 +832,20 @@ public class MainActivity extends AppCompatActivity
                     getString(R.string.accepted));
             Log.e("Download Incomplete", response.toString());
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+        }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
     }
 
     @Override

@@ -383,6 +383,7 @@ public class DocumentActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        HttpClientWrapper.call.cancel();
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();
@@ -392,6 +393,7 @@ public class DocumentActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        HttpClientWrapper.call.cancel();
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();
