@@ -44,8 +44,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 //                i--;
 //            }
 //        }
-        Collections.sort(examinerDuties, (o1, o2) -> o2.getExaminationDay().compareTo(
-                o1.getExaminationDay()));
+        Collections.sort(examinerDuties, (o1, o2) -> o1.getExaminationDay().compareTo(
+                o2.getExaminationDay()));
         this.examinerDuties = examinerDuties;
         this.tempExaminerDuties = new ArrayList<>();
         this.tempExaminerDuties.addAll(examinerDuties);

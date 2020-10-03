@@ -15,7 +15,7 @@ public class SecondForm {
     int noeMasraf;
     String qotreLoole;
     String noeMasrafString;
-    boolean vaziatNasbePomp;
+    int vaziatNasbePomp;
     int omqeZirzamin;
     boolean etesalZirzamin;
     int omqFazelab;
@@ -36,7 +36,7 @@ public class SecondForm {
     public SecondForm(int khakiAb, int khakiFazelab, int asphalutAb, int asphalutFazelab,
                       int sangFarshAb, int sangFarshFazelab, int otherAb, int otherFazelab,
                       String qotreLoole, String jenseLoole, int noeMasraf, String noeMasrafString,
-                      boolean vaziatNasbePomp, int omqeZirzamin, boolean etesalZirzamin,
+                      int vaziatNasbePomp, int omqeZirzamin, boolean etesalZirzamin,
                       int omqFazelab, boolean chahAbBaran, boolean ezhaNazarA, boolean ezhaNazarF,
                       int qotreLooleI, int jenseLooleI, boolean looleA, boolean looleF,
                       String masrafDescription, String chahDescription, String eshterak) {
@@ -240,11 +240,11 @@ public class SecondForm {
         this.noeMasrafString = noeMasrafString;
     }
 
-    public boolean isVaziatNasbePomp() {
+    public int isVaziatNasbePomp() {
         return vaziatNasbePomp;
     }
 
-    public void setVaziatNasbePomp(boolean vaziatNasbePomp) {
+    public void setVaziatNasbePomp(int vaziatNasbePomp) {
         this.vaziatNasbePomp = vaziatNasbePomp;
     }
 

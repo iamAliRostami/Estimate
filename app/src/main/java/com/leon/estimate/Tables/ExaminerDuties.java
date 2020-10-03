@@ -85,7 +85,7 @@ public class ExaminerDuties {
     boolean looleF;
     int noeMasrafI;
     String noeMasrafS;
-    boolean vaziatNasbPompI;
+    int vaziatNasbPompI;
     int omqeZirzamin;
     boolean etesalZirzamin;
     int omqFazelab;
@@ -842,11 +842,11 @@ public class ExaminerDuties {
         this.noeMasrafS = noeMasrafS;
     }
 
-    public boolean isVaziatNasbPompI() {
+    public int isVaziatNasbPompI() {
         return vaziatNasbPompI;
     }
 
-    public void setVaziatNasbPompI(boolean vaziatNasbPompI) {
+    public void setVaziatNasbPompI(int vaziatNasbPompI) {
         this.vaziatNasbPompI = vaziatNasbPompI;
     }
 

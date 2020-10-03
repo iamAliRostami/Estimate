@@ -761,7 +761,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:background="@drawable/border_gray_2"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -769,7 +769,7 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:text="@string/vaziat_nasb_pomp"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
+                        android:textSize="@dimen/textSizeMedium" />
 
                     <RadioGroup
                         android:id="@+id/radioGroupVaziatPomp"
@@ -788,7 +788,6 @@
                             android:paddingLeft="@dimen/activity_mid_padding"
                             android:paddingRight="@dimen/activity_mid_padding"
                             android:text="@string/monaseb"
-                            android:textColor="@color/blue4"
                             android:textSize="@dimen/textSizeLarge" />
 
                         <RadioButton
@@ -799,6 +798,17 @@
                             android:paddingLeft="@dimen/activity_mid_padding"
                             android:paddingRight="@dimen/activity_mid_padding"
                             android:text="@string/namonaseb"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonDontHave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/have_n"
                             android:textColor="@color/blue4"
                             android:textSize="@dimen/textSizeLarge" />
                     </RadioGroup>

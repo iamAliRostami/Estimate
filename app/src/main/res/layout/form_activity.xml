@@ -36,7 +36,6 @@
             android:textSize="@dimen/textSizeHuge"
             android:textStyle="bold" />
 
-
         <EditText
             android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
@@ -47,6 +46,8 @@
             android:gravity="right|top"
             android:inputType="textMultiLine"
             android:lines="3"
+            android:hint="@string/description"
+            android:maxLines="3"
             android:padding="@dimen/activity_medium_padding"
             android:textSize="@dimen/textSizeMedium"
             tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />

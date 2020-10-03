@@ -79,8 +79,12 @@ public class SecondFormFragment extends Fragment {
 
         binding.checkBoxLooleAb.setChecked(secondForm.isLooleA());
         binding.checkBoxLooleFazelab.setChecked(secondForm.isLooleF());
-        binding.radioButtonNormal.setChecked(secondForm.isVaziatNasbePomp());
-        binding.radioButtonANormalPomp.setChecked(!secondForm.isVaziatNasbePomp());
+        if (secondForm.isVaziatNasbePomp() == 0)
+            binding.radioButtonNormal.setChecked(true);
+        else if (secondForm.isVaziatNasbePomp() == 1)
+            binding.radioButtonANormalPomp.setChecked(true);
+        else if (secondForm.isVaziatNasbePomp() == 2)
+            binding.radioButtonDontHave.setChecked(true);
         binding.editTextOmqZirzamin.setText(String.valueOf(secondForm.getOmqeZirzamin()));
         if (examinerDuties.getNoeMasrafI() == 0)
             binding.radioButtonNormal.setChecked(true);
@@ -166,7 +170,12 @@ public class SecondFormFragment extends Fragment {
             noeMasraf = 3;
             radioButtonMasraf = binding.radioButtonMedical;
         }
-
+        int pomp = 0;
+        if (binding.radioButtonANormalPomp.isChecked()) {
+            pomp = 1;
+        } else if (binding.radioButtonDontHave.isChecked()) {
+            pomp = 2;
+        }
         return new SecondForm(
                 Integer.parseInt(binding.editTextKhaki.getText().toString()),
                 Integer.parseInt(binding.editTextKhakiFazelab.getText().toString()),
@@ -180,7 +189,7 @@ public class SecondFormFragment extends Fragment {
                 jenseLoole,
                 noeMasraf/*TODO*/,
                 radioButtonMasraf.getText().toString()/*TODO*/,
-                binding.radioButtonNormalPomp.isChecked()/*TODO*/,
+                pomp/*TODO*/,
                 Integer.parseInt(binding.editTextOmqZirzamin.getText().toString()),
                 binding.checkBoxEtesalZirzamin.isChecked(),
                 Integer.parseInt(binding.editTextOmqFazelab.getText().toString()),
