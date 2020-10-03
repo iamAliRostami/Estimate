@@ -67,6 +67,7 @@
     <string name="error_android_version">نسخه اندروید شما این ویژگی را پشتیبانی نمی کند</string>
 
     <string name="location">مکان یابی</string>
+    <string name="crooki">ویرایش نقشه</string>
     <string name="setting">تنظیمات برنامه</string>
     <string name="setting_">تنظیمات</string>
     <string name="setting_gps">تنظیمات جی پی اس</string>

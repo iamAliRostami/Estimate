@@ -24,7 +24,7 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/textViewTitle"
+            android:id="@+id/textViewTitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -39,14 +39,18 @@
 
         <EditText
             android:id="@+id/editTextDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewTitle"
+            android:layout_below="@id/textViewTitle1"
             android:layout_margin="@dimen/activity_medium_margin"
+            android:background="@drawable/border_gray_1"
+            android:gravity="right|top"
+            android:inputType="textMultiLine"
+            android:lines="3"
             android:padding="@dimen/activity_medium_padding"
-            android:hint="@string/map_description"
             android:textSize="@dimen/textSizeMedium"
-            tools:ignore="Autofill,TextFields" />
+            tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />
+        <!--        android:hint="@string/map_description"-->
 
         <org.osmdroid.views.MapView
             android:id="@+id/mapView"
@@ -58,7 +62,7 @@
             android:padding="@dimen/activity_mid_padding" />
 
         <ImageView
-            android:id="@+id/imageViewRefresh"
+            android:id="@+id/imageViewRefresh1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextDescription"
@@ -78,6 +82,85 @@
             android:layout_margin="@dimen/activity_medium_margin"
             android:padding="@dimen/activity_mid_padding"
             tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutEditMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/buttonNext"
+        android:layoutDirection="rtl"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textViewTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/activity_large_margin"
+            android:gravity="center"
+            android:text="@string/crooki"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeHuge"
+            android:textStyle="bold" />
+
+        <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/signature_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:padding="@dimen/activity_mid_padding"
+            sign:penColor="#000000" />
+
+        <ImageView
+            android:id="@+id/imageViewRefresh2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/refresh"
+            app:srcCompat="@drawable/refresh"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/imageViewColorYellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_toLeftOf="@id/imageViewRefresh2"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/color_yellow"
+            app:srcCompat="@drawable/color_yellow"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/imageViewColorBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_toLeftOf="@id/imageViewColorYellow"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/color_blue"
+            app:srcCompat="@drawable/color_blue"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/imageViewColorRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_toLeftOf="@id/imageViewColorBlue"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/color_red"
+            app:srcCompat="@drawable/color_red"
+            tools:ignore="ContentDescription,RtlHardcoded" />
     </RelativeLayout>
 
     <Button

@@ -93,6 +93,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static android.graphics.Color.BLUE;
+import static android.graphics.Color.RED;
+import static android.graphics.Color.YELLOW;
 import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
@@ -102,15 +105,6 @@ import static com.leon.estimate.Utils.Constants.tejarihas;
 import static com.leon.estimate.Utils.Constants.valueInteger;
 
 public class FormActivity extends AppCompatActivity implements LocationListener {
-    //    public static String karbari, noeVagozari;
-//    public static List<RequestDictionary> requestDictionaries;
-//    public static ExaminerDuties examinerDuties;
-//    public static CalculationUserInput calculationUserInput, calculationUserInputTemp;
-//    public static SecondForm secondForm;
-//    public static Arzeshdaraei arzeshdaraei;
-//    public static int value;
-//    public static ArrayList<Tejariha> tejarihas;
-//    public static ArrayList<Integer> valueInteger;
     Context context;
     @SuppressLint("StaticFieldLeak")
     public static FormActivity activity;
@@ -122,10 +116,37 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
     private double latitude, longitude;
     private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-    private int polygonIndex;
-    private int place1Index;
-    private int place2Index;
-    private int pageNumber = 1;
+    Bitmap bitmap;
+    private int polygonIndex, place1Index, place2Index, pageNumber = 1;
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            switch (id) {
+                case R.id.imageViewRefresh1:
+                    binding.mapView.getOverlays().clear();
+                    place1Index = 0;
+                    place2Index = 0;
+                    polygonIndex = 0;
+                    polygonPoint.removeAll(polygonPoint);
+                    initializeMap();
+                    break;
+                case R.id.imageViewRefresh2:
+                    binding.signatureView.clearCanvas();
+                    binding.signatureView.setBitmap(convertMapToBitmap());
+                    break;
+                case R.id.imageViewColorBlue:
+                    binding.signatureView.setPenColor(BLUE);
+                    break;
+                case R.id.imageViewColorRed:
+                    binding.signatureView.setPenColor(RED);
+                    break;
+                case R.id.imageViewColorYellow:
+                    binding.signatureView.setPenColor(YELLOW);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,14 +181,12 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         new GetDBData().execute();
         setOnButtonClickListener();
         binding.progressBar.setVisibility(View.VISIBLE);
-        binding.imageViewRefresh.setOnClickListener(view -> {
-            binding.mapView.getOverlays().clear();
-            place1Index = 0;
-            place2Index = 0;
-            polygonIndex = 0;
-            polygonPoint.removeAll(polygonPoint);
-            initializeMap();
-        });
+        binding.signatureView.setPenColor(YELLOW);
+        binding.imageViewRefresh1.setOnClickListener(onClickListener);
+        binding.imageViewRefresh2.setOnClickListener(onClickListener);
+        binding.imageViewColorYellow.setOnClickListener(onClickListener);
+        binding.imageViewColorBlue.setOnClickListener(onClickListener);
+        binding.imageViewColorRed.setOnClickListener(onClickListener);
     }
 
     void setOnButtonClickListener() {
@@ -223,20 +242,28 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                         examinerDuties.updateExaminerDuties(secondForm);
                         if (examinerDuties.getMapDescription() != null)
                             binding.editTextDescription.setText(examinerDuties.getMapDescription().trim());
-                        binding.buttonNext.setText(R.string.save_info);
                         pageNumber = pageNumber + 1;
                         binding.fragment.setVisibility(View.GONE);
                         binding.relativeLayoutMap.setVisibility(View.VISIBLE);
                         setActionBarTitle(
                                 context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
+                        binding.buttonNext.setText(R.string.crooki);
                     }
                     break;
                 case 5:
-                    Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
-//                    bitmap = convertBitmapToByte(convertMapToBitmap());
-//                    intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
-                    Constants.bitmapMapImage = convertMapToBitmap();
+                    bitmap = convertMapToBitmap();
                     examinerDuties.setMapDescription(binding.editTextDescription.getText().toString());
+                    pageNumber = pageNumber + 1;
+                    binding.relativeLayoutMap.setVisibility(View.GONE);
+                    binding.relativeLayoutEditMap.setVisibility(View.VISIBLE);
+                    binding.signatureView.setBitmap(bitmap);
+                    setActionBarTitle(
+                            context.getString(R.string.app_name).concat(" / ").concat("صفحه ششم"));
+                    binding.buttonNext.setText(R.string.save_info);
+                    break;
+                case 6:
+                    Constants.bitmapMapImage = binding.signatureView.getSignatureBitmap();
+                    Intent intent = new Intent(getApplicationContext(), DocumentFormActivity.class);
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                     if (examinerDuties.getBillId() != null)
                         intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
@@ -273,9 +300,15 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     binding.buttonNext.setText(R.string.next);
                     binding.fragment.setVisibility(View.VISIBLE);
                     binding.relativeLayoutMap.setVisibility(View.GONE);
-//                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment, new SecondFormFragment());
-//                    fragmentTransaction.commit();
+                    setActionBarTitle(
+                            context.getString(R.string.app_name).concat(" / ").concat("صفحه چهارم"));
+                    break;
+                case 6:
+                    binding.buttonNext.setText(R.string.crooki);
+                    binding.relativeLayoutMap.setVisibility(View.VISIBLE);
+                    binding.relativeLayoutEditMap.setVisibility(View.GONE);
+                    setActionBarTitle(
+                            context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
                     break;
             }
             pageNumber = pageNumber - 1;

@@ -96,11 +96,11 @@ public class SecondFormFragment extends Fragment {
         binding.editTextDescriptionChahAbBaran.setText(secondForm.getChahDescription());
         binding.editTextNoeMasrafDescription.setText(secondForm.getMasrafDescription());
         binding.editTextEshterak.setText(secondForm.getEshterak().trim());
-        if (examinerDuties.isNewEnsheab()) {
-            binding.editTextEshterak.setEnabled(true);
-        } else {
-            binding.editTextEshterak.setEnabled(false);
-        }
+//        if (examinerDuties.isNewEnsheab()) {
+//            binding.editTextEshterak.setEnabled(true);
+//        } else {
+//            binding.editTextEshterak.setEnabled(false);
+//        }
     }
 
     ArrayAdapter<String> createArrayAdapter(String[] arraySpinner) {
