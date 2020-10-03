@@ -61,7 +61,7 @@ public class DocumentActivity extends AppCompatActivity {
     Context context;
     static ImageDataTitle imageDataTitle;
     String trackNumber, billId;
-    boolean isNew;
+    boolean isNew, isNeighbour;
     ImageViewAdapter imageViewAdapter;
     int counter = 0;
     MyDatabase dataBase;
@@ -99,6 +99,7 @@ public class DocumentActivity extends AppCompatActivity {
             billId = getIntent().getExtras().getString(BundleEnum.BILL_ID.getValue());
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
+            isNeighbour = getIntent().getExtras().getBoolean(BundleEnum.IS_NEIGHBOUR.getValue());
         }
     }
 
@@ -142,7 +143,7 @@ public class DocumentActivity extends AppCompatActivity {
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
 
         Call<ImageDataThumbnail> call;
-        if (isNew)
+        if (isNew && !isNeighbour)
             call = getImage.getDocsListThumbnail(sharedPreferenceManager
                     .getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), trackNumber);
         else

@@ -226,4 +226,5 @@
     <string name="ta">تا</string>
     <string name="document">سند</string>
     <string name="documents">مدارک</string>
+    <string name="neighbour_document">مدارک همسایه</string>
 </resources>

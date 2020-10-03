@@ -692,32 +692,13 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    class GetGISSanitationTransfer implements ICallback<String> {
-        @Override
-        public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
-                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
-                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                    //TODO
-                    try {
-                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-
-                        MyKmlStyle.color = 4;
-                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
-                        binding.mapView.getOverlays().add(geoJsonOverlay);
-                        binding.mapView.invalidate();
-                        binding.progressBar.setVisibility(View.GONE);
-                    } catch (Exception e) {
-                        Log.e("error map", e.toString());
-                    }
-                }
-            }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.document_menu, menu);
+        if (!examinerDuties.isNewEnsheab()) {
+            menu.getItem(1).setVisible(false);
         }
+        return true;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -756,7 +737,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
                     Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                     try {
-
                         kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                         MyKmlStyle.color = 2;
                         FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
@@ -797,34 +777,59 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
+        intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
+        if (examinerDuties.getBillId() != null)
+            intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
+        else
+            intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getNeighbourBillId());
+        intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
+        if (id == R.id.menu_document) {
+            intent.putExtra(BundleEnum.IS_NEIGHBOUR.getValue(), false);
+        } else if (id == R.id.menu_neighbour_document) {
+            intent.putExtra(BundleEnum.IS_NEIGHBOUR.getValue(), true);
+        }
+        startActivity(intent);
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGISSanitationTransfer implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+            KmlDocument kmlDocument = new KmlDocument();
+            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
+                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                    //TODO
+                    try {
+                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+
+                        MyKmlStyle.color = 4;
+                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                        binding.mapView.getOverlays().add(geoJsonOverlay);
+                        binding.mapView.invalidate();
+                    } catch (Exception e) {
+                        Log.e("error map", e.toString());
+                    }
+                }
+            }
+            binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
     class GetGISIncomplete implements ICallbackIncomplete<String> {
         @Override
         public void executeIncomplete(Response<String> response) {
+            binding.progressBar.setVisibility(View.GONE);
             if (response.errorBody() != null) {
                 Log.e("Error GetGISIncomplete", response.errorBody().toString());
-            }
-        }
-    }
-
-    class GetGISToken implements ICallback<GISToken> {
-        @Override
-        public void execute(GISToken gisToken) {
-            token = gisToken.getToken();
-            if (latLong != null) {
-                getGis(0);
-                getGis(1);
-                getGis(2);
-                getGis(3);
-            } else
-                binding.progressBar.setVisibility(View.GONE);
-        }
-    }
-
-    class GetGISTokenIncomplete implements ICallbackIncomplete<GISToken> {
-        @Override
-        public void executeIncomplete(Response<GISToken> response) {
-            if (response.errorBody() != null) {
-                Log.e("GetGISTokenIncomplete", response.errorBody().toString());
             }
         }
     }
@@ -844,9 +849,38 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
+    class GetGISToken implements ICallback<GISToken> {
+        @Override
+        public void execute(GISToken gisToken) {
+            token = gisToken.getToken();
+            if (latLong != null) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+                getGis(0);
+                binding.progressBar.setVisibility(View.VISIBLE);
+                getGis(1);
+                binding.progressBar.setVisibility(View.VISIBLE);
+                getGis(2);
+                binding.progressBar.setVisibility(View.VISIBLE);
+                getGis(3);
+            } else
+                binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    class GetGISTokenIncomplete implements ICallbackIncomplete<GISToken> {
+        @Override
+        public void executeIncomplete(Response<GISToken> response) {
+            binding.progressBar.setVisibility(View.GONE);
+            if (response.errorBody() != null) {
+                Log.e("GetGISTokenIncomplete", response.errorBody().toString());
+            }
+        }
+    }
+
     class GetXYIncomplete implements ICallbackIncomplete<Place> {
         @Override
         public void executeIncomplete(Response<Place> response) {
+            binding.progressBar.setVisibility(View.GONE);
             if (response.errorBody() != null) {
                 Log.e("GetXYIncomplete", response.errorBody().toString());
             }
@@ -856,36 +890,14 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
+            binding.progressBar.setVisibility(View.GONE);
             Log.e("GetError", Objects.requireNonNull(t.getMessage()));
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.document_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_document) {
-            Intent intent = new Intent(getApplicationContext(), DocumentActivity.class);
-            intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
-            if (examinerDuties.getBillId() != null)
-                intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
-            else
-                intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getNeighbourBillId());
-            intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        Log.e("on", "resume");
     }
 
     @Override

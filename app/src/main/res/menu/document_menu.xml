@@ -7,4 +7,10 @@
         android:orderInCategory="200"
         android:title="@string/documents"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_neighbour_document"
+        android:orderInCategory="200"
+        android:title="@string/neighbour_document"
+        app:showAsAction="never" />
 </menu>

@@ -109,8 +109,10 @@
             android:id="@+id/signature_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textViewTitle2"
-            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_below="@id/imageViewColorBlue"
+            android:layout_marginLeft="@dimen/activity_medium_margin"
+            android:layout_marginRight="@dimen/activity_medium_margin"
+            android:layout_marginBottom="@dimen/activity_medium_margin"
             android:padding="@dimen/activity_mid_padding"
             sign:penColor="#000000" />
 

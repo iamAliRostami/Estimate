@@ -24,6 +24,7 @@ public enum BundleEnum {
     IMAGE_BITMAP("image_bitmap"),
     REQUEST("request"),
     ZONE_ID("zone_id"),
+    IS_NEIGHBOUR("is_neighbour"),
     SERVICES("services");
 
     private final String value;
