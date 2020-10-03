@@ -98,6 +98,7 @@ public class ExaminerDuties {
 
     String chahDescription;
     String masrafDescription;
+    String mapDescription;
 
     @Ignore
     ArrayList<RequestDictionary> requestDictionary;
@@ -146,7 +147,7 @@ public class ExaminerDuties {
         trackingId = calculationUserInput.trackingId;
         requestType = String.valueOf(calculationUserInput.requestType);
         parNumber = calculationUserInput.parNumber;
-        zoneId = String.valueOf(calculationUserInput.zoneId);
+//        zoneId = String.valueOf(calculationUserInput.zoneId);
         phoneNumber = calculationUserInput.phoneNumber;
         mobile = calculationUserInput.mobile;
         firstName = calculationUserInput.firstName;
@@ -179,6 +180,14 @@ public class ExaminerDuties {
         shenasname = calculationUserInput.shenasname;
 //        isPeymayesh = true;
         return this;
+    }
+
+    public String getMapDescription() {
+        return mapDescription;
+    }
+
+    public void setMapDescription(String mapDescription) {
+        this.mapDescription = mapDescription;
     }
 
     public boolean isSanad() {

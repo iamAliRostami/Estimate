@@ -3,6 +3,7 @@ package com.leon.estimate.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +36,14 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
-        for (int i = 0; i < examinerDuties.size(); i++) {
-            if (examinerDuties.get(i).getZoneId() == null ||
-                    examinerDuties.get(i).getZoneId().equals("0")) {
-                i--;
-                examinerDuties.remove(i);
-            }
-        }
+        Log.e("size", String.valueOf(examinerDuties.size()));
+//        for (int i = 0; i < examinerDuties.size(); i++) {
+//            if (examinerDuties.get(i).getZoneId() == null ||
+//                    examinerDuties.get(i).getZoneId().equals("0")) {
+//                examinerDuties.remove(i);
+//                i--;
+//            }
+//        }
         Collections.sort(examinerDuties, (o1, o2) -> o2.getExaminationDay().compareTo(
                 o1.getExaminationDay()));
         this.examinerDuties = examinerDuties;

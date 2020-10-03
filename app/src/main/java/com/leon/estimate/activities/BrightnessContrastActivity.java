@@ -1,5 +1,6 @@
 package com.leon.estimate.activities;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
@@ -24,6 +25,7 @@ public class BrightnessContrastActivity extends AppCompatActivity {
     Bitmap bitmapTemp;
     BrightnessContrastActivityBinding binding;
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
+        @SuppressLint({"NewApi", "UseCompatLoadingForDrawables"})
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             int brightness = progress - 250;
@@ -80,6 +82,7 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         initialize();
     }
 
+    @SuppressLint({"UseCompatLoadingForDrawables", "NewApi"})
     void initialize() {
         binding.seekBarBrightness.setMax(500);
         binding.seekBarBrightness.setOnSeekBarChangeListener(onSeekBarChangeListenerBrightness);
@@ -90,6 +93,8 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         binding.seekBarContrast.setProgress(50);
 
         bitmapTemp = Constants.bitmapSelectedImage;
+//        Drawable d = new BitmapDrawable(getResources(), bitmapTemp);
+//        binding.imageView.setImageDrawable(d);
         binding.imageView.setImageBitmap(bitmapTemp);
 
         binding.buttonAccepted.setOnClickListener(onClickListenerAccepted);

@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity
         context = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
-//        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-//                .fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_36_37).build();
+        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_36_37).build();
     }
 
     void readData() {

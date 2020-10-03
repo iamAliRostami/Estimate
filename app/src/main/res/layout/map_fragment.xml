@@ -20,21 +20,22 @@
         android:textSize="@dimen/textSizeHuge"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textViewDescription"
+    <EditText
+        android:id="@+id/editTextDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewTitle"
         android:layout_margin="@dimen/activity_medium_margin"
         android:padding="@dimen/activity_medium_padding"
-        android:text="@string/map_description"
-        android:textSize="@dimen/textSizeMedium" />
+        android:hint="@string/map_description"
+        android:textSize="@dimen/textSizeMedium"
+        tools:ignore="Autofill,TextFields" />
 
     <org.osmdroid.views.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textViewDescription"
+        android:layout_below="@id/editTextDescription"
         android:layout_margin="@dimen/activity_medium_margin"
         android:background="@drawable/border_gray_1"
         android:padding="@dimen/activity_mid_padding" />
@@ -43,7 +44,7 @@
         android:id="@+id/imageViewRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewDescription"
+        android:layout_below="@id/editTextDescription"
         android:layout_margin="@dimen/activity_medium_margin"
         android:padding="@dimen/activity_mid_padding"
         android:src="@drawable/refresh"

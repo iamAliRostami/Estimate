@@ -127,7 +127,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                 try {
                     photoFile = createImageFile();
                 } catch (IOException e) {
-                    Log.e("Main", "IOException");
+                    Log.e("Main", e.toString());
                 }
                 if (photoFile != null) {
                     StrictMode.VmPolicy.Builder builder1 = new StrictMode.VmPolicy.Builder();
@@ -247,6 +247,12 @@ public class DocumentFormActivity extends AppCompatActivity {
         String timeWaterMark = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
         cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
 
+
+        small = 75;
+        yCoordinate = (float) src.getHeight() * 25 / 144;
+        tPaint.setTextSize(small);
+
+        cs.drawText(examinerDuties.getMapDescription(), xCoordinate, yCoordinate, tPaint);
         return dest;
     }
 
@@ -326,7 +332,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         }
         //Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 40 /*ignored for PNG*/, bos);
         byte[] bitmapData = bos.toByteArray();
         //write the bytes in file
         FileOutputStream fos = null;
@@ -372,7 +378,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         if (file.exists()) file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 50, out);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 40, out);
             out.flush();
             out.close();
 

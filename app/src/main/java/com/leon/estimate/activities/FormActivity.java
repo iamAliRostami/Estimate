@@ -42,6 +42,7 @@ import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.Block;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.DaoBlock;
+import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
 import com.leon.estimate.Tables.DaoFormula;
 import com.leon.estimate.Tables.DaoTejariha;
@@ -220,6 +221,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     }
                     if (secondForm != null) {
                         examinerDuties.updateExaminerDuties(secondForm);
+                        if (examinerDuties.getMapDescription() != null)
+                            binding.editTextDescription.setText(examinerDuties.getMapDescription().trim());
                         binding.buttonNext.setText(R.string.save_info);
                         pageNumber = pageNumber + 1;
                         binding.fragment.setVisibility(View.GONE);
@@ -233,6 +236,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 //                    bitmap = convertBitmapToByte(convertMapToBitmap());
 //                    intent.putExtra(BundleEnum.IMAGE_BITMAP.getValue(), bitmap);
                     Constants.bitmapMapImage = convertMapToBitmap();
+                    examinerDuties.setMapDescription(binding.editTextDescription.getText().toString());
                     intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), trackNumber);
                     if (examinerDuties.getBillId() != null)
                         intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getBillId());
@@ -359,7 +363,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
     void prepareToSend() {
         fillCalculationUserInput();
-//        updateCalculationUserInput();
+        updateCalculationUserInput();
         updateExamination();
         updateTejariha();
     }
@@ -376,11 +380,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         calculationUserInput.setSent(false);
     }
 
-//    void updateCalculationUserInput() {//TODO
-//        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-//        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
-//        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
-//    }
+    void updateCalculationUserInput() {//TODO
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
+        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
+    }
 
     void updateExamination() {
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
@@ -662,14 +666,24 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
-            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
+                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                    //TODO
+                    try {
+                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
 
-            MyKmlStyle.color = 4;
-            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
-            binding.mapView.getOverlays().add(geoJsonOverlay);
-            binding.mapView.invalidate();
-            binding.progressBar.setVisibility(View.GONE);
+                        MyKmlStyle.color = 4;
+                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                        binding.mapView.getOverlays().add(geoJsonOverlay);
+                        binding.mapView.invalidate();
+                        binding.progressBar.setVisibility(View.GONE);
+                    } catch (Exception e) {
+                        Log.e("error map", e.toString());
+                    }
+                }
+            }
         }
     }
 
@@ -680,12 +694,21 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
-            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-            MyKmlStyle.color = 3;
-            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
-            binding.mapView.getOverlays().add(geoJsonOverlay);
-            binding.mapView.invalidate();
+            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
+                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                    try {
+                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                        MyKmlStyle.color = 3;
+                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                        binding.mapView.getOverlays().add(geoJsonOverlay);
+                        binding.mapView.invalidate();
+                    } catch (Exception e) {
+                        Log.e("error map", e.toString());
+                    }
+                }
+            }
         }
     }
 
@@ -696,12 +719,22 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
-            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-            MyKmlStyle.color = 2;
-            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
-            binding.mapView.getOverlays().add(geoJsonOverlay);
-            binding.mapView.invalidate();
+            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
+                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                    try {
+
+                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                        MyKmlStyle.color = 2;
+                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                        binding.mapView.getOverlays().add(geoJsonOverlay);
+                        binding.mapView.invalidate();
+                    } catch (Exception e) {
+                        Log.e("error map", e.toString());
+                    }
+                }
+            }
         }
     }
 
@@ -712,12 +745,22 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
-            kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-            MyKmlStyle.color = 1;
-            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
-            binding.mapView.getOverlays().add(geoJsonOverlay);
-            binding.mapView.invalidate();
+            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
+                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                    //TODO
+                    try {
+                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                        MyKmlStyle.color = 1;
+                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                        binding.mapView.getOverlays().add(geoJsonOverlay);
+                        binding.mapView.invalidate();
+                    } catch (Exception e) {
+                        Log.e("error map", e.toString());
+                    }
+                }
+            }
         }
     }
 
