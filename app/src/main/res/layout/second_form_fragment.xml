@@ -768,7 +768,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:text="@string/vaziat_nasb_pomp"
-                        android:textColor="@color/blue4"
                         android:textSize="@dimen/textSizeMedium" />
 
                     <RadioGroup
@@ -827,7 +826,8 @@
                         android:layout_margin="@dimen/activity_medium_margin"
                         android:text="@string/omq_zirzamin"
                         android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge" />
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="TooManyViews" />
 
                     <EditText
                         android:id="@+id/editTextOmqZirzamin"
