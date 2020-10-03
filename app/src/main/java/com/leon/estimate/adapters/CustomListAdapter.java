@@ -3,6 +3,7 @@ package com.leon.estimate.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,8 +46,11 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 //                i--;
 //            }
 //        }
-        Collections.sort(examinerDuties, (o1, o2) -> o1.getExaminationDay().compareTo(
-                o2.getExaminationDay()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            examinerDuties.sort(Comparator.comparing(ExaminerDuties::isPeymayesh).thenComparing(ExaminerDuties::getExaminationDay));
+        } else
+            Collections.sort(examinerDuties, (o1, o2) -> o1.getExaminationDay().compareTo(
+                    o2.getExaminationDay()));
         this.examinerDuties = examinerDuties;
         this.tempExaminerDuties = new ArrayList<>();
         this.tempExaminerDuties.addAll(examinerDuties);
