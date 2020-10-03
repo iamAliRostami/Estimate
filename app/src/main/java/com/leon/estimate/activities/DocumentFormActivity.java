@@ -326,7 +326,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         }
         //Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50 /*ignored for PNG*/, bos);
         byte[] bitmapData = bos.toByteArray();
         //write the bytes in file
         FileOutputStream fos = null;
@@ -372,7 +372,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         if (file.exists()) file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 50, out);
             out.flush();
             out.close();
 
