@@ -535,7 +535,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             super.onPostExecute(s);
             dialog.dismiss();
         }
-
     }
 
     private void addUserPlace(GeoPoint p) {
@@ -692,14 +691,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.document_menu, menu);
-        if (!examinerDuties.isNewEnsheab()) {
-            menu.getItem(1).setVisible(false);
-        }
-        return true;
-    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     class GetGISWaterTransfer implements ICallback<String> {
@@ -751,32 +742,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    class GetGISParcels implements ICallback<String> {
-        @Override
-        public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
-                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
-                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                    //TODO
-                    try {
-                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                        MyKmlStyle.color = 1;
-                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
-                        binding.mapView.getOverlays().add(geoJsonOverlay);
-                        binding.mapView.invalidate();
-                    } catch (Exception e) {
-                        Log.e("error map", e.toString());
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         int id = item.getItemId();
@@ -795,6 +760,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressLint("UseCompatLoadingForDrawables")
     class GetGISSanitationTransfer implements ICallback<String> {
@@ -892,6 +858,42 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         public void executeError(Throwable t) {
             binding.progressBar.setVisibility(View.GONE);
             Log.e("GetError", Objects.requireNonNull(t.getMessage()));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.document_menu, menu);
+        if (!examinerDuties.isNewEnsheab()) {
+            menu.getItem(1).setVisible(false);
+        }
+        return true;
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    class GetGISParcels implements ICallback<String> {
+        @Override
+        public void execute(String s) {
+            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
+            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+            KmlDocument kmlDocument = new KmlDocument();
+            if (customGeoJSON != null && kmlDocument != null && customArcGISJSON != null) {
+                if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+                    Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                    //TODO
+                    try {
+                        kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
+                        MyKmlStyle.color = 1;
+                        FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                        binding.mapView.getOverlays().add(geoJsonOverlay);
+                        binding.mapView.invalidate();
+                    } catch (Exception e) {
+                        Log.e("error map", e.toString());
+                    }
+                }
+            }
+            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
