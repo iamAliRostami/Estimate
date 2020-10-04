@@ -423,12 +423,14 @@ public class DocumentFormActivity extends AppCompatActivity {
                 f = new File(f, imagesList.get(i).getAddress());
                 Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
                 imagesList.get(i).setBitmap(b);
-                for (int j = 0; j < imageDataTitle.getData().size(); j++) {
-                    if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
-                        imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
+                if (imageDataTitle != null) {
+                    for (int j = 0; j < imageDataTitle.getData().size(); j++) {
+                        if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
+                            imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
+                    }
+                    images.add(imagesList.get(i));
+                    imageViewAdapter.notifyDataSetChanged();
                 }
-                images.add(imagesList.get(i));
-                imageViewAdapter.notifyDataSetChanged();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
