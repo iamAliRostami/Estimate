@@ -251,9 +251,10 @@ public class DocumentFormActivity extends AppCompatActivity {
             small = 75;
             tPaint.setTextSize(small);
 
-            if (examinerDuties.getMapDescription().length() <= 25)
+            if (examinerDuties.getMapDescription().length() <= 25) {
+                yCoordinate = (float) src.getHeight() * 25 / 144;
                 cs.drawText(examinerDuties.getMapDescription(), xCoordinate, yCoordinate, tPaint);
-            else {
+            } else {
                 for (int i = 0; i < examinerDuties.getMapDescription().length() / 25; i++) {
                     yCoordinate = (float) src.getHeight() * (25 + 10 * i) / 144;
                     cs.drawText(examinerDuties.getMapDescription().substring(i * 25, 25 * (i + 1)), xCoordinate, yCoordinate, tPaint);
