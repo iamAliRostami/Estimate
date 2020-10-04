@@ -36,12 +36,10 @@ public class BrightnessContrastActivity extends AppCompatActivity {
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
         }
     };
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerContrast = new SeekBar.OnSeekBarChangeListener() {
