@@ -218,7 +218,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     void initializeImageView() {
         binding.imageView.setOnClickListener(onPickClickListener);
         if (bitmap != null) {
-            bitmap = createImage(bitmap);
+            bitmap = createImage(bitmap, true);
             binding.imageView.setImageBitmap(bitmap);
             Constants.bitmapSelectedImage = bitmap;
             binding.buttonUpload.setVisibility(View.VISIBLE);
@@ -227,7 +227,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SimpleDateFormat")
-    Bitmap createImage(Bitmap src) {
+    Bitmap createImage(Bitmap src, boolean isMap) {
         int small = 50;
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cs = new Canvas(dest);
@@ -247,15 +247,17 @@ public class DocumentFormActivity extends AppCompatActivity {
         String timeWaterMark = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
         cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
 
-        small = 75;
-        tPaint.setTextSize(small);
+        if (isMap) {
+            small = 75;
+            tPaint.setTextSize(small);
 
-        if (examinerDuties.getMapDescription().length() <= 25)
-            cs.drawText(examinerDuties.getMapDescription(), xCoordinate, yCoordinate, tPaint);
-        else {
-            for (int i = 0; i < examinerDuties.getMapDescription().length() / 25; i++) {
-                yCoordinate = (float) src.getHeight() * (25 + 10 * i) / 144;
-                cs.drawText(examinerDuties.getMapDescription().substring(i * 25, 25 * (i + 1)), xCoordinate, yCoordinate, tPaint);
+            if (examinerDuties.getMapDescription().length() <= 25)
+                cs.drawText(examinerDuties.getMapDescription(), xCoordinate, yCoordinate, tPaint);
+            else {
+                for (int i = 0; i < examinerDuties.getMapDescription().length() / 25; i++) {
+                    yCoordinate = (float) src.getHeight() * (25 + 10 * i) / 144;
+                    cs.drawText(examinerDuties.getMapDescription().substring(i * 25, 25 * (i + 1)), xCoordinate, yCoordinate, tPaint);
+                }
             }
         }
         return dest;
@@ -479,7 +481,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
             if (Constants.bitmapSelectedImage != null) {
-                Constants.bitmapSelectedImage = createImage(Constants.bitmapSelectedImage);
+                Constants.bitmapSelectedImage = createImage(Constants.bitmapSelectedImage, false);
                 binding.imageView.setImageBitmap(Constants.bitmapSelectedImage);
                 binding.buttonUpload.setVisibility(View.VISIBLE);
                 Toast.makeText(this, R.string.done, Toast.LENGTH_LONG).show();
