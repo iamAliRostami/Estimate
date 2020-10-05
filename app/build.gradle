@@ -109,5 +109,4 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.kyanogen.signatureview:signature-view:1.2'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-
 }
