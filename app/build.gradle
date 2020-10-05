@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     packagingOptions {
-//        exclude 'AndroidManifest.xml'
-//        exclude 'lib/x86_64/libopencv_java3.so'
-//        exclude 'lib/x86/libopencv_java3.so'
+        exclude 'AndroidManifest.xml'
+        exclude 'lib/x86_64/libopencv_java3.so'
+        exclude 'lib/x86/libopencv_java3.so'
 //        exclude 'lib/arm64-v8a/libopencv_java3.so'
-//        exclude 'lib/mips64/libopencv_java3.so'
-//        exclude 'lib/mips/libopencv_java3.so'
-//        exclude 'lib/armeabi/libopencv_java3.so'
+        exclude 'lib/mips64/libopencv_java3.so'
+        exclude 'lib/mips/libopencv_java3.so'
+        exclude 'lib/armeabi/libopencv_java3.so'
     }
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
