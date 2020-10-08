@@ -125,10 +125,8 @@ public class ExaminerDuties {
         vaziatNasbPompI = secondForm.vaziatNasbePomp;
         omqeZirzamin = secondForm.omqeZirzamin;
         omqFazelab = secondForm.omqFazelab;
-
         etesalZirzamin = secondForm.etesalZirzamin;
         chahAbBaran = secondForm.chahAbBaran;
-
         chahDescription = secondForm.chahDescription;
         masrafDescription = secondForm.masrafDescription;
         eshterak = secondForm.eshterak;
@@ -147,7 +145,6 @@ public class ExaminerDuties {
         trackingId = calculationUserInput.trackingId;
         requestType = String.valueOf(calculationUserInput.requestType);
         parNumber = calculationUserInput.parNumber;
-//        zoneId = String.valueOf(calculationUserInput.zoneId);
         phoneNumber = calculationUserInput.phoneNumber;
         mobile = calculationUserInput.mobile;
         firstName = calculationUserInput.firstName;
@@ -178,7 +175,6 @@ public class ExaminerDuties {
         isEnsheabQeirDaem = calculationUserInput.ensheabQeireDaem;
         requestDictionaryString = calculationUserInput.selectedServicesString;
         shenasname = calculationUserInput.shenasname;
-//        isPeymayesh = true;
         return this;
     }
 

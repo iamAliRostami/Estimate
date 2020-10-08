@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.location.LocationManagerCompat;
 import androidx.core.view.GravityCompat;
@@ -88,8 +89,8 @@ import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -176,8 +177,7 @@ public class MainActivity extends AppCompatActivity
         context = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
-        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_36_37).build();
+//        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_36_37).build();
     }
 
     void readData() {
@@ -283,14 +283,13 @@ public class MainActivity extends AppCompatActivity
         binding.imageViewRequest.setOnClickListener(onClickListener);
     }
 
-    @SuppressLint("MissingPermission")
     void initializeMap() {
         if (!GpsEnabled()) {
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-            mapView.setTileSource(TileSourceFactory.MAPNIK);
             mapView.setBuiltInZoomControls(true);
+            mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
             mapController.setZoom(19.5);
@@ -303,11 +302,20 @@ public class MainActivity extends AppCompatActivity
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
             } else {
+                if (ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED) {
+                    askPermission();
+                    return;
+                }
                 locationManager.requestLocationUpdates(provider, 0, 0, this);
             }
 //            E/long: 51.7134364        E/lat: 32.7031978
-            Log.e("long", String.valueOf(longitude));
-            Log.e("lat", String.valueOf(latitude));
+//            Log.e("long", String.valueOf(longitude));
+//            Log.e("lat", String.valueOf(latitude));
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
             mapController.setCenter(startPoint);
             MyLocationNewOverlay locationOverlay =
@@ -323,14 +331,13 @@ public class MainActivity extends AppCompatActivity
         Location l = null;
         LocationManager mLocationManager = (LocationManager)
                 getApplicationContext().getSystemService(LOCATION_SERVICE);
-//        assert mLocationManager != null;
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 l = mLocationManager.getLastKnownLocation(provider);
-            }
+            } else askPermission();
             if (l == null) {
                 continue;
             }
@@ -837,6 +844,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mapView.onResume();
         if (counter < examinerDuties.size()) {
             setActionBarTitle("در حال جانمایی میسرها...");
             if (examinerDuties.get(counter).getBillId() != null
@@ -856,6 +864,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        mapView.onPause();
         HttpClientWrapper.call.cancel();
     }
 

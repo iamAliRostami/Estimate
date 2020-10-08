@@ -227,4 +227,9 @@
     <string name="document">سند</string>
     <string name="documents">مدارک</string>
     <string name="neighbour_document">مدارک همسایه</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrZnlhOWU5ejFzYm0yd3Q4eXh6dXlqMzIifQ.jUMpwF5jUG5PJ5pMUooPjg</string>
+    <string name="parcels">پارسل</string>
+    <string name="water_pipe">لوله آب</string>
+    <string name="water_transfer">شبکه انتقال آب</string>
+    <string name="sanitation_transfer">شبکه انتقال فاضلاب</string>
 </resources>

@@ -26,7 +26,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0.0.1990712"
+        versionName "1.0.0.1990716"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -83,6 +83,9 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
     implementation 'com.github.MKergall:osmbonuspack:6.3'
     implementation 'org.osmdroid:osmdroid-android:6.1.7@aar'
     implementation 'com.cocoahero.android:geojson:1.0.1@jar'

@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
@@ -127,7 +128,6 @@ public class CreateImageActivity extends AppCompatActivity {
             HighQualityFragment highQualityFragment = HighQualityFragment.newInstance(
                     bitmap, "imageSign");
             highQualityFragment.show(fragmentTransaction, "imageSign");
-
         });
     }
 
@@ -203,7 +203,6 @@ public class CreateImageActivity extends AppCompatActivity {
         else
             call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
                     SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, billId);
-
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
                 new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
     }
@@ -215,10 +214,14 @@ public class CreateImageActivity extends AppCompatActivity {
 
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         daoExaminerDuties.updateExamination(true, trackNumber);
+        calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
+        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
 
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-        calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
+
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
                 new SendCalculation(), new SendCalculationIncomplete(), new GetError());
@@ -562,6 +565,7 @@ public class CreateImageActivity extends AppCompatActivity {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
             e.printStackTrace();
         }
+        MediaScannerConnection.scanFile(context, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
     }
 
     public boolean isExternalStorageWritable() {

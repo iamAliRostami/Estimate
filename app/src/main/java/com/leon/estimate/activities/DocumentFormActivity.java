@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +46,6 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
@@ -89,7 +89,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 public class DocumentFormActivity extends AppCompatActivity {
@@ -346,19 +345,12 @@ public class DocumentFormActivity extends AppCompatActivity {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(f);
-        } catch (FileNotFoundException e) {
+            fos.write(bitmapData);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            if (fos != null) {
-                fos.write(bitmapData);
-                fos.flush();
-                fos.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), f);
         return MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
     }
@@ -389,7 +381,6 @@ public class DocumentFormActivity extends AppCompatActivity {
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 40, out);
             out.flush();
             out.close();
-
             DaoImages daoImages = dataBase.daoImages();
             Images image = new Images(imageFileName, billId, trackNumber,
                     String.valueOf(imageDataTitle.getData().get(
@@ -405,6 +396,7 @@ public class DocumentFormActivity extends AppCompatActivity {
             Log.e("error", Objects.requireNonNull(e.getMessage()));
             e.printStackTrace();
         }
+        MediaScannerConnection.scanFile(context, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
     }
 
     public boolean isExternalStorageWritable() {
@@ -544,10 +536,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                             if (imageDataTitleTemp.getTitle().equals("ارزیابی"))
                                 tempTitleId = imageDataTitleTemp.getId();
                         }
-                        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
-                        daoCalculationUserInput.deleteByTrackNumber(trackNumber);
-                        daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
-
                         intent.putExtra(BundleEnum.TITLE.getValue(), tempTitleId);
                         startActivity(intent);
                         FormActivity.activity.finish();
@@ -752,13 +740,13 @@ public class DocumentFormActivity extends AppCompatActivity {
             if (response.errorBody() != null) {
                 Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
             }
+            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, DocumentFormActivity.this, error,
                     DocumentFormActivity.this.getString(R.string.dear_user),
                     DocumentFormActivity.this.getString(R.string.upload_image),
                     DocumentFormActivity.this.getString(R.string.accepted));
-            saveTempBitmap(Constants.bitmapSelectedImage);
         }
     }
 
