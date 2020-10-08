@@ -10,12 +10,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
         RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class,
         Tejariha.class, Zarib.class, Formula.class, Block.class},
-        version = 38, exportSchema = false)
+        version = 39, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_36_37 = new Migration(3738, 35) {
+    public static final Migration MIGRATION_38_39 = new Migration(38, 39) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  mapDescription Text;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  x1 Real;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  x2 Real;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y1 Real;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y2 Real;");
 //            database.execSQL("CREATE TABLE \"FormulaTemp\" (\n" +
 //                    "\t\"id\"\tINTEGER,\n" +
 //                    "\t\"zoneId\"\tINTEGER,\n" +

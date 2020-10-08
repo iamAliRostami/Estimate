@@ -49,7 +49,7 @@ public class CalculationUserInputSend {
     public boolean ensheabQeireDaem;
     public boolean adamTaxfifAb;
     public boolean adamTaxfifFazelab;
-
+    public double x1, x2, y1, y2;
     public ArrayList<Integer> selectedServices;
 
     public CalculationUserInputSend(CalculationUserInput calculationUserInput) {
@@ -91,6 +91,10 @@ public class CalculationUserInputSend {
         this.adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
         this.address = calculationUserInput.address;
         this.resultId = calculationUserInput.resultId;
+        this.x1 = calculationUserInput.x1;
+        this.x2 = calculationUserInput.x2;
+        this.y1 = calculationUserInput.y1;
+        this.y2 = calculationUserInput.y2;
         setSelectedServices(calculationUserInput);
     }
 
