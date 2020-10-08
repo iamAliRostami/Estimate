@@ -725,14 +725,15 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
     private Location getLastKnownLocation() {
         Location l = null;
-        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(getSystemService(LOCATION_SERVICE));
+        LocationManager mLocationManager = (LocationManager)
+                getApplicationContext().getSystemService(LOCATION_SERVICE);
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(context,
+            if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 l = mLocationManager.getLastKnownLocation(provider);
-            }
+            } else askPermission();
             if (l == null) {
                 continue;
             }
