@@ -125,7 +125,6 @@ public class CropActivity extends AppCompatActivity {
             finish();
         }
     }
-
     public static Bitmap rotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
