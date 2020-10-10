@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlContainer"
+    android:layoutDirection="rtl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.leon.estimate.activities.CropActivity">
@@ -9,16 +10,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_large_margin"
         android:orientation="vertical"
-        android:weightSum="10"
         tools:context=".ImageCropActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/activity_large_margin"
-            android:layout_marginEnd="@dimen/activity_large_margin"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_large_margin"
+            android:layout_marginRight="@dimen/activity_large_margin"
+            android:layout_marginBottom="@dimen/activity_medium_margin">
 
             <ImageView
                 android:id="@+id/imageViewRotate"
@@ -39,6 +40,7 @@
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/activity_mid_margin"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/activity_mid_padding"
                 android:src="@drawable/ic_align"
@@ -50,6 +52,7 @@
                 android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/activity_mid_margin"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/activity_mid_padding"
                 android:src="@drawable/ic_invert_colors"
@@ -61,15 +64,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_medium_margin"
             android:layout_weight="8">
 
             <FrameLayout
                 android:id="@+id/holderImageCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_medium_margin">
+                android:layout_gravity="center">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -91,16 +92,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_large_margin"
+            android:layout_marginLeft="@dimen/activity_large_margin"
+            android:layout_marginTop="@dimen/activity_medium_margin"
+            android:layout_marginRight="@dimen/activity_large_margin"
+            android:layout_marginBottom="@dimen/activity_medium_margin"
             android:orientation="horizontal"
             android:weightSum="2">
+
+            <Button
+                android:id="@+id/buttonCrop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="@dimen/activity_medium_margin"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:layout_marginBottom="@dimen/activity_medium_margin"
+                android:layout_weight="1"
+                android:background="@drawable/border_green_2"
+                android:text="@string/crop"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeLarge"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/buttonClose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_large_margin"
+                android:layout_marginLeft="@dimen/activity_large_margin"
+                android:layout_marginTop="@dimen/activity_medium_margin"
+                android:layout_marginRight="@dimen/activity_large_margin"
+                android:layout_marginBottom="@dimen/activity_medium_margin"
                 android:layout_weight="1"
                 android:background="@drawable/border_red_2"
                 android:text="@string/close"
@@ -108,18 +131,6 @@
                 android:textSize="@dimen/textSizeLarge"
                 tools:ignore="ButtonStyle" />
 
-            <Button
-                android:id="@+id/buttonCrop"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_large_margin"
-                android:layout_weight="1"
-                android:background="@drawable/border_green_2"
-                android:text="@string/crop"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textSizeLarge"
-                tools:ignore="ButtonStyle" />
 
         </LinearLayout>
     </LinearLayout>

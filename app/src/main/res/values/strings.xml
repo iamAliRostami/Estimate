@@ -161,8 +161,8 @@
     <string name="no">خیر</string>
     <string name="accepted_question">درصورت تایید، امکان ویرایش وجود نخواهد داشت. آیا تایید میکنید؟</string>
     <string name="map_description">برای ایجاد چند ضلعی، چندین بار بر روی نقشه ضربه بزنید.\n\nبرای تعیین محل، کنتور انگشت خود را چند لحظه روی محل نگه دارید.\n\nبعد از تعیین محل کنتور، برای تعیین محل سیفون، مجددا انگشت خود را چند لحظه روی محل نگه دارید.</string>
-    <string name="brightness">\"درخشش: \"</string>
-    <string name="contrast">\"کنتراست: \"</string>
+    <string name="brightness">درخشش: </string>
+    <string name="contrast">کنتراست: </string>
     <string name="home">خانه</string>
     <string name="distance_water_network">فاصله تا شبکه آب</string>
     <string name="distance_fazelab_network">فاصله تا شبکه فاضلاب</string>

@@ -24,11 +24,21 @@ import org.opencv.core.Mat;
 public class BrightnessContrastActivity extends AppCompatActivity {
     Bitmap bitmapTemp;
     BrightnessContrastActivityBinding binding;
+    View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Constants.bitmapSelectedImage = bitmapTemp;
+            setResult(RESULT_OK);
+            finish();
+        }
+    };
+    View.OnClickListener onClickListenerClose = v -> finish();
+
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
         @SuppressLint({"NewApi", "UseCompatLoadingForDrawables"})
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            int brightness = progress - 250;
+            int brightness = progress - 150;
             bitmapTemp = brightnessController(Constants.bitmapSelectedImage, brightness);
             binding.imageView.setImageBitmap(bitmapTemp);
             binding.textViewBrightness.setText(getString(R.string.brightness).concat(String.valueOf(brightness)));
@@ -61,16 +71,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
-    View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Constants.bitmapSelectedImage = bitmapTemp;
-            setResult(RESULT_OK);
-            finish();
-        }
-    };
-    View.OnClickListener onClickListenerClose = v -> finish();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +82,9 @@ public class BrightnessContrastActivity extends AppCompatActivity {
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NewApi"})
     void initialize() {
-        binding.seekBarBrightness.setMax(500);
+        binding.seekBarBrightness.setMax(300);
         binding.seekBarBrightness.setOnSeekBarChangeListener(onSeekBarChangeListenerBrightness);
-        binding.seekBarBrightness.setProgress(250);
+        binding.seekBarBrightness.setProgress(150);
 
         binding.seekBarContrast.setMax(100);
         binding.seekBarContrast.setOnSeekBarChangeListener(onSeekBarChangeListenerContrast);

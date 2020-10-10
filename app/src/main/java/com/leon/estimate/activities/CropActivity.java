@@ -114,6 +114,7 @@ public class CropActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = CropActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         isInverted = false;
