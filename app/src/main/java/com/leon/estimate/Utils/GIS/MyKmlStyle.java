@@ -30,14 +30,19 @@ public class MyKmlStyle implements KmlFeature.Styler {
 
     @Override
     public void onPolygon(Polygon polygon, KmlPlacemark kmlPlacemark, KmlPolygon kmlPolygon) {
-        if (color == 1)
+        if (color == 1) {
             polygon.setStrokeColor(Color.parseColor("#4CAF50"));
-        else if (color == 2)
+            polygon.setStrokeWidth(2);
+        } else if (color == 2) {
             polygon.setStrokeColor(Color.parseColor("#1E8CAB"));
-        else if (color == 3)
+            polygon.setStrokeWidth(5);
+        } else if (color == 3) {
             polygon.setStrokeColor(Color.parseColor("#0C374D"));
-        else if (color == 4)
+            polygon.setStrokeWidth(10);
+        } else if (color == 4) {
             polygon.setStrokeColor(Color.parseColor("#FF5722"));
+            polygon.setStrokeWidth(5);
+        }
     }
 
     @Override
