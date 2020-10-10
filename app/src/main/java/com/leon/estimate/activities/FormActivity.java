@@ -946,8 +946,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 latLong[0] = getLastKnownLocation().getLatitude();
                 latLong[1] = getLastKnownLocation().getLongitude();
             }
-            calculationUserInput.x1 = latLong[0];
-            calculationUserInput.y1 = latLong[1];
+            calculationUserInput.y1 = latLong[0];
+            calculationUserInput.x1 = latLong[1];
             addUserPlace(new GeoPoint(latLong[0], latLong[1]));
             getGISToken();
         }

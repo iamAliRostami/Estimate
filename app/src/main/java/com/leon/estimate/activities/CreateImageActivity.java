@@ -220,8 +220,8 @@ public class CreateImageActivity extends AppCompatActivity {
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         daoExaminerDuties.updateExamination(true, trackNumber);
         Location location = getLastKnownLocation();
-        calculationUserInput.x2 = location.getLatitude();
-        calculationUserInput.y2 = location.getLongitude();
+        calculationUserInput.y2 = location.getLatitude();
+        calculationUserInput.x2 = location.getLongitude();
         calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.deleteByTrackNumber(trackNumber);

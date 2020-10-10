@@ -91,8 +91,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         binding.seekBarContrast.setProgress(50);
 
         bitmapTemp = Constants.bitmapSelectedImage;
-//        Drawable d = new BitmapDrawable(getResources(), bitmapTemp);
-//        binding.imageView.setImageDrawable(d);
         binding.imageView.setImageBitmap(bitmapTemp);
 
         binding.buttonAccepted.setOnClickListener(onClickListenerAccepted);
