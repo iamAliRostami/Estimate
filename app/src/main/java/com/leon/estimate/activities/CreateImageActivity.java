@@ -635,16 +635,16 @@ public class CreateImageActivity extends AppCompatActivity {
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
+            uploadImage();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
-            uploadImage();
-
         }
     }
 
     class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
         @Override
         public void executeIncomplete(Response<SimpleMessage> response) {
+            uploadImage();
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
@@ -677,23 +677,23 @@ public class CreateImageActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
+            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
                     CreateImageActivity.this.getString(R.string.dear_user),
                     CreateImageActivity.this.getString(R.string.upload_image),
                     CreateImageActivity.this.getString(R.string.accepted));
-            saveTempBitmap(Constants.bitmapSelectedImage);
         }
     }
 
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
+            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(CreateImageActivity.this, error, Toast.LENGTH_LONG).show();
-//            finish();
         }
     }
 
