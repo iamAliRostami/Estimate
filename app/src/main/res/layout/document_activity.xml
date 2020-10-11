@@ -33,6 +33,19 @@
                 android:textSize="@dimen/textSizeMedium" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/textViewEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:text="@string/not_found"
+            android:textColor="@color/red1"
+            android:textSize="@dimen/textSizeLarge"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints" />
+
         <GridView
             android:id="@+id/gridViewImage"
             android:layout_width="wrap_content"

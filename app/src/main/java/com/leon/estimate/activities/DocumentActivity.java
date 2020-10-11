@@ -294,7 +294,11 @@ public class DocumentActivity extends AppCompatActivity {
                     }
                     if (imageDataThumbnailUri.size() > 0)
                         getImageThumbnail(imageDataThumbnail.get(0).getImg());
-                    else binding.progressBar.setVisibility(View.GONE);
+                    else {
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.textViewEmpty.setVisibility(View.VISIBLE);
+                        binding.gridViewImage.setVisibility(View.GONE);
+                    }
                 } else binding.progressBar.setVisibility(View.GONE);
             } else {
                 Toast.makeText(DocumentActivity.this,

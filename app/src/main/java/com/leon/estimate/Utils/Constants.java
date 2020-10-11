@@ -22,7 +22,7 @@ public class Constants {
     public static String cropError = "شما یک فیلد معتبر انتخاب نکرده اید. لطفاً تا زمانی که خطوط به رنگ آبی نباشد ، تصحیح کنید.";
     public static String progressColor = "#331199";
 
-    public static String karbari, noeVagozari;
+    public static String karbari, noeVagozari, qotrEnsheab;
     public static List<RequestDictionary> requestDictionaries;
     public static ExaminerDuties examinerDuties;
     public static CalculationUserInput calculationUserInput, calculationUserInputTemp;

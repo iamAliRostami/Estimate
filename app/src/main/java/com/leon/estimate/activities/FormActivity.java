@@ -76,6 +76,7 @@ import com.leon.estimate.Utils.GIS.MyKmlStyle;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.databinding.FormActivityBinding;
+import com.leon.estimate.fragments.EnterBillIdFragment;
 import com.leon.estimate.fragments.FormFragment;
 import com.leon.estimate.fragments.PersonalFragment;
 import com.leon.estimate.fragments.SecondFormFragment;
@@ -809,10 +810,15 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
         if (id == R.id.menu_document) {
             intent.putExtra(BundleEnum.IS_NEIGHBOUR.getValue(), false);
+            startActivity(intent);
         } else if (id == R.id.menu_neighbour_document) {
             intent.putExtra(BundleEnum.IS_NEIGHBOUR.getValue(), true);
+            startActivity(intent);
+        } else if (id == R.id.menu_other_document) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            EnterBillIdFragment enterBillIdFragment = EnterBillIdFragment.newInstance();
+            enterBillIdFragment.show(fragmentTransaction, "bill Id");
         }
-        startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
 

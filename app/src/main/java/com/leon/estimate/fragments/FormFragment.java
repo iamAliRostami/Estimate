@@ -79,6 +79,7 @@ import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 import static com.leon.estimate.Utils.Constants.karbari;
 import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.qotrEnsheab;
 import static com.leon.estimate.Utils.Constants.tejarihas;
 
 public class FormFragment extends Fragment {
@@ -258,6 +259,7 @@ public class FormFragment extends Fragment {
 
         karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
         noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
+        qotrEnsheab = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getTitle();
         examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
         examinerDuties.setParvane(binding.checkbox4.isChecked());
         examinerDuties.setMotaqazi(binding.checkbox2.isChecked());

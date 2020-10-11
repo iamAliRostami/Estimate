@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl"
+    android:padding="@dimen/activity_large_margin"
+    tools:context=".fragments.EnterBillIdFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_mid_margin"
+            android:gravity="left"
+            android:text="@string/bill_id"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeLarge"
+            tools:ignore="RtlHardcoded" />
+
+        <EditText
+            android:id="@+id/editText_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_mid_margin"
+            android:layout_weight="1"
+            android:background="@drawable/border_gray_1"
+            android:gravity="center"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="13"
+            android:maxLines="1"
+            android:paddingTop="@dimen/activity_medium_padding"
+            android:paddingBottom="@dimen/activity_medium_padding"
+            android:singleLine="true"
+            tools:ignore="Autofill,LabelFor" />
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_mid_padding"
+            android:background="@drawable/border_green_2"
+            android:paddingLeft="@dimen/activity_medium_padding"
+            android:paddingRight="@dimen/activity_medium_padding"
+            android:text="@string/search"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSizeLarge" />
+    </LinearLayout>
+
+</FrameLayout>

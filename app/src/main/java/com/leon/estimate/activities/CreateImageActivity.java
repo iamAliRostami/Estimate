@@ -87,6 +87,7 @@ import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 import static com.leon.estimate.Utils.Constants.karbari;
 import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.qotrEnsheab;
 import static com.leon.estimate.Utils.Constants.secondForm;
 import static com.leon.estimate.Utils.Constants.tejarihas;
 
@@ -348,7 +349,7 @@ public class CreateImageActivity extends AppCompatActivity {
 
         yCoordinate = (float) src.getHeight() * 63 / 288;
         xCoordinate = (float) src.getWidth() * 27 / 36;
-        cs.drawText(String.valueOf(examinerDuties.getQotrEnsheabId()), xCoordinate, yCoordinate, tPaint);//TODO
+        cs.drawText(qotrEnsheab, xCoordinate, yCoordinate, tPaint);//TODO
         xCoordinate = (float) src.getWidth() * 20 / 36;
         cs.drawText(String.valueOf(examinerDuties.getArse()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 16 / 36;
