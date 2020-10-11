@@ -1,7 +1,6 @@
 package com.leon.estimate.activities;
 
 import android.annotation.SuppressLint;
-import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,7 +13,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +29,8 @@ import com.leon.estimate.databinding.CropActivityBinding;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -305,29 +299,6 @@ public class CropActivity extends AppCompatActivity {
             orderedPoints = getOutlinePoints(tempBitmap);
         }
         return orderedPoints;
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "cropped_" + timeStamp + ".png";
-        File myPath = new File(directory, imageFileName);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return directory.getAbsolutePath();
     }
 
     @Override
