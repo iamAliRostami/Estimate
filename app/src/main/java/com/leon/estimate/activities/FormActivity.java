@@ -189,6 +189,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     binding.checkboxWaterTransfer.setChecked(false);
                     binding.checkboxWaterPipe.setChecked(false);
                     binding.checkboxParcels.setChecked(false);
+                    calculationUserInput.x3 = 0;
+                    calculationUserInput.y3 = 0;
                     initializeMap(true);
                     break;
                 case R.id.imageViewRefresh2:
@@ -517,6 +519,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             place2Index = 0;
         }
         if (place1Index == 0) {
+            calculationUserInput.y3 = p.getLatitude();
+            calculationUserInput.x3 = p.getLongitude();
             startMarker.setIcon(getResources().getDrawable(R.drawable.map_water_drop_point));
             binding.mapView.getOverlays().add(startMarker);
             place1Index = binding.mapView.getOverlays().size() - 1;

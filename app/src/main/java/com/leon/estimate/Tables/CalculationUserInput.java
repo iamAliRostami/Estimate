@@ -68,6 +68,8 @@ public class CalculationUserInput {
     int pelak;
     public int resultId;
     public double x1, x2, y1, y2;
+    @Ignore
+    public double x3, y3;
 
     public CalculationUserInput() {
     }

@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity
         context = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
-//        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_38_39).build();
+        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_39_40).build();
     }
 
     void readData() {
@@ -897,7 +897,7 @@ public class MainActivity extends AppCompatActivity
                     Gson gson = new Gson();
                     examinerDutiesList.get(i).setRequestDictionaryString(
                             gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-                    Log.e("zoneId ".concat(String.valueOf(i)), examinerDutiesList.get(i).getZoneId());
+//                    Log.e("zoneId ".concat(String.valueOf(i)), examinerDutiesList.get(i).getExaminerName());
                     if (examinerDutiesList.get(i).getZoneId() == null ||
                             examinerDutiesList.get(i).getZoneId().equals("0")) {
                         examinerDutiesList.remove(i);

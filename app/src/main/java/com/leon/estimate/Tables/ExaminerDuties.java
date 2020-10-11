@@ -93,7 +93,7 @@ public class ExaminerDuties {
     public int noeVagozariId;
     public int pelak;
     boolean sanad;
-
+    String examinerName;
     boolean estelamShahrdari, parvane, motaqazi;
 
     String chahDescription;
@@ -176,6 +176,18 @@ public class ExaminerDuties {
         requestDictionaryString = calculationUserInput.selectedServicesString;
         shenasname = calculationUserInput.shenasname;
         return this;
+    }
+
+    public int getVaziatNasbPompI() {
+        return vaziatNasbPompI;
+    }
+
+    public String getExaminerName() {
+        return examinerName;
+    }
+
+    public void setExaminerName(String examinerName) {
+        this.examinerName = examinerName;
     }
 
     public String getMapDescription() {

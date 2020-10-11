@@ -89,6 +89,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 public class DocumentFormActivity extends AppCompatActivity {
@@ -261,6 +262,13 @@ public class DocumentFormActivity extends AppCompatActivity {
                     } else
                         cs.drawText(examinerDuties.getMapDescription().substring(i * 25, 25 * (i + 1)), xCoordinate, yCoordinate, tPaint);
                 }
+            }
+            if (calculationUserInput.x3 > 0 && calculationUserInput.y3 > 0) {
+                small = 50;
+                tPaint.setTextSize(small);
+                yCoordinate = (float) src.getHeight() * 140 / 144;
+                cs.drawText("x: ".concat(String.valueOf(calculationUserInput.x3)).concat(" , ").
+                        concat("y: ").concat(String.valueOf(calculationUserInput.y3)), xCoordinate, yCoordinate, tPaint);
             }
         }
         return dest;

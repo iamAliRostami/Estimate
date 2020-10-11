@@ -516,6 +516,8 @@ public class CreateImageActivity extends AppCompatActivity {
         @SuppressLint("SimpleDateFormat")
         String timeWaterMark = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
         cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
+        yCoordinate = (float) src.getHeight() * 245 / 288;
+        cs.drawText(examinerDuties.getExaminerName(), xCoordinate, yCoordinate, tPaint);
         return dest;
     }
 
