@@ -40,7 +40,7 @@
             android:visibility="visible"
             sign:enableSignature="true"
             sign:penColor="@color/black"
-            sign:penSize="5dp"
+            sign:penSize="2dp"
             tools:ignore="RtlHardcoded" />
 
         <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
@@ -51,7 +51,7 @@
             android:visibility="visible"
             sign:enableSignature="true"
             sign:penColor="@color/black"
-            sign:penSize="5dp" />
+            sign:penSize="2dp" />
     </LinearLayout>
 
     <LinearLayout
