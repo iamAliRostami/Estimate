@@ -60,6 +60,7 @@
         </RelativeLayout>
 
         <FrameLayout
+            android:background="@drawable/border_2"
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
