@@ -47,7 +47,7 @@ public class CropActivity extends AppCompatActivity {
     private boolean isInverted;
     CropActivityBinding binding;
     @SuppressLint("CheckResult")
-    private View.OnClickListener onButtonCropClickListener = v -> {
+    private final View.OnClickListener onButtonCropClickListener = v -> {
         setProgressBar(true);
         Observable.fromCallable(() -> {
             Constants.bitmapSelectedImage = getCroppedImage();
@@ -64,7 +64,7 @@ public class CropActivity extends AppCompatActivity {
                 });
     };
     @SuppressLint("CheckResult")
-    private View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
+    private final View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             setProgressBar(true);
@@ -80,9 +80,15 @@ public class CropActivity extends AppCompatActivity {
                     });
         }
     };
-    private View.OnClickListener onButtonCloseClickListener = v -> finish();
+    private final View.OnClickListener onButtonCloseClickListener = v -> finish();
+    private final View.OnClickListener onImageViewRebase = v -> {
+        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
+                bitmapTempOriginal.getConfig(), true);
+        isInverted = false;
+        initializeElement();
+    };
     @SuppressLint("CheckResult")
-    private View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
+    private final View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             setProgressBar(true);
@@ -97,12 +103,6 @@ public class CropActivity extends AppCompatActivity {
                         initializeElement();
                     });
         }
-    };
-    private View.OnClickListener onImageViewRebase = v -> {
-        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
-                bitmapTempOriginal.getConfig(), true);
-        isInverted = false;
-        initializeElement();
     };
 
     @Override

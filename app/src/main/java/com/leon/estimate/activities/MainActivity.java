@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     MyDatabase dataBase;
     SharedPreferenceManager sharedPreferenceManager;
+    @SuppressLint("NonConstantResourceId")
     View.OnClickListener onClickListener = view -> {
         Intent intent;
         switch (view.getId()) {

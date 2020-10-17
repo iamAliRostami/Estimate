@@ -22,11 +22,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 
 public final class NetworkHelper {
-    private static TimeUnit TIME_UNIT = TimeUnit.SECONDS;
-    private static long READ_TIMEOUT = 120;
-    private static long WRITE_TIMEOUT = 60;
-    private static long CONNECT_TIMEOUT = 10;
-    private static boolean RETRY_ENABLED = true;
+    private static final TimeUnit TIME_UNIT = TimeUnit.SECONDS;
+    private static final long READ_TIMEOUT = 120;
+    private static final long WRITE_TIMEOUT = 60;
+    private static final long CONNECT_TIMEOUT = 10;
+    private static final boolean RETRY_ENABLED = true;
 
     private NetworkHelper() {
 
@@ -78,8 +78,6 @@ public final class NetworkHelper {
                 .client(NetworkHelper.getHttpClient(""))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-//                .addConverterFactory(MoshiConverterFactory.create().asLenient())
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         return retrofit;
     }
