@@ -374,6 +374,11 @@ public class DocumentFormActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
     @SuppressLint("SimpleDateFormat")
     void saveImage(Bitmap bitmapImage) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -408,11 +413,6 @@ public class DocumentFormActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         MediaScannerConnection.scanFile(context, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
-    }
-
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     void loadImage() {
@@ -525,7 +525,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     class ShowDialogue implements CustomDialog.Inline {
-        private LovelyStandardDialog lovelyStandardDialog;
+        private final LovelyStandardDialog lovelyStandardDialog;
 
         //TODO
         ShowDialogue(String message, String title, String top, String positiveButtonText, String negativeButtonText,
