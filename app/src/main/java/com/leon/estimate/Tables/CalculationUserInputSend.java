@@ -27,7 +27,6 @@ public class CalculationUserInputSend {
     public String postalCode;
     public int requestType;
     public int zoneId;
-    public int karbariId;
     public int qotrEnsheabId;
     public int noeVagozariId;
     public int taxfifId;
@@ -40,7 +39,6 @@ public class CalculationUserInputSend {
     public int sifoon150;
     public int sifoon200;
     public int zarfiatQarardadi;
-    public int arzeshMelk;
     public int tedadMaskooni;
     public int tedadTejari;
     public int tedadSaier;
@@ -52,7 +50,36 @@ public class CalculationUserInputSend {
     public double x1, x2, y1, y2;
     public ArrayList<Integer> selectedServices;
 
-    public CalculationUserInputSend(CalculationUserInput calculationUserInput) {
+    public int karbariId;
+    public int arzeshMelk;
+    public double accuracy;
+    //TODO
+    String eshterak;
+    int omqeZirzamin;
+    boolean chahAbBaran;
+    boolean hasMap;
+    int faseleKhakiA;
+    int faseleKhakiF;
+    int faseleAsphaultA;
+    int faseleAsphaultF;
+    int faseleSangA;
+    int faseleSangF;
+    int faseleOtherA;
+    int faseleOtherF;
+
+    public CalculationUserInputSend(CalculationUserInput calculationUserInput, ExaminerDuties examinerDuties) {
+        this.eshterak = examinerDuties.eshterak;
+        this.omqeZirzamin = examinerDuties.omqeZirzamin;
+        this.chahAbBaran = examinerDuties.chahAbBaran;
+        this.faseleOtherF = examinerDuties.faseleOtherF;
+        this.faseleOtherA = examinerDuties.faseleOtherA;
+        this.faseleSangF = examinerDuties.faseleSangF;
+        this.faseleSangA = examinerDuties.faseleSangA;
+        this.faseleAsphaultF = examinerDuties.faseleAsphaultF;
+        this.faseleAsphaultA = examinerDuties.faseleAsphaultA;
+        this.faseleKhakiF = examinerDuties.faseleKhakiF;
+        this.faseleKhakiA = examinerDuties.faseleKhakiA;
+
         this.postalCode = calculationUserInput.postalCode;
         this.fatherName = calculationUserInput.fatherName;
         this.identityCode = calculationUserInput.identityCode;
@@ -95,6 +122,8 @@ public class CalculationUserInputSend {
         this.x2 = calculationUserInput.x2;
         this.y1 = calculationUserInput.y1;
         this.y2 = calculationUserInput.y2;
+        this.accuracy = calculationUserInput.accuracy;
+        hasMap = true;
         setSelectedServices(calculationUserInput);
     }
 

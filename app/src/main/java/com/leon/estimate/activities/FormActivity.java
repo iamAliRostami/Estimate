@@ -87,8 +87,6 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
-import org.osmdroid.tileprovider.tilesource.MapBoxTileSource;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -135,6 +133,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     double[] latLong;
     double latitude, longitude;
     Bitmap bitmap;
+    @SuppressLint("NonConstantResourceId")
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) -> {
         int id = buttonView.getId();
         switch (id) {
@@ -533,36 +532,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         return binding.mapView.getDrawingCache(true);
     }
 
-    void test() {
-//        binding.mapView.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, "",
-//                new String[]{"http://basemap.nationalmap.gov/ArcGIS/rest/services/USGSTopo/MapServer/tile/"}) {
-//            @Override
-//            public String getTileURLString(long pMapTileIndex) {
-//                return getBaseUrl()
-//                        + MapTileIndex.getZoom(pMapTileIndex)
-//                        + "/" + MapTileIndex.getY(pMapTileIndex)
-//                        + "/" + MapTileIndex.getX(pMapTileIndex)
-//                        + mImageFilenameEnding;
-//            }
-//        });
-
-        final MapBoxTileSource tileSource = new MapBoxTileSource();
-        //option 1, load your settings from the manifest
-        tileSource.retrieveAccessToken(context);
-//        tileSource.retrieveMapBoxMapId(context);
-        TileSourceFactory.addTileSource(tileSource);
-        binding.mapView.setTileSource(tileSource);
-
-//        binding.mapView.setTileSource(new MapBoxTileSource(getContext()));
-
-    }
-
     private void initializeMap(boolean isRefresh) {
         if (!GpsEnabled()) {
             initialize();
             return;
         }
-//        test();
         binding.mapView.setBuiltInZoomControls(true);
         binding.mapView.setMultiTouchControls(true);
 

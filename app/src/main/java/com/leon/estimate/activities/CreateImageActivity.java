@@ -223,13 +223,14 @@ public class CreateImageActivity extends AppCompatActivity {
         Location location = getLastKnownLocation();
         calculationUserInput.y2 = location.getLatitude();
         calculationUserInput.x2 = location.getLongitude();
+        calculationUserInput.accuracy = location.getAccuracy();
         calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.deleteByTrackNumber(trackNumber);
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
 
         ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
-        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput));
+        calculationUserInputSends.add(new CalculationUserInputSend(calculationUserInput, examinerDuties));
 
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,

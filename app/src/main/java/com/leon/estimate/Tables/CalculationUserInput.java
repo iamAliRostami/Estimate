@@ -23,7 +23,6 @@ public class CalculationUserInput {
     public int requestType;
     public String parNumber;
     public String billId;
-    public int karbariId;
     public String neighbourBillId;
     public int zoneId;
     public String notificationMobile;
@@ -36,8 +35,6 @@ public class CalculationUserInput {
     public String mobile;
     public String firstName;
     public String sureName;
-    @Ignore
-    public List<RequestDictionary> selectedServicesObject;
     public int aianKol;
     public int aianMaskooni;
     public int aianTejari;
@@ -47,7 +44,6 @@ public class CalculationUserInput {
     public int sifoon200;
 
     public int zarfiatQarardadi;
-    public int arzeshMelk;
     public int tedadMaskooni;
     public int tedadTejari;
     public int tedadSaier;
@@ -65,11 +61,19 @@ public class CalculationUserInput {
     int id;
     public String shenasname;
     @Ignore
+    public List<RequestDictionary> selectedServicesObject;
+    @Ignore
     int pelak;
-    public int resultId;
-    public double x1, x2, y1, y2;
     @Ignore
     public double x3, y3;
+    public int resultId;
+    public double x1, x2, y1, y2;
+    public double accuracy;
+
+    public int arzeshMelk;
+    public int karbariId;
+
+//TODO نقشه، امکان منفی، A
 
     public CalculationUserInput() {
     }

@@ -38,7 +38,6 @@ public class ExaminerDuties {
     boolean hasFazelab;
     String fazelabInstallDate;
     boolean isFinished;
-    String eshterak;
     int arse;
     int aianKol;
     int aianMaskooni;
@@ -67,14 +66,6 @@ public class ExaminerDuties {
     String requestDictionaryString;
     String shenasname;
 
-    int faseleKhakiA;
-    int faseleKhakiF;
-    int faseleAsphaultA;
-    int faseleAsphaultF;
-    int faseleSangA;
-    int faseleSangF;
-    int faseleOtherA;
-    int faseleOtherF;
     boolean ezhaNazarA;
     boolean ezhaNazarF;
     int qotrLooleI;
@@ -86,19 +77,29 @@ public class ExaminerDuties {
     int noeMasrafI;
     String noeMasrafS;
     int vaziatNasbPompI;
-    int omqeZirzamin;
     boolean etesalZirzamin;
     int omqFazelab;
-    boolean chahAbBaran;
     public int noeVagozariId;
     public int pelak;
     boolean sanad;
     String examinerName;
     boolean estelamShahrdari, parvane, motaqazi;
-
-    String chahDescription;
     String masrafDescription;
+    String chahDescription;
     String mapDescription;
+
+    String eshterak;
+
+    int faseleKhakiA;
+    int faseleKhakiF;
+    int faseleAsphaultA;
+    int faseleAsphaultF;
+    int faseleSangA;
+    int faseleSangF;
+    int faseleOtherA;
+    int faseleOtherF;
+    int omqeZirzamin;
+    boolean chahAbBaran;
 
     @Ignore
     ArrayList<RequestDictionary> requestDictionary;

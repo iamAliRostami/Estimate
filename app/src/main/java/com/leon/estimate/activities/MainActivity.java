@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity
         context = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
-        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_39_40).build();
+        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_40_41).build();
     }
 
     void readData() {
@@ -593,11 +593,14 @@ public class MainActivity extends AppCompatActivity
     void send() {
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         if (calculationUserInputList.size() > 0) {
             ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
             for (int i = 0; i < calculationUserInputList.size(); i++) {
+                ExaminerDuties examinerDuties = daoExaminerDuties.examinerDutiesByTrackNumber(
+                        calculationUserInputList.get(i).trackNumber);
                 CalculationUserInputSend calculationUserInputSend =
-                        new CalculationUserInputSend(calculationUserInputList.get(i));
+                        new CalculationUserInputSend(calculationUserInputList.get(i), examinerDuties);
                 calculationUserInputSends.add(calculationUserInputSend);
             }
             SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(

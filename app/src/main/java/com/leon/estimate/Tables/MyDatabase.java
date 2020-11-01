@@ -10,13 +10,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
         RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class,
         Tejariha.class, Zarib.class, Formula.class, Block.class},
-        version = 40, exportSchema = false)
+        version = 41, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_39_40 = new Migration(38, 39) {
+    public static final Migration MIGRATION_40_41 = new Migration(40, 41) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  examinerName Text;");
-//            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  x3 Real;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  examinerName Text;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  accuracy Real;");
 //            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y3 Real;");
 //            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y1 Real;");
 //            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y2 Real;");
