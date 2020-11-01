@@ -47,7 +47,7 @@ public class CalculationUserInputSend {
     public boolean ensheabQeireDaem;
     public boolean adamTaxfifAb;
     public boolean adamTaxfifFazelab;
-    public double x1, x2, y1, y2;
+    public String x1, x2, y1, y2;
     public ArrayList<Integer> selectedServices;
 
     public int karbariId;
@@ -118,10 +118,10 @@ public class CalculationUserInputSend {
         this.adamTaxfifFazelab = calculationUserInput.adamTaxfifFazelab;
         this.address = calculationUserInput.address;
         this.resultId = calculationUserInput.resultId;
-        this.x1 = calculationUserInput.x1;
-        this.x2 = calculationUserInput.x2;
-        this.y1 = calculationUserInput.y1;
-        this.y2 = calculationUserInput.y2;
+        this.x1 = String.valueOf(calculationUserInput.x1);
+        this.x2 = String.valueOf(calculationUserInput.x2);
+        this.y1 = String.valueOf(calculationUserInput.y1);
+        this.y2 = String.valueOf(calculationUserInput.y2);
         this.accuracy = calculationUserInput.accuracy;
         hasMap = true;
         setSelectedServices(calculationUserInput);
