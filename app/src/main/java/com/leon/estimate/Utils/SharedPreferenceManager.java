@@ -22,7 +22,7 @@ public class SharedPreferenceManager implements ISharedPreferenceManager {
         appPrefs = this.context.getSharedPreferences(xml, MODE_PRIVATE);
     }
 
-    public boolean CheckIsNotEmpty(String key) {
+    public boolean checkIsNotEmpty(String key) {
 
         if (appPrefs == null) {
             return false;

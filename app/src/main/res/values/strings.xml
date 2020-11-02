@@ -233,4 +233,5 @@
     <string name="water_transfer">شبکه انتقال آب</string>
     <string name="sanitation_transfer">شبکه انتقال فاضلاب</string>
     <string name="other_document">مدارک مجاور</string>
+    <string name="save">ذخیره</string>
 </resources>

@@ -47,7 +47,7 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginActivityBinding binding;
-    private int REQUEST_LOCATION_CODE = 1236;
+    private final int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
     private String username, password;
     private Context context;
@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 .concat(BuildConfig.VERSION_NAME));
         sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
                 SharedReferenceNames.ACCOUNT.getValue());
+        loadPreference();
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
         binding.imageViewPerson.setImageResource(R.drawable.img_profile);
@@ -257,6 +258,16 @@ public class LoginActivity extends AppCompatActivity {
         binding.buttonLogin.setOnLongClickListener(view -> false);
     }
 
+    void loadPreference() {
+        if (sharedPreferenceManager.checkIsNotEmpty(SharedReferenceKeys.USERNAME.getValue()) &&
+                sharedPreferenceManager.checkIsNotEmpty(SharedReferenceKeys.PASSWORD.getValue())) {
+            binding.editTextUsername.setText(sharedPreferenceManager.getStringData(
+                    SharedReferenceKeys.USERNAME.getValue()));
+            binding.editTextPassword.setText(sharedPreferenceManager.getStringData(
+                    SharedReferenceKeys.PASSWORD.getValue()));
+        }
+    }
+
     class LoginFeedBack
             implements ICallback<com.leon.estimate.Tables.LoginFeedBack> {
         @Override
@@ -267,11 +278,15 @@ public class LoginActivity extends AppCompatActivity {
                     loginFeedBack.getRefresh_token().length() < 1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_is_not_match), Toast.LENGTH_SHORT).show();
             } else {
-                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN.getValue(), loginFeedBack.getAccess_token());
-                sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME.getValue(), username);
+                sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME_TEMP.getValue(), username);
 //                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
-                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), password);
+                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD_TEMP.getValue(), password);
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN.getValue(), loginFeedBack.getAccess_token());
                 sharedPreferenceManager.putData(SharedReferenceKeys.REFRESH_TOKEN.getValue(), loginFeedBack.getRefresh_token());
+                if (binding.checkBoxSave.isChecked()) {
+                    sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME.getValue(), username);
+                    sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), password);
+                }
                 GpsEnabled();
             }
         }

@@ -5,6 +5,8 @@ package com.leon.estimate.Enums;
  */
 
 public enum SharedReferenceKeys {
+    USERNAME_TEMP("username_temp"),
+    PASSWORD_TEMP("password_temp"),
     USERNAME("username"),
     PASSWORD("password"),
     TOKEN("token"),

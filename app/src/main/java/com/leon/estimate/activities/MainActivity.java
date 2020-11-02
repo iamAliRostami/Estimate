@@ -624,8 +624,8 @@ public class MainActivity extends AppCompatActivity
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
-                SharedReferenceKeys.USERNAME.getValue()),
-                sharedPreferenceManager.getStringData(SharedReferenceKeys.PASSWORD.getValue()));
+                SharedReferenceKeys.USERNAME_TEMP.getValue()),
+                sharedPreferenceManager.getStringData(SharedReferenceKeys.PASSWORD_TEMP.getValue()));
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
                 this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
     }
