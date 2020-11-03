@@ -85,6 +85,8 @@ import static com.leon.estimate.Utils.Constants.tejarihas;
 public class FormFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private Context context;
+    int saier;
+    int tejari;
     FormFragmentBinding binding;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
@@ -127,6 +129,7 @@ public class FormFragment extends Fragment {
         new initializeSpinners().execute();
         setOnEditTextSodurDateClickListener();
         setOnEditTextTedadTejariTextChangeListener();
+        setOnEditTextTedadSaierTextChangeListener();
         setOnTextViewArezeshdaraeiClickListener();
         setOnImageViewPlusClickListener();
         tejarihaAdapter = new TejarihaAdapter(context);
@@ -192,9 +195,34 @@ public class FormFragment extends Fragment {
         });
     }
 
+    void setOnEditTextTedadSaierTextChangeListener() {
+        binding.editTextTedadSaier.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0)
+                    saier = Integer.parseInt(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (tejari < 1) {
+                    binding.linearLayoutTejari.setVisibility(View.GONE);
+                }
+                if (saier > 0) {
+                    binding.linearLayoutTejari.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
     void setOnEditTextTedadTejariTextChangeListener() {
         binding.editTextTedadTejari.addTextChangedListener(new TextWatcher() {
-            int tejari;
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -209,8 +237,9 @@ public class FormFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.e("tejari", String.valueOf(tejari));
-                binding.linearLayoutTejari.setVisibility(View.GONE);
+                if (saier < 1) {
+                    binding.linearLayoutTejari.setVisibility(View.GONE);
+                }
                 if (tejari > 0) {
                     binding.linearLayoutTejari.setVisibility(View.VISIBLE);
                 }

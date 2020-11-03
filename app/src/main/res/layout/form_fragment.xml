@@ -634,6 +634,7 @@
                 android:orientation="horizontal"
                 android:weightSum="4">
 
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -642,13 +643,13 @@
                     android:layout_marginBottom="@dimen/activity_mid_margin"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="@string/aian_kol"
+                    android:text="@string/other_number"
                     android:textColor="@color/blue4"
                     android:textSize="@dimen/textSizeLarge"
                     tools:ignore="RtlHardcoded" />
 
                 <EditText
-                    android:id="@+id/editTextAianKol"
+                    android:id="@+id/editTextTedadSaier"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -656,7 +657,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/border_gray_1"
                     android:gravity="center"
-                    android:inputType="number"
+                    android:inputType="numberSigned"
                     android:lines="1"
                     android:maxLines="1"
                     android:paddingTop="@dimen/activity_medium_padding"
@@ -824,13 +825,13 @@
                     android:layout_marginBottom="@dimen/activity_mid_margin"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="@string/other_number"
+                    android:text="@string/aian_kol"
                     android:textColor="@color/blue4"
                     android:textSize="@dimen/textSizeLarge"
                     tools:ignore="RtlHardcoded" />
 
                 <EditText
-                    android:id="@+id/editTextTedadSaier"
+                    android:id="@+id/editTextAianKol"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -838,7 +839,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/border_gray_1"
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="number"
                     android:lines="1"
                     android:maxLines="1"
                     android:paddingTop="@dimen/activity_medium_padding"

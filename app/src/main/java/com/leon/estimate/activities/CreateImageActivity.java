@@ -385,7 +385,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(String.valueOf(examinerDuties.getTedadSaier()), xCoordinate, yCoordinate, tPaint);
 
         //TODO
-        if (examinerDuties.getTedadTejari() > 0)
+        if (examinerDuties.getTedadTejari() > 0 || examinerDuties.getTedadSaier() > 0)
             for (int i = 0; i < tejarihas.size(); i++) {
                 Tejariha tejariha = tejarihas.get(i);
                 yCoordinate = (float) src.getHeight() * (49 + i * 3) / 144;
