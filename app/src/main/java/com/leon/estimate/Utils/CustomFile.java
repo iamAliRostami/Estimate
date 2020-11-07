@@ -1,4 +1,4 @@
-package com.leon.estimate.Utils.GIS;
+package com.leon.estimate.Utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
@@ -22,9 +23,9 @@ import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.Constants;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -41,13 +42,17 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static com.leon.estimate.Utils.Constants.fileName;
+import static com.leon.estimate.Utils.Constants.imageFileName;
+
 public class CustomFile {
+
 
     @SuppressLint("SimpleDateFormat")
     public static MultipartBody.Part bitmapToFile(Bitmap bitmap, Context context) {
         String timeStamp = (new SimpleDateFormat(context.getString(R.string.save_format_name))).format(new Date());
-        String fileNameToSave = "JPEG_" + timeStamp + "_";
-        File f = new File(context.getCacheDir(), fileNameToSave);
+        imageFileName = "JPEG_" + timeStamp + "_";
+        File f = new File(context.getCacheDir(), imageFileName);
         try {
             f.createNewFile();
         } catch (IOException e) {
@@ -76,9 +81,11 @@ public class CustomFile {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    public static void saveTempBitmap(Bitmap bitmap, Context context) {
+    public static void saveTempBitmap(Bitmap bitmap, Context context, MyDatabase database,
+                                      String billId, String trackNumber, String docId,
+                                      String docTitle, boolean isNew) {
         if (isExternalStorageWritable()) {
-            saveImage(bitmap, context);
+            saveImage(bitmap, context, database, billId, trackNumber, docId, docTitle, isNew);
         } else {
             Log.e("error", "ExternalStorage is not Writable");
             Toast.makeText(context, context.getString(R.string.error_external_storage_is_not_writable), Toast.LENGTH_LONG).show();
@@ -86,7 +93,9 @@ public class CustomFile {
     }
 
     @SuppressLint("SimpleDateFormat")
-    static void saveImage(Bitmap bitmapImage, Context context) {
+    static void saveImage(Bitmap bitmapImage, Context context, MyDatabase database,
+                          String billId, String trackNumber, String docId, String docTitle,
+                          boolean isNew) {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES) + context.getString(R.string.camera_folder));
         if (!mediaStorageDir.exists()) {
@@ -95,14 +104,23 @@ public class CustomFile {
             }
         }
         String timeStamp = (new SimpleDateFormat(context.getString(R.string.save_format_name))).format(new Date());
-        String fileNameToSave = "JPEG_" + timeStamp + "_";
-        File file = new File(mediaStorageDir, fileNameToSave);
+        imageFileName = "JPEG_" + timeStamp + "_";
+        File file = new File(mediaStorageDir, imageFileName);
         if (file.exists()) file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 40, out);
             out.flush();
             out.close();
+
+            DaoImages daoImages = database.daoImages();
+            Images image = new Images(imageFileName, billId, trackNumber,
+                    docId, docTitle,
+                    bitmapImage, true);
+            if (isNew)
+                image.setBillId("");
+            else image.setTrackingNumber("");
+            daoImages.insertImage(image);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("error", Objects.requireNonNull(e.getMessage()));
@@ -113,13 +131,13 @@ public class CustomFile {
     @SuppressLint({"SimpleDateFormat"})
     public static File createImageFile(Context context) throws IOException {
         String timeStamp = (new SimpleDateFormat(context.getString(R.string.save_format_name))).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         storageDir.mkdirs();
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         StringBuilder stringBuilder = (new StringBuilder()).append("file:");
         Objects.requireNonNull(image);
-        Constants.fileName = stringBuilder.append(image.getAbsolutePath()).toString();
+        fileName = stringBuilder.append(image.getAbsolutePath()).toString();
         return image;
     }
 
@@ -200,5 +218,11 @@ public class CustomFile {
 
         DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
         daoResultDictionary.insertAll(input.getResultDictionary());
+    }
+
+    private byte[] convertBitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
+        return bos.toByteArray();
     }
 }

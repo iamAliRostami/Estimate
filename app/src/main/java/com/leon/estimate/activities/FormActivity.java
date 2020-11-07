@@ -6,17 +6,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -27,8 +22,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.location.LocationManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,7 +31,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.leon.estimate.BuildConfig;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
@@ -73,6 +65,7 @@ import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
 import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
 import com.leon.estimate.Utils.GIS.CustomGeoJSON;
 import com.leon.estimate.Utils.GIS.MyKmlStyle;
+import com.leon.estimate.Utils.GPSTracker;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.databinding.FormActivityBinding;
@@ -85,7 +78,6 @@ import com.leon.estimate.fragments.ServicesFragment;
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.kml.KmlDocument;
-import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.FolderOverlay;
@@ -95,7 +87,6 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -116,7 +107,7 @@ import static com.leon.estimate.Utils.Constants.secondForm;
 import static com.leon.estimate.Utils.Constants.tejarihas;
 import static com.leon.estimate.Utils.Constants.valueInteger;
 
-public class FormActivity extends AppCompatActivity implements LocationListener {
+public class FormActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public static FormActivity activity;
     FormActivityBinding binding;
@@ -124,7 +115,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     MyDatabase dataBase;
     int REQUEST_LOCATION_CODE = 1236, polygonIndex, place1Index, place2Index, pageNumber = 1;
     int[] indexes;
-    LocationManager locationManager;
+    GPSTracker gpsTracker;
     FolderOverlay[] geoJsonOverlays;
     Marker startMarker;
     CoordinateConversion conversion;
@@ -173,6 +164,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         indexes[3] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
     };
     View.OnClickListener onClickListener = new View.OnClickListener() {
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
             int id = v.getId();
@@ -217,8 +209,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         setContentView(binding.getRoot());
         activity = this;
         context = this;
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+//        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+//        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             new SerializeJson().execute(getIntent());
@@ -455,12 +447,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         examinerDuties.setShenasname(calculationUserInputTemp.shenasname);
     }
 
-    private byte[] convertBitmapToByte(Bitmap bitmap) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
-        return bos.toByteArray();
-    }
-
     void prepareToSend() {
         fillCalculationUserInput();
         updateCalculationUserInput();
@@ -543,20 +529,9 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         IMapController mapController = binding.mapView.getController();
         mapController.setZoom(19.5);
 
-        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
-        Location location = getLastKnownLocation();
-        if (location != null) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        } else {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                askPermission();
-                return;
-            }
-            locationManager.requestLocationUpdates(bestProvider, 0, 0, this);
-        }
+        gpsTracker = new GPSTracker(activity);
+        latitude = gpsTracker.getLatitude();
+        longitude = gpsTracker.getLongitude();
         GeoPoint startPoint = new GeoPoint(latitude, longitude);
         mapController.setCenter(startPoint);
         MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), binding.mapView);
@@ -700,35 +675,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         line.setPoints(polygonPoint);
         polygonPoint.remove(polygonPoint.size() - 1);
         polygonIndex = binding.mapView.getOverlays().size() - 1;
-    }
-
-    private Location getLastKnownLocation() {
-        Location l = null;
-        LocationManager mLocationManager = (LocationManager)
-                getApplicationContext().getSystemService(LOCATION_SERVICE);
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                l = mLocationManager.getLastKnownLocation(provider);
-            } else askPermission();
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                bestLocation = l;
-            }
-        }
-        return bestLocation;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        locationManager.removeUpdates(this);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        initializeMap(true);
     }
 
     void getXY(String billId) {
@@ -931,8 +877,9 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 latLong = conversion.utm2LatLon(utm);
             } else {
                 latLong = new double[2];
-                latLong[0] = getLastKnownLocation().getLatitude();
-                latLong[1] = getLastKnownLocation().getLongitude();
+                gpsTracker.getLocation();
+                latLong[0] = gpsTracker.getLatitude();
+                latLong[1] = gpsTracker.getLongitude();
             }
             calculationUserInput.y1 = latLong[0];
             calculationUserInput.x1 = latLong[1];

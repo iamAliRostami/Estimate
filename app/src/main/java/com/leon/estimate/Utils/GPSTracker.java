@@ -67,7 +67,7 @@ public class GPSTracker extends Service {
     }
 
     @SuppressLint({"MissingPermission", "ShowToast"})
-    void getLocation() {
+    public void getLocation() {
         try {
             locationManager = (LocationManager) activity
                     .getSystemService(LOCATION_SERVICE);
@@ -120,6 +120,11 @@ public class GPSTracker extends Service {
     public void stopListener() {
         if (locationManager != null)
             locationManager.removeUpdates(locationListener);
+    }
+
+    public double getAccuracy() {
+        getLocation();
+        return location.getAccuracy();
     }
 
     @Override

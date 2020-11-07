@@ -46,11 +46,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.leon.estimate.Utils.Constants.CAMERA_REQUEST;
+import static com.leon.estimate.Utils.Constants.GALLERY_REQUEST;
+
 public final class TakeOtherPhotoActivity extends AppCompatActivity {
-    private final int CAMERA_REQUEST = 1888;
-    private final int GALLERY_REQUEST = 1888;
-    private final int IMAGE_CROP_REQUEST = 1234;
-    private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
     static String imageFileName;
     String mCurrentPhotoPath;
     boolean replace = false;
@@ -82,6 +81,8 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
+        int IMAGE_CROP_REQUEST = 1234;
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             Bitmap btimap = null;

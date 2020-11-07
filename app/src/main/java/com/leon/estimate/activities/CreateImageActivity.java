@@ -1,17 +1,13 @@
 package com.leon.estimate.activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.location.Location;
-import android.location.LocationManager;
 import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,7 +21,6 @@ import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
@@ -55,6 +50,7 @@ import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomProgressBar;
+import com.leon.estimate.Utils.GPSTracker;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -99,8 +95,7 @@ public class CreateImageActivity extends AppCompatActivity {
     List<ResultDictionary> resultDictionaries;
     MyDatabase dataBase;
     SharedPreferenceManager sharedPreferenceManager;
-    String trackNumber;
-    String billId;
+    String trackNumber, billId;
     boolean isNew;
     int docId;
 
@@ -220,10 +215,10 @@ public class CreateImageActivity extends AppCompatActivity {
 
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         daoExaminerDuties.updateExamination(true, trackNumber);
-        Location location = getLastKnownLocation();
-        calculationUserInput.y2 = location.getLatitude();
-        calculationUserInput.x2 = location.getLongitude();
-        calculationUserInput.accuracy = location.getAccuracy();
+        GPSTracker gpsTracker = new GPSTracker(this);
+        calculationUserInput.accuracy = gpsTracker.getAccuracy();
+        calculationUserInput.y2 = gpsTracker.getLatitude();
+        calculationUserInput.x2 = gpsTracker.getLongitude();
         calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.deleteByTrackNumber(trackNumber);
@@ -235,26 +230,6 @@ public class CreateImageActivity extends AppCompatActivity {
         Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
                 new SendCalculation(), new SendCalculationIncomplete(), new GetError());
-    }
-
-    private Location getLastKnownLocation() {
-        Location l = null;
-        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(getSystemService(LOCATION_SERVICE));
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                l = mLocationManager.getLastKnownLocation(provider);
-            }
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                bestLocation = l;
-            }
-        }
-        return bestLocation;
     }
 
     void getExtra() {

@@ -2,15 +2,13 @@ package com.leon.estimate.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -31,8 +29,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.location.LocationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -74,7 +70,9 @@ import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.CustomProgressBar;
+import com.leon.estimate.Utils.GPSTracker;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
@@ -99,21 +97,14 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -121,16 +112,17 @@ import retrofit2.Retrofit;
 import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
     double latitude, longitude;
-    LocationManager locationManager;
     MainActivityBinding binding;
     String trackNumber;
     DrawerLayout drawer;
     Polyline roadOverlay;
     MapView mapView;
     Context context;
+    Activity activity;
     CoordinateConversion conversion;
+    GPSTracker gpsTracker;
     int wayIndex = 0, counter = 0, imageId, imageCounter = 0;
     ArrayList<Integer> indexArray;
     ArrayList<GeoPoint> wayPoints, placesPoints;
@@ -175,6 +167,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         context = this;
+        activity = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
 //        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_40_41).build();
@@ -229,26 +222,9 @@ public class MainActivity extends AppCompatActivity
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
             mapController.setZoom(19.5);
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            String provider = String.valueOf(locationManager.getBestProvider(criteria, true));
-            Location location = getLastKnownLocation();
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            } else {
-                if (ActivityCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED) {
-                    askPermission();
-                    return;
-                }
-                locationManager.requestLocationUpdates(provider, 0, 0, this);
-            }
+            gpsTracker = new GPSTracker(activity);
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
             mapController.setCenter(startPoint);
             MyLocationNewOverlay locationOverlay =
@@ -258,27 +234,6 @@ public class MainActivity extends AppCompatActivity
             conversion = new CoordinateConversion();
             initializePlace();
         }
-    }
-
-    private Location getLastKnownLocation() {
-        Location l = null;
-        LocationManager mLocationManager = (LocationManager)
-                getApplicationContext().getSystemService(LOCATION_SERVICE);
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                l = mLocationManager.getLastKnownLocation(provider);
-            } else askPermission();
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                bestLocation = l;
-            }
-        }
-        return bestLocation;
     }
 
     void initializePlace() {
@@ -347,7 +302,8 @@ public class MainActivity extends AppCompatActivity
                     context.startActivity(intent);
                 }
             } else {
-                new AddRoutOverlay().execute(new GeoPoint(getLastKnownLocation()), startPoint);
+                gpsTracker.getLocation();
+                new AddRoutOverlay().execute(new GeoPoint(gpsTracker.getLatitude(), gpsTracker.getLongitude()), startPoint);
                 startMarker.setTitle(examinerDuties.getNameAndFamily().concat("\n")
                         .concat(examinerDuties.getServiceGroup()));
                 startMarker.setSubDescription(examinerDuties.getAddress().concat("\n")
@@ -394,26 +350,6 @@ public class MainActivity extends AppCompatActivity
         roadOverlay = RoadManager.buildRoadOverlay(road);
         mapView.getOverlays().add(roadOverlay);
         mapView.invalidate();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        locationManager.removeUpdates(this);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        initializeMap();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public void onProviderEnabled(@NotNull String provider) {
-    }
-
-    @Override
-    public void onProviderDisabled(@NotNull String provider) {
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -567,7 +503,7 @@ public class MainActivity extends AppCompatActivity
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         images = loadImage(images);
         if (images != null) {
-            MultipartBody.Part body = bitmapToFile(images.getBitmap(), images.getAddress());
+            MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), images.getAddress(), context);//TODO
             Call<UploadImage> call;
             if (images.getTrackingNumber().length() > 0)
                 call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
@@ -594,43 +530,6 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
             return null;
         }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    MultipartBody.Part bitmapToFile(Bitmap bitmap, String fileNameToSave) {
-        if (fileNameToSave == null) {
-            String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-            fileNameToSave = "JPEG_" + timeStamp + "_";
-        }
-        File f = new File(context.getCacheDir(), fileNameToSave);
-        try {
-            f.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Convert bitmap to byte array
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
-        byte[] bitmapData = bos.toByteArray();
-        //write the bytes in file
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(f);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (fos != null) {
-                fos.write(bitmapData);
-                fos.flush();
-                fos.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), f);
-        return MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
     }
 
     class LoginDocument implements ICallback<Login> {
@@ -668,21 +567,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
             Log.e("UploadImageDoc error", response.toString());
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                HttpClientWrapper.call.cancel();
-                super.onBackPressed();
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
         }
     }
 
@@ -764,46 +648,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class DownloadIncomplete implements ICallbackIncomplete<Input> {
-        @Override
-        public void executeIncomplete(Response<Input> response) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            new CustomDialog(DialogType.Yellow, context, error,
-                    getString(R.string.dear_user),
-                    getString(R.string.download),
-                    getString(R.string.accepted));
-            Log.e("Download Incomplete", response.toString());
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-        if (counter < examinerDuties.size()) {
-            setActionBarTitle("در حال جانمایی میسرها...");
-            if (examinerDuties.get(counter).getBillId() != null
-                    && examinerDuties.get(counter).getBillId().length() > 0)
-                getXY(examinerDuties.get(counter).getBillId());
-            else getXY(examinerDuties.get(counter).getNeighbourBillId());
-        }
-        if (counter == examinerDuties.size())
-            setActionBarTitle(getString(R.string.home));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-        HttpClientWrapper.call.cancel();
-    }
-
     class Download implements ICallback<Input> {
         @Override
         public void execute(Input input) {
@@ -859,6 +703,61 @@ public class MainActivity extends AppCompatActivity
             } else {
                 Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+        }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+        HttpClientWrapper.call.cancel();
+    }
+
+    class DownloadIncomplete implements ICallbackIncomplete<Input> {
+        @Override
+        public void executeIncomplete(Response<Input> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, context, error,
+                    getString(R.string.dear_user),
+                    getString(R.string.download),
+                    getString(R.string.accepted));
+            Log.e("Download Incomplete", response.toString());
         }
     }
 
