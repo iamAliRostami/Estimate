@@ -118,6 +118,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
     double latitude, longitude;
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity
     MapView mapView;
     Context context;
     CoordinateConversion conversion;
-    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0, imageId, imageCounter = 0;
+    int wayIndex = 0, counter = 0, imageId, imageCounter = 0;
     ArrayList<Integer> indexArray;
     ArrayList<GeoPoint> wayPoints, placesPoints;
     List<ExaminerDuties> examinerDuties, examinerDutiesReady;
