@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.room.Room;
 
 import com.google.gson.Gson;
@@ -49,9 +50,11 @@ public class CustomFile {
 
 
     @SuppressLint("SimpleDateFormat")
-    public static MultipartBody.Part bitmapToFile(Bitmap bitmap, Context context) {
-        String timeStamp = (new SimpleDateFormat(context.getString(R.string.save_format_name))).format(new Date());
-        imageFileName = "JPEG_" + timeStamp + "_";
+    public static MultipartBody.Part bitmapToFile(Bitmap bitmap, Context context, @Nullable String fileName) {
+        if (fileName == null) {
+            String timeStamp = (new SimpleDateFormat(context.getString(R.string.save_format_name))).format(new Date());
+            imageFileName = "JPEG_" + timeStamp + "_";
+        } else imageFileName = fileName;
         File f = new File(context.getCacheDir(), imageFileName);
         try {
             f.createNewFile();

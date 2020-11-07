@@ -503,7 +503,7 @@ public class MainActivity extends AppCompatActivity
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         images = loadImage(images);
         if (images != null) {
-            MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), images.getAddress(), context);//TODO
+            MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), context, images.getAddress());//TODO
             Call<UploadImage> call;
             if (images.getTrackingNumber().length() > 0)
                 call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(

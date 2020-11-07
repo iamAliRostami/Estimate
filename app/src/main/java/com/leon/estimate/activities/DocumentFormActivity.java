@@ -320,7 +320,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     void uploadImage(int docId, Bitmap bitmap) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
-        MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context);
+        MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context, null);
         Call<UploadImage> call;
         if (isNew)
             call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
