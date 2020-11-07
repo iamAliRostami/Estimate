@@ -45,9 +45,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 public class LoginActivity extends AppCompatActivity {
     private LoginActivityBinding binding;
-    private final int REQUEST_LOCATION_CODE = 1236;
     private SharedPreferenceManager sharedPreferenceManager;
     private String username, password;
     private Context context;
@@ -65,8 +66,6 @@ public class LoginActivity extends AppCompatActivity {
         context = this;
         binding.textViewVersion.setText(getString(R.string.version).concat(" ")
                 .concat(BuildConfig.VERSION_NAME));
-        sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
-                SharedReferenceNames.ACCOUNT.getValue());
         loadPreference();
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
@@ -139,20 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         } else askPermission();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        GpsEnabled();
-    }
-
-    private void forceClose() {
-        new CustomDialog(DialogType.Red, getApplicationContext(),
-                getApplicationContext().getString(R.string.permission_not_completed),
-                getApplicationContext().getString(R.string.dear_user),
-                getApplicationContext().getString(R.string.call_operator),
-                getApplicationContext().getString(R.string.force_close));
-        finishAffinity();
-    }
 
     private void setEditTextUsernameChangedListener() {
         binding.editTextUsername.addTextChangedListener(new TextWatcher() {
@@ -259,6 +244,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void loadPreference() {
+        sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
+                SharedReferenceNames.ACCOUNT.getValue());
         if (sharedPreferenceManager.checkIsNotEmpty(SharedReferenceKeys.USERNAME.getValue()) &&
                 sharedPreferenceManager.checkIsNotEmpty(SharedReferenceKeys.PASSWORD.getValue())) {
             binding.editTextUsername.setText(sharedPreferenceManager.getStringData(
@@ -266,6 +253,21 @@ public class LoginActivity extends AppCompatActivity {
             binding.editTextPassword.setText(sharedPreferenceManager.getStringData(
                     SharedReferenceKeys.PASSWORD.getValue()));
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        GpsEnabled();
+    }
+
+    private void forceClose() {
+        new CustomDialog(DialogType.Red, getApplicationContext(),
+                getApplicationContext().getString(R.string.permission_not_completed),
+                getApplicationContext().getString(R.string.dear_user),
+                getApplicationContext().getString(R.string.call_operator),
+                getApplicationContext().getString(R.string.force_close));
+        finishAffinity();
     }
 
     class LoginFeedBack

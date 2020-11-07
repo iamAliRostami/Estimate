@@ -40,7 +40,6 @@ import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.BundleEnum;
@@ -100,13 +99,11 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -181,70 +178,6 @@ public class MainActivity extends AppCompatActivity
         Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_40_41).build();
     }
 
-    void readData() {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, "json.txt");
-        StringBuilder text = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
-            }
-            br.close();
-        } catch (IOException ignored) {
-            Log.e("Error", ignored.toString());
-        }
-        String json = text.toString();
-        Log.e("json", json);
-        Gson gson = new GsonBuilder().create();
-        Input input = gson.fromJson(json, Input.class);
-        List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            Gson gson1 = new Gson();
-            examinerDutiesList.get(i).setRequestDictionaryString(
-                    gson1.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-        }
-        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            examinerDutiesList.get(i).setTrackNumber(
-                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-            examinerDutiesList.get(i).setRadif(
-                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
-            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
-                    examinerDutiesList.remove(i);
-                    j = examinerDutiesListTemp.size();
-                    i--;
-                }
-            }
-        }
-        daoExaminerDuties.insertAll(examinerDutiesList);
-        DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
-        daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-
-        DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
-        daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-
-        DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-        daoServiceDictionary.insertAll(input.getServiceDictionary());
-
-        DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
-        daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-
-        DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
-        daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-
-        DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
-        daoResultDictionary.insertAll(input.getResultDictionary());
-    }
-
     void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -314,9 +247,6 @@ public class MainActivity extends AppCompatActivity
                 }
                 locationManager.requestLocationUpdates(provider, 0, 0, this);
             }
-//            E/long: 51.7134364        E/lat: 32.7031978
-//            Log.e("long", String.valueOf(longitude));
-//            Log.e("lat", String.valueOf(latitude));
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
             mapController.setCenter(startPoint);
             MyLocationNewOverlay locationOverlay =
@@ -872,26 +802,6 @@ public class MainActivity extends AppCompatActivity
         HttpClientWrapper.call.cancel();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
     class Download implements ICallback<Input> {
         @Override
         public void execute(Input input) {
@@ -948,5 +858,25 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }

@@ -16,11 +16,11 @@
         android:layout_above="@id/buttonNext" />
 
     <RelativeLayout
-        android:layoutDirection="rtl"
         android:id="@+id/relativeLayoutMap"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/buttonNext"
+        android:layoutDirection="rtl"
         android:visibility="gone">
 
         <TextView
@@ -36,90 +36,98 @@
             android:textSize="@dimen/textSizeHuge"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewTitle1"
-            android:layout_margin="@dimen/activity_mid_margin"
-            android:background="@drawable/border_gray_1"
-            android:gravity="right|top"
-            android:hint="@string/description"
-            android:inputType="textMultiLine"
-            android:lines="2"
-            android:maxLines="2"
-            android:padding="@dimen/activity_medium_padding"
-            android:textSize="@dimen/textSizeMedium"
-            tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />
-
-        <LinearLayout
-            android:id="@+id/linearLayoutAttribute"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/editTextDescription"
-            android:layout_margin="@dimen/activity_mid_margin"
-            android:orientation="horizontal"
-            android:padding="@dimen/activity_mid_padding">
-
-            <CheckBox
-                android:id="@+id/checkboxParcels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/parcels"
-                android:visibility="gone" />
-
-            <CheckBox
-                android:id="@+id/checkboxWaterPipe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/water_pipe"
-                android:visibility="gone" />
-
-            <CheckBox
-                android:id="@+id/checkboxWaterTransfer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/water_transfer"
-                android:visibility="gone" />
-
-            <CheckBox
-                android:id="@+id/checkboxSanitationTransfer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sanitation_transfer"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <org.osmdroid.views.MapView
-            android:id="@+id/mapView"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/linearLayoutAttribute"
-            android:layout_margin="@dimen/activity_mid_margin"
-            android:background="@drawable/border_gray_1"
-            android:padding="@dimen/activity_mid_padding" />
+            android:layout_below="@id/textViewTitle1"
+            android:background="@drawable/border_gray_2">
 
-        <ImageView
-            android:id="@+id/imageViewRefresh1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayoutAttribute"
-            android:layout_alignParentRight="true"
-            android:layout_margin="@dimen/activity_medium_margin"
-            android:padding="@dimen/activity_mid_padding"
-            android:src="@drawable/refresh"
-            app:srcCompat="@drawable/refresh"
-            tools:ignore="ContentDescription,RtlHardcoded" />
+            <EditText
+                android:id="@+id/editTextDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:background="@drawable/border_white_2"
+                android:gravity="right|top"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:maxLines="2"
+                android:padding="@dimen/activity_medium_padding"
+                android:textSize="@dimen/textSizeMedium"
+                tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayoutAttribute"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="@dimen/activity_medium_margin"
-            android:padding="@dimen/activity_mid_padding"
-            tools:ignore="RtlHardcoded" />
+            <LinearLayout
+                android:id="@+id/linearLayoutAttribute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextDescription"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:background="@drawable/border_white_2"
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_mid_padding"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkboxParcels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parcels"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/checkboxWaterPipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/water_pipe"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/checkboxWaterTransfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/water_transfer"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/checkboxSanitationTransfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sanitation_transfer"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <org.osmdroid.views.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/linearLayoutAttribute"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:background="@drawable/border_gray_1"
+                android:padding="@dimen/activity_mid_padding" />
+
+            <ImageView
+                android:id="@+id/imageViewRefresh1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayoutAttribute"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/activity_medium_margin"
+                android:padding="@dimen/activity_mid_padding"
+                android:src="@drawable/refresh"
+                app:srcCompat="@drawable/refresh"
+                tools:ignore="ContentDescription,RtlHardcoded" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayoutAttribute"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="@dimen/activity_medium_margin"
+                android:padding="@dimen/activity_mid_padding"
+                tools:ignore="RtlHardcoded" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout

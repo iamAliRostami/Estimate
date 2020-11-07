@@ -21,7 +21,7 @@ import static com.leon.estimate.Utils.Constants.tejarihas;
 
 public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHolder> {
     private Context context;
-    private MyDatabase dataBase;
+    private final MyDatabase dataBase;
 
     public TejarihaAdapter(Context context) {
         this.context = context;
@@ -34,7 +34,7 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
     public TejarihaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.item_mother_child, parent, false);
+        View view = layoutInflater.inflate(R.layout.item_tejari, parent, false);
         TejarihaAdapter.ViewHolder holder = new TejarihaAdapter.ViewHolder(view);
         holder.imageViewMinus.setOnClickListener(v -> {
             Tejariha tejariha = tejarihas.get(viewType);

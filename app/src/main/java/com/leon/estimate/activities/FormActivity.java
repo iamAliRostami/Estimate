@@ -816,6 +816,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                             binding.mapView, null, new MyKmlStyle(), kmlDocument);
                     geoJsonOverlays[2] = geoJsonOverlay;
                     binding.checkboxWaterTransfer.setVisibility(View.VISIBLE);
+                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
 //                    binding.mapView.getOverlays().add(geoJsonOverlay);
 //                    binding.mapView.invalidate();
                 } catch (Exception e) {
@@ -843,6 +844,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
 
                     geoJsonOverlays[1] = geoJsonOverlay;
                     binding.checkboxWaterPipe.setVisibility(View.VISIBLE);
+                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
 //                    binding.mapView.getOverlays().add(geoJsonOverlay);
 //                    binding.mapView.invalidate();
                 } catch (Exception e) {
@@ -871,6 +873,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                             binding.mapView, null, new MyKmlStyle(), kmlDocument);
                     geoJsonOverlays[3] = geoJsonOverlay;
                     binding.checkboxSanitationTransfer.setVisibility(View.VISIBLE);
+                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
 //                    binding.mapView.getOverlays().add(geoJsonOverlay);
 //                    binding.mapView.invalidate();
                 } catch (Exception e) {
@@ -878,16 +881,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 }
             }
 //            binding.progressBar.setVisibility(View.GONE);
-        }
-    }
-
-    class GetGISIncomplete implements ICallbackIncomplete<String> {
-        @Override
-        public void executeIncomplete(Response<String> response) {
-            binding.progressBar.setVisibility(View.GONE);
-            if (response.errorBody() != null) {
-                Log.e("Error GetGISIncomplete", response.errorBody().toString());
-            }
         }
     }
 
@@ -908,6 +901,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                             binding.mapView, null, new MyKmlStyle(), kmlDocument);
                     geoJsonOverlays[0] = geoJsonOverlay;
                     binding.checkboxParcels.setVisibility(View.VISIBLE);
+                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
 //                    binding.mapView.getOverlays().add(geoJsonOverlay);
 //                    binding.mapView.invalidate();
                 } catch (Exception e) {
@@ -915,6 +909,16 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 }
             }
             binding.progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    class GetGISIncomplete implements ICallbackIncomplete<String> {
+        @Override
+        public void executeIncomplete(Response<String> response) {
+            binding.progressBar.setVisibility(View.GONE);
+            if (response.errorBody() != null) {
+                Log.e("Error GetGISIncomplete", response.errorBody().toString());
+            }
         }
     }
 

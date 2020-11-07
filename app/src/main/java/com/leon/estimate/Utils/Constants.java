@@ -31,6 +31,13 @@ public class Constants {
     public static int value;
     public static ArrayList<Tejariha> tejarihas;
     public static ArrayList<Integer> valueInteger;
+    public static final int REQUEST_LOCATION_CODE = 1236;
+    public static final int REQUEST_NETWORK_CODE = 1234;
+    public static final int CAMERA_REQUEST = 1888;
+    public static final int GALLERY_REQUEST = 1889;
+    public static final int GPS_CODE = 1235;
+    public static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 2;
+    public static final long MIN_TIME_BW_UPDATES = 1000;
 
     @SuppressLint("StaticFieldLeak")
     public static CustomListAdapter customAdapter;

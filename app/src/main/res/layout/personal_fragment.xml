@@ -28,19 +28,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3"
+            android:background="@drawable/border_gray_2"
+            android:weightSum="3.1"
             tools:ignore="DisableBaselineAlignment">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_mid_margin"
-                android:layout_marginTop="@dimen/activity_mid_margin"
-                android:layout_marginBottom="@dimen/activity_mid_margin"
+                android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
-                android:background="@drawable/border_gray_1"
-                android:orientation="vertical"
-                tools:ignore="RtlHardcoded">
+                android:background="@drawable/border_white_1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -55,16 +53,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="@dimen/textSizeLarge"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/textSizeLarge" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_mid_margin"
-                android:layout_weight="1"
-                android:background="@drawable/border_gray_1"
+                android:layout_weight="1.1"
+                android:background="@drawable/border_white_1"
                 android:orientation="vertical">
 
                 <TextView
@@ -81,18 +78,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="@dimen/textSizeLarge"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/textSizeLarge" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_mid_margin"
-                android:layout_marginRight="@dimen/activity_mid_margin"
-                android:layout_marginBottom="@dimen/activity_mid_margin"
+                android:layout_margin="@dimen/activity_mid_margin"
                 android:layout_weight="1"
-                android:background="@drawable/border_gray_1"
+                android:background="@drawable/border_white_1"
                 android:orientation="vertical"
                 tools:ignore="RtlHardcoded">
 
@@ -109,17 +103,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="@dimen/textSizeLarge"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/textSizeLarge" />
             </LinearLayout>
         </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_mid_margin"
             android:layout_marginBottom="@dimen/activity_mid_margin"
-            android:background="@drawable/border_gray_1"
-            android:padding="@dimen/activity_mid_padding"
+            android:background="@drawable/border_white_2"
             tools:ignore="NestedWeights,UselessParent">
 
             <LinearLayout
@@ -127,419 +120,434 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="0.75"
-                        android:gravity="left"
-                        android:text="@string/name"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
-                        tools:ignore="RtlHardcoded" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="0.75"
+                            android:gravity="left"
+                            android:text="@string/name"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
 
-                    <EditText
-                        android:id="@+id/editTextName"
-                        android:layout_width="0dp"
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="1.25"
+                            android:gravity="left"
+                            android:text="@string/family"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextFamily"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
-                    <TextView
-                        android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="0.75"
+                            android:gravity="left"
+                            android:text="@string/father_name"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextFatherName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="1.25"
+                            android:gravity="left"
+                            android:text="@string/shenasname"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextShenasname"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:lines="1"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1.25"
-                        android:gravity="left"
-                        android:text="@string/family"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
-                        tools:ignore="RtlHardcoded" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="0.75"
+                            android:gravity="left"
+                            android:text="@string/nation_code"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
 
-                    <EditText
-                        android:id="@+id/editTextFamily"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
+                        <EditText
+                            android:id="@+id/editTextNationNumber"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:lines="1"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            android:text="@string/ten_zero"
+                            tools:ignore="Autofill,LabelFor" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="1.25"
+                            android:gravity="left"
+                            android:text="@string/postal_code"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextPostalCode"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:lines="1"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="0.75"
-                        android:gravity="left"
-                        android:text="@string/father_name"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
-                    <EditText
-                        android:id="@+id/editTextFatherName"
-                        android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="0.75"
+                            android:gravity="left"
+                            android:text="@string/radif"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <TextView
+                            android:id="@+id/editTextRadif"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            android:textSize="@dimen/textSizeMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="1.25"
+                            android:gravity="left"
+                            android:text="@string/eshterak"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <TextView
+                            android:id="@+id/editTextEshterak"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            android:textSize="@dimen/textSizeMedium"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="8"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="0.75"
+                            android:gravity="left"
+                            android:text="@string/mobile_number"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextMobile"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLength="11"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="1.25"
+                            android:gravity="left"
+                            android:text="@string/phone_number"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+
+                            tools:ignore="RtlHardcoded" />
+
+                        <EditText
+                            android:id="@+id/editTextPhone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="center"
+                            android:inputType="phone"
+                            android:lines="1"
+                            android:maxLength="8"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
                         android:gravity="center"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1.25"
-                        android:gravity="left"
-                        android:text="@string/shenasname"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="0.75"
+                            android:gravity="left"
+                            android:text="@string/address"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
 
-                    <EditText
-                        android:id="@+id/editTextShenasname"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLength="10"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
+                        <EditText
+                            android:id="@+id/editTextAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="right|top"
+                            android:inputType="textMultiLine"
+                            android:lines="7"
+                            android:padding="@dimen/activity_mid_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor,RtlHardcoded" />
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="@dimen/activity_mid_margin"
+                            android:layout_marginBottom="@dimen/activity_mid_margin"
+                            android:layout_weight="1.25"
+                            android:gravity="left"
+                            android:text="@string/description"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
+                            tools:ignore="RtlHardcoded" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="0.75"
-                        android:gravity="left"
-                        android:text="@string/nation_code"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextNationNumber"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLength="10"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        android:text="@string/ten_zero"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1.25"
-                        android:gravity="left"
-                        android:text="@string/postal_code"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextPostalCode"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:lines="1"
-                        android:maxLength="10"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="0.75"
-                        android:gravity="left"
-                        android:text="@string/radif"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:id="@+id/editTextRadif"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1.25"
-                        android:gravity="left"
-                        android:text="@string/eshterak"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
-
-                    <TextView
-                        android:id="@+id/editTextEshterak"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        android:textSize="@dimen/textSizeMedium"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="0.75"
-                        android:gravity="left"
-                        android:text="@string/mobile_number"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextMobile"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLength="11"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1.25"
-                        android:gravity="left"
-                        android:text="@string/phone_number"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextPhone"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLength="8"
-                        android:maxLines="1"
-                        android:paddingTop="@dimen/activity_medium_padding"
-                        android:paddingBottom="@dimen/activity_medium_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="0.75"
-                        android:gravity="left"
-                        android:text="@string/address"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextAddress"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="right|top"
-                        android:inputType="textMultiLine"
-                        android:lines="7"
-                        android:padding="@dimen/activity_mid_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor,RtlHardcoded" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginTop="@dimen/activity_mid_margin"
-                        android:layout_marginBottom="@dimen/activity_mid_margin"
-                        android:layout_weight="1.25"
-                        android:gravity="left"
-                        android:text="@string/description"
-                        android:textColor="@color/blue4"
-                        android:textSize="@dimen/textSizeLarge"
-
-                        tools:ignore="RtlHardcoded" />
-
-                    <EditText
-                        android:id="@+id/editTextDescription"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/activity_mid_margin"
-                        android:layout_weight="2"
-                        android:background="@drawable/border_gray_1"
-                        android:gravity="right|top"
-                        android:inputType="textMultiLine"
-                        android:lines="7"
-                        android:padding="@dimen/activity_mid_padding"
-                        android:singleLine="true"
-                        tools:ignore="Autofill,LabelFor,RtlHardcoded" />
+                        <EditText
+                            android:id="@+id/editTextDescription"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_mid_margin"
+                            android:layout_weight="2"
+                            android:background="@drawable/border_white_1"
+                            android:gravity="right|top"
+                            android:inputType="textMultiLine"
+                            android:lines="7"
+                            android:padding="@dimen/activity_mid_padding"
+                            android:singleLine="true"
+                            tools:ignore="Autofill,LabelFor,RtlHardcoded" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
