@@ -106,6 +106,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     ArrayList<String> imageDataThumbnailUri = new ArrayList<>(), arrayListTitle = new ArrayList<>();
     DocumentFormActivityBinding binding;
     SharedPreferenceManager sharedPreferenceManager;
+    @SuppressLint("QueryPermissionsNeeded")
     View.OnClickListener onPickClickListener = v -> {
         AlertDialog.Builder builder = new AlertDialog.Builder(DocumentFormActivity.this);
         builder.setTitle(R.string.choose_document);
@@ -660,6 +661,7 @@ public class DocumentFormActivity extends AppCompatActivity {
             if (response.errorBody() != null) {
                 Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
             }
+            //TODO
             CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
                     String.valueOf(imageDataTitle.getData().get(
                             binding.spinnerTitle.getSelectedItemPosition()).getId()),

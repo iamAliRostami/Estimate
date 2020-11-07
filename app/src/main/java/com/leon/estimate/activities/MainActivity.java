@@ -17,7 +17,6 @@ import android.os.Debug;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -84,7 +83,6 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -113,7 +111,6 @@ import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    double latitude, longitude;
     MainActivityBinding binding;
     String trackNumber;
     DrawerLayout drawer;
@@ -124,16 +121,17 @@ public class MainActivity extends AppCompatActivity
     CoordinateConversion conversion;
     GPSTracker gpsTracker;
     int wayIndex = 0, counter = 0, imageId, imageCounter = 0;
-    ArrayList<Integer> indexArray;
-    ArrayList<GeoPoint> wayPoints, placesPoints;
-    List<ExaminerDuties> examinerDuties, examinerDutiesReady;
-    ArrayList<Boolean> isShown;
-    List<CalculationUserInput> calculationUserInputList;
-    List<Images> images;
+    double latitude, longitude;
     boolean doubleBackToExitPressedOnce = false;
     Toolbar toolbar;
     MyDatabase dataBase;
     SharedPreferenceManager sharedPreferenceManager;
+    ArrayList<Integer> indexArray;
+    ArrayList<Boolean> isShown;
+    ArrayList<GeoPoint> wayPoints, placesPoints;
+    List<Images> images;
+    List<ExaminerDuties> examinerDuties, examinerDutiesReady;
+    List<CalculationUserInput> calculationUserInputList;
     @SuppressLint("NonConstantResourceId")
     View.OnClickListener onClickListener = view -> {
         Intent intent;
@@ -182,8 +180,6 @@ public class MainActivity extends AppCompatActivity
             ) {
                 askPermission();
             } else {
-                Configuration.getInstance().load(context,
-                        PreferenceManager.getDefaultSharedPreferences(context));
                 setContentView(binding.getRoot());
                 initialize();
             }
@@ -251,23 +247,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressLint("WrongConstant")
-    void setActionBarTitle(String title) {
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
-                (this, drawer, toolbar, R.string.open, R.string.close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        toolbar.setNavigationOnClickListener(view1 -> drawer.openDrawer(Gravity.START));
-    }
 
     void getXY(String billId) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
@@ -483,9 +462,13 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
         DaoImages daoImages = dataBase.daoImages();
         images = daoImages.getImages();
-        if (images.size() > 0) {
-            attemptLogin();
+        for (Images images1 : images
+        ) {
+            Log.e("images", images1.toString());
         }
+//        if (images.size() > 0) {
+//            attemptLogin();
+//        }
     }
 
     void attemptLogin() {
@@ -503,7 +486,7 @@ public class MainActivity extends AppCompatActivity
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         images = loadImage(images);
         if (images != null) {
-            MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), context, images.getAddress());//TODO
+            MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), context, images.getAddress());
             Call<UploadImage> call;
             if (images.getTrackingNumber().length() > 0)
                 call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
@@ -520,7 +503,7 @@ public class MainActivity extends AppCompatActivity
     Images loadImage(Images images) {
         try {
             File f = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "AbfaCamera");
+                    Environment.DIRECTORY_PICTURES), context.getString(R.string.camera_folder));
             f = new File(f, images.getAddress());
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             images.setBitmap(b);
@@ -551,16 +534,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class UploadImageDoc implements ICallback<UploadImage> {
-        @Override
-        public void execute(UploadImage responseBody) {
-            DaoImages daoImages = dataBase.daoImages();
-            daoImages.deleteByID(imageId);
-            imageCounter = imageCounter + 1;
-            if (imageCounter < images.size()) {
-                uploadImage(images.get(imageCounter));
+    @SuppressLint("WrongConstant")
+    void setActionBarTitle(String title) {
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
+                (this, drawer, toolbar, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
             }
-        }
+        };
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        toolbar.setNavigationOnClickListener(view1 -> drawer.openDrawer(Gravity.START));
     }
 
     static class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
@@ -657,7 +646,6 @@ public class MainActivity extends AppCompatActivity
                     Gson gson = new Gson();
                     examinerDutiesList.get(i).setRequestDictionaryString(
                             gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-//                    Log.e("zoneId ".concat(String.valueOf(i)), examinerDutiesList.get(i).getExaminerName());
                     if (examinerDutiesList.get(i).getZoneId() == null ||
                             examinerDutiesList.get(i).getZoneId().equals("0")) {
                         examinerDutiesList.remove(i);
@@ -707,6 +695,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        binding.imageViewDownload.setImageResource(R.drawable.image_download);
+        binding.imageViewExit.setImageResource(R.drawable.image_exit);
+        binding.imageViewUpload.setImageResource(R.drawable.image_upload);
+        binding.imageViewPaper.setImageResource(R.drawable.image_paper);
+        binding.imageViewRequest.setImageResource(R.drawable.image_request);
+        binding.imageViewForm.setImageResource(R.drawable.image_form);
+        mapView.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+        }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -722,18 +731,39 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-        if (counter < examinerDuties.size()) {
-            setActionBarTitle("در حال جانمایی میسرها...");
-            if (examinerDuties.get(counter).getBillId() != null
-                    && examinerDuties.get(counter).getBillId().length() > 0)
-                getXY(examinerDuties.get(counter).getBillId());
-            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+    protected void onStop() {
+        super.onStop();
+        binding.imageViewDownload.setImageDrawable(null);
+        binding.imageViewUpload.setImageDrawable(null);
+        binding.imageViewExit.setImageDrawable(null);
+        binding.imageViewForm.setImageDrawable(null);
+        binding.imageViewPaper.setImageDrawable(null);
+        binding.imageViewRequest.setImageDrawable(null);
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    class UploadImageDoc implements ICallback<UploadImage> {
+        @Override
+        public void execute(UploadImage responseBody) {
+            if (responseBody.isSuccess()) {
+                DaoImages daoImages = dataBase.daoImages();
+                daoImages.deleteByID(imageId);
+                imageCounter = imageCounter + 1;
+                if (imageCounter < images.size()) {
+                    uploadImage(images.get(imageCounter));
+                }
+            } else
+                new CustomDialog(DialogType.Yellow, MainActivity.this,
+                        MainActivity.this.getString(R.string.error_upload).concat("\n")
+                                .concat(responseBody.getError()),
+                        MainActivity.this.getString(R.string.dear_user),
+                        MainActivity.this.getString(R.string.upload_image),
+                        MainActivity.this.getString(R.string.accepted));
         }
-        if (counter == examinerDuties.size())
-            setActionBarTitle(getString(R.string.home));
     }
 
     @Override
@@ -759,16 +789,6 @@ public class MainActivity extends AppCompatActivity
                     getString(R.string.accepted));
             Log.e("Download Incomplete", response.toString());
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 
     @Override
