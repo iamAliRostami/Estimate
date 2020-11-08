@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +31,12 @@ import java.util.Locale;
 
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder> {
     private Context context;
-    private List<ExaminerDuties> examinerDuties;
-    private ArrayList<ExaminerDuties> tempExaminerDuties;
+    private final List<ExaminerDuties> examinerDuties;
+    private final ArrayList<ExaminerDuties> tempExaminerDuties;
     private int size = 0;
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
-        Log.e("size", String.valueOf(examinerDuties.size()));
 //        for (int i = 0; i < examinerDuties.size(); i++) {
 //            if (examinerDuties.get(i).getZoneId() == null ||
 //                    examinerDuties.get(i).getZoneId().equals("0")) {

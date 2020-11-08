@@ -177,7 +177,7 @@ public class DocumentActivity extends AppCompatActivity {
                 imagesList.get(i).setBitmap(b);
                 if (imageDataTitle != null) {
                     for (int j = 0; j < imageDataTitle.getData().size(); j++) {
-                        if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
+                        if (imagesList.get(i).getDocId().equals(String.valueOf(imageDataTitle.getData().get(j).getId())))
                             imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
                     }
                     images.add(imagesList.get(i));
@@ -255,7 +255,7 @@ public class DocumentActivity extends AppCompatActivity {
         @Override
         public void execute(ImageDataTitle imageDataTitle) {
             if (imageDataTitle.isSuccess()) {
-                DocumentFormActivity.imageDataTitle = imageDataTitle;
+                DocumentActivity.imageDataTitle = imageDataTitle;
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
                     arrayListTitle.add(dataTitle.getTitle());
                 }

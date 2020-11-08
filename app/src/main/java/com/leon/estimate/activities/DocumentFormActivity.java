@@ -347,7 +347,8 @@ public class DocumentFormActivity extends AppCompatActivity {
                 imagesList.get(i).setBitmap(b);
                 if (imageDataTitle != null) {
                     for (int j = 0; j < imageDataTitle.getData().size(); j++) {
-                        if (imagesList.get(i).getImageId() == imageDataTitle.getData().get(j).getId())
+                        if (imagesList.get(i).getDocId().equals(
+                                String.valueOf(imageDataTitle.getData().get(j).getId())))
                             imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
                     }
                     images.add(imagesList.get(i));

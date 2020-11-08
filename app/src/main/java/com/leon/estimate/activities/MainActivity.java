@@ -462,13 +462,9 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
         DaoImages daoImages = dataBase.daoImages();
         images = daoImages.getImages();
-        for (Images images1 : images
-        ) {
-            Log.e("images", images1.toString());
+        if (images.size() > 0) {
+            attemptLogin();
         }
-//        if (images.size() > 0) {
-//            attemptLogin();
-//        }
     }
 
     void attemptLogin() {
@@ -481,7 +477,7 @@ public class MainActivity extends AppCompatActivity
                 this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
     }
 
-    void uploadImage(Images images) {
+    void uploadImage(Images images) {//todo
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         images = loadImage(images);
@@ -490,10 +486,12 @@ public class MainActivity extends AppCompatActivity
             Call<UploadImage> call;
             if (images.getTrackingNumber().length() > 0)
                 call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
-                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, images.getImageId(), images.getTrackingNumber());
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body,
+                        Integer.parseInt(images.getDocId()), images.getTrackingNumber());
             else
                 call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
-                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, images.getImageId(), images.getBillId());
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body,
+                        Integer.parseInt(images.getDocId()), images.getBillId());
             imageId = images.getImageId();
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
                     new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
