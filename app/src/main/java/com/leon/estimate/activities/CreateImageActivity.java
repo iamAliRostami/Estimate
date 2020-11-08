@@ -8,12 +8,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,9 +35,7 @@ import com.leon.estimate.R;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
-import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoResultDictionary;
-import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.RequestDictionary;
 import com.leon.estimate.Tables.ResultDictionary;
@@ -49,6 +44,7 @@ import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.CustomProgressBar;
 import com.leon.estimate.Utils.GPSTracker;
 import com.leon.estimate.Utils.HttpClientWrapper;
@@ -61,20 +57,13 @@ import com.sardari.daterangepicker.utils.PersianCalendar;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -196,7 +185,7 @@ public class CreateImageActivity extends AppCompatActivity {
     void uploadImage() {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
-        MultipartBody.Part body = bitmapToFile(bitmap);
+        MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context, null);
         Call<UploadImage> call;
         if (isNew)
             call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
@@ -498,88 +487,6 @@ public class CreateImageActivity extends AppCompatActivity {
         return dest;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    MultipartBody.Part bitmapToFile(Bitmap bitmap) {
-        String fileNameToSave;
-        String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-        fileNameToSave = "JPEG_" + timeStamp + "_";
-        File f = new File(context.getCacheDir(), fileNameToSave);
-        try {
-            f.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Convert bitmap to byte array
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
-        byte[] bitmapData = bos.toByteArray();
-        //write the bytes in file
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(f);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (fos != null) {
-                fos.write(bitmapData);
-                fos.flush();
-                fos.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/jpeg"), f);
-        return MultipartBody.Part.createFormData("imageFile", f.getName(), reqFile);
-    }
-
-    public void saveTempBitmap(Bitmap bitmap) {
-        if (isExternalStorageWritable()) {
-            saveImage(bitmap);
-        } else {
-            Log.e("error", "isExternalStorageWritable");
-        }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    void saveImage(Bitmap bitmapImage) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES) + "/AbfaCamera/");
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                return;
-            }
-        }
-        String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + ".jpg";
-        File file = new File(mediaStorageDir, imageFileName);
-        if (file.exists()) file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-
-            DaoImages daoImages = dataBase.daoImages();
-            Images image = new Images(imageFileName, billId, trackNumber,
-                    String.valueOf(docId), "ارزیابی",
-                    bitmapImage, true);
-            if (isNew)
-                image.setBillId("");
-            else image.setTrackingNumber("");
-            daoImages.insertImage(image);
-        } catch (Exception e) {
-            Log.e("error", Objects.requireNonNull(e.getMessage()));
-            e.printStackTrace();
-        }
-        MediaScannerConnection.scanFile(context, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
-    }
-
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
 
     @SuppressLint("StaticFieldLeak")
     class CreateImage extends AsyncTask<Integer, Integer, Integer> {
@@ -641,7 +548,10 @@ public class CreateImageActivity extends AppCompatActivity {
                         CreateImageActivity.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                saveTempBitmap(Constants.bitmapSelectedImage);
+                //TODO
+                CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
+                        String.valueOf(docId), "ارزیابی", isNew);
+//                saveTempBitmap(Constants.bitmapSelectedImage);
                 new CustomDialog(DialogType.Yellow, CreateImageActivity.this,
                         CreateImageActivity.this.getString(R.string.error_upload).concat("\n")
                                 .concat(responseBody.getError()),
@@ -656,7 +566,11 @@ public class CreateImageActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
-            saveTempBitmap(Constants.bitmapSelectedImage);
+            //TODO
+
+            CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
+                    String.valueOf(docId), "ارزیابی", isNew);
+//            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
@@ -669,7 +583,11 @@ public class CreateImageActivity extends AppCompatActivity {
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
-            saveTempBitmap(Constants.bitmapSelectedImage);
+            //TODO
+
+            CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
+                    String.valueOf(docId), "ارزیابی", isNew);
+//            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(CreateImageActivity.this, error, Toast.LENGTH_LONG).show();

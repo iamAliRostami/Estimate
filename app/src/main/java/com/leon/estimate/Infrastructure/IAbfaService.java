@@ -193,7 +193,7 @@ public interface IAbfaService {
     );
 
     @Multipart
-    @POST("/MoshtarakinAp/SepanoDMS/V1/Upload/{token}")
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Upload/{token}")
     Call<UploadImage> uploadDoc(
             @Path("token") String token,
             @Part MultipartBody.Part imageFile,

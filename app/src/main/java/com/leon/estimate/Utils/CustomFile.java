@@ -53,7 +53,7 @@ public class CustomFile {
     public static MultipartBody.Part bitmapToFile(Bitmap bitmap, Context context, @Nullable String fileName) {
         if (fileName == null) {
             String timeStamp = (new SimpleDateFormat(context.getString(R.string.save_format_name))).format(new Date());
-            imageFileName = "JPEG_" + timeStamp + "_";
+            imageFileName = "JPEG_" + timeStamp + ".jpg";
         } else imageFileName = fileName;
         File f = new File(context.getCacheDir(), imageFileName);
         try {
