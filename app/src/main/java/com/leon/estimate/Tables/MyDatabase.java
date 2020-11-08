@@ -12,11 +12,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
         Tejariha.class, Zarib.class, Formula.class, Block.class},
         version = 41, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_40_41 = new Migration(40, 41) {
+    public static final Migration MIGRATION_41_42 = new Migration(41, 42) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
 //            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  examinerName Text;");
-            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  accuracy Real;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  ready INTEGER;");
 //            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y3 Real;");
 //            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y1 Real;");
 //            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y2 Real;");

@@ -220,6 +220,7 @@ public class CreateImageActivity extends AppCompatActivity {
         calculationUserInput.y2 = gpsTracker.getLatitude();
         calculationUserInput.x2 = gpsTracker.getLongitude();
         calculationUserInput.resultId = resultDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
+        calculationUserInput.ready = true;
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.deleteByTrackNumber(trackNumber);
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);

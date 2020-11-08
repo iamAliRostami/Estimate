@@ -17,6 +17,7 @@ import java.util.List;
 
 public class CalculationUserInput {
     public boolean sent;
+    public boolean ready;
     public String trackNumber;
     public String trackingId;
     public String radif;
