@@ -104,7 +104,6 @@ public class CreateImageActivity extends AppCompatActivity {
                 SharedReferenceNames.ACCOUNT.getValue());
         dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
-
         DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
         resultDictionaries = daoResultDictionary.getResults();
         initializeSpinner();
@@ -606,6 +605,7 @@ public class CreateImageActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        binding.imageViewExport.setImageDrawable(null);
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();

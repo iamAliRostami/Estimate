@@ -33,7 +33,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         }
     };
     View.OnClickListener onClickListenerClose = v -> finish();
-
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
         @SuppressLint({"NewApi", "UseCompatLoadingForDrawables"})
         @Override
@@ -71,6 +70,7 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +134,7 @@ public class BrightnessContrastActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        binding.imageView.setImageDrawable(null);
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();

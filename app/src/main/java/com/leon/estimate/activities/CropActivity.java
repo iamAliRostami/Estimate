@@ -63,6 +63,13 @@ public class CropActivity extends AppCompatActivity {
                     }
                 });
     };
+    private final View.OnClickListener onButtonCloseClickListener = v -> finish();
+    private final View.OnClickListener onImageViewRebase = v -> {
+        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
+                bitmapTempOriginal.getConfig(), true);
+        isInverted = false;
+        initializeElement();
+    };
     @SuppressLint("CheckResult")
     private final View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
         @Override
@@ -79,13 +86,6 @@ public class CropActivity extends AppCompatActivity {
                         binding.imageView.setImageBitmap(scaledBitmap);
                     });
         }
-    };
-    private final View.OnClickListener onButtonCloseClickListener = v -> finish();
-    private final View.OnClickListener onImageViewRebase = v -> {
-        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
-                bitmapTempOriginal.getConfig(), true);
-        isInverted = false;
-        initializeElement();
     };
     @SuppressLint("CheckResult")
     private final View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
@@ -119,6 +119,7 @@ public class CropActivity extends AppCompatActivity {
             finish();
         }
     }
+
     public static Bitmap rotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -236,7 +237,6 @@ public class CropActivity extends AppCompatActivity {
         isInverted = !isInverted;
     }
 
-
     protected Bitmap getCroppedImage() {
         try {
             Map<Integer, PointF> points = binding.polygonView.getPoints();
@@ -313,6 +313,7 @@ public class CropActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        binding.imageView.setImageDrawable(null);
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();

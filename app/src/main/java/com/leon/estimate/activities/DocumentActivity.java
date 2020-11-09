@@ -163,7 +163,6 @@ public class DocumentActivity extends AppCompatActivity {
                 new GetImageDoc(), new GetImageDocIncomplete(), new GetError());
     }
 
-
     void loadImage() {
         DaoImages daoImages = dataBase.daoImages();
         List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
@@ -189,7 +188,6 @@ public class DocumentActivity extends AppCompatActivity {
             Log.e("error", e.toString());
         }
     }
-
 
     public final void askPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
@@ -241,7 +239,6 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
-
         @Override
         public void executeIncomplete(Response<Login> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
@@ -308,7 +305,6 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     class GetImageThumbnailListIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
-
         @Override
         public void executeIncomplete(Response<ImageDataThumbnail> response) {
             if (response.errorBody() != null) {
@@ -342,7 +338,6 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     class GetImageDocIncomplete implements ICallbackIncomplete<ResponseBody> {
-
         @Override
         public void executeIncomplete(Response<ResponseBody> response) {
             if (response.errorBody() != null) {
@@ -379,7 +374,6 @@ public class DocumentActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -400,6 +394,12 @@ public class DocumentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         HttpClientWrapper.call.cancel();
+        imageDataTitle = null;
+        imageViewAdapter = null;
+        images = null;
+        imageDataThumbnail = null;
+        imageDataThumbnailUri = null;
+        arrayListTitle = null;
         Runtime.getRuntime().totalMemory();
         Runtime.getRuntime().freeMemory();
         Runtime.getRuntime().maxMemory();
