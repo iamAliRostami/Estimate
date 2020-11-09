@@ -76,7 +76,6 @@ import static com.leon.estimate.Utils.Constants.qotrEnsheab;
 import static com.leon.estimate.Utils.Constants.secondForm;
 import static com.leon.estimate.Utils.Constants.tejarihas;
 
-
 public class CreateImageActivity extends AppCompatActivity {
     Context context;
     CreateImageActivityBinding binding;
@@ -231,6 +230,7 @@ public class CreateImageActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     Bitmap createImage() {
         int small = 35;
         Bitmap src = BitmapFactory.decodeResource(getResources(), R.drawable.export);
@@ -314,7 +314,7 @@ public class CreateImageActivity extends AppCompatActivity {
 
         yCoordinate = (float) src.getHeight() * 63 / 288;
         xCoordinate = (float) src.getWidth() * 27 / 36;
-        cs.drawText(qotrEnsheab, xCoordinate, yCoordinate, tPaint);//TODO
+        cs.drawText(qotrEnsheab, xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 20 / 36;
         cs.drawText(String.valueOf(examinerDuties.getArse()), xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 16 / 36;
@@ -348,7 +348,6 @@ public class CreateImageActivity extends AppCompatActivity {
         xCoordinate = (float) src.getWidth() * 15 / 36;
         cs.drawText(String.valueOf(examinerDuties.getTedadSaier()), xCoordinate, yCoordinate, tPaint);
 
-        //TODO
         if (examinerDuties.getTedadTejari() > 0 || examinerDuties.getTedadSaier() > 0)
             for (int i = 0; i < tejarihas.size(); i++) {
                 Tejariha tejariha = tejarihas.get(i);
@@ -429,7 +428,6 @@ public class CreateImageActivity extends AppCompatActivity {
             cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
         else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
 
-
         yCoordinate = (float) src.getHeight() * 175 / 288;
         xCoordinate = (float) src.getWidth() * 27 / 36;
         if (secondForm.isChahAbBaran())
@@ -478,7 +476,6 @@ public class CreateImageActivity extends AppCompatActivity {
         xCoordinate = (float) src.getWidth() * 20 / 36;
         PersianCalendar persianCalendar = new PersianCalendar();
         String dateWaterMark = " - ".concat(persianCalendar.getPersianLongDate());
-        @SuppressLint("SimpleDateFormat")
         String timeWaterMark = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
         cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
         yCoordinate = (float) src.getHeight() * 245 / 288;
@@ -547,10 +544,8 @@ public class CreateImageActivity extends AppCompatActivity {
                         CreateImageActivity.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                //TODO
                 CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
                         String.valueOf(docId), "ارزیابی", isNew);
-//                saveTempBitmap(Constants.bitmapSelectedImage);
                 new CustomDialog(DialogType.Yellow, CreateImageActivity.this,
                         CreateImageActivity.this.getString(R.string.error_upload).concat("\n")
                                 .concat(responseBody.getError()),
@@ -565,11 +560,8 @@ public class CreateImageActivity extends AppCompatActivity {
 
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
-            //TODO
-
             CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
                     String.valueOf(docId), "ارزیابی", isNew);
-//            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
@@ -582,11 +574,8 @@ public class CreateImageActivity extends AppCompatActivity {
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
-            //TODO
-
             CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
                     String.valueOf(docId), "ارزیابی", isNew);
-//            saveTempBitmap(Constants.bitmapSelectedImage);
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(CreateImageActivity.this, error, Toast.LENGTH_LONG).show();

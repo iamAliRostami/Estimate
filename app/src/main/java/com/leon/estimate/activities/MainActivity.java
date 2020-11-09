@@ -168,7 +168,9 @@ public class MainActivity extends AppCompatActivity
         activity = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
-        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME()).fallbackToDestructiveMigration().addMigrations(MyDatabase.MIGRATION_41_42).build();
+        Room.databaseBuilder(context, MyDatabase.class,
+                MyApplication.getDBNAME()).fallbackToDestructiveMigration()
+                .addMigrations(MyDatabase.MIGRATION_41_42).build();
     }
 
     void checkPermission() {
@@ -214,7 +216,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             mapView = findViewById(R.id.mapView);
             mapView.setBuiltInZoomControls(true);
-            mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
+            mapView.getZoomController().setVisibility(
+                    CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
             mapController.setZoom(19.5);
@@ -240,13 +243,12 @@ public class MainActivity extends AppCompatActivity
         examinerDuties = daoExaminerDuties.ExaminerDuties();
         examinerDutiesReady = new ArrayList<>();
         if (examinerDuties != null && examinerDuties.size() > 0) {
-            setActionBarTitle("در حال جانمایی میسرها...");
+            setActionBarTitle(getString(R.string.locating));
             if (examinerDuties.get(0).getBillId() != null)
                 getXY(examinerDuties.get(0).getBillId());
             else getXY(examinerDuties.get(0).getNeighbourBillId());
         }
     }
-
 
     void getXY(String billId) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
@@ -299,13 +301,11 @@ public class MainActivity extends AppCompatActivity
         mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Log.e("location1", p.toString());
                 return false;
             }
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                Log.e("location2", p.toString());
                 return false;
             }
         }));
@@ -320,7 +320,6 @@ public class MainActivity extends AppCompatActivity
         if (roadOverlay != null) {
             mapView.getOverlays().remove(roadOverlay);
         }
-
         RoadManager roadManager = new OSRMRoadManager(context);
         wayPoints = new ArrayList<>();
         wayPoints.add(startPoint);
@@ -341,7 +340,6 @@ public class MainActivity extends AppCompatActivity
             progressBar = new CustomProgressBar();
             progressBar.show(context, context.getString(R.string.waiting_for_routing));
         }
-
 
         @Override
         protected Integer doInBackground(GeoPoint... geoPoints) {
@@ -477,7 +475,7 @@ public class MainActivity extends AppCompatActivity
                 this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
     }
 
-    void uploadImage(Images images) {//todo
+    void uploadImage(Images images) {
         Retrofit retrofit = NetworkHelper.getInstance(true, "");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         images = loadImage(images);
@@ -636,60 +634,56 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class Download implements ICallback<Input> {
-        @Override
-        public void execute(Input input) {
-            if (input != null) {
-                List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
-                for (int i = 0; i < examinerDutiesList.size(); i++) {
-                    Gson gson = new Gson();
-                    examinerDutiesList.get(i).setRequestDictionaryString(
-                            gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-                    if (examinerDutiesList.get(i).getZoneId() == null ||
-                            examinerDutiesList.get(i).getZoneId().equals("0")) {
-                        examinerDutiesList.remove(i);
-                        i--;
-                    }
-                }
-                DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-                List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-                for (int i = 0; i < examinerDutiesList.size(); i++) {
-                    examinerDutiesList.get(i).setTrackNumber(
-                            examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-                    examinerDutiesList.get(i).setRadif(
-                            examinerDutiesList.get(i).getRadif().replace(".0", ""));
-                    ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-                    Log.e("zoneId ".concat(String.valueOf(i)), examinerDuties.getZoneId());
-                    for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                        ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                        if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
-                                || examinerDuties.getZoneId() == null
-                                || examinerDuties.getZoneId().equals("0")) {
-                            examinerDutiesList.remove(i);
-                            j = examinerDutiesListTemp.size();
-                            i--;
-                        }
-                    }
-                }
-                daoExaminerDuties.insertAll(examinerDutiesList);
-                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
-                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
-                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-                daoServiceDictionary.insertAll(input.getServiceDictionary());
-                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
-                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
-                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
-                daoResultDictionary.insertAll(input.getResultDictionary());
-                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
-                        input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
-                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
+    List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            Gson gson = new Gson();
+            examinerDutiesList.get(i).setRequestDictionaryString(
+                    gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+            if (examinerDutiesList.get(i).getZoneId() == null ||
+                    examinerDutiesList.get(i).getZoneId().equals("0")) {
+                examinerDutiesList.remove(i);
+                i--;
             }
+        }
+        return examinerDutiesList;
+    }
+
+    int removeExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            examinerDutiesList.get(i).setTrackNumber(
+                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+            examinerDutiesList.get(i).setRadif(
+                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
+            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
+                        || examinerDuties.getZoneId() == null
+                        || examinerDuties.getZoneId().equals("0")) {
+                    examinerDutiesList.remove(i);
+                    j = examinerDutiesListTemp.size();
+                    i--;
+                }
+            }
+        }
+        daoExaminerDuties.insertAll(examinerDutiesList);
+        return examinerDutiesList.size();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
         }
     }
 
@@ -714,37 +708,6 @@ public class MainActivity extends AppCompatActivity
             setActionBarTitle(getString(R.string.home));
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                HttpClientWrapper.call.cancel();
-                super.onBackPressed();
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        binding.imageViewDownload.setImageDrawable(null);
-        binding.imageViewUpload.setImageDrawable(null);
-        binding.imageViewExit.setImageDrawable(null);
-        binding.imageViewForm.setImageDrawable(null);
-        binding.imageViewPaper.setImageDrawable(null);
-        binding.imageViewRequest.setImageDrawable(null);
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
     class UploadImageDoc implements ICallback<UploadImage> {
         @Override
         public void execute(UploadImage responseBody) {
@@ -766,15 +729,45 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onStop() {
+        super.onStop();
+        binding.imageViewDownload.setImageDrawable(null);
+        binding.imageViewUpload.setImageDrawable(null);
+        binding.imageViewExit.setImageDrawable(null);
+        binding.imageViewForm.setImageDrawable(null);
+        binding.imageViewPaper.setImageDrawable(null);
+        binding.imageViewRequest.setImageDrawable(null);
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-        HttpClientWrapper.call.cancel();
+    class Download implements ICallback<Input> {
+        @Override
+        public void execute(Input input) {
+            if (input != null) {
+                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+                daoServiceDictionary.insertAll(input.getServiceDictionary());
+                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+                daoResultDictionary.insertAll(input.getResultDictionary());
+                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
+                        removeExaminerDuties(prepareExaminerDuties(input.getExaminerDuties()))))
+                        .concat(" مسیر بارگیری شد."),
+                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     class DownloadIncomplete implements ICallbackIncomplete<Input> {
@@ -788,6 +781,13 @@ public class MainActivity extends AppCompatActivity
                     getString(R.string.accepted));
             Log.e("Download Incomplete", response.toString());
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+        HttpClientWrapper.call.cancel();
     }
 
     @Override

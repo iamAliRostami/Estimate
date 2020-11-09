@@ -42,6 +42,7 @@ import com.leon.estimate.databinding.MotherChildActivityBinding;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -95,7 +96,6 @@ public class MotherChildActivity extends AppCompatActivity {
                         checkIsNoEmpty(binding.editTextFamily) ||
                         checkIsNoEmpty(binding.editTextName))) {
                     cancel = true;
-
                 }
                 if (!cancel && nationNumber.length() < 10) {
                     View focusView;
@@ -109,7 +109,7 @@ public class MotherChildActivity extends AppCompatActivity {
                 if (isNew)
                     sendNewRequest();
                 else
-                    senAfterSaleRequest();
+                    sendAfterSaleRequest();
             }
         });
     }
@@ -134,9 +134,7 @@ public class MotherChildActivity extends AppCompatActivity {
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
         Retrofit retrofit = NetworkHelper.getInstance(true, token);
         final IAbfaService sendRequest = retrofit.create(IAbfaService.class);
-        ArrayList<Integer> selectedServices = new ArrayList<>();
-        selectedServices.add(1);
-        selectedServices.add(2);
+        ArrayList<Integer> selectedServices = new ArrayList<>(Arrays.asList(1, 2));
         Call<SimpleMessage> call = sendRequest.sendRequestNew(new Request(billId, selectedServices,
                 binding.editTextName.getText().toString(),
                 binding.editTextFamily.getText().toString(), mobile, nationNumber,
@@ -145,7 +143,7 @@ public class MotherChildActivity extends AppCompatActivity {
                 new SendRequest(), new SendRequestIncomplete(), new GetError());
     }
 
-    void senAfterSaleRequest() {
+    void sendAfterSaleRequest() {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                 getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());

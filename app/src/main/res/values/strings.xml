@@ -238,4 +238,5 @@
     <string name="sanitation_transfer">شبکه انتقال فاضلاب</string>
     <string name="other_document">مدارک مجاور</string>
     <string name="save">ذخیره</string>
+    <string name="locating">در حال جانمایی میسرها...</string>
 </resources>
