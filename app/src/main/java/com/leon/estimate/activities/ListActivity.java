@@ -40,8 +40,6 @@ import static com.leon.estimate.Utils.Constants.customAdapter;
 public class ListActivity extends AppCompatActivity {
     Context context;
     List<ExaminerDuties> examinerDuties;
-    //    @SuppressLint("StaticFieldLeak")
-//    public static CustomListAdapter customAdapter;
     ProgressDialog dialog;
     ListActivityBinding binding;
 
@@ -101,10 +99,6 @@ public class ListActivity extends AppCompatActivity {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context, SharedReferenceNames.ACCOUNT.getValue());
         if (sharedPreferenceManager.getStringData(SharedReferenceKeys.TRACK_NUMBER.getValue()) == null ||
                 sharedPreferenceManager.getStringData(SharedReferenceKeys.TRACK_NUMBER.getValue()).length() < 1) {
-//            MenuInflater inflater = getMenuInflater();
-//            inflater.inflate(R.menu.search_menu, menu);
-//            MenuItem menuItem = findViewById(R.id.menu_last);
-//            menuItem.setVisible(false);
             menu.getItem(1).setVisible(false);
         }
         return true;
