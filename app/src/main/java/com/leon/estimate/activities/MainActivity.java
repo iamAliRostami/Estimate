@@ -634,6 +634,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    class UploadImageDoc implements ICallback<UploadImage> {
+        @Override
+        public void execute(UploadImage responseBody) {
+            if (responseBody.isSuccess()) {
+                DaoImages daoImages = dataBase.daoImages();
+                daoImages.deleteByID(imageId);
+                imageCounter = imageCounter + 1;
+                if (imageCounter < images.size()) {
+                    uploadImage(images.get(imageCounter));
+                }
+            } else
+                new CustomDialog(DialogType.Yellow, MainActivity.this,
+                        MainActivity.this.getString(R.string.error_upload).concat("\n")
+                                .concat(responseBody.getError()),
+                        MainActivity.this.getString(R.string.dear_user),
+                        MainActivity.this.getString(R.string.upload_image),
+                        MainActivity.this.getString(R.string.accepted));
+        }
+    }
+
     List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
         for (int i = 0; i < examinerDutiesList.size(); i++) {
             Gson gson = new Gson();
@@ -670,78 +691,6 @@ public class MainActivity extends AppCompatActivity
         }
         daoExaminerDuties.insertAll(examinerDutiesList);
         return examinerDutiesList.size();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                HttpClientWrapper.call.cancel();
-                super.onBackPressed();
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        binding.imageViewDownload.setImageResource(R.drawable.image_download);
-        binding.imageViewExit.setImageResource(R.drawable.image_exit);
-        binding.imageViewUpload.setImageResource(R.drawable.image_upload);
-        binding.imageViewPaper.setImageResource(R.drawable.image_paper);
-        binding.imageViewRequest.setImageResource(R.drawable.image_request);
-        binding.imageViewForm.setImageResource(R.drawable.image_form);
-        mapView.onResume();
-        if (counter < examinerDuties.size()) {
-            setActionBarTitle("در حال جانمایی میسرها...");
-            if (examinerDuties.get(counter).getBillId() != null
-                    && examinerDuties.get(counter).getBillId().length() > 0)
-                getXY(examinerDuties.get(counter).getBillId());
-            else getXY(examinerDuties.get(counter).getNeighbourBillId());
-        }
-        if (counter == examinerDuties.size())
-            setActionBarTitle(getString(R.string.home));
-    }
-
-    class UploadImageDoc implements ICallback<UploadImage> {
-        @Override
-        public void execute(UploadImage responseBody) {
-            if (responseBody.isSuccess()) {
-                DaoImages daoImages = dataBase.daoImages();
-                daoImages.deleteByID(imageId);
-                imageCounter = imageCounter + 1;
-                if (imageCounter < images.size()) {
-                    uploadImage(images.get(imageCounter));
-                }
-            } else
-                new CustomDialog(DialogType.Yellow, MainActivity.this,
-                        MainActivity.this.getString(R.string.error_upload).concat("\n")
-                                .concat(responseBody.getError()),
-                        MainActivity.this.getString(R.string.dear_user),
-                        MainActivity.this.getString(R.string.upload_image),
-                        MainActivity.this.getString(R.string.accepted));
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        binding.imageViewDownload.setImageDrawable(null);
-        binding.imageViewUpload.setImageDrawable(null);
-        binding.imageViewExit.setImageDrawable(null);
-        binding.imageViewForm.setImageDrawable(null);
-        binding.imageViewPaper.setImageDrawable(null);
-        binding.imageViewRequest.setImageDrawable(null);
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 
     class Download implements ICallback<Input> {
@@ -781,6 +730,59 @@ public class MainActivity extends AppCompatActivity
                     getString(R.string.accepted));
             Log.e("Download Incomplete", response.toString());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.imageViewDownload.setImageResource(R.drawable.image_download);
+        binding.imageViewExit.setImageResource(R.drawable.image_exit);
+        binding.imageViewUpload.setImageResource(R.drawable.image_upload);
+        binding.imageViewPaper.setImageResource(R.drawable.image_paper);
+        binding.imageViewRequest.setImageResource(R.drawable.image_request);
+        binding.imageViewForm.setImageResource(R.drawable.image_form);
+        mapView.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+        }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        binding.imageViewDownload.setImageDrawable(null);
+        binding.imageViewUpload.setImageDrawable(null);
+        binding.imageViewExit.setImageDrawable(null);
+        binding.imageViewForm.setImageDrawable(null);
+        binding.imageViewPaper.setImageDrawable(null);
+        binding.imageViewRequest.setImageDrawable(null);
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 
     @Override
