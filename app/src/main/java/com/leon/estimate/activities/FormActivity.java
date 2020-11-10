@@ -793,8 +793,6 @@ public class FormActivity extends AppCompatActivity {
                     geoJsonOverlays[1] = geoJsonOverlay;
                     binding.checkboxWaterPipe.setVisibility(View.VISIBLE);
                     binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
-//                    binding.mapView.getOverlays().add(geoJsonOverlay);
-//                    binding.mapView.invalidate();
                 } catch (Exception e) {
                     Log.e("error map", e.toString());
                 }
