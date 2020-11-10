@@ -759,7 +759,6 @@ public class FormActivity extends AppCompatActivity {
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
             if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
-//                Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                 try {
                     kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                     MyKmlStyle.color = 3;
@@ -768,13 +767,10 @@ public class FormActivity extends AppCompatActivity {
                     geoJsonOverlays[2] = geoJsonOverlay;
                     binding.checkboxWaterTransfer.setVisibility(View.VISIBLE);
                     binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
-//                    binding.mapView.getOverlays().add(geoJsonOverlay);
-//                    binding.mapView.invalidate();
                 } catch (Exception e) {
                     Log.e("error map", e.toString());
                 }
             }
-//            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
