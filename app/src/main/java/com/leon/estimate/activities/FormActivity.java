@@ -99,6 +99,7 @@ import retrofit2.Retrofit;
 import static android.graphics.Color.BLUE;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.YELLOW;
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
 import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
@@ -113,7 +114,7 @@ public class FormActivity extends AppCompatActivity {
     FormActivityBinding binding;
     Context context;
     MyDatabase dataBase;
-    int REQUEST_LOCATION_CODE = 1236, polygonIndex, place1Index, place2Index, pageNumber = 1;
+    int polygonIndex, place1Index, place2Index, pageNumber = 1;
     int[] indexes;
     GPSTracker gpsTracker;
     FolderOverlay[] geoJsonOverlays;
