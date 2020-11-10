@@ -175,7 +175,7 @@ public class FormActivity extends AppCompatActivity {
                     place1Index = 0;
                     place2Index = 0;
                     polygonIndex = 0;
-                    polygonPoint.removeAll(polygonPoint);
+                    polygonPoint.clear();
                     binding.checkboxSanitationTransfer.setChecked(false);
                     binding.checkboxWaterTransfer.setChecked(false);
                     binding.checkboxWaterPipe.setChecked(false);
@@ -362,6 +362,9 @@ public class FormActivity extends AppCompatActivity {
                             context.getString(R.string.app_name).concat(" / ").concat("صفحه چهارم"));
                     break;
                 case 6:
+                    if (examinerDuties.isNewEnsheab()) {
+                        binding.mapView.getOverlays().add(startMarker);
+                    }
                     binding.buttonNext.setText(R.string.crooki);
                     binding.relativeLayoutMap.setVisibility(View.VISIBLE);
                     binding.relativeLayoutEditMap.setVisibility(View.GONE);
@@ -466,7 +469,7 @@ public class FormActivity extends AppCompatActivity {
         calculationUserInput.sent = false;
     }
 
-    void updateCalculationUserInput() {//TODO
+    void updateCalculationUserInput() {
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         daoCalculationUserInput.deleteByTrackNumber(trackNumber);
         daoCalculationUserInput.insertCalculationUserInput(calculationUserInput);
@@ -513,6 +516,8 @@ public class FormActivity extends AppCompatActivity {
     }
 
     public Bitmap convertMapToBitmap() {
+        if (examinerDuties.isNewEnsheab())
+            binding.mapView.getOverlays().remove(startMarker);
         binding.mapView.destroyDrawingCache();
         binding.mapView.setDrawingCacheEnabled(true);
         return binding.mapView.getDrawingCache(true);
@@ -666,7 +671,7 @@ public class FormActivity extends AppCompatActivity {
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
         line.setColor(Color.YELLOW);
-        if (polygonIndex != 0) {//TODO crash on paging...
+        if (polygonIndex != 0) {
             binding.mapView.getOverlays().remove(polygonIndex);
         }
         binding.mapView.getOverlays().add(line);
