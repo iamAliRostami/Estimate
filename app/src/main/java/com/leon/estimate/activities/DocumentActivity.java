@@ -118,7 +118,7 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     void attemptLogin() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.USERNAME_TEMP.getValue()), sharedPreferenceManager.getStringData(
@@ -128,7 +128,7 @@ public class DocumentActivity extends AppCompatActivity {
     }
 
     void getImageTitles() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<ImageDataTitle> call = abfaService.getTitle(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()));
@@ -138,7 +138,7 @@ public class DocumentActivity extends AppCompatActivity {
 
     void getImageThumbnailList() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
 
         Call<ImageDataThumbnail> call;
@@ -154,7 +154,7 @@ public class DocumentActivity extends AppCompatActivity {
 
     void getImageThumbnail(String uri) {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),

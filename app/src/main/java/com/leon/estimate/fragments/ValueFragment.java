@@ -19,10 +19,6 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 
 import com.leon.estimate.Enums.BundleEnum;
-import com.leon.estimate.Enums.ProgressType;
-import com.leon.estimate.Enums.SharedReferenceKeys;
-import com.leon.estimate.Enums.SharedReferenceNames;
-import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
@@ -31,9 +27,6 @@ import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.Block;
 import com.leon.estimate.Tables.Formula;
 import com.leon.estimate.Tables.Zarib;
-import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.NetworkHelper;
-import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.databinding.ValueFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,9 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.valueInteger;
@@ -277,17 +268,6 @@ public class ValueFragment extends DialogFragment {
             return false;
         }
         return true;
-    }
-
-    void getArzeshdaraei() {
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context,
-                SharedReferenceNames.ACCOUNT.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true,
-                sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
-        final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
-        Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(zoneId));
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
-                new GetArzeshdaraei(), new GetArzeshdaraeiIncomplete(), new GetError());
     }
 
     @Override

@@ -134,7 +134,7 @@ public class MotherChildActivity extends AppCompatActivity {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                 getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        Retrofit retrofit = NetworkHelper.getInstance(token);
         final IAbfaService sendRequest = retrofit.create(IAbfaService.class);
         ArrayList<Integer> selectedServices = new ArrayList<>(Arrays.asList(1, 2));
         Call<SimpleMessage> call = sendRequest.sendRequestNew(new Request(billId, selectedServices,
@@ -149,7 +149,7 @@ public class MotherChildActivity extends AppCompatActivity {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                 getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        Retrofit retrofit = NetworkHelper.getInstance(token);
         final IAbfaService sendRequest = retrofit.create(IAbfaService.class);
         ArrayList<Integer> selectedServices = new ArrayList<>();
         selectedServices.add(7);
@@ -174,7 +174,7 @@ public class MotherChildActivity extends AppCompatActivity {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                 getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        Retrofit retrofit = NetworkHelper.getInstance(token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,

@@ -488,7 +488,7 @@ public class FormFragment extends Fragment {
     void getArzeshdaraei() {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context,
                 SharedReferenceNames.ACCOUNT.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true,
+        Retrofit retrofit = NetworkHelper.getInstance(
                 sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
         final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
         Log.e("zone", examinerDuties.getZoneId());

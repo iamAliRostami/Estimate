@@ -273,7 +273,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     void attemptLogin() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.USERNAME_TEMP.getValue()), sharedPreferenceManager.getStringData(
@@ -283,7 +283,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     void getImageTitles() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<ImageDataTitle> call = abfaService.getTitle(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()));
@@ -293,7 +293,7 @@ public class DocumentFormActivity extends AppCompatActivity {
 
     void getImageThumbnailList() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
 
         Call<ImageDataThumbnail> call;
@@ -309,7 +309,7 @@ public class DocumentFormActivity extends AppCompatActivity {
 
     void getImageThumbnail(String uri) {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         Call<ResponseBody> call = getImage.getDoc(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
@@ -319,7 +319,7 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     void uploadImage(int docId, Bitmap bitmap) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context, null);
         Call<UploadImage> call;

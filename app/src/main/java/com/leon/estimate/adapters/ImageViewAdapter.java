@@ -92,7 +92,7 @@ public class ImageViewAdapter extends BaseAdapter {
     }
 
     void getImageMain(String uri) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
 //        Retrofit retrofit = NetworkHelper.getInstanceWithCache(context);
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
 

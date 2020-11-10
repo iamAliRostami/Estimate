@@ -679,7 +679,7 @@ public class FormActivity extends AppCompatActivity {
 
     void getXY(String billId) {
         binding.progressBar.setVisibility(View.VISIBLE);
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<Place> call = iAbfaService.getXY(billId);
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
@@ -687,7 +687,7 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void getGISToken() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<GISToken> call = iAbfaService.getGISToken();
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
@@ -695,7 +695,7 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void getGis(int i) {
-        Retrofit retrofit = NetworkHelper.getInstanceMap();
+        Retrofit retrofit = NetworkHelper.getInstance();
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<String> call;
         binding.progressBar.setVisibility(View.VISIBLE);

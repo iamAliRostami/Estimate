@@ -71,7 +71,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private double latitude, longitude;
     double[] latLong;
-    private ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
+    private final ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     private int polygonIndex, place1Index, place2Index, place3Index;
     MapFragmentBinding binding;
     private Context context;
@@ -96,6 +96,7 @@ public class MapFragment extends Fragment implements LocationListener {
         context = getActivity();
         ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
+//        OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
     }
 
@@ -127,6 +128,13 @@ public class MapFragment extends Fragment implements LocationListener {
     @SuppressLint("MissingPermission")
     private void initializeMap() {
         binding.mapView.setBuiltInZoomControls(true);
+        /*OnlineTileSourceBase tileSource = new XYTileSource("MyOSM", null, 1, 19, 256, ".png",
+        new String[]{"http://tactile.myserver.com/osm_tiles"});
+TileSourceFactory.addTileSource(tileSource);
+mapView.setTileSource("MyOSM");
+        mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+*/
+
         binding.mapView.setMultiTouchControls(true);
         IMapController mapController = binding.mapView.getController();
         mapController.setZoom(19.5);
@@ -245,7 +253,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void getXY(String billId) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance();
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<Place> call = iAbfaService.getXY(billId);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
@@ -253,7 +261,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void getGISToken() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance();
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<GISToken> call = iAbfaService.getGISToken();
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
@@ -261,7 +269,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void getGis(int i) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance();
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<String> call;
         if (i == 1) {

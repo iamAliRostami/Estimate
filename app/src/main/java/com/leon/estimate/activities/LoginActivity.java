@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
@@ -81,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void attemptLogin() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
         Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login1(username, password);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW_CANCELABLE.getValue(), this,
@@ -217,6 +219,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setButtonOnClickListener() {
         binding.buttonLogin.setOnClickListener(view -> {
+            Log.e("buttonLogin", "click");
             View viewFocus;
             boolean cancel = false;
             username = binding.editTextUsername.getText().toString();
@@ -234,13 +237,37 @@ public class LoginActivity extends AppCompatActivity {
                 cancel = true;
             }
             if (!cancel) {
+                MyApplication.isLocal = false;
                 attemptLogin();
             }
         });
     }
 
     private void setButtonOnLongClickListener() {
-        binding.buttonLogin.setOnLongClickListener(view -> false);
+        binding.buttonLogin.setOnLongClickListener(v -> {
+            Log.e("buttonLogin", "Long");
+            View viewFocus;
+            boolean cancel = false;
+            username = binding.editTextUsername.getText().toString();
+            password = binding.editTextPassword.getText().toString();
+            if (username.length() < 1) {
+                viewFocus = binding.editTextUsername;
+                viewFocus.requestFocus();
+                binding.editTextUsername.setError(getString(R.string.error_empty));
+                cancel = true;
+            }
+            if (!cancel && password.length() < 1) {
+                viewFocus = binding.editTextPassword;
+                viewFocus.requestFocus();
+                binding.editTextPassword.setError(getString(R.string.error_empty));
+                cancel = true;
+            }
+            if (!cancel) {
+                MyApplication.isLocal = true;
+                attemptLogin();
+            }
+            return false;
+        });
     }
 
     void loadPreference() {
@@ -280,6 +307,10 @@ public class LoginActivity extends AppCompatActivity {
                     loginFeedBack.getRefresh_token().length() < 1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_is_not_match), Toast.LENGTH_SHORT).show();
             } else {
+                if (MyApplication.isLocal) {
+                    Toast.makeText(getApplicationContext(), "شبکه داخلی فعال شد.", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "اینترنت فعال شد.", Toast.LENGTH_LONG).show();
                 sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME_TEMP.getValue(), username);
 //                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
                 sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD_TEMP.getValue(), password);

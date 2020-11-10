@@ -11,7 +11,6 @@ public class DifferentCompanyManager {
     private DifferentCompanyManager() {
     }
 
-    //
     public static CompanyNames getCompanyNameEnum(int companyCode) {
         switch (companyCode) {
             case 1:
@@ -42,7 +41,6 @@ public class DifferentCompanyManager {
         }
     }
 
-    //
     public static String getCompanyName(CompanyNames companyName) {
         switch (companyName) {
             case ZONE1:
@@ -109,7 +107,6 @@ public class DifferentCompanyManager {
                 throw new UnsupportedOperationException();
         }
     }
-
     //
     public static String getLocalBaseUrl(CompanyNames companyNames) {
         switch (companyNames) {
@@ -134,7 +131,7 @@ public class DifferentCompanyManager {
             case TOWNS_WEST:
                 return "http://172.28.5.40/";
             case ESF:
-                return "http://172.18.12.14:100";
+                return "http://172.18.12.121";
 //                return "http://172.18.12.121";
             case ESF_MAP:
                 return "http://172.18.12.242/osm_tiles/";

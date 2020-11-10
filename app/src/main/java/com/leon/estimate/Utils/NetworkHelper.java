@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.leon.estimate.Enums.CompanyNames;
+import com.leon.estimate.MyApplication;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -50,14 +50,15 @@ public final class NetworkHelper {
         return client;
     }
 
-    public static Retrofit getInstance(boolean b, String token) {
+    public static Retrofit getInstance(String token) {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
         String baseUrl = DifferentCompanyManager.getBaseUrl(
                 DifferentCompanyManager.getActiveCompanyName());
-        if (!b)
-            baseUrl = DifferentCompanyManager.getLocalBaseUrl(CompanyNames.SEPANO);
+        if (MyApplication.isLocal)
+            baseUrl = DifferentCompanyManager.getLocalBaseUrl(
+                    DifferentCompanyManager.getActiveCompanyName());
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(token))
@@ -67,12 +68,15 @@ public final class NetworkHelper {
         return retrofit;
     }
 
-    public static Retrofit getInstanceMap() {
+    public static Retrofit getInstance() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
         String baseUrl = DifferentCompanyManager.getBaseUrl(
                 DifferentCompanyManager.getActiveCompanyName());
+        if (MyApplication.isLocal)
+            baseUrl = DifferentCompanyManager.getLocalBaseUrl(
+                    DifferentCompanyManager.getActiveCompanyName());
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(""))

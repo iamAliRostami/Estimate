@@ -181,7 +181,7 @@ public class CreateImageActivity extends AppCompatActivity {
     }
 
     void uploadImage() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context, null);
         Call<UploadImage> call;
@@ -197,7 +197,7 @@ public class CreateImageActivity extends AppCompatActivity {
 
     void send() {
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        Retrofit retrofit = NetworkHelper.getInstance(token);
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
 
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();

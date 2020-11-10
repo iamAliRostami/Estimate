@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
+
             mapView.setBuiltInZoomControls(true);
             mapView.getZoomController().setVisibility(
                     CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void getXY(String billId) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<Place> call = iAbfaService.getXY(billId);
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
@@ -428,7 +429,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                 getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        Retrofit retrofit = NetworkHelper.getInstance(token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
@@ -451,7 +452,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                     getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
             String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-            Retrofit retrofit = NetworkHelper.getInstance(true, token);
+            Retrofit retrofit = NetworkHelper.getInstance(token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
@@ -466,7 +467,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void attemptLogin() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService abfaService = retrofit.create(IAbfaService.class);
         Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
                 SharedReferenceKeys.USERNAME_TEMP.getValue()),
@@ -476,7 +477,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void uploadImage(Images images) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
         images = loadImage(images);
         if (images != null) {

@@ -239,4 +239,5 @@
     <string name="other_document">مدارک مجاور</string>
     <string name="save">ذخیره</string>
     <string name="locating">در حال جانمایی میسرها...</string>
+    <string name="login_lcoal">ورود به شبکه داخلی</string>
 </resources>
