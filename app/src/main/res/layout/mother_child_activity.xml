@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewTitle"
         android:layout_marginBottom="@dimen/activity_mid_margin"
-        android:background="@drawable/border_gray_1"
+        android:background="@drawable/border_white_1"
         android:fillViewport="true"
         android:padding="@dimen/activity_mid_padding"
         tools:ignore="UnusedAttribute,UselessParent">
@@ -33,8 +33,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_mid_margin"
+            android:background="@drawable/border_gray_2"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -101,13 +102,13 @@
                     tools:ignore="RtlHardcoded" />
 
                 <EditText
+                    android:background="@drawable/border_white_1"
                     android:id="@+id/editTextBillId"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
                     android:gravity="center"
                     android:inputType="number"
                     android:lines="1"
@@ -138,7 +139,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
+                    android:background="@drawable/border_white_1"
                     android:gravity="center"
                     android:inputType="phone"
                     android:lines="1"
@@ -177,7 +178,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
+                    android:background="@drawable/border_white_1"
                     android:gravity="center"
                     android:inputType="text"
                     android:lines="1"
@@ -207,7 +208,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
+                    android:background="@drawable/border_white_1"
                     android:gravity="center"
                     android:inputType="text"
                     android:lines="1"
@@ -246,7 +247,7 @@
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/border_gray_1"
+                    android:background="@drawable/border_white_1"
                     android:gravity="center"
                     android:inputType="numberSigned"
                     android:lines="1"
@@ -277,7 +278,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1.25"
-                    android:background="@drawable/border_gray_1"
+                    android:background="@drawable/border_white_1"
                     android:gravity="right|top"
                     android:inputType="textMultiLine"
                     android:lines="7"
