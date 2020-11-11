@@ -32,7 +32,6 @@
             android:padding="@dimen/activity_mid_padding"
             tools:ignore="UselessParent">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,7 +94,6 @@
                                 android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
-
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -178,7 +176,6 @@
                                 android:text="@string/zero"
                                 tools:ignore="Autofill,LabelFor" />
                         </LinearLayout>
-
 
                         <LinearLayout
                             android:layout_width="0dp"
