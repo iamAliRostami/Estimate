@@ -102,13 +102,13 @@
                     tools:ignore="RtlHardcoded" />
 
                 <EditText
-                    android:background="@drawable/border_white_1"
                     android:id="@+id/editTextBillId"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_mid_margin"
                     android:layout_weight="1"
+                    android:background="@drawable/border_white_1"
                     android:gravity="center"
                     android:inputType="number"
                     android:lines="1"
@@ -219,7 +219,6 @@
                     tools:ignore="Autofill,LabelFor" />
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/linearLayoutNation"
                 android:layout_width="match_parent"
@@ -285,7 +284,6 @@
                     android:padding="@dimen/activity_mid_padding"
                     android:singleLine="true"
                     tools:ignore="Autofill,LabelFor,RtlHardcoded" />
-
             </LinearLayout>
 
             <Button
@@ -303,5 +301,4 @@
                 tools:ignore="RtlHardcoded" />
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>

@@ -78,8 +78,8 @@ public class LoginActivity extends AppCompatActivity {
         setEditTextUsernameOnFocusChangeListener();
         setEditTextPasswordOnFocusChangeListener();
         setImageViewOnClickListener();
-        setButtonOnClickListener();
-        setButtonOnLongClickListener();
+        setButtonLoginOnClickListener();
+        setButtonLocalOnClickListener();
     }
 
     void attemptLogin() {
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void setButtonOnClickListener() {
+    private void setButtonLoginOnClickListener() {
         binding.buttonLogin.setOnClickListener(view -> {
             Log.e("buttonLogin", "click");
             View viewFocus;
@@ -243,8 +243,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void setButtonOnLongClickListener() {
-        binding.buttonLogin.setOnLongClickListener(v -> {
+    private void setButtonLocalOnClickListener() {
+        binding.buttonLoginLocal.setOnClickListener(v -> {
             Log.e("buttonLogin", "Long");
             View viewFocus;
             boolean cancel = false;
@@ -266,7 +266,6 @@ public class LoginActivity extends AppCompatActivity {
                 MyApplication.isLocal = true;
                 attemptLogin();
             }
-            return false;
         });
     }
 
