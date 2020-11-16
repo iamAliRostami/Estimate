@@ -3,6 +3,7 @@ package com.leon.estimate.Utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
@@ -31,6 +32,8 @@ import com.leon.estimate.Tables.MyDatabase;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -227,5 +230,20 @@ public class CustomFile {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
         return bos.toByteArray();
+    }
+
+    public static Images getImage(Images images, Context context) {
+        try {
+            File f = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), context.getString(R.string.camera_folder));
+            f = new File(f, images.getAddress());
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            images.setBitmap(b);
+            return images;
+        } catch (
+                FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -542,7 +542,6 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
-
         @Override
         public void executeIncomplete(Response<Login> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
@@ -574,7 +573,6 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     class GetImageThumbnailListIncomplete implements ICallbackIncomplete<ImageDataThumbnail> {
-
         @Override
         public void executeIncomplete(Response<ImageDataThumbnail> response) {
             if (response.errorBody() != null) {
@@ -608,7 +606,6 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     class GetImageDocIncomplete implements ICallbackIncomplete<ResponseBody> {
-
         @Override
         public void executeIncomplete(Response<ResponseBody> response) {
             if (response.errorBody() != null) {
@@ -656,13 +653,11 @@ public class DocumentFormActivity extends AppCompatActivity {
     }
 
     class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
-
         @Override
         public void executeIncomplete(Response<UploadImage> response) {
             if (response.errorBody() != null) {
                 Log.e("ErrorImageDocIncomplete", response.errorBody().toString());
             }
-            //TODO
             CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
                     String.valueOf(imageDataTitle.getData().get(
                             binding.spinnerTitle.getSelectedItemPosition()).getId()),

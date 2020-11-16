@@ -32,6 +32,7 @@ import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Infrastructure.IAbfaService;
@@ -61,6 +62,7 @@ import com.leon.estimate.Tables.Zarib;
 import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
+import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
 import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
 import com.leon.estimate.Utils.GIS.CustomGeoJSON;
@@ -79,7 +81,9 @@ import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.MapTileIndex;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -210,8 +214,6 @@ public class FormActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         activity = this;
         context = this;
-//        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-//        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         if (getIntent().getExtras() != null) {
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             new SerializeJson().execute(getIntent());
@@ -455,7 +457,7 @@ public class FormActivity extends AppCompatActivity {
         fillCalculationUserInput();
         updateCalculationUserInput();
         updateExamination();
-        updateTejariha();
+        updateOthers();
     }
 
     void fillCalculationUserInput() {
@@ -481,7 +483,7 @@ public class FormActivity extends AppCompatActivity {
         daoExaminerDuties.insert(examinerDuties.updateExaminerDuties(calculationUserInput));
     }
 
-    void updateTejariha() {
+    void updateOthers() {
         DaoTejariha daoTejariha = dataBase.daoTejariha();
         for (int i = 0; i < tejarihas.size(); i++)
             daoTejariha.insertTejariha(tejarihas.get(i));
@@ -529,6 +531,21 @@ public class FormActivity extends AppCompatActivity {
             initialize();
             return;
         }
+
+        if (MyApplication.isLocal) {
+            final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
+                    0, 19, 256, ".png", new String[]{
+                    DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)//"http://192.168.142.206:8080/styles/klokantech-basic/"
+            }) {
+                @Override
+                public String getTileURLString(long aTile) {
+                    return getBaseUrl() + MapTileIndex.getZoom(aTile) + "/" + MapTileIndex.getX(aTile)
+                            + "/" + MapTileIndex.getY(aTile) + mImageFilenameEnding;
+                }
+            };
+            binding.mapView.setTileSource(custom);
+        }
+
         binding.mapView.setBuiltInZoomControls(true);
         binding.mapView.setMultiTouchControls(true);
 
@@ -701,7 +718,7 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void getGis(int i) {
-        Retrofit retrofit = NetworkHelper.getInstance();
+        Retrofit retrofit = NetworkHelper.getInstance("");
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<String> call;
         binding.progressBar.setVisibility(View.VISIBLE);

@@ -35,19 +35,19 @@ public final class NetworkHelper {
     public static OkHttpClient getHttpClient(final String token) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient
+
+        return new OkHttpClient
                 .Builder()
                 .readTimeout(READ_TIMEOUT, TIME_UNIT)
                 .writeTimeout(WRITE_TIMEOUT, TIME_UNIT)
                 .connectTimeout(CONNECT_TIMEOUT, TIME_UNIT)
                 .retryOnConnectionFailure(RETRY_ENABLED)
                 .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("Authorization", "Bearer " + token).build();
+                    Request request = chain.request().newBuilder().addHeader("Authorization",
+                            "Bearer " + token).build();
                     return chain.proceed(request);
                 })
                 .addInterceptor(interceptor).build();
-
-        return client;
     }
 
     public static Retrofit getInstance(String token) {
@@ -59,13 +59,12 @@ public final class NetworkHelper {
         if (MyApplication.isLocal)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(
                     DifferentCompanyManager.getActiveCompanyName());
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(token))
                 .addConverterFactory(GsonConverterFactory.create(gson))
 //                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
-        return retrofit;
     }
 
     public static Retrofit getInstance() {
@@ -77,13 +76,12 @@ public final class NetworkHelper {
         if (MyApplication.isLocal)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(
                     DifferentCompanyManager.getActiveCompanyName());
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(""))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        return retrofit;
     }
 
     public static Retrofit getInstanceWithCache(Context context) {

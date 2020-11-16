@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -71,6 +72,7 @@ import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.CustomProgressBar;
+import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.GPSTracker;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
@@ -84,7 +86,9 @@ import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.MapTileIndex;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
@@ -168,9 +172,9 @@ public class MainActivity extends AppCompatActivity
         activity = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
         checkPermission();
-        Room.databaseBuilder(context, MyDatabase.class,
-                MyApplication.getDBNAME()).fallbackToDestructiveMigration()
-                .addMigrations(MyDatabase.MIGRATION_41_42).build();
+//        Room.databaseBuilder(context, MyDatabase.class,
+//                MyApplication.getDBNAME()).fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_41_42).build();
     }
 
     void checkPermission() {
@@ -216,12 +220,26 @@ public class MainActivity extends AppCompatActivity
         } else {
             mapView = findViewById(R.id.mapView);
 
+            if (MyApplication.isLocal) {
+                final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
+                        0, 19, 256, ".png", new String[]{
+                        DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)//"http://192.168.142.206:8080/styles/klokantech-basic/"
+                }) {
+                    @Override
+                    public String getTileURLString(long aTile) {
+                        return getBaseUrl() + MapTileIndex.getZoom(aTile) + "/" + MapTileIndex.getX(aTile)
+                                + "/" + MapTileIndex.getY(aTile) + mImageFilenameEnding;
+                    }
+                };
+                mapView.setTileSource(custom);
+            }
+
             mapView.setBuiltInZoomControls(true);
             mapView.getZoomController().setVisibility(
                     CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
-            mapController.setZoom(19.5);
+            mapController.setZoom(10);
             gpsTracker = new GPSTracker(activity);
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
