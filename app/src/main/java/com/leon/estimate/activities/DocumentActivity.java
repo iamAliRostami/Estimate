@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -30,7 +29,6 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Images;
@@ -38,17 +36,14 @@ import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivityBinding;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import okhttp3.ResponseBody;
@@ -163,32 +158,6 @@ public class DocumentActivity extends AppCompatActivity {
                 new GetImageDoc(), new GetImageDocIncomplete(), new GetError());
     }
 
-    void loadImage() {
-        DaoImages daoImages = dataBase.daoImages();
-        List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
-        Log.e("size", String.valueOf(imagesList.size()));
-        try {
-            for (int i = 0; i < imagesList.size(); i++) {
-                File f = new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES), "AbfaCamera");
-                f = new File(f, imagesList.get(i).getAddress());
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                imagesList.get(i).setBitmap(b);
-                if (imageDataTitle != null) {
-                    for (int j = 0; j < imageDataTitle.getData().size(); j++) {
-                        if (imagesList.get(i).getDocId().equals(String.valueOf(imageDataTitle.getData().get(j).getId())))
-                            imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
-                    }
-                    images.add(imagesList.get(i));
-                    imageViewAdapter.notifyDataSetChanged();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.e("error", e.toString());
-        }
-    }
-
     public final void askPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
@@ -256,7 +225,8 @@ public class DocumentActivity extends AppCompatActivity {
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
                     arrayListTitle.add(dataTitle.getTitle());
                 }
-                loadImage();
+                images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
+                imageViewAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(DocumentActivity.this,
                         DocumentActivity.this.getString(R.string.error_call_backup),

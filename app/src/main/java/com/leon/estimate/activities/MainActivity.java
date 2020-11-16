@@ -496,7 +496,7 @@ public class MainActivity extends AppCompatActivity
     void uploadImage(Images images) {
         Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService getImage = retrofit.create(IAbfaService.class);
-        images = loadImage(images);
+        images = CustomFile.getImage(images, context);
         if (images != null) {
             MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), context,
                     images.getAddress());

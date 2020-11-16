@@ -25,6 +25,7 @@ import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
@@ -38,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -245,5 +247,34 @@ public class CustomFile {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static ArrayList<Images> loadImage(MyDatabase dataBase, String trackNumber,
+                                              String billId, ImageDataTitle imageDataTitle, Context context) {
+        DaoImages daoImages = dataBase.daoImages();
+        List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
+        Log.e("size", String.valueOf(imagesList.size()));
+        ArrayList<Images> images = new ArrayList<>();
+        for (int i = 0; i < imagesList.size(); i++) {
+            try {
+                File f = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES), context.getString(R.string.camera_folder));
+                f = new File(f, imagesList.get(i).getAddress());
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                imagesList.get(i).setBitmap(b);
+                if (imageDataTitle != null) {
+                    for (int j = 0; j < imageDataTitle.getData().size(); j++) {
+                        if (imagesList.get(i).getDocId().equals(
+                                String.valueOf(imageDataTitle.getData().get(j).getId())))
+                            imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
+                    }
+                    images.add(imagesList.get(i));
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Log.e("error", e.toString());
+            }
+        }
+        return images;
     }
 }

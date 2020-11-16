@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -45,7 +44,6 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Images;
@@ -69,14 +67,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import okhttp3.MultipartBody;
@@ -334,33 +329,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                 new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
     }
 
-    void loadImage() {
-        DaoImages daoImages = dataBase.daoImages();
-        List<Images> imagesList = daoImages.getImagesByTrackingNumberOrBillId(trackNumber, billId);
-        Log.e("size", String.valueOf(imagesList.size()));
-        try {
-            for (int i = 0; i < imagesList.size(); i++) {
-                File f = new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES), "AbfaCamera");
-                f = new File(f, imagesList.get(i).getAddress());
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                imagesList.get(i).setBitmap(b);
-                if (imageDataTitle != null) {
-                    for (int j = 0; j < imageDataTitle.getData().size(); j++) {
-                        if (imagesList.get(i).getDocId().equals(
-                                String.valueOf(imageDataTitle.getData().get(j).getId())))
-                            imagesList.get(i).setDocTitle(imageDataTitle.getData().get(j).getTitle());
-                    }
-                    images.add(imagesList.get(i));
-                    imageViewAdapter.notifyDataSetChanged();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.e("error", e.toString());
-        }
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         int IMAGE_CROP_REQUEST = 1234;
@@ -496,7 +464,8 @@ public class DocumentFormActivity extends AppCompatActivity {
                 };
                 binding.spinnerTitle.setAdapter(arrayAdapter);
                 binding.spinnerTitle.setSelection(selected);
-                loadImage();
+                images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
+                imageViewAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(DocumentFormActivity.this,
                         DocumentFormActivity.this.getString(R.string.error_call_backup),
