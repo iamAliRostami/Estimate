@@ -718,7 +718,7 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void getGis(int i) {
-        Retrofit retrofit = NetworkHelper.getInstance("");
+        Retrofit retrofit = NetworkHelper.getInstance();
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
         Call<String> call;
         binding.progressBar.setVisibility(View.VISIBLE);

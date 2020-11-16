@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-
             if (MyApplication.isLocal) {
                 final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
                         0, 19, 256, ".png", new String[]{

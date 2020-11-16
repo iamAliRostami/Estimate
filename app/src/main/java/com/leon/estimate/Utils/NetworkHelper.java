@@ -63,7 +63,6 @@ public final class NetworkHelper {
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(token))
                 .addConverterFactory(GsonConverterFactory.create(gson))
-//                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
 
@@ -79,8 +78,8 @@ public final class NetworkHelper {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(""))
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
 
