@@ -44,6 +44,7 @@
     <string name="error_short_length">.این فیلد کوتاه است</string>
     <string name="error_similar">شماره پرونده و شماره اشتراک مطابق نیستند.</string>
     <string name="error_upload">در بارگذاری اطلاعات خطایی پدید آمد.</string>
+    <string name="error_add_document">در افزودن ردیف خطایی پدید آمد.</string>
     <string name="error_Socket">خطادر ارتباط با سرور، لطفا تنظیمات شبکه خود را بررسی و مجدد تلاش کنید</string>
     <string name="error_is_not_match">نام کاربری و گذرواژه با یکدیگر مطابقت ندارند</string>
     <string name="error_passwords_is_not_match">گذرواژه و تکرار آن با یکدیکر مطابق نیستند</string>
@@ -238,6 +239,8 @@
     <string name="sanitation_transfer">شبکه انتقال فاضلاب</string>
     <string name="other_document">مدارک مجاور</string>
     <string name="save">ذخیره</string>
-    <string name="locating">در حال جانمایی میسرها...</string>
+    <string name="locating">در حال جانمایی میسرها…</string>
     <string name="login_lcoal">ورود به شبکه داخلی</string>
+    <string name="add_document">افزودن ردیف</string>
+    <string name="add_successful">افزودن ردیف با موفقیت انجام شد.</string>
 </resources>

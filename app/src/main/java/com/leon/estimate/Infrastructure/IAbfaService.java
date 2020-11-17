@@ -1,5 +1,6 @@
 package com.leon.estimate.Infrastructure;
 
+import com.leon.estimate.Tables.AddDocument;
 import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
@@ -180,7 +181,6 @@ public interface IAbfaService {
     );
 
     @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
-//    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
     Call<ImageDataThumbnail> getDocsListThumbnail(
             @Path("token") String token,
             @Path("billIdOrTrackNumber") String billIdOrTrackNumber
@@ -201,7 +201,13 @@ public interface IAbfaService {
             @Part("billId") String billId
     );
 
-    @Multipart
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Add/{token}")
+    Call<UploadImage> addDocument(
+            @Path("token") String token,
+            @Body AddDocument addDocument
+    );
+
+
     @POST("/MoshtarakinApi/SepanoDMS/V1/Upload/{token}")
     Call<UploadImage> uploadDocNew(
             @Path("token") String token,

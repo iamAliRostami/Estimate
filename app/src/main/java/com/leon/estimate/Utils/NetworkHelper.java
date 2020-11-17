@@ -59,11 +59,12 @@ public final class NetworkHelper {
         if (MyApplication.isLocal)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(
                     DifferentCompanyManager.getActiveCompanyName());
-        return new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(token))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+        return retrofit;
     }
 
     public static Retrofit getInstance() {
@@ -75,12 +76,13 @@ public final class NetworkHelper {
         if (MyApplication.isLocal)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(
                     DifferentCompanyManager.getActiveCompanyName());
-        return new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(NetworkHelper.getHttpClient(""))
-                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+        return retrofit;
     }
 
     public static Retrofit getInstanceWithCache(Context context) {

@@ -19,6 +19,8 @@ import android.os.Debug;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -59,6 +61,7 @@ import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentFormActivityBinding;
+import com.leon.estimate.fragments.AddDocumentFragment;
 import com.leon.estimate.fragments.HighQualityFragment;
 import com.sardari.daterangepicker.utils.PersianCalendar;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -660,6 +663,24 @@ public class DocumentFormActivity extends AppCompatActivity {
             Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
             binding.progressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isNew)
+            getMenuInflater().inflate(R.menu.add_document_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.add_document_menu) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            AddDocumentFragment addDocumentFragment = AddDocumentFragment.newInstance();
+            addDocumentFragment.show(fragmentTransaction, "");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
