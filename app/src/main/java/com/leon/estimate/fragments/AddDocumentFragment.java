@@ -100,6 +100,7 @@ public class AddDocumentFragment extends DialogFragment {
         @Override
         public void execute(UploadImage responseBody) {
             if (responseBody.isSuccess()) {
+                Log.e("successful", responseBody.getData());
                 Toast.makeText(getActivity(),
                         getActivity().getString(R.string.add_successful), Toast.LENGTH_LONG).show();
                 dismiss();

@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity
         context = this;
         activity = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
+//        MyApplication.isLocal = true;//TODO
         checkPermission();
 //        Room.databaseBuilder(context, MyDatabase.class,
 //                MyApplication.getDBNAME()).fallbackToDestructiveMigration()

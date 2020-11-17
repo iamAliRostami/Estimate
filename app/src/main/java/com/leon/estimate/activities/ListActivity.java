@@ -49,7 +49,6 @@ public class ListActivity extends AppCompatActivity {
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = ListActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        MyApplication.isLocal = true;//TODO
         initialize();
     }
 
