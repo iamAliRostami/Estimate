@@ -201,13 +201,7 @@ public interface IAbfaService {
             @Part("billId") String billId
     );
 
-    @POST("/MoshtarakinApi/SepanoDMS/V1/Add/{token}")
-    Call<UploadImage> addDocument(
-            @Path("token") String token,
-            @Body AddDocument addDocument
-    );
-
-
+    @Multipart
     @POST("/MoshtarakinApi/SepanoDMS/V1/Upload/{token}")
     Call<UploadImage> uploadDocNew(
             @Path("token") String token,
@@ -215,6 +209,13 @@ public interface IAbfaService {
             @Part("docId") int docId,
             @Part("trackingNumber") String trackingNumber
     );
+
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Add/{token}")
+    Call<AddDocument> addDocument(
+            @Path("token") String token,
+            @Body AddDocument addDocument
+    );
+
 
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(

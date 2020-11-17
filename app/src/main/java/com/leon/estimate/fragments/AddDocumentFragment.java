@@ -20,7 +20,6 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.AddDocument;
-import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
@@ -74,7 +73,7 @@ public class AddDocumentFragment extends DialogFragment {
         binding.buttonSend.setOnClickListener(v -> {
             Retrofit retrofit = NetworkHelper.getInstance("");
             IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
-            Call<UploadImage> call = iAbfaService.addDocument(
+            Call<AddDocument> call = iAbfaService.addDocument(
                     sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue()),
                     new AddDocument(Constants.examinerDuties.getTrackNumber(),
                             Constants.examinerDuties.getFirstName(),
@@ -96,11 +95,10 @@ public class AddDocumentFragment extends DialogFragment {
         super.onResume();
     }
 
-    class addDocument implements ICallback<UploadImage> {
+    class addDocument implements ICallback<AddDocument> {
         @Override
-        public void execute(UploadImage responseBody) {
+        public void execute(AddDocument responseBody) {
             if (responseBody.isSuccess()) {
-                Log.e("successful", responseBody.getData());
                 Toast.makeText(getActivity(),
                         getActivity().getString(R.string.add_successful), Toast.LENGTH_LONG).show();
                 dismiss();
@@ -116,9 +114,9 @@ public class AddDocumentFragment extends DialogFragment {
         }
     }
 
-    class addDocumentIncomplete implements ICallbackIncomplete<UploadImage> {
+    class addDocumentIncomplete implements ICallbackIncomplete<AddDocument> {
         @Override
-        public void executeIncomplete(Response<UploadImage> response) {
+        public void executeIncomplete(Response<AddDocument> response) {
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(getActivity());
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, getActivity(), error,

@@ -5,7 +5,7 @@ import okhttp3.MultipartBody;
 public class UploadImage {
     boolean success;
     String error;
-    String data;
+//    String data;
     String billId;
     String trackingNumber;
     int docId;
@@ -64,13 +64,5 @@ public class UploadImage {
 
     public void setImageFile(MultipartBody.Part imageFile) {
         this.imageFile = imageFile;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
     }
 }
