@@ -83,7 +83,7 @@ import static com.leon.estimate.Utils.Constants.qotrEnsheab;
 
 public class FormFragment extends Fragment {
     private Context context;
-    OthersAdapter othersAdapter;
+    private OthersAdapter othersAdapter;
     private int saier, tejari;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
