@@ -448,7 +448,6 @@ public class FormActivity extends AppCompatActivity {
             initialize();
             return;
         }
-
         if (MyApplication.isLocal) {
             final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
                     0, 19, 256, ".png", new String[]{
@@ -462,11 +461,11 @@ public class FormActivity extends AppCompatActivity {
             };
             binding.mapView.setTileSource(custom);
         }
-        binding.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
-
+        binding.mapView.getZoomController().setVisibility(
+                CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
+        binding.mapView.setMultiTouchControls(true);
         IMapController mapController = binding.mapView.getController();
         mapController.setZoom(19.5);
-
         gpsTracker = new GPSTracker(activity);
         latitude = gpsTracker.getLatitude();
         longitude = gpsTracker.getLongitude();

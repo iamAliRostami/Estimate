@@ -3,7 +3,6 @@ package com.leon.estimate.activities;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
@@ -115,7 +114,7 @@ public class CropActivity extends AppCompatActivity {
         if (Constants.bitmapSelectedImage != null) {
             initializeElement();
         } else {
-            Toast.makeText(this, Constants.imageError, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_no_image_selected), Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -162,16 +161,6 @@ public class CropActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
     private void initializeElement() {
         nativeClass = new NativeClass();
-        if (binding.progressBar.getIndeterminateDrawable() != null &&
-                Constants.progressColor != null)
-            binding.progressBar.getIndeterminateDrawable().setColorFilter(
-                    Color.parseColor(Constants.progressColor),
-                    android.graphics.PorterDuff.Mode.MULTIPLY);
-        else if (binding.progressBar.getProgressDrawable() != null &&
-                Constants.progressColor != null)
-            binding.progressBar.getProgressDrawable().setColorFilter(
-                    Color.parseColor(Constants.progressColor),
-                    android.graphics.PorterDuff.Mode.MULTIPLY);
         setProgressBar(true);
         Observable.fromCallable(() -> {
             setImageRotation();
@@ -254,7 +243,7 @@ public class CropActivity extends AppCompatActivity {
             float y4 = (Objects.requireNonNull(points.get(3)).y) * yRatio;
             return nativeClass.getScannedBitmap(bitmapSelectedImage, x1, y1, x2, y2, x3, y3, x4, y4);
         } catch (Exception e) {
-            runOnUiThread(() -> Toast.makeText(CropActivity.this, Constants.cropError,
+            runOnUiThread(() -> Toast.makeText(CropActivity.this, getString(R.string.error_incorrect_selection),
                     Toast.LENGTH_SHORT).show());
             return null;
         }
@@ -267,7 +256,7 @@ public class CropActivity extends AppCompatActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
     }
 
-    private Map<Integer, PointF> getEdgePoints(Bitmap tempBitmap) throws Exception {
+    private Map<Integer, PointF> getEdgePoints(Bitmap tempBitmap) {
         List<PointF> pointFs = getContourEdgePoints(tempBitmap);
         return orderedValidEdgePoints(tempBitmap, pointFs);
     }

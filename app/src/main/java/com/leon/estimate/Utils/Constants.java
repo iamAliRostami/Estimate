@@ -27,12 +27,8 @@ public class Constants {
     public static Bitmap bitmapMapImage;
     public static ArrayList<Tejariha> others;
     public static String fileName;
-    public static String imageError = "هیچ تصویری انتخاب نشده است ، لطفاً دوباره امتحان کنید.";
-    public static String cropError = "شما یک فیلد معتبر انتخاب نکرده اید. لطفاً تا زمانی که خطوط به رنگ آبی نباشد ، تصحیح کنید.";
-    public static String progressColor = "#331199";
     public static String karbari, noeVagozari, qotrEnsheab;
 
-    public static int value;
     public static ArrayList<Integer> valueInteger;
     public static String imageFileName;
     public static final int REQUEST_LOCATION_CODE = 1236;

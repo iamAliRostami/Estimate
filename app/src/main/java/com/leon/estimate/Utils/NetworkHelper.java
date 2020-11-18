@@ -56,7 +56,7 @@ public final class NetworkHelper {
                 .create();
         String baseUrl = DifferentCompanyManager.getBaseUrl(
                 DifferentCompanyManager.getActiveCompanyName());
-        if (MyApplication.isLocal)
+        if (!MyApplication.isLocal)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(
                     DifferentCompanyManager.getActiveCompanyName());
         Retrofit retrofit = new Retrofit.Builder()
@@ -73,7 +73,7 @@ public final class NetworkHelper {
                 .create();
         String baseUrl = DifferentCompanyManager.getBaseUrl(
                 DifferentCompanyManager.getActiveCompanyName());
-        if (MyApplication.isLocal)
+        if (!MyApplication.isLocal)
             baseUrl = DifferentCompanyManager.getLocalBaseUrl(
                     DifferentCompanyManager.getActiveCompanyName());
         Retrofit retrofit = new Retrofit.Builder()

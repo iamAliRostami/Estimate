@@ -68,6 +68,8 @@
 
     <string name="error_preparing">مشکلی در فرآیند آماده سازی روی داده است</string>
     <string name="error_android_version">نسخه اندروید شما این ویژگی را پشتیبانی نمی کند</string>
+    <string name="error_no_image_selected">هیچ تصویری انتخاب نشده است ، لطفاً دوباره امتحان کنید.</string>
+    <string name="error_incorrect_selection">شما یک فیلد معتبر انتخاب نکرده اید. لطفاً تا زمانی که خطوط به رنگ آبی نباشد ، تصحیح کنید.</string>
 
     <string name="save_format_name">yyyyMMdd_HHmmss</string>
     <string name="camera_folder">/AbfaCamera/</string>

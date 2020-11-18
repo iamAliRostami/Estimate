@@ -7,14 +7,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -99,9 +96,6 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -171,7 +165,6 @@ public class MainActivity extends AppCompatActivity
         context = this;
         activity = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
-//        MyApplication.isLocal = true;//TODO
         checkPermission();
 //        Room.databaseBuilder(context, MyDatabase.class,
 //                MyApplication.getDBNAME()).fallbackToDestructiveMigration()
@@ -233,13 +226,11 @@ public class MainActivity extends AppCompatActivity
                 };
                 mapView.setTileSource(custom);
             }
-
-            mapView.setBuiltInZoomControls(true);
             mapView.getZoomController().setVisibility(
                     CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
-            mapController.setZoom(10);
+            mapController.setZoom(10.5);
             gpsTracker = new GPSTracker(activity);
             latitude = gpsTracker.getLatitude();
             longitude = gpsTracker.getLongitude();
@@ -513,21 +504,6 @@ public class MainActivity extends AppCompatActivity
             imageId = images.getImageId();
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
                     new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
-        }
-    }
-
-    Images loadImage(Images images) {
-        try {
-            File f = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), context.getString(R.string.camera_folder));
-            f = new File(f, images.getAddress());
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            images.setBitmap(b);
-            return images;
-        } catch (
-                FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
