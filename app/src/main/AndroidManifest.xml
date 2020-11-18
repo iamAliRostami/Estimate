@@ -64,18 +64,16 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activities.BrightnessContrastActivity" />
         <activity android:name=".activities.CropActivity" />
-        <activity android:name=".activities.ListActivity">
+        <activity android:name=".activities.ListActivity" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity">
-
         </activity>
         <activity
             android:name=".activities.MainActivity"
