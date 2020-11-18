@@ -42,9 +42,9 @@ public class MyPagerFormAdapter extends FragmentPagerAdapter {
             case 1: // Fragment # 0 - This will show FirstFragment different title
                 return FormFragment.newInstance(examinerDuties);
             case 2: // Fragment # 1 - This will show SecondFragment
-                return PersonalFragment.newInstance(examinerDuties, "Page # 3");
+                return PersonalFragment.newInstance(examinerDuties);
             case 3: // Fragment # 1 - This will show SecondFragment
-                return MapFragment.newInstance(examinerDuties, "Page # 4");
+                return MapFragment.newInstance(examinerDuties);
             default:
                 return null;
         }

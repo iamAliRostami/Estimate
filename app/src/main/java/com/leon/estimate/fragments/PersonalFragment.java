@@ -25,19 +25,17 @@ import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 
 public class PersonalFragment extends Fragment {
-    private static final String ARG_PARAM2 = "param2";
     PersonalFragmentBinding binding;
 
     public PersonalFragment() {
     }
 
-    public static PersonalFragment newInstance(ExaminerDuties examinerDuties, String param2) {
+    public static PersonalFragment newInstance(ExaminerDuties examinerDuties) {
         PersonalFragment fragment = new PersonalFragment();
         Bundle args = new Bundle();
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
         args.putString(BundleEnum.REQUEST.getValue(), json);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }

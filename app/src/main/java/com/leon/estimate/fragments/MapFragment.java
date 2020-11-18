@@ -65,27 +65,27 @@ import static android.content.Context.LOCATION_SERVICE;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 public class MapFragment extends Fragment implements LocationListener {
-    private static final String ARG_PARAM2 = "param2";
     String token, billId;
     CoordinateConversion conversion;
     private LocationManager locationManager;
     private double latitude, longitude;
     double[] latLong;
     private final ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
-    private int polygonIndex, place1Index, place2Index, place3Index;
+    private int polygonIndex;
+    private int place1Index;
+    private int place2Index;
     MapFragmentBinding binding;
     private Context context;
 
     public MapFragment() {
     }
 
-    public static MapFragment newInstance(ExaminerDuties examinerDuties, String param2) {
+    public static MapFragment newInstance(ExaminerDuties examinerDuties) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
         args.putString(BundleEnum.REQUEST.getValue(), json);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,9 +94,8 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
+        ((FormActivity) getActivity()).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
-//        OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
     }
 
@@ -115,7 +114,7 @@ public class MapFragment extends Fragment implements LocationListener {
             place1Index = 0;
             place2Index = 0;
             polygonIndex = 0;
-            polygonPoint.removeAll(polygonPoint);
+            polygonPoint.clear();
             initializeMap();
         });
     }
@@ -128,13 +127,6 @@ public class MapFragment extends Fragment implements LocationListener {
     @SuppressLint("MissingPermission")
     private void initializeMap() {
         binding.mapView.setBuiltInZoomControls(true);
-        /*OnlineTileSourceBase tileSource = new XYTileSource("MyOSM", null, 1, 19, 256, ".png",
-        new String[]{"http://tactile.myserver.com/osm_tiles"});
-TileSourceFactory.addTileSource(tileSource);
-mapView.setTileSource("MyOSM");
-        mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-*/
-
         binding.mapView.setMultiTouchControls(true);
         IMapController mapController = binding.mapView.getController();
         mapController.setZoom(19.5);
@@ -344,9 +336,9 @@ mapView.setTileSource("MyOSM");
             token = gisToken.getToken();
             if (latLong != null) {
                 getGis(0);
-//            getGis(1);
-//            getGis(2);
-//            getGis(3);
+                getGis(1);
+                getGis(2);
+                getGis(3);
             }
         }
     }

@@ -19,25 +19,19 @@ import com.leon.estimate.databinding.SecondFormFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 import static com.leon.estimate.Utils.Constants.secondForm;
 
 public class SecondFormFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     SecondFormFragmentBinding binding;
     Context context;
 
     public SecondFormFragment() {
     }
 
-    public static SecondFormFragment newInstance(String param1, String param2) {
+    public static SecondFormFragment newInstance() {
         SecondFormFragment fragment = new SecondFormFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,7 +39,7 @@ public class SecondFormFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         context = getActivity();
-        ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
+        ((FormActivity) getActivity()).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ")
                         .concat("صفحه چهارم"));
         super.onCreate(savedInstanceState);
@@ -95,16 +89,11 @@ public class SecondFormFragment extends Fragment {
         else if (examinerDuties.getNoeMasrafI() == 3)
             binding.radioButtonMedical.setChecked(true);
         binding.checkBoxEtesalZirzamin.setChecked(secondForm.isEtesalZirzamin());
-        binding.checkBoxChahAbBaran.setChecked(secondForm.isChahAbBaran());//TODO
+        binding.checkBoxChahAbBaran.setChecked(secondForm.isChahAbBaran());
 
         binding.editTextDescriptionChahAbBaran.setText(secondForm.getChahDescription());
         binding.editTextNoeMasrafDescription.setText(secondForm.getMasrafDescription());
         binding.editTextEshterak.setText(secondForm.getEshterak().trim());
-//        if (examinerDuties.isNewEnsheab()) {
-//            binding.editTextEshterak.setEnabled(true);
-//        } else {
-//            binding.editTextEshterak.setEnabled(false);
-//        }
     }
 
     ArrayAdapter<String> createArrayAdapter(String[] arraySpinner) {
@@ -187,15 +176,15 @@ public class SecondFormFragment extends Fragment {
                 Integer.parseInt(binding.editTextOtherFazelab.getText().toString()),
                 loole,
                 jenseLoole,
-                noeMasraf/*TODO*/,
-                radioButtonMasraf.getText().toString()/*TODO*/,
-                pomp/*TODO*/,
+                noeMasraf,
+                radioButtonMasraf.getText().toString(),
+                pomp,
                 Integer.parseInt(binding.editTextOmqZirzamin.getText().toString()),
                 binding.checkBoxEtesalZirzamin.isChecked(),
                 Integer.parseInt(binding.editTextOmqFazelab.getText().toString()),
-                binding.checkBoxChahAbBaran.isChecked()/*TODO*/,
+                binding.checkBoxChahAbBaran.isChecked(),
                 binding.checkBoxVahedAb.isChecked(),
-                binding.checkBoxVahedFazelab.isChecked(),//TODO
+                binding.checkBoxVahedFazelab.isChecked(),
                 binding.spinnerLoole.getSelectedItemPosition(),
                 binding.spinnerLooleJens.getSelectedItemPosition(),
                 binding.checkBoxLooleAb.isChecked(),

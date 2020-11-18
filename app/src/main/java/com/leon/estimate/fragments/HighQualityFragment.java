@@ -22,7 +22,6 @@ import java.util.Objects;
 public class HighQualityFragment extends DialogFragment {
     HighQualityFragmentBinding binding;
     private Bitmap bitmap;
-    private String title;
 
     public HighQualityFragment() {
     }
@@ -46,7 +45,7 @@ public class HighQualityFragment extends DialogFragment {
             if (bytes != null) {
                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             }
-            title = getArguments().getString(BundleEnum.TITLE.getValue());
+            String title = getArguments().getString(BundleEnum.TITLE.getValue());
             if (title != null) {
                 Log.e("title", title);
             }
@@ -56,7 +55,6 @@ public class HighQualityFragment extends DialogFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = HighQualityFragmentBinding.inflate(inflater, container, false);
         initialize();
         return binding.getRoot();
