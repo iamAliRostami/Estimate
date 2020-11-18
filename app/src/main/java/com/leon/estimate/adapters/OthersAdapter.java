@@ -17,13 +17,13 @@ import com.leon.estimate.Tables.DaoTejariha;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Tejariha;
 
-import static com.leon.estimate.Utils.Constants.tejarihas;
+import static com.leon.estimate.Utils.Constants.others;
 
-public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHolder> {
+public class OthersAdapter extends RecyclerView.Adapter<OthersAdapter.ViewHolder> {
     private Context context;
     private final MyDatabase dataBase;
 
-    public TejarihaAdapter(Context context) {
+    public OthersAdapter(Context context) {
         this.context = context;
         dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                 .allowMainThreadQueries().build();
@@ -31,16 +31,16 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
 
     @NonNull
     @Override
-    public TejarihaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OthersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.item_tejari, parent, false);
-        TejarihaAdapter.ViewHolder holder = new TejarihaAdapter.ViewHolder(view);
+        OthersAdapter.ViewHolder holder = new OthersAdapter.ViewHolder(view);
         holder.imageViewMinus.setOnClickListener(v -> {
-            Tejariha tejariha = tejarihas.get(viewType);
+            Tejariha tejariha = others.get(viewType);
             DaoTejariha daoTejariha = dataBase.daoTejariha();
             daoTejariha.delete(tejariha.id);
-            tejarihas.remove(viewType);
+            others.remove(viewType);
             notifyDataSetChanged();
 
         });
@@ -48,8 +48,8 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TejarihaAdapter.ViewHolder holder, int position) {
-        Tejariha tejariha = tejarihas.get(position);
+    public void onBindViewHolder(@NonNull OthersAdapter.ViewHolder holder, int position) {
+        Tejariha tejariha = others.get(position);
         holder.textViewKarbari.setText(tejariha.karbari);
         holder.textViewA2.setText(String.valueOf(tejariha.a));
         holder.textViewNoeShoql.setText(String.valueOf(tejariha.noeShoql));
@@ -59,7 +59,7 @@ public class TejarihaAdapter extends RecyclerView.Adapter<TejarihaAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return tejarihas.size();
+        return others.size();
     }
 
     @Override

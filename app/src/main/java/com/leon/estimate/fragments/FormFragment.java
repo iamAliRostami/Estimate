@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +59,7 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.activities.FormActivity;
-import com.leon.estimate.adapters.TejarihaAdapter;
+import com.leon.estimate.adapters.OthersAdapter;
 import com.leon.estimate.databinding.FormFragmentBinding;
 import com.sardari.daterangepicker.customviews.DateRangeCalendarView;
 import com.sardari.daterangepicker.dialog.DatePickerDialog;
@@ -79,32 +78,29 @@ import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 import static com.leon.estimate.Utils.Constants.karbari;
 import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.others;
 import static com.leon.estimate.Utils.Constants.qotrEnsheab;
-import static com.leon.estimate.Utils.Constants.tejarihas;
 
 public class FormFragment extends Fragment {
-    private static final String ARG_PARAM2 = "param2";
     private Context context;
-    int saier;
-    int tejari;
-    FormFragmentBinding binding;
+    OthersAdapter othersAdapter;
+    private int saier, tejari;
     private MyDatabase dataBase;
     private List<KarbariDictionary> karbariDictionaries;
     private List<QotrEnsheabDictionary> qotrEnsheabDictionaries;
     private List<NoeVagozariDictionary> noeVagozariDictionaries;
     private List<TaxfifDictionary> taxfifDictionaries;
-    TejarihaAdapter tejarihaAdapter;
+    private FormFragmentBinding binding;
 
     public FormFragment() {
     }
 
-    public static FormFragment newInstance(ExaminerDuties examinerDuties, String param2) {
+    public static FormFragment newInstance(ExaminerDuties examinerDuties) {
         FormFragment fragment = new FormFragment();
         Bundle args = new Bundle();
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
         args.putString(BundleEnum.REQUEST.getValue(), json);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -113,7 +109,7 @@ public class FormFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
+        ((FormActivity) getActivity()).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat("صفحه سوم"));
     }
 
@@ -132,8 +128,8 @@ public class FormFragment extends Fragment {
         setOnEditTextTedadSaierTextChangeListener();
         setOnTextViewArezeshdaraeiClickListener();
         setOnImageViewPlusClickListener();
-        tejarihaAdapter = new TejarihaAdapter(context);
-        binding.recyclerViewTejariha.setAdapter(tejarihaAdapter);
+        othersAdapter = new OthersAdapter(context);
+        binding.recyclerViewTejariha.setAdapter(othersAdapter);
         binding.recyclerViewTejariha.setLayoutManager(new LinearLayoutManager(getActivity()) {
             @Override
             public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
@@ -146,18 +142,19 @@ public class FormFragment extends Fragment {
 
     void setOnImageViewPlusClickListener() {
         binding.imageViewPlus.setOnClickListener(v -> {
-            //todo check empty
             if (checkIsNoEmpty(binding.editTextVahed) && checkIsNoEmpty(binding.editTextNoeShoql)
-                    && checkIsNoEmpty(binding.editTextVahedMohasebe) && checkIsNoEmpty(binding.editTextA2)) {
-                String karbari = karbariDictionaries.get(binding.spinner5.getSelectedItemPosition()).getTitle();
+                    && checkIsNoEmpty(binding.editTextVahedMohasebe)
+                    && checkIsNoEmpty(binding.editTextA2)) {
+                String karbari = karbariDictionaries.get(
+                        binding.spinner5.getSelectedItemPosition()).getTitle();
                 String noeShoql = binding.editTextNoeShoql.getText().toString();
                 int tedadVahed = Integer.parseInt(binding.editTextVahed.getText().toString());
                 String vahedMohasebe = binding.editTextVahedMohasebe.getText().toString();
                 String a = binding.editTextA2.getText().toString();
                 Tejariha tejariha = new Tejariha(karbari, noeShoql, tedadVahed, vahedMohasebe, a,
                         examinerDuties.getTrackNumber());
-                tejarihas.add(tejariha);
-                tejarihaAdapter.notifyDataSetChanged();
+                others.add(tejariha);
+                othersAdapter.notifyDataSetChanged();
                 binding.editTextA2.setText("");
                 binding.editTextNoeShoql.setText("");
                 binding.editTextVahed.setText("");
@@ -182,7 +179,7 @@ public class FormFragment extends Fragment {
                     && arzeshdaraei.formulas.size() > 0
                     && arzeshdaraei.zaribs != null
                     && arzeshdaraei.zaribs.size() > 0) {
-                FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 if (fragmentManager != null) {
                     fragmentTransaction = fragmentManager.beginTransaction();
@@ -197,10 +194,8 @@ public class FormFragment extends Fragment {
 
     void setOnEditTextTedadSaierTextChangeListener() {
         binding.editTextTedadSaier.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -226,7 +221,6 @@ public class FormFragment extends Fragment {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -265,30 +259,48 @@ public class FormFragment extends Fragment {
 
     private CalculationUserInput prepareField() {
         CalculationUserInput calculationUserInput = new CalculationUserInput();
-        calculationUserInput.sifoon100 = Integer.parseInt(binding.editTextSifoon100.getText().toString());
-        calculationUserInput.sifoon125 = Integer.parseInt(binding.editTextSifoon125.getText().toString());
-        calculationUserInput.sifoon150 = Integer.parseInt(binding.editTextSifoon150.getText().toString());
-        calculationUserInput.sifoon200 = Integer.parseInt(binding.editTextSifoon200.getText().toString());
+        calculationUserInput.sifoon100 =
+                Integer.parseInt(binding.editTextSifoon100.getText().toString());
+        calculationUserInput.sifoon125 =
+                Integer.parseInt(binding.editTextSifoon125.getText().toString());
+        calculationUserInput.sifoon150 =
+                Integer.parseInt(binding.editTextSifoon150.getText().toString());
+        calculationUserInput.sifoon200 =
+                Integer.parseInt(binding.editTextSifoon200.getText().toString());
         calculationUserInput.arse = Integer.parseInt(binding.editTextArese.getText().toString());
-        calculationUserInput.aianMaskooni = Integer.parseInt(binding.editTextAianMaskooni.getText().toString());
-        calculationUserInput.aianTejari = Integer.parseInt(binding.editTextAianNonMaskooni.getText().toString());
+        calculationUserInput.aianMaskooni =
+                Integer.parseInt(binding.editTextAianMaskooni.getText().toString());
+        calculationUserInput.aianTejari =
+                Integer.parseInt(binding.editTextAianNonMaskooni.getText().toString());
         calculationUserInput.aianKol = Integer.parseInt(binding.editTextAianKol.getText().toString());
-        calculationUserInput.tedadMaskooni = Integer.parseInt(binding.editTextTedadMaskooni.getText().toString());
-        calculationUserInput.tedadTejari = Integer.parseInt(binding.editTextTedadTejari.getText().toString());
-        calculationUserInput.tedadSaier = Integer.parseInt(binding.editTextTedadSaier.getText().toString());
-        calculationUserInput.tedadTaxfif = Integer.parseInt(binding.editTextTedadTakhfif.getText().toString());
-        calculationUserInput.zarfiatQarardadi = Integer.parseInt(binding.editTextZarfiatQaradadi.getText().toString());
-        calculationUserInput.arzeshMelk = Integer.parseInt(binding.textViewArzeshMelk.getText().toString());
+        calculationUserInput.tedadMaskooni =
+                Integer.parseInt(binding.editTextTedadMaskooni.getText().toString());
+        calculationUserInput.tedadTejari =
+                Integer.parseInt(binding.editTextTedadTejari.getText().toString());
+        calculationUserInput.tedadSaier =
+                Integer.parseInt(binding.editTextTedadSaier.getText().toString());
+        calculationUserInput.tedadTaxfif =
+                Integer.parseInt(binding.editTextTedadTakhfif.getText().toString());
+        calculationUserInput.zarfiatQarardadi =
+                Integer.parseInt(binding.editTextZarfiatQaradadi.getText().toString());
+        calculationUserInput.arzeshMelk =
+                Integer.parseInt(binding.textViewArzeshMelk.getText().toString());
         calculationUserInput.parNumber = binding.editTextPariNumber.getText().toString();
-        calculationUserInput.karbariId = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
-        calculationUserInput.noeVagozariId = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
-        calculationUserInput.qotrEnsheabId = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
-        calculationUserInput.taxfifId = taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
+        calculationUserInput.karbariId =
+                karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getId();
+        calculationUserInput.noeVagozariId =
+                noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getId();
+        calculationUserInput.qotrEnsheabId =
+                qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getId();
+        calculationUserInput.taxfifId =
+                taxfifDictionaries.get(binding.spinner4.getSelectedItemPosition()).getId();
         calculationUserInput.ensheabQeireDaem = binding.checkbox1.isChecked();
 
         karbari = karbariDictionaries.get(binding.spinner1.getSelectedItemPosition()).getTitle();
-        noeVagozari = noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
-        qotrEnsheab = qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getTitle();
+        noeVagozari =
+                noeVagozariDictionaries.get(binding.spinner2.getSelectedItemPosition()).getTitle();
+        qotrEnsheab =
+                qotrEnsheabDictionaries.get(binding.spinner3.getSelectedItemPosition()).getTitle();
         examinerDuties.setEstelamShahrdari(binding.checkbox3.isChecked());
         examinerDuties.setParvane(binding.checkbox4.isChecked());
         examinerDuties.setMotaqazi(binding.checkbox2.isChecked());
@@ -361,7 +373,6 @@ public class FormFragment extends Fragment {
         }
         binding.spinner1.setAdapter(createArrayAdapter(arrayListSpinner));
         binding.spinner5.setAdapter(createArrayAdapter(arrayListSpinner));
-//        binding.spinner1.setSelection(FormActivity1.examinerDuties.getKarbariId());
         binding.spinner1.setSelection(selected);
     }
 
@@ -378,7 +389,6 @@ public class FormFragment extends Fragment {
             counter = counter + 1;
         }
         binding.spinner4.setAdapter(createArrayAdapter(arrayListSpinner));
-//        binding.spinner4.setSelection(FormActivity1.examinerDuties.getTaxfifId());
         binding.spinner4.setSelection(selected);
     }
 
@@ -386,13 +396,8 @@ public class FormFragment extends Fragment {
         DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
         noeVagozariDictionaries = daoNoeVagozariDictionary.getNoeVagozariDictionaries();
         List<String> arrayListSpinner = new ArrayList<>();
-        int select = 0, counter = 0;
         for (NoeVagozariDictionary noeVagozariDictionary : noeVagozariDictionaries) {
             arrayListSpinner.add(noeVagozariDictionary.getTitle());
-            if (noeVagozariDictionary.isSelected()) {
-                select = counter;
-            }
-            counter++;
         }
         binding.spinner2.setAdapter(createArrayAdapter(arrayListSpinner));
         binding.spinner2.setSelection(examinerDuties.noeVagozariId);
@@ -411,7 +416,6 @@ public class FormFragment extends Fragment {
             counter = counter + 1;
         }
         binding.spinner3.setAdapter(createArrayAdapter(arrayListSpinner));
-//        binding.spinner3.setSelection(FormActivity1.examinerDuties.getQotrEnsheabId());
         binding.spinner3.setSelection(selected);
     }
 
@@ -491,7 +495,6 @@ public class FormFragment extends Fragment {
         Retrofit retrofit = NetworkHelper.getInstance(
                 sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
         final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
-        Log.e("zone", examinerDuties.getZoneId());
         Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(
                 examinerDuties.getZoneId()));
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
@@ -514,7 +517,7 @@ public class FormFragment extends Fragment {
                     daoBlock.insertBlock(arzeshdaraei.blocks.get(i));
                 for (int i = 0; i < arzeshdaraei.zaribs.size(); i++)
                     daoZarib.insertZarib(arzeshdaraei.zaribs.get(i));
-                FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 if (fragmentManager != null) {
                     fragmentTransaction = fragmentManager.beginTransaction();

@@ -13,6 +13,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 @Entity(tableName = "CalculationUserInput", indices = @Index(value = {"trackNumber"}, unique = true))
 
 public class CalculationUserInput {
@@ -74,8 +78,6 @@ public class CalculationUserInput {
     public int arzeshMelk;
     public int karbariId;
 
-//TODO نقشه، امکان منفی، A
-
     public CalculationUserInput() {
     }
 
@@ -91,5 +93,57 @@ public class CalculationUserInput {
         Type userListType = new TypeToken<ArrayList<RequestDictionary>>() {
         }.getType();
         return gson.fromJson(json, userListType);
+    }
+
+    public void prepareCalculationFromPersonal() {
+        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
+        calculationUserInput.firstName = calculationUserInputTemp.firstName;
+        calculationUserInput.sureName = calculationUserInputTemp.sureName;
+        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
+        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
+        calculationUserInput.radif = calculationUserInputTemp.radif;
+        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
+        calculationUserInput.mobile = calculationUserInputTemp.mobile;
+        calculationUserInput.address = calculationUserInputTemp.address;
+        calculationUserInput.description = calculationUserInputTemp.description;
+        calculationUserInput.shenasname = calculationUserInputTemp.shenasname;
+        calculationUserInput.zoneId = Integer.parseInt(examinerDuties.getZoneId());
+    }
+
+    public void fillCalculationUserInput() {
+        calculationUserInput.trackingId = examinerDuties.getTrackingId();
+        calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
+        calculationUserInput.parNumber = examinerDuties.getParNumber();
+        calculationUserInput.billId = examinerDuties.getBillId();
+        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
+        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
+        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
+        calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
+        calculationUserInput.sent = false;
+    }
+
+    public void prepareCalculationUserInputFromForm() {
+        calculationUserInput.sifoon100 = calculationUserInputTemp.sifoon100;
+        calculationUserInput.sifoon125 = calculationUserInputTemp.sifoon125;
+        calculationUserInput.sifoon150 = calculationUserInputTemp.sifoon150;
+        calculationUserInput.sifoon200 = calculationUserInputTemp.sifoon200;
+        calculationUserInput.arse = calculationUserInputTemp.arse;
+        calculationUserInput.aianKol = calculationUserInputTemp.aianKol;
+        calculationUserInput.aianMaskooni = calculationUserInputTemp.aianMaskooni;
+        calculationUserInput.aianTejari = calculationUserInputTemp.aianTejari;
+        calculationUserInput.tedadMaskooni = calculationUserInputTemp.tedadMaskooni;
+        calculationUserInput.tedadTejari = calculationUserInputTemp.tedadTejari;
+        calculationUserInput.tedadSaier = calculationUserInputTemp.tedadSaier;
+        calculationUserInput.arzeshMelk = calculationUserInputTemp.arzeshMelk;
+        calculationUserInput.tedadTaxfif = calculationUserInputTemp.tedadTaxfif;
+        calculationUserInput.zarfiatQarardadi = calculationUserInputTemp.zarfiatQarardadi;
+        calculationUserInput.parNumber = calculationUserInputTemp.parNumber;
+        calculationUserInput.karbariId = calculationUserInputTemp.karbariId;
+        calculationUserInput.noeVagozariId = calculationUserInputTemp.noeVagozariId;
+        calculationUserInput.qotrEnsheabId = calculationUserInputTemp.qotrEnsheabId;
+        calculationUserInput.taxfifId = calculationUserInputTemp.taxfifId;
+        calculationUserInput.adamTaxfifAb = calculationUserInputTemp.adamTaxfifAb;
+        calculationUserInput.adamTaxfifFazelab = calculationUserInputTemp.adamTaxfifFazelab;
+        calculationUserInput.ensheabQeireDaem = calculationUserInputTemp.ensheabQeireDaem;
     }
 }

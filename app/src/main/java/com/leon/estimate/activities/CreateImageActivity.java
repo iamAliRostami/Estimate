@@ -72,9 +72,9 @@ import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
 import static com.leon.estimate.Utils.Constants.karbari;
 import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.others;
 import static com.leon.estimate.Utils.Constants.qotrEnsheab;
 import static com.leon.estimate.Utils.Constants.secondForm;
-import static com.leon.estimate.Utils.Constants.tejarihas;
 
 public class CreateImageActivity extends AppCompatActivity {
     Context context;
@@ -349,8 +349,8 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(String.valueOf(examinerDuties.getTedadSaier()), xCoordinate, yCoordinate, tPaint);
 
         if (examinerDuties.getTedadTejari() > 0 || examinerDuties.getTedadSaier() > 0)
-            for (int i = 0; i < tejarihas.size(); i++) {
-                Tejariha tejariha = tejarihas.get(i);
+            for (int i = 0; i < others.size(); i++) {
+                Tejariha tejariha = others.get(i);
                 yCoordinate = (float) src.getHeight() * (49 + i * 3) / 144;
                 xCoordinate = (float) src.getWidth() * 104 / 144;
                 cs.drawText(tejariha.karbari, xCoordinate, yCoordinate, tPaint);

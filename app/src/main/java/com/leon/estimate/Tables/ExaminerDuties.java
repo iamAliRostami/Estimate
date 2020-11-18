@@ -7,6 +7,10 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 @Entity(tableName = "ExaminerDuties", indices = @Index(value = {"trackNumber", "id"}, unique = true))
 public class ExaminerDuties {
     @PrimaryKey(autoGenerate = true)
@@ -177,6 +181,44 @@ public class ExaminerDuties {
         requestDictionaryString = calculationUserInput.selectedServicesString;
         shenasname = calculationUserInput.shenasname;
         return this;
+    }
+
+    public void prepareExaminerDutiesFromForm() {
+        examinerDuties.setSifoon100(calculationUserInputTemp.sifoon100);
+        examinerDuties.setSifoon125(calculationUserInputTemp.sifoon125);
+        examinerDuties.setSifoon150(calculationUserInputTemp.sifoon150);
+        examinerDuties.setSifoon200(calculationUserInputTemp.sifoon200);
+        examinerDuties.setArse(calculationUserInputTemp.arse);
+        examinerDuties.setAianMaskooni(calculationUserInputTemp.aianMaskooni);
+        examinerDuties.setAianNonMaskooni(calculationUserInputTemp.aianTejari);
+        examinerDuties.setAianKol(calculationUserInputTemp.aianKol);
+        examinerDuties.setTedadMaskooni(calculationUserInputTemp.tedadMaskooni);
+        examinerDuties.setTedadTejari(calculationUserInputTemp.tedadTejari);
+        examinerDuties.setTedadSaier(calculationUserInputTemp.tedadSaier);
+        examinerDuties.setTedadTaxfif(calculationUserInputTemp.tedadTaxfif);
+        examinerDuties.setZarfiatQarardadi(calculationUserInputTemp.zarfiatQarardadi);
+        examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
+        examinerDuties.setParNumber(calculationUserInputTemp.parNumber);
+        examinerDuties.setKarbariId(calculationUserInputTemp.karbariId);
+        examinerDuties.setQotrEnsheabId(calculationUserInputTemp.qotrEnsheabId);
+        examinerDuties.setTaxfifId(calculationUserInputTemp.taxfifId);
+        examinerDuties.setEnsheabQeirDaem(calculationUserInputTemp.ensheabQeireDaem);
+        examinerDuties.setNoeVagozariId(calculationUserInputTemp.noeVagozariId);
+    }
+
+    public void prepareExaminerDutiesFromPersonal() {
+        examinerDuties.setNationalId(calculationUserInputTemp.nationalId);
+        examinerDuties.setFirstName(calculationUserInputTemp.firstName);
+        examinerDuties.setSureName(calculationUserInputTemp.sureName);
+        examinerDuties.setNameAndFamily(calculationUserInputTemp.firstName.concat(" ")
+                .concat(calculationUserInputTemp.sureName));
+        examinerDuties.setFatherName(calculationUserInputTemp.fatherName);
+        examinerDuties.setPostalCode(calculationUserInput.postalCode);
+        examinerDuties.setPhoneNumber(calculationUserInput.phoneNumber);
+        examinerDuties.setMobile(calculationUserInputTemp.mobile);
+        examinerDuties.setAddress(calculationUserInputTemp.address);
+        examinerDuties.setDescription(calculationUserInputTemp.description);
+        examinerDuties.setShenasname(calculationUserInputTemp.shenasname);
     }
 
     public int getVaziatNasbPompI() {

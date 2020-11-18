@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Constants {
-    public static final int REQUEST_NETWORK_CODE = 1234;
-    public static final int GPS_CODE = 1235;
     @SuppressLint("StaticFieldLeak")
     public static CustomListAdapter customAdapter;
     public static List<RequestDictionary> requestDictionaries;
@@ -27,7 +25,7 @@ public class Constants {
 
     public static Bitmap bitmapSelectedImage;
     public static Bitmap bitmapMapImage;
-    public static ArrayList<Tejariha> tejarihas;
+    public static ArrayList<Tejariha> others;
     public static String fileName;
     public static String imageError = "هیچ تصویری انتخاب نشده است ، لطفاً دوباره امتحان کنید.";
     public static String cropError = "شما یک فیلد معتبر انتخاب نکرده اید. لطفاً تا زمانی که خطوط به رنگ آبی نباشد ، تصحیح کنید.";

@@ -1,6 +1,5 @@
 package com.leon.estimate.activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -29,11 +28,8 @@ import androidx.room.Room;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.CompanyNames;
-import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
@@ -61,7 +57,6 @@ import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Tables.Zarib;
 import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.Utils.CoordinateConversion;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.DifferentCompanyManager;
 import com.leon.estimate.Utils.GIS.ConvertArcToGeo;
 import com.leon.estimate.Utils.GIS.CustomArcGISJSON;
@@ -84,6 +79,7 @@ import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.MapTileIndex;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -108,8 +104,8 @@ import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.calculationUserInput;
 import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
 import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.others;
 import static com.leon.estimate.Utils.Constants.secondForm;
-import static com.leon.estimate.Utils.Constants.tejarihas;
 import static com.leon.estimate.Utils.Constants.valueInteger;
 
 public class FormActivity extends AppCompatActivity {
@@ -119,15 +115,15 @@ public class FormActivity extends AppCompatActivity {
     Context context;
     MyDatabase dataBase;
     int polygonIndex, place1Index, place2Index, pageNumber = 1;
+    double latitude, longitude;
     int[] indexes;
-    GPSTracker gpsTracker;
+    double[] latLong;
     FolderOverlay[] geoJsonOverlays;
+    GPSTracker gpsTracker;
     Marker startMarker;
     CoordinateConversion conversion;
     ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     String token, billId, trackNumber, json;
-    double[] latLong;
-    double latitude, longitude;
     Bitmap bitmap;
     @SuppressLint("NonConstantResourceId")
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) -> {
@@ -224,17 +220,11 @@ public class FormActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     void initialize() {
         valueInteger = new ArrayList<>();
-        valueInteger.add(0);
-        valueInteger.add(0);
-        valueInteger.add(0);
-        valueInteger.add(0);
-        valueInteger.add(0);
-        valueInteger.add(0);
-        valueInteger.add(0);
-        valueInteger.add(0);
+        for (int i = 0; i < 8; i++)
+            valueInteger.add(0);
         calculationUserInput = new CalculationUserInput();
         calculationUserInputTemp = new CalculationUserInput();
-        tejarihas = new ArrayList<>();
+        others = new ArrayList<>();
         new GetDBData().execute();
         setOnButtonClickListener();
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -280,10 +270,12 @@ public class FormActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         pageNumber = pageNumber + 1;
                     } else
-                        Toast.makeText(context, R.string.select_service, Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.select_service,
+                                Toast.LENGTH_LONG).show();
                     break;
                 case 3:
-                    FormFragment formFragment = (FormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    FormFragment formFragment = (FormFragment)
+                            fragmentManager.findFragmentById(R.id.fragment);
                     if (formFragment != null)
                         calculationUserInputTemp = formFragment.setOnButtonNextClickListener();
                     if (calculationUserInputTemp != null) {
@@ -295,7 +287,8 @@ public class FormActivity extends AppCompatActivity {
                     }
                     break;
                 case 4:
-                    SecondFormFragment secondFormFragment = (SecondFormFragment) fragmentManager.findFragmentById(R.id.fragment);
+                    SecondFormFragment secondFormFragment = (SecondFormFragment)
+                            fragmentManager.findFragmentById(R.id.fragment);
                     if (secondFormFragment != null) {
                         secondForm = secondFormFragment.setOnButtonNextClickListener();
                     }
@@ -380,96 +373,20 @@ public class FormActivity extends AppCompatActivity {
     }
 
     void prepareFromForm() {
-        calculationUserInput.sifoon100 = calculationUserInputTemp.sifoon100;
-        calculationUserInput.sifoon125 = calculationUserInputTemp.sifoon125;
-        calculationUserInput.sifoon150 = calculationUserInputTemp.sifoon150;
-        calculationUserInput.sifoon200 = calculationUserInputTemp.sifoon200;
-        calculationUserInput.arse = calculationUserInputTemp.arse;
-        calculationUserInput.aianKol = calculationUserInputTemp.aianKol;
-        calculationUserInput.aianMaskooni = calculationUserInputTemp.aianMaskooni;
-        calculationUserInput.aianTejari = calculationUserInputTemp.aianTejari;
-        calculationUserInput.tedadMaskooni = calculationUserInputTemp.tedadMaskooni;
-        calculationUserInput.tedadTejari = calculationUserInputTemp.tedadTejari;
-        calculationUserInput.tedadSaier = calculationUserInputTemp.tedadSaier;
-        calculationUserInput.arzeshMelk = calculationUserInputTemp.arzeshMelk;
-        calculationUserInput.tedadTaxfif = calculationUserInputTemp.tedadTaxfif;
-        calculationUserInput.zarfiatQarardadi = calculationUserInputTemp.zarfiatQarardadi;
-        calculationUserInput.parNumber = calculationUserInputTemp.parNumber;
-        calculationUserInput.karbariId = calculationUserInputTemp.karbariId;
-        calculationUserInput.noeVagozariId = calculationUserInputTemp.noeVagozariId;
-        calculationUserInput.qotrEnsheabId = calculationUserInputTemp.qotrEnsheabId;
-        calculationUserInput.taxfifId = calculationUserInputTemp.taxfifId;
-        calculationUserInput.adamTaxfifAb = calculationUserInputTemp.adamTaxfifAb;
-        calculationUserInput.adamTaxfifFazelab = calculationUserInputTemp.adamTaxfifFazelab;
-        calculationUserInput.ensheabQeireDaem = calculationUserInputTemp.ensheabQeireDaem;
-
-        examinerDuties.setSifoon100(calculationUserInputTemp.sifoon100);
-        examinerDuties.setSifoon125(calculationUserInputTemp.sifoon125);
-        examinerDuties.setSifoon150(calculationUserInputTemp.sifoon150);
-        examinerDuties.setSifoon200(calculationUserInputTemp.sifoon200);
-        examinerDuties.setArse(calculationUserInputTemp.arse);
-        examinerDuties.setAianMaskooni(calculationUserInputTemp.aianMaskooni);
-        examinerDuties.setAianNonMaskooni(calculationUserInputTemp.aianTejari);
-        examinerDuties.setAianKol(calculationUserInputTemp.aianKol);
-        examinerDuties.setTedadMaskooni(calculationUserInputTemp.tedadMaskooni);
-        examinerDuties.setTedadTejari(calculationUserInputTemp.tedadTejari);
-        examinerDuties.setTedadSaier(calculationUserInputTemp.tedadSaier);
-        examinerDuties.setTedadTaxfif(calculationUserInputTemp.tedadTaxfif);
-        examinerDuties.setZarfiatQarardadi(calculationUserInputTemp.zarfiatQarardadi);
-        examinerDuties.setArzeshMelk(calculationUserInputTemp.arzeshMelk);
-        examinerDuties.setParNumber(calculationUserInputTemp.parNumber);
-        examinerDuties.setKarbariId(calculationUserInputTemp.karbariId);
-        examinerDuties.setQotrEnsheabId(calculationUserInputTemp.qotrEnsheabId);
-        examinerDuties.setTaxfifId(calculationUserInputTemp.taxfifId);
-        examinerDuties.setEnsheabQeirDaem(calculationUserInputTemp.ensheabQeireDaem);
-        examinerDuties.setNoeVagozariId(calculationUserInputTemp.noeVagozariId);
+        calculationUserInput.prepareCalculationUserInputFromForm();
+        examinerDuties.prepareExaminerDutiesFromForm();
     }
 
     void prepareFromPersonal() {
-        calculationUserInput.nationalId = calculationUserInputTemp.nationalId;
-        calculationUserInput.firstName = calculationUserInputTemp.firstName;
-        calculationUserInput.sureName = calculationUserInputTemp.sureName;
-        calculationUserInput.fatherName = calculationUserInputTemp.fatherName;
-        calculationUserInput.postalCode = calculationUserInputTemp.postalCode;
-        calculationUserInput.radif = calculationUserInputTemp.radif;
-        calculationUserInput.phoneNumber = calculationUserInputTemp.phoneNumber;
-        calculationUserInput.mobile = calculationUserInputTemp.mobile;
-        calculationUserInput.address = calculationUserInputTemp.address;
-        calculationUserInput.description = calculationUserInputTemp.description;
-        calculationUserInput.shenasname = calculationUserInputTemp.shenasname;
-        calculationUserInput.zoneId = Integer.parseInt(examinerDuties.getZoneId());
-
-        examinerDuties.setNationalId(calculationUserInputTemp.nationalId);
-        examinerDuties.setFirstName(calculationUserInputTemp.firstName);
-        examinerDuties.setSureName(calculationUserInputTemp.sureName);
-        examinerDuties.setNameAndFamily(calculationUserInputTemp.firstName.concat(" ")
-                .concat(calculationUserInputTemp.sureName));
-        examinerDuties.setFatherName(calculationUserInputTemp.fatherName);
-        examinerDuties.setPostalCode(calculationUserInput.postalCode);
-        examinerDuties.setPhoneNumber(calculationUserInput.phoneNumber);
-        examinerDuties.setMobile(calculationUserInputTemp.mobile);
-        examinerDuties.setAddress(calculationUserInputTemp.address);
-        examinerDuties.setDescription(calculationUserInputTemp.description);
-        examinerDuties.setShenasname(calculationUserInputTemp.shenasname);
+        calculationUserInput.prepareCalculationFromPersonal();
+        examinerDuties.prepareExaminerDutiesFromPersonal();
     }
 
     void prepareToSend() {
-        fillCalculationUserInput();
+        calculationUserInput.fillCalculationUserInput();
         updateCalculationUserInput();
         updateExamination();
         updateOthers();
-    }
-
-    void fillCalculationUserInput() {
-        calculationUserInput.trackingId = examinerDuties.getTrackingId();
-        calculationUserInput.requestType = Integer.parseInt(examinerDuties.getRequestType());
-        calculationUserInput.parNumber = examinerDuties.getParNumber();
-        calculationUserInput.billId = examinerDuties.getBillId();
-        calculationUserInput.neighbourBillId = examinerDuties.getNeighbourBillId();
-        calculationUserInput.notificationMobile = examinerDuties.getNotificationMobile();
-        calculationUserInput.identityCode = examinerDuties.getIdentityCode();
-        calculationUserInput.trackNumber = examinerDuties.getTrackNumber();
-        calculationUserInput.sent = false;
     }
 
     void updateCalculationUserInput() {
@@ -485,12 +402,12 @@ public class FormActivity extends AppCompatActivity {
 
     void updateOthers() {
         DaoTejariha daoTejariha = dataBase.daoTejariha();
-        for (int i = 0; i < tejarihas.size(); i++)
-            daoTejariha.insertTejariha(tejarihas.get(i));
+        for (int i = 0; i < others.size(); i++)
+            daoTejariha.insertTejariha(others.get(i));
     }
 
     public void setActionBarTitle(String title) {
-        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -535,7 +452,7 @@ public class FormActivity extends AppCompatActivity {
         if (MyApplication.isLocal) {
             final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
                     0, 19, 256, ".png", new String[]{
-                    DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)//"http://192.168.142.206:8080/styles/klokantech-basic/"
+                    DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)
             }) {
                 @Override
                 public String getTileURLString(long aTile) {
@@ -545,9 +462,7 @@ public class FormActivity extends AppCompatActivity {
             };
             binding.mapView.setTileSource(custom);
         }
-
-        binding.mapView.setBuiltInZoomControls(true);
-        binding.mapView.setMultiTouchControls(true);
+        binding.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
 
         IMapController mapController = binding.mapView.getController();
         mapController.setZoom(19.5);
@@ -605,42 +520,6 @@ public class FormActivity extends AppCompatActivity {
         return enabled;
     }
 
-    public final void askPermission() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(), "مجوز رد شد \n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                forceClose(context);
-            }
-        };
-        new TedPermission(this)
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("جهت استفاده از برنامه مجوزهای پیشنهادی را قبول فرمایید")
-                .setDeniedMessage("در صورت رد این مجوز قادر به استفاده از این دستگاه نخواهید بود" + "\n" +
-                        "لطفا با فشار دادن دکمه اعطای دسترسی و سپس در بخش دسترسی ها با این مجوز ها موافقت نمایید")
-                .setPermissions(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                ).check();
-    }
-
-    private void forceClose(Context context) {
-        new CustomDialog(DialogType.Red, context,
-                context.getString(R.string.permission_not_completed),
-                context.getString(R.string.dear_user),
-                context.getString(R.string.call_operator),
-                context.getString(R.string.force_close));
-        finishAffinity();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -688,7 +567,7 @@ public class FormActivity extends AppCompatActivity {
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
-        line.setColor(Color.YELLOW);
+        line.getOutlinePaint().setColor(Color.YELLOW);
         if (polygonIndex != 0) {
             binding.mapView.getOverlays().remove(polygonIndex);
         }
@@ -800,7 +679,6 @@ public class FormActivity extends AppCompatActivity {
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
             if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
-//                Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                 try {
                     kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                     MyKmlStyle.color = 2;
@@ -826,8 +704,6 @@ public class FormActivity extends AppCompatActivity {
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
             if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
-//                Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                //TODO
                 try {
                     kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
 
@@ -837,13 +713,10 @@ public class FormActivity extends AppCompatActivity {
                     geoJsonOverlays[3] = geoJsonOverlay;
                     binding.checkboxSanitationTransfer.setVisibility(View.VISIBLE);
                     binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
-//                    binding.mapView.getOverlays().add(geoJsonOverlay);
-//                    binding.mapView.invalidate();
                 } catch (Exception e) {
                     Log.e("error map", e.toString());
                 }
             }
-//            binding.progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -855,8 +728,6 @@ public class FormActivity extends AppCompatActivity {
             CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
             KmlDocument kmlDocument = new KmlDocument();
             if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
-//                Log.e("json", ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                //TODO
                 try {
                     kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
                     MyKmlStyle.color = 1;
@@ -865,8 +736,6 @@ public class FormActivity extends AppCompatActivity {
                     geoJsonOverlays[0] = geoJsonOverlay;
                     binding.checkboxParcels.setVisibility(View.VISIBLE);
                     binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
-//                    binding.mapView.getOverlays().add(geoJsonOverlay);
-//                    binding.mapView.invalidate();
                 } catch (Exception e) {
                     Log.e("error map", e.toString());
                 }
@@ -986,15 +855,20 @@ public class FormActivity extends AppCompatActivity {
                     examinerDuties.getEshterak()
             );
             DaoTejariha daoTejariha = dataBase.daoTejariha();
-            List<Tejariha> tejarihatemp = daoTejariha.getTejarihaByTrackNumber(examinerDuties.getTrackNumber());
-            tejarihas.addAll(tejarihatemp);
+            List<Tejariha> othersTemp = daoTejariha.getTejarihaByTrackNumber(
+                    examinerDuties.getTrackNumber());
+            others.addAll(othersTemp);
             DaoFormula daoFormula = dataBase.daoFormula();
             DaoBlock daoBlock = dataBase.daoBlock();
             DaoZarib daoZarib = dataBase.daoZarib();
-            List<Formula> formulas = daoFormula.getFormulaByZoneId(Integer.parseInt(examinerDuties.getZoneId()));
-            List<Block> blocks = daoBlock.getBlockByZoneId(Integer.parseInt(examinerDuties.getZoneId()));
-            List<Zarib> zaribs = daoZarib.getZaribByZoneId(Integer.parseInt(examinerDuties.getZoneId()));
-            if (formulas != null && formulas.size() > 0 && blocks != null && blocks.size() > 0 && zaribs != null && zaribs.size() > 0) {
+            List<Formula> formulas = daoFormula.getFormulaByZoneId(
+                    Integer.parseInt(examinerDuties.getZoneId()));
+            List<Block> blocks = daoBlock.getBlockByZoneId(
+                    Integer.parseInt(examinerDuties.getZoneId()));
+            List<Zarib> zaribs = daoZarib.getZaribByZoneId(
+                    Integer.parseInt(examinerDuties.getZoneId()));
+            if (formulas != null && formulas.size() > 0 && blocks != null && blocks.size() > 0
+                    && zaribs != null && zaribs.size() > 0) {
                 arzeshdaraei = new Arzeshdaraei(blocks, formulas, zaribs);
             }
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
