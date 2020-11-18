@@ -91,7 +91,7 @@ import static com.leon.estimate.Utils.Constants.fileName;
 import static com.leon.estimate.Utils.Constants.imageFileName;
 
 public class DocumentFormActivity extends AppCompatActivity {
-    static ImageDataTitle imageDataTitle;
+    ImageDataTitle imageDataTitle;
     Context context;
     String trackNumber, billId;
     boolean isNew;
@@ -442,11 +442,11 @@ public class DocumentFormActivity extends AppCompatActivity {
 
     class GetImageTitles implements ICallback<ImageDataTitle> {
         @Override
-        public void execute(ImageDataTitle imageDataTitle) {
-            if (imageDataTitle.isSuccess()) {
+        public void execute(ImageDataTitle title) {
+            if (title.isSuccess()) {
                 int selected = 0, counter = 0;
-                DocumentFormActivity.imageDataTitle = imageDataTitle;
-                for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
+                imageDataTitle = title;
+                for (ImageDataTitle.DataTitle dataTitle : title.getData()) {
                     if (dataTitle.getTitle().equals("کروکی"))
                         selected = counter;
                     counter = counter + 1;
@@ -467,7 +467,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                 };
                 binding.spinnerTitle.setAdapter(arrayAdapter);
                 binding.spinnerTitle.setSelection(selected);
-                images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
+                images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, title, context));
                 imageViewAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(DocumentFormActivity.this,

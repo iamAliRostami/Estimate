@@ -53,7 +53,6 @@ import retrofit2.Retrofit;
 
 public class DocumentActivity extends AppCompatActivity {
     Context context;
-    static ImageDataTitle imageDataTitle;
     String trackNumber, billId;
     boolean isNew, isNeighbour;
     ImageViewAdapter imageViewAdapter;
@@ -221,7 +220,7 @@ public class DocumentActivity extends AppCompatActivity {
         @Override
         public void execute(ImageDataTitle imageDataTitle) {
             if (imageDataTitle.isSuccess()) {
-                DocumentActivity.imageDataTitle = imageDataTitle;
+//                DocumentActivity.imageDataTitle = imageDataTitle;
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
                     arrayListTitle.add(dataTitle.getTitle());
                 }
@@ -364,7 +363,6 @@ public class DocumentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         HttpClientWrapper.call.cancel();
-        imageDataTitle = null;
         imageViewAdapter = null;
         images = null;
         imageDataThumbnail = null;
