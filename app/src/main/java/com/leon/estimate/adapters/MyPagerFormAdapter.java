@@ -17,7 +17,7 @@ import com.leon.estimate.fragments.ServicesFragment;
 import org.jetbrains.annotations.NotNull;
 
 public class MyPagerFormAdapter extends FragmentPagerAdapter {
-    private static int NUM_ITEMS = 2;
+    private static final int NUM_ITEMS = 2;
     ExaminerDuties examinerDuties;
     Context context;
 
@@ -40,11 +40,11 @@ public class MyPagerFormAdapter extends FragmentPagerAdapter {
             case 0: // Fragment # 0 - This will show FirstFragment
                 return ServicesFragment.newInstance(examinerDuties, "Page # 1");
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return FormFragment.newInstance(examinerDuties, "Page # 2");
+                return FormFragment.newInstance(examinerDuties);
             case 2: // Fragment # 1 - This will show SecondFragment
-                return PersonalFragment.newInstance(examinerDuties, "Page # 3");
+                return PersonalFragment.newInstance(examinerDuties);
             case 3: // Fragment # 1 - This will show SecondFragment
-                return MapFragment.newInstance(examinerDuties, "Page # 4");
+                return MapFragment.newInstance(examinerDuties);
             default:
                 return null;
         }

@@ -2,7 +2,6 @@ package com.leon.estimate.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,21 +21,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 
 public class PersonalFragment extends Fragment {
-    private static final String ARG_PARAM2 = "param2";
     PersonalFragmentBinding binding;
 
     public PersonalFragment() {
     }
 
-    public static PersonalFragment newInstance(ExaminerDuties examinerDuties, String param2) {
+    public static PersonalFragment newInstance(ExaminerDuties examinerDuties) {
         PersonalFragment fragment = new PersonalFragment();
         Bundle args = new Bundle();
         Gson gson = new Gson();
         String json = gson.toJson(examinerDuties);
         args.putString(BundleEnum.REQUEST.getValue(), json);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +46,7 @@ public class PersonalFragment extends Fragment {
         Context context = getActivity();
         if (context != null) {
             ((FormActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(
-                    context.getString(R.string.app_name).concat(" / ").concat(context.getString(R.string.moshakhasat_malek)));
+                    context.getString(R.string.app_name).concat(" / ").concat("صفحه اول"));
         }
     }
 
@@ -82,14 +81,13 @@ public class PersonalFragment extends Fragment {
         calculationUserInput.mobile = binding.editTextMobile.getText().toString();
         calculationUserInput.address = binding.editTextAddress.getText().toString();
         calculationUserInput.description = binding.editTextDescription.getText().toString();
+        calculationUserInput.shenasname = binding.editTextShenasname.getText().toString();
         return calculationUserInput;
     }
 
     private boolean prepareForm() {
         return checkIsNoEmpty(binding.editTextName)
                 && checkIsNoEmpty(binding.editTextFamily)
-//                && checkIsNoEmpty(binding.editTextEshterak)
-//                && checkIsNoEmpty(binding.editTextRadif)
                 && checkIsNoEmpty(binding.editTextAddress)
                 && checkOtherIsNoEmpty();
     }
@@ -118,11 +116,6 @@ public class PersonalFragment extends Fragment {
             focusView = binding.editTextPostalCode;
             focusView.requestFocus();
             return false;
-        } else if (binding.editTextPhone.getText().toString().length() < 8) {
-            binding.editTextPhone.setError(getString(R.string.error_format));
-            focusView = binding.editTextPhone;
-            focusView.requestFocus();
-            return false;
         } else if (binding.editTextMobile.getText().toString().length() < 11) {
             binding.editTextMobile.setError(getString(R.string.error_format));
             focusView = binding.editTextMobile;
@@ -133,24 +126,32 @@ public class PersonalFragment extends Fragment {
     }
 
     private void initializeField() {
-        binding.editTextAddress.setText(FormActivity.examinerDuties.getAddress());
-        if (FormActivity.examinerDuties.getFirstName() != null)
-            binding.editTextName.setText(FormActivity.examinerDuties.getFirstName().trim());
-        if (FormActivity.examinerDuties.getSureName() != null)
-            binding.editTextFamily.setText(FormActivity.examinerDuties.getSureName().trim());
-        binding.editTextNationNumber.setText(FormActivity.examinerDuties.getNationalId());
-        binding.editTextFatherName.setText(FormActivity.examinerDuties.getFatherName());
-        binding.editTextDescription.setText(FormActivity.examinerDuties.getDescription());
-        binding.editTextPhone.setText(FormActivity.examinerDuties.getPhoneNumber());
-        binding.editTextMobile.setText(FormActivity.examinerDuties.getMobile());
+        binding.editTextAddress.setText(examinerDuties.getAddress());
+        if (examinerDuties.getFirstName() != null)
+            binding.editTextName.setText(examinerDuties.getFirstName().trim());
+        if (examinerDuties.getSureName() != null)
+            binding.editTextFamily.setText(examinerDuties.getSureName().trim());
+        if (examinerDuties.getNationalId().length() == 10)
+            binding.editTextNationNumber.setText(examinerDuties.getNationalId());
+        binding.editTextFatherName.setText(examinerDuties.getFatherName());
+        binding.editTextDescription.setText(examinerDuties.getDescription().trim());
+        binding.editTextPhone.setText(examinerDuties.getPhoneNumber());
+        binding.editTextMobile.setText(examinerDuties.getMobile());
         binding.editTextEshterak.setText(Objects.requireNonNull(
-                FormActivity.examinerDuties.getEshterak().trim()));
-        binding.editTextPostalCode.setText(FormActivity.examinerDuties.getPostalCode());
-        binding.editTextRadif.setText(FormActivity.examinerDuties.getRadif());
+                examinerDuties.getEshterak().trim()));
+        if (examinerDuties.getPostalCode().length() == 10)
+            binding.editTextPostalCode.setText(examinerDuties.getPostalCode());
+        binding.editTextRadif.setText(examinerDuties.getRadif());
 
-        binding.textViewZone.setText(FormActivity.examinerDuties.getZoneTitle());
-        binding.textViewBillId.setText(FormActivity.examinerDuties.getBillId());
-        binding.textViewTrackNumber.setText(FormActivity.examinerDuties.getTrackNumber());
+        binding.textViewZone.setText(examinerDuties.getZoneTitle());
+        if (examinerDuties.getBillId() != null && examinerDuties.getBillId().length() > 0)
+            binding.textViewBillId.setText(examinerDuties.getBillId());
+        else {
+            binding.textViewBillId.setText(examinerDuties.getNeighbourBillId());
+            binding.textViewBillIdTitle.setText(getString(R.string.neighbour_bill_id));
+        }
+        binding.textViewTrackNumber.setText(examinerDuties.getTrackNumber());
+        binding.editTextShenasname.setText(examinerDuties.getShenasname());//TODO
     }
 
     @Override
@@ -166,7 +167,6 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("onResume", "happened");
         initializeField();
     }
 }

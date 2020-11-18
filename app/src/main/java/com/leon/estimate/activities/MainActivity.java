@@ -2,21 +2,18 @@ package com.leon.estimate.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,7 +25,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.location.LocationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,10 +32,10 @@ import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Enums.BundleEnum;
+import com.leon.estimate.Enums.CompanyNames;
 import com.leon.estimate.Enums.DialogType;
 import com.leon.estimate.Enums.ProgressType;
 import com.leon.estimate.Enums.SharedReferenceKeys;
@@ -54,21 +50,28 @@ import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
 import com.leon.estimate.Tables.DaoCalculationUserInput;
 import com.leon.estimate.Tables.DaoExaminerDuties;
+import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.DaoKarbariDictionary;
 import com.leon.estimate.Tables.DaoNoeVagozariDictionary;
 import com.leon.estimate.Tables.DaoQotrEnsheabDictionary;
+import com.leon.estimate.Tables.DaoResultDictionary;
 import com.leon.estimate.Tables.DaoServiceDictionary;
 import com.leon.estimate.Tables.DaoTaxfifDictionary;
 import com.leon.estimate.Tables.ExaminerDuties;
+import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Input;
+import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Place;
+import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.CoordinateConversion;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
+import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.CustomProgressBar;
+import com.leon.estimate.Utils.DifferentCompanyManager;
+import com.leon.estimate.Utils.GPSTracker;
 import com.leon.estimate.Utils.HttpClientWrapper;
-import com.leon.estimate.Utils.HttpClientWrapperOld;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -79,10 +82,11 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.MapTileIndex;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -92,38 +96,41 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
-    public double latitude, longitude;
-    LocationManager locationManager;
+        implements NavigationView.OnNavigationItemSelectedListener {
     MainActivityBinding binding;
     String trackNumber;
     DrawerLayout drawer;
-    int REQUEST_LOCATION_CODE = 1236, wayIndex = 0, counter = 0;
     Polyline roadOverlay;
     MapView mapView;
     Context context;
-    ArrayList<Integer> indexArray;
-    ArrayList<GeoPoint> wayPoints, placesPoints;
+    Activity activity;
     CoordinateConversion conversion;
-    List<ExaminerDuties> examinerDuties, examinerDutiesReady;
-    //    boolean isShown = false;
-    ArrayList<Boolean> isShown;
+    GPSTracker gpsTracker;
+    int wayIndex = 0, counter = 0, imageId, imageCounter = 0;
+    double latitude, longitude;
     boolean doubleBackToExitPressedOnce = false;
-    List<CalculationUserInput> calculationUserInputList;
     Toolbar toolbar;
+    MyDatabase dataBase;
+    SharedPreferenceManager sharedPreferenceManager;
+    ArrayList<Integer> indexArray;
+    ArrayList<Boolean> isShown;
+    ArrayList<GeoPoint> wayPoints, placesPoints;
+    List<Images> images;
+    List<ExaminerDuties> examinerDuties, examinerDutiesReady;
+    List<CalculationUserInput> calculationUserInputList;
+    @SuppressLint("NonConstantResourceId")
     View.OnClickListener onClickListener = view -> {
         Intent intent;
         switch (view.getId()) {
@@ -136,6 +143,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.imageViewUpload:
                 send();
+                break;
+            case R.id.imageViewRequest:
+                intent = new Intent(getApplicationContext(), MotherChildActivity.class);
+                startActivity(intent);
                 break;
             case R.id.imageViewPaper:
                 intent = new Intent(getApplicationContext(), TakeOtherPhotoActivity.class);
@@ -152,7 +163,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         context = this;
+        activity = this;
         binding = MainActivityBinding.inflate(getLayoutInflater());
+        checkPermission();
+//        Room.databaseBuilder(context, MyDatabase.class,
+//                MyApplication.getDBNAME()).fallbackToDestructiveMigration()
+//                .addMigrations(MyDatabase.MIGRATION_41_42).build();
+    }
+
+    void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED ||
@@ -161,134 +180,64 @@ public class MainActivity extends AppCompatActivity
             ) {
                 askPermission();
             } else {
-                Configuration.getInstance().load(context,
-                        PreferenceManager.getDefaultSharedPreferences(context));
                 setContentView(binding.getRoot());
                 initialize();
             }
         }
-//        Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-//                .fallbackToDestructiveMigration()
-//                .addMigrations(MyDatabase.MIGRATION_22_23).build();
-//        readData();
     }
 
-    public void readData() {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, "json.txt");
-        StringBuilder text = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
-            }
-            br.close();
-        } catch (IOException ignored) {
-        }
-        String json = text.toString();
-        Log.e("json", json);
-        Gson gson = new GsonBuilder().create();
-        Input input = gson.fromJson(json, Input.class);
-        List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            Gson gson1 = new Gson();
-            examinerDutiesList.get(i).setRequestDictionaryString(
-                    gson1.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-        }
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            examinerDutiesList.get(i).setTrackNumber(
-                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-            examinerDutiesList.get(i).setRadif(
-                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
-            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
-                    examinerDutiesList.remove(i);
-                    j = examinerDutiesListTemp.size();
-                    i--;
-                }
-            }
-        }
-        daoExaminerDuties.insertAll(examinerDutiesList);
-        DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
-        daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
-        DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
-        daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-        DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-        daoServiceDictionary.insertAll(input.getServiceDictionary());
-        DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
-        daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-        DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
-        daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-    }
-
-    @SuppressLint("WrongConstant")
     void initialize() {
         toolbar = findViewById(R.id.toolbar);
         drawer = findViewById(R.id.drawer_layout);
-        setActionBarTitle("خانه");
+        setActionBarTitle(getString(R.string.home));
         drawer.openDrawer(GravityCompat.START);
+        sharedPreferenceManager = new SharedPreferenceManager(context,
+                SharedReferenceNames.ACCOUNT.getValue());
         setImageViewClickListener();
+        dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
+                .allowMainThreadQueries().build();
         initializeMap();
     }
 
-    private Location getLastKnownLocation() {
-        Location l = null;
-        LocationManager mLocationManager = (LocationManager)
-                getApplicationContext().getSystemService(LOCATION_SERVICE);
-        assert mLocationManager != null;
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                l = mLocationManager.getLastKnownLocation(provider);
-            }
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                bestLocation = l;
-            }
-        }
-        return bestLocation;
+    void setImageViewClickListener() {
+        binding.imageViewDownload.setOnClickListener(onClickListener);
+        binding.imageViewUpload.setOnClickListener(onClickListener);
+        binding.imageViewPaper.setOnClickListener(onClickListener);
+        binding.imageViewExit.setOnClickListener(onClickListener);
+        binding.imageViewForm.setOnClickListener(onClickListener);
+        binding.imageViewRequest.setOnClickListener(onClickListener);
     }
 
-    @SuppressLint("MissingPermission")
     void initializeMap() {
         if (!GpsEnabled()) {
             initialize();
         } else {
             mapView = findViewById(R.id.mapView);
-            mapView.setTileSource(TileSourceFactory.MAPNIK);
-            mapView.setBuiltInZoomControls(true);
+            if (MyApplication.isLocal) {
+                final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
+                        0, 19, 256, ".png", new String[]{
+                        DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)//"http://192.168.142.206:8080/styles/klokantech-basic/"
+                }) {
+                    @Override
+                    public String getTileURLString(long aTile) {
+                        return getBaseUrl() + MapTileIndex.getZoom(aTile) + "/" + MapTileIndex.getX(aTile)
+                                + "/" + MapTileIndex.getY(aTile) + mImageFilenameEnding;
+                    }
+                };
+                mapView.setTileSource(custom);
+            }
+            mapView.getZoomController().setVisibility(
+                    CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);
             IMapController mapController = mapView.getController();
-            mapController.setZoom(19.5);
-
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
-            Location location = getLastKnownLocation();
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-            } else {
-                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-            }
-//            E/long: 51.7134364        E/lat: 32.7031978
-            Log.e("long", String.valueOf(longitude));
-            Log.e("lat", String.valueOf(latitude));
+            mapController.setZoom(10.5);
+            gpsTracker = new GPSTracker(activity);
+            latitude = gpsTracker.getLatitude();
+            longitude = gpsTracker.getLongitude();
             GeoPoint startPoint = new GeoPoint(latitude, longitude);
             mapController.setCenter(startPoint);
-            MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
+            MyLocationNewOverlay locationOverlay =
+                    new MyLocationNewOverlay(new GpsMyLocationProvider(context), mapView);
             locationOverlay.enableMyLocation();
             mapView.getOverlays().add(locationOverlay);
             conversion = new CoordinateConversion();
@@ -300,46 +249,23 @@ public class MainActivity extends AppCompatActivity
         placesPoints = new ArrayList<>();
         indexArray = new ArrayList<>();
         isShown = new ArrayList<>();
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
         DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         examinerDuties = daoExaminerDuties.ExaminerDuties();
         examinerDutiesReady = new ArrayList<>();
         if (examinerDuties != null && examinerDuties.size() > 0) {
-            setActionBarTitle("در حال جانمایی میسرها...");
-            getXY(examinerDuties.get(0).getBillId());
+            setActionBarTitle(getString(R.string.locating));
+            if (examinerDuties.get(0).getBillId() != null)
+                getXY(examinerDuties.get(0).getBillId());
+            else getXY(examinerDuties.get(0).getNeighbourBillId());
         }
     }
 
-    @SuppressLint("WrongConstant")
-    void setActionBarTitle(String title) {
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
-                (this, drawer, toolbar, R.string.open, R.string.close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        toolbar.setNavigationOnClickListener(view1 -> {
-            drawer.openDrawer(Gravity.START);
-        });
-    }
-
     void getXY(String billId) {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         IAbfaService iAbfaService = retrofit.create(IAbfaService.class);
-        GetXY getXY = new GetXY();
-        GetXYIncomplete incomplete = new GetXYIncomplete();
-        GetError error = new GetError();
         Call<Place> call = iAbfaService.getXY(billId);
         HttpClientWrapper.callHttpAsync(call, ProgressType.NOT_SHOW.getValue(), context,
-                getXY, incomplete, error);
+                new GetXY(), new GetXYIncomplete(), new GetError());
     }
 
     private void addPlace(GeoPoint p) {
@@ -348,20 +274,15 @@ public class MainActivity extends AppCompatActivity
         Marker startMarker = new Marker(mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-//        MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-//                org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
         MarkerInfoWindow infoWindow = new MarkerInfoWindow(
                 R.layout.custom_info_window, mapView);
         startMarker.setInfoWindow(infoWindow);
         startMarker.setOnMarkerClickListener((marker, mapView) -> {
-            //TODO start index from 1
             int overlayIndex = mapView.getOverlayManager().indexOf(startMarker) / 2;
             ExaminerDuties examinerDuties = examinerDutiesReady.get(overlayIndex);
-            Log.e("name", examinerDuties.getNameAndFamily());
             InfoWindow.closeAllInfoWindowsOn(mapView);
             infoWindow.close();
-            if (isShown.get(overlayIndex)/* && mapView.getOverlayManager().indexOf(startMarker) == wayIndex*/) {
+            if (isShown.get(overlayIndex)) {
                 mapView.getOverlays().remove(roadOverlay);
                 if (examinerDuties.isPeymayesh()) {
                     Toast.makeText(context, R.string.is_peymayesh, Toast.LENGTH_LONG).show();
@@ -372,7 +293,8 @@ public class MainActivity extends AppCompatActivity
                     context.startActivity(intent);
                 }
             } else {
-                new AddRoutOverlay().execute(new GeoPoint(getLastKnownLocation()), startPoint);
+                gpsTracker.getLocation();
+                new AddRoutOverlay().execute(new GeoPoint(gpsTracker.getLatitude(), gpsTracker.getLongitude()), startPoint);
                 startMarker.setTitle(examinerDuties.getNameAndFamily().concat("\n")
                         .concat(examinerDuties.getServiceGroup()));
                 startMarker.setSubDescription(examinerDuties.getAddress().concat("\n")
@@ -383,25 +305,20 @@ public class MainActivity extends AppCompatActivity
                 isShown.set(i, false);
             isShown.set(overlayIndex, !isShown.get(overlayIndex));
             wayIndex = mapView.getOverlayManager().indexOf(startMarker);
-            Log.e("index", String.valueOf(wayIndex));
             return false;
         });
         mapView.getOverlayManager().add(startMarker);
         mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Log.e("location1", p.toString());
                 return false;
             }
 
             @Override
             public boolean longPressHelper(GeoPoint p) {
-                Log.e("location2", p.toString());
                 return false;
             }
         }));
-        int placeIndex = mapView.getOverlays().size() - 1;
-        Log.e("placeIndex", String.valueOf(placeIndex));
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -413,64 +330,14 @@ public class MainActivity extends AppCompatActivity
         if (roadOverlay != null) {
             mapView.getOverlays().remove(roadOverlay);
         }
-
         RoadManager roadManager = new OSRMRoadManager(context);
         wayPoints = new ArrayList<>();
         wayPoints.add(startPoint);
         wayPoints.add(endPoint);
         Road road = roadManager.getRoad(wayPoints);
         roadOverlay = RoadManager.buildRoadOverlay(road);
-        roadOverlay.setOnClickListener((polyline, mapView, eventPos) -> {
-//            mapView.getOverlays().remove(polyline);
-//            InfoWindow.closeAllInfoWindowsOn(mapView);
-//            isShown = !isShown;
-            return false;
-        });
         mapView.getOverlays().add(roadOverlay);
         mapView.invalidate();
-    }
-
-    void setImageViewClickListener() {
-        binding.imageViewDownload.setOnClickListener(onClickListener);
-        binding.imageViewUpload.setOnClickListener(onClickListener);
-        binding.imageViewPaper.setOnClickListener(onClickListener);
-        binding.imageViewExit.setOnClickListener(onClickListener);
-        binding.imageViewForm.setOnClickListener(onClickListener);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                HttpClientWrapper.call.cancel();
-                super.onBackPressed();
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        locationManager.removeUpdates(this);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        initializeMap();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public void onProviderEnabled(@NotNull String provider) {
-    }
-
-    @Override
-    public void onProviderDisabled(@NotNull String provider) {
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -483,7 +350,6 @@ public class MainActivity extends AppCompatActivity
             progressBar = new CustomProgressBar();
             progressBar.show(context, context.getString(R.string.waiting_for_routing));
         }
-
 
         @Override
         protected Integer doInBackground(GeoPoint... geoPoints) {
@@ -572,101 +438,152 @@ public class MainActivity extends AppCompatActivity
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                 getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(true, token);
+        Retrofit retrofit = NetworkHelper.getInstance(token);
         final IAbfaService getKardex = retrofit.create(IAbfaService.class);
         Call<Input> call = getKardex.getMyWorks();
-        Download download = new Download();
-        HttpClientWrapperOld.callHttpAsync(call, download, context, ProgressType.SHOW.getValue());
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new Download(), new DownloadIncomplete(), new GetError());
     }
 
     void send() {
-        MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                .allowMainThreadQueries().build();
         DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
         calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
         if (calculationUserInputList.size() > 0) {
             ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
             for (int i = 0; i < calculationUserInputList.size(); i++) {
+                ExaminerDuties examinerDuties = daoExaminerDuties.examinerDutiesByTrackNumber(
+                        calculationUserInputList.get(i).trackNumber);
                 CalculationUserInputSend calculationUserInputSend =
-                        new CalculationUserInputSend(calculationUserInputList.get(i));
+                        new CalculationUserInputSend(calculationUserInputList.get(i), examinerDuties);
                 calculationUserInputSends.add(calculationUserInputSend);
             }
             SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
                     getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
             String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
-            Retrofit retrofit = NetworkHelper.getInstance(true, token);
+            Retrofit retrofit = NetworkHelper.getInstance(token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
-            SendCalculation sendCalculation = new SendCalculation();
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
-            HttpClientWrapperOld.callHttpAsync(call, sendCalculation, context, ProgressType.SHOW.getValue());
-
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
+                    new SendCalculationIncomplete(), new GetError());
         } else
             Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
+        DaoImages daoImages = dataBase.daoImages();
+        images = daoImages.getImages();
+        if (images.size() > 0) {
+            attemptLogin();
+        }
     }
 
-    class Download implements ICallback<Input> {
+    void attemptLogin() {
+        Retrofit retrofit = NetworkHelper.getInstance("");
+        final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+        Call<Login> call = abfaService.login2(sharedPreferenceManager.getStringData(
+                SharedReferenceKeys.USERNAME_TEMP.getValue()),
+                sharedPreferenceManager.getStringData(SharedReferenceKeys.PASSWORD_TEMP.getValue()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(),
+                this, new LoginDocument(), new LoginDocumentIncomplete(), new GetError());
+    }
+
+    void uploadImage(Images images) {
+        Retrofit retrofit = NetworkHelper.getInstance("");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+        images = CustomFile.getImage(images, context);
+        if (images != null) {
+            MultipartBody.Part body = CustomFile.bitmapToFile(images.getBitmap(), context,
+                    images.getAddress());
+            Call<UploadImage> call;
+            if (images.getTrackingNumber().length() > 0)
+                call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body,
+                        Integer.parseInt(images.getDocId()), images.getTrackingNumber());
+            else
+                call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body,
+                        Integer.parseInt(images.getDocId()), images.getBillId());
+            imageId = images.getImageId();
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+                    new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
+        }
+    }
+
+    class LoginDocument implements ICallback<Login> {
         @Override
-        public void execute(Input input) {
-            List<ExaminerDuties> examinerDutiesList = input.getExaminerDuties();
-            for (int i = 0; i < examinerDutiesList.size(); i++) {
-                Gson gson = new Gson();
-                examinerDutiesList.get(i).setRequestDictionaryString(
-                        gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+        public void execute(Login loginFeedBack) {
+            if (loginFeedBack.isSuccess()) {
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
+                        loginFeedBack.getData().getToken());
+                uploadImage(images.get(0));
             }
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                    .allowMainThreadQueries().build();
+        }
+    }
 
-            DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-            List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-            for (int i = 0; i < examinerDutiesList.size(); i++) {
-                examinerDutiesList.get(i).setTrackNumber(
-                        examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-                examinerDutiesList.get(i).setRadif(
-                        examinerDutiesList.get(i).getRadif().replace(".0", ""));
-                ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-                for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                    ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                    if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())) {
-                        examinerDutiesList.remove(i);
-                        j = examinerDutiesListTemp.size();
-                        i--;
-                    }
-                }
+    static class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
+
+        @Override
+        public void executeIncomplete(Response<Login> response) {
+            Log.e("Login incomplete", response.toString());
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    void setActionBarTitle(String title) {
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
+                (this, drawer, toolbar, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
             }
-            daoExaminerDuties.insertAll(examinerDutiesList);
+        };
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        toolbar.setNavigationOnClickListener(view1 -> drawer.openDrawer(Gravity.START));
+    }
 
-            DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
-            daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+    static class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
+        @Override
+        public void executeIncomplete(Response<UploadImage> response) {
+            Log.e("UploadImageDoc error", response.toString());
+        }
+    }
 
-            DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
-            daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
-
-            DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
-            daoServiceDictionary.insertAll(input.getServiceDictionary());
-
-            DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
-            daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
-
-            Log.e("size", String.valueOf(input.getKarbariDictionary().size()));
-            DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
-            daoKarbariDictionary.insertAll(input.getKarbariDictionary());
-
-            new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
-                    input.getExaminerDuties().size())).concat(" مسیر بارگیری شد."),
-                    getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+    static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
+        @Override
+        public void executeIncomplete(Response<SimpleMessage> response) {
+            Log.e("SendCalculation Error", response.toString());
         }
     }
 
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
-            MyDatabase dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
-                    .allowMainThreadQueries().build();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             for (CalculationUserInput calculationUserInput : calculationUserInputList) {
                 trackNumber = calculationUserInput.trackNumber;
                 daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
             }
+        }
+    }
+
+    class GetXYIncomplete implements ICallbackIncomplete<Place> {
+        @Override
+        public void executeIncomplete(Response<Place> response) {
+            counter = counter + 1;
+            if (counter < examinerDuties.size()) {
+                if (examinerDuties.get(counter).getBillId() != null
+                        && examinerDuties.get(counter).getBillId().length() > 0)
+                    getXY(examinerDuties.get(counter).getBillId());
+                else getXY(examinerDuties.get(counter).getNeighbourBillId());
+            }
+            if (counter == examinerDuties.size())
+                setActionBarTitle(getString(R.string.home));
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            Log.e("GetXYIncomplete", error);
         }
     }
 
@@ -685,7 +602,7 @@ public class MainActivity extends AppCompatActivity
                         break;
                     }
                 }
-                if (isUnique) {
+                if (isUnique && counter < examinerDuties.size()) {
                     isShown.add(false);
                     indexArray.add(counter);
                     examinerDutiesReady.add(examinerDuties.get(counter));
@@ -700,41 +617,183 @@ public class MainActivity extends AppCompatActivity
                 else getXY(examinerDuties.get(counter).getNeighbourBillId());
             }
             if (counter == examinerDuties.size())
-                setActionBarTitle("خانه");
-        }
-    }
-
-    class GetXYIncomplete implements ICallbackIncomplete<Place> {
-        @Override
-        public void executeIncomplete(Response<Place> response) {
-            counter = counter + 1;
-            if (counter < examinerDuties.size()) {
-                if (examinerDuties.get(counter).getBillId() != null
-                        && examinerDuties.get(counter).getBillId().length() > 0)
-                    getXY(examinerDuties.get(counter).getBillId());
-                else getXY(examinerDuties.get(counter).getNeighbourBillId());
-            }
-            if (counter == examinerDuties.size())
-                setActionBarTitle("خانه");
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            Log.e("GetXYIncomplete", error);
+                setActionBarTitle(getString(R.string.home));
         }
     }
 
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
-//            counter = counter + 1;
-//            if (counter < examinerDuties.size()) {
-//                if (examinerDuties.get(counter).getBillId() != null
-//                        && examinerDuties.get(counter).getBillId().length() > 0)
-//                    getXY(examinerDuties.get(counter).getBillId());
-//                else getXY(examinerDuties.get(counter).getNeighbourBillId());
-//            }
-//            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-//            String error = customErrorHandlingNew.getErrorMessageTotal(t);
-//            Log.e("GetXYError", error);
+            Log.e("Error", Objects.requireNonNull(t.getMessage()));
+            setActionBarTitle(getString(R.string.home));
         }
+    }
+
+
+    class UploadImageDoc implements ICallback<UploadImage> {
+        @Override
+        public void execute(UploadImage responseBody) {
+            if (responseBody.isSuccess()) {
+                DaoImages daoImages = dataBase.daoImages();
+                daoImages.deleteByID(imageId);
+                imageCounter = imageCounter + 1;
+                if (imageCounter < images.size()) {
+                    uploadImage(images.get(imageCounter));
+                }
+            } else
+                new CustomDialog(DialogType.Yellow, MainActivity.this,
+                        MainActivity.this.getString(R.string.error_upload).concat("\n")
+                                .concat(responseBody.getError()),
+                        MainActivity.this.getString(R.string.dear_user),
+                        MainActivity.this.getString(R.string.upload_image),
+                        MainActivity.this.getString(R.string.accepted));
+        }
+    }
+
+    List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            Gson gson = new Gson();
+            examinerDutiesList.get(i).setRequestDictionaryString(
+                    gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+            if (examinerDutiesList.get(i).getZoneId() == null ||
+                    examinerDutiesList.get(i).getZoneId().equals("0")) {
+                examinerDutiesList.remove(i);
+                i--;
+            }
+        }
+        return examinerDutiesList;
+    }
+
+    int removeExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            examinerDutiesList.get(i).setTrackNumber(
+                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+            examinerDutiesList.get(i).setRadif(
+                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
+            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
+                        || examinerDuties.getZoneId() == null
+                        || examinerDuties.getZoneId().equals("0")) {
+                    examinerDutiesList.remove(i);
+                    j = examinerDutiesListTemp.size();
+                    i--;
+                }
+            }
+        }
+        daoExaminerDuties.insertAll(examinerDutiesList);
+        return examinerDutiesList.size();
+    }
+
+    class Download implements ICallback<Input> {
+        @Override
+        public void execute(Input input) {
+            if (input != null) {
+                DaoNoeVagozariDictionary daoNoeVagozariDictionary = dataBase.daoNoeVagozariDictionary();
+                daoNoeVagozariDictionary.insertAll(input.getNoeVagozariDictionary());
+                DaoQotrEnsheabDictionary daoQotrEnsheabDictionary = dataBase.daoQotrEnsheabDictionary();
+                daoQotrEnsheabDictionary.insertAll(input.getQotrEnsheabDictionary());
+                DaoServiceDictionary daoServiceDictionary = dataBase.daoServiceDictionary();
+                daoServiceDictionary.insertAll(input.getServiceDictionary());
+                DaoTaxfifDictionary daoTaxfifDictionary = dataBase.daoTaxfifDictionary();
+                daoTaxfifDictionary.insertAll(input.getTaxfifDictionary());
+                DaoKarbariDictionary daoKarbariDictionary = dataBase.daoKarbariDictionary();
+                daoKarbariDictionary.insertAll(input.getKarbariDictionary());
+                DaoResultDictionary daoResultDictionary = dataBase.daoResultDictionary();
+                daoResultDictionary.insertAll(input.getResultDictionary());
+                new CustomDialog(DialogType.Green, context, "تعداد ".concat(String.valueOf(
+                        removeExaminerDuties(prepareExaminerDuties(input.getExaminerDuties()))))
+                        .concat(" مسیر بارگیری شد."),
+                        getString(R.string.dear_user), getString(R.string.receive), getString(R.string.accepted));
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.empty_download, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    class DownloadIncomplete implements ICallbackIncomplete<Input> {
+        @Override
+        public void executeIncomplete(Response<Input> response) {
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, context, error,
+                    getString(R.string.dear_user),
+                    getString(R.string.download),
+                    getString(R.string.accepted));
+            Log.e("Download Incomplete", response.toString());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.imageViewDownload.setImageResource(R.drawable.image_download);
+        binding.imageViewExit.setImageResource(R.drawable.image_exit);
+        binding.imageViewUpload.setImageResource(R.drawable.image_upload);
+        binding.imageViewPaper.setImageResource(R.drawable.image_paper);
+        binding.imageViewRequest.setImageResource(R.drawable.image_request);
+        binding.imageViewForm.setImageResource(R.drawable.image_form);
+        mapView.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+        }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        binding.imageViewDownload.setImageDrawable(null);
+        binding.imageViewUpload.setImageDrawable(null);
+        binding.imageViewExit.setImageDrawable(null);
+        binding.imageViewForm.setImageDrawable(null);
+        binding.imageViewPaper.setImageDrawable(null);
+        binding.imageViewRequest.setImageDrawable(null);
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+        HttpClientWrapper.call.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }

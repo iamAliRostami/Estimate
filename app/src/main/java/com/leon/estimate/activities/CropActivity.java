@@ -1,10 +1,8 @@
 package com.leon.estimate.activities;
 
 import android.annotation.SuppressLint;
-import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
@@ -13,7 +11,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Debug;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,18 +22,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.leon.estimate.R;
-import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.databinding.CropActivityBinding;
 
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,24 +46,31 @@ public class CropActivity extends AppCompatActivity {
     private boolean isInverted;
     CropActivityBinding binding;
     @SuppressLint("CheckResult")
-    private View.OnClickListener onButtonCropClickListener = v -> {
+    private final View.OnClickListener onButtonCropClickListener = v -> {
         setProgressBar(true);
         Observable.fromCallable(() -> {
-            ScannerConstants.bitmapSelectedImage = getCroppedImage();
-            if (ScannerConstants.bitmapSelectedImage == null)
+            Constants.bitmapSelectedImage = getCroppedImage();
+            if (Constants.bitmapSelectedImage == null)
                 return false;
             return false;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe((result) -> {
                     setProgressBar(false);
-                    if (ScannerConstants.bitmapSelectedImage != null) {
+                    if (Constants.bitmapSelectedImage != null) {
                         setResult(RESULT_OK);
                         finish();
                     }
                 });
     };
+    private final View.OnClickListener onButtonCloseClickListener = v -> finish();
+    private final View.OnClickListener onImageViewRebase = v -> {
+        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
+                bitmapTempOriginal.getConfig(), true);
+        isInverted = false;
+        initializeElement();
+    };
     @SuppressLint("CheckResult")
-    private View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
+    private final View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             setProgressBar(true);
@@ -85,22 +86,15 @@ public class CropActivity extends AppCompatActivity {
                     });
         }
     };
-    private View.OnClickListener onButtonCloseClickListener = v -> finish();
-    private View.OnClickListener onImageViewRebase = v -> {
-        ScannerConstants.bitmapSelectedImage = bitmapTempOriginal.copy(
-                bitmapTempOriginal.getConfig(), true);
-        isInverted = false;
-        initializeElement();
-    };
     @SuppressLint("CheckResult")
-    private View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
+    private final View.OnClickListener onImageViewRotateClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             setProgressBar(true);
             Observable.fromCallable(() -> {
                 if (isInverted)
                     invertColor();
-                ScannerConstants.bitmapSelectedImage = rotateBitmap(bitmapSelectedImage, 90);
+                Constants.bitmapSelectedImage = rotateBitmap(bitmapSelectedImage, 90);
                 return false;
             }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe((result) -> {
@@ -110,17 +104,17 @@ public class CropActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         binding = CropActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         isInverted = false;
-        if (ScannerConstants.bitmapSelectedImage != null) {
+        if (Constants.bitmapSelectedImage != null) {
             initializeElement();
         } else {
-            Toast.makeText(this, ScannerConstants.imageError, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_no_image_selected), Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -133,18 +127,19 @@ public class CropActivity extends AppCompatActivity {
     }
 
     private void setImageRotation() {
-        Bitmap tempBitmap = ScannerConstants.bitmapSelectedImage.copy(ScannerConstants.bitmapSelectedImage.getConfig(), true);
+        Bitmap tempBitmap = Constants.bitmapSelectedImage.copy(Constants.bitmapSelectedImage.getConfig(), true);
         for (int i = 1; i <= 4; i++) {
             MatOfPoint2f point2f = nativeClass.getPoint(tempBitmap);
             if (point2f == null) {
                 tempBitmap = rotateBitmap(tempBitmap, 90 * i);
             } else {
-                ScannerConstants.bitmapSelectedImage = tempBitmap.copy(
-                        ScannerConstants.bitmapSelectedImage.getConfig(), true);
+                Constants.bitmapSelectedImage = tempBitmap.copy(
+                        Constants.bitmapSelectedImage.getConfig(), true);
                 break;
             }
         }
     }
+
     private void setProgressBar(boolean isShow) {
         RelativeLayout rlContainer = findViewById(R.id.rlContainer);
         setViewInteract(rlContainer, !isShow);
@@ -166,16 +161,6 @@ public class CropActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
     private void initializeElement() {
         nativeClass = new NativeClass();
-        if (binding.progressBar.getIndeterminateDrawable() != null &&
-                ScannerConstants.progressColor != null)
-            binding.progressBar.getIndeterminateDrawable().setColorFilter(
-                    Color.parseColor(ScannerConstants.progressColor),
-                    android.graphics.PorterDuff.Mode.MULTIPLY);
-        else if (binding.progressBar.getProgressDrawable() != null &&
-                ScannerConstants.progressColor != null)
-            binding.progressBar.getProgressDrawable().setColorFilter(
-                    Color.parseColor(ScannerConstants.progressColor),
-                    android.graphics.PorterDuff.Mode.MULTIPLY);
         setProgressBar(true);
         Observable.fromCallable(() -> {
             setImageRotation();
@@ -193,16 +178,16 @@ public class CropActivity extends AppCompatActivity {
     }
 
     private void initializeCropping() {
-        bitmapSelectedImage = ScannerConstants.bitmapSelectedImage;
+        bitmapSelectedImage = Constants.bitmapSelectedImage;
         bitmapTempOriginal = bitmapSelectedImage.copy(bitmapSelectedImage.getConfig(), true);
-        ScannerConstants.bitmapSelectedImage = null;
+        Constants.bitmapSelectedImage = null;
 
         Bitmap scaledBitmap = scaledBitmap(bitmapSelectedImage, binding.holderImageCrop.getWidth(),
                 binding.holderImageCrop.getHeight());
         binding.imageView.setImageBitmap(scaledBitmap);
 
         Bitmap tempBitmap = ((BitmapDrawable) binding.imageView.getDrawable()).getBitmap();
-        Map<Integer, PointF> pointFs = null;
+        Map<Integer, PointF> pointFs;
         try {
             pointFs = getEdgePoints(tempBitmap);
             binding.polygonView.setPoints(pointFs);
@@ -241,7 +226,6 @@ public class CropActivity extends AppCompatActivity {
         isInverted = !isInverted;
     }
 
-
     protected Bitmap getCroppedImage() {
         try {
             Map<Integer, PointF> points = binding.polygonView.getPoints();
@@ -259,7 +243,7 @@ public class CropActivity extends AppCompatActivity {
             float y4 = (Objects.requireNonNull(points.get(3)).y) * yRatio;
             return nativeClass.getScannedBitmap(bitmapSelectedImage, x1, y1, x2, y2, x3, y3, x4, y4);
         } catch (Exception e) {
-            runOnUiThread(() -> Toast.makeText(CropActivity.this, ScannerConstants.cropError,
+            runOnUiThread(() -> Toast.makeText(CropActivity.this, getString(R.string.error_incorrect_selection),
                     Toast.LENGTH_SHORT).show());
             return null;
         }
@@ -272,7 +256,7 @@ public class CropActivity extends AppCompatActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
     }
 
-    private Map<Integer, PointF> getEdgePoints(Bitmap tempBitmap) throws Exception {
+    private Map<Integer, PointF> getEdgePoints(Bitmap tempBitmap) {
         List<PointF> pointFs = getContourEdgePoints(tempBitmap);
         return orderedValidEdgePoints(tempBitmap, pointFs);
     }
@@ -306,26 +290,22 @@ public class CropActivity extends AppCompatActivity {
         return orderedPoints;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "cropped_" + timeStamp + ".png";
-        File myPath = new File(directory, imageFileName);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return directory.getAbsolutePath();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding.imageView.setImageDrawable(null);
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }

@@ -48,10 +48,6 @@ public class CheckBoxAdapter extends BaseAdapter {
         holder.checkBox.setText(requestDictionaries.get(position).getTitle());
         holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
             requestDictionaries.get(position).setSelected(b);
-//            if (b) counter = counter + 1;
-//            else counter = counter - 1;
-//            Log.e("select".concat(String.valueOf(position)), String.valueOf(b));
-//            Log.e("number selected", String.valueOf(counter));
         });
         holder.checkBox.setChecked(requestDictionaries.get(position).isSelected());
         return view;

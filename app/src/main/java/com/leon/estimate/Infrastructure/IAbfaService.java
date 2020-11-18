@@ -1,8 +1,12 @@
 package com.leon.estimate.Infrastructure;
 
+import com.leon.estimate.Tables.AddDocument;
+import com.leon.estimate.Tables.Arzeshdaraei;
 import com.leon.estimate.Tables.CalculationInfo;
 import com.leon.estimate.Tables.CalculationUserInput;
 import com.leon.estimate.Tables.CalculationUserInputSend;
+import com.leon.estimate.Tables.GISInfo;
+import com.leon.estimate.Tables.GISToken;
 import com.leon.estimate.Tables.ImageDataThumbnail;
 import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Input;
@@ -10,6 +14,7 @@ import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.LoginFeedBack;
 import com.leon.estimate.Tables.LoginInfo;
 import com.leon.estimate.Tables.Place;
+import com.leon.estimate.Tables.Request;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Tables.Uri;
 import com.leon.estimate.Utils.SimpleMessage;
@@ -21,6 +26,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -175,7 +181,6 @@ public interface IAbfaService {
     );
 
     @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListThumbnail/{billIdOrTrackNumber}/{token}")
-//    @GET("/MoshtarakinApi/SepanoDMS/V1/GetDocsListHighQuality/{billIdOrTrackNumber}/{token}")
     Call<ImageDataThumbnail> getDocsListThumbnail(
             @Path("token") String token,
             @Path("billIdOrTrackNumber") String billIdOrTrackNumber
@@ -205,6 +210,13 @@ public interface IAbfaService {
             @Part("trackingNumber") String trackingNumber
     );
 
+    @POST("/MoshtarakinApi/SepanoDMS/V1/Add/{token}")
+    Call<AddDocument> addDocument(
+            @Path("token") String token,
+            @Body AddDocument addDocument
+    );
+
+
     @PATCH("/Auth/Account/UpdateDeviceId")
     Call<SimpleMessage> signSerial(
             @Query("deviceId") String deviceId);
@@ -227,6 +239,31 @@ public interface IAbfaService {
     @POST("/MoshtarakinApi/ExaminationManager/SetExaminationInfo")
     Call<SimpleMessage> SetExaminationInfo(
             @Body CalculationUserInput calculationUserInput);
+
+    @GET("/MoshtarakinApi/Gis/V1/Token/jesuschrist")
+    Call<GISToken> getGISToken();
+
+    @Headers("Content-Type: application/json")
+    @POST("/MoshtarakinApi/Gis/V1/Parcels")
+    Call<String> getGisParcels(@Body GISInfo gisInfo);
+
+    @POST("/MoshtarakinApi/Gis/V1/WaterPipe")
+    Call<String> getGisWaterPipe(@Body GISInfo gisInfo);
+
+    @POST("/MoshtarakinApi/Gis/V1/WaterTransfer")
+    Call<String> getGisWaterTransfer(@Body GISInfo gisInfo);
+
+    @POST("/MoshtarakinApi/Gis/V1/SanitationTransfer")
+    Call<String> getGisSanitationTransfer(@Body GISInfo gisInfo);
+
+    @GET("/moshtarakinApi/ExaminationManager/GetArzeshDaraii?")
+    Call<Arzeshdaraei> getArzeshDaraii(@Query("zoneId") int zoneId);
+
+    @POST("/moshtarakinApi/ExaminationManager/RegisterNew")
+    Call<SimpleMessage> sendRequestNew(@Body Request request);
+
+    @POST("/moshtarakinApi/ExaminationManager/RegisterAS")
+    Call<SimpleMessage> sendRequestAfterSale(@Body Request request);
 
 }
 

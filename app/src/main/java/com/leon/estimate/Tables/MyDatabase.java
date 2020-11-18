@@ -8,46 +8,82 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {CalculationInformation.class, Calculation.class, CalculationUserInput.class,
         TaxfifDictionary.class, ServiceDictionary.class, KarbariDictionary.class, ExaminerDuties.class,
         QotrSifoonDictionary.class, QotrEnsheabDictionary.class, NoeVagozariDictionary.class,
-        RequestDictionary.class, Images.class, MapScreen.class}, version = 23, exportSchema = false)
+        RequestDictionary.class, Images.class, MapScreen.class, ResultDictionary.class,
+        Tejariha.class, Zarib.class, Formula.class, Block.class},
+        version = 41, exportSchema = false)
 public abstract class MyDatabase extends RoomDatabase {
-    public static final Migration MIGRATION_22_23 = new Migration(22, 23) {
+    public static final Migration MIGRATION_41_42 = new Migration(41, 42) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE ImagesTemp (" +
-                    "imageId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "address TEXT, " +
-                    "billId TEXT, " +
-                    "trackingNumber  TEXT, " +
-                    "peygiri  TEXT, " +
-                    "docId INTEGER, " +
-                    "Sent INTEGER" +
-                    ");");
-            database.execSQL("DROP TABLE Images;");
-            database.execSQL("ALTER TABLE ImagesTemp RENAME TO Images;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  examinerName Text;");
+            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  ready INTEGER;");
+//            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y3 Real;");
+//            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y1 Real;");
+//            database.execSQL("Alter TABLE \"CalculationUserInput\" Add column  y2 Real;");
+//            database.execSQL("CREATE TABLE \"FormulaTemp\" (\n" +
+//                    "\t\"id\"\tINTEGER,\n" +
+//                    "\t\"zoneId\"\tINTEGER,\n" +
+//                    "\t\"gozarFrom\"\tREAL,\n" +
+//                    "\t\"gozarTo\"\tREAL,\n" +
+//                    "\t\"gozarTitle\"\tTEXT,\n" +
+//                    "\t\"maskooniZ\"\tREAL,\n" +
+//                    "\t\"TejraiZ\"\tREAL,\n" +
+//                    "\t\"edariDolatiZ\"\tREAL,\n" +
+//                    "\t\"khadamatiZ\"\tREAL,\n" +
+//                    "\t\"sanatiZ\"\tREAL,\n" +
+//                    "\t\"sayerZ\"\tREAL,\n" +
+//                    "\tPRIMARY KEY(\"id\")\n" +
+//                    ");");
+//            database.execSQL("DROP TABLE Formula;");
+//            database.execSQL("ALTER TABLE FormulaTemp RENAME TO Formula;");
+
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column pelak INTEGER;");
+//            database.execSQL("CREATE TABLE \"ImagesTemp\" (\n" +
+//                    "\t\"imageId\"\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+//                    "\t\"address\"\tTEXT,\n" +
+//                    "\t\"billId\"\tTEXT,\n" +
+//                    "\t\"trackingNumber\"\tTEXT,\n" +
+//                    "\t\"peygiri\"\tTEXT,\n" +
+//                    "\t\"docId\"\tINTEGER,\n" +
+//                    "\t\"Sent\"\tINTEGER\n" +
+//                    ");");
         }
     };
 
-    public static final Migration MIGRATION_17_18 = new Migration(17, 18) {
+    public static final Migration MIGRATION_31_32 = new Migration(27, 28) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE my_table_copy( \n" +
-                    "    id INTEGER, \n" +
-                    "    lang INTEGER,\n" +
-                    "    data TEXT,\n" +
-                    "    PRIMARY KEY (id, lang)\n" +
-                    ");\n");
-//            database.execSQL("INSERT INTO my_table_copy (id, lang, data)\n" +
-//                    "   SELECT id, lang, data FROM my_table;\n");
-            database.execSQL("DROP TABLE my_table;\n");
-            database.execSQL("ALTER TABLE my_table_copy RENAME TO my_table;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column estelamShahrdari INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column parvane INTEGER;");
+            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column motaqazi INTEGER;");
+//            database.execSQL("Alter TABLE \"chahDescription\" Add column parvane TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Rename column olqFazelab to omqFazelab ;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column shenasname TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleKhakiA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleKhakiF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleAsphaultA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleAsphaultF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleSangA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleSangF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleOtherA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column faseleOtherF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column ezhaNazarA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column ezhaNazarF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  qotrLooleI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column jensLooleI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column qotrLooleS TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  jensLooleS TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column looleA INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  looleF INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column noeMasrafI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column noeMasrafS TEXT;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  vaziatNasbPompI INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column omqeZirzamin INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column  etesalZirzamin INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column olqFazelab INTEGER;");
+//            database.execSQL("Alter TABLE \"ExaminerDuties\" Add column chahAbBaran INTEGER;");
         }
     };
-
-    public abstract DaoCalculation daoCalculateCalculation();
-
-    public abstract DaoCalculateInfo daoCalculateInfo();
-
-    public abstract DaoCalculationUserInput daoCalculationUserInput();
 
     public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
@@ -132,7 +168,16 @@ public abstract class MyDatabase extends RoomDatabase {
         }
     };
 
+
+    public abstract DaoCalculation daoCalculateCalculation();
+
+    public abstract DaoCalculateInfo daoCalculateInfo();
+
+    public abstract DaoCalculationUserInput daoCalculationUserInput();
+
     public abstract DaoImages daoImages();
+
+    public abstract DaoTejariha daoTejariha();
 
     public abstract DaoMapScreen daoMapScreen();
 
@@ -151,5 +196,13 @@ public abstract class MyDatabase extends RoomDatabase {
     public abstract DaoTaxfifDictionary daoTaxfifDictionary();
 
     public abstract DaoServiceDictionary daoServiceDictionary();
+
+    public abstract DaoResultDictionary daoResultDictionary();
+
+    public abstract DaoZarib daoZarib();
+
+    public abstract DaoBlock daoBlock();
+
+    public abstract DaoFormula daoFormula();
 
 }

@@ -1,18 +1,20 @@
 package com.leon.estimate.activities;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.View;
 import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.leon.estimate.R;
-import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.databinding.BrightnessContrastActivityBinding;
 
 import org.opencv.android.Utils;
@@ -22,30 +24,38 @@ import org.opencv.core.Mat;
 public class BrightnessContrastActivity extends AppCompatActivity {
     Bitmap bitmapTemp;
     BrightnessContrastActivityBinding binding;
+    View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Constants.bitmapSelectedImage = bitmapTemp;
+            setResult(RESULT_OK);
+            finish();
+        }
+    };
+    View.OnClickListener onClickListenerClose = v -> finish();
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerBrightness = new SeekBar.OnSeekBarChangeListener() {
+        @SuppressLint({"NewApi", "UseCompatLoadingForDrawables"})
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            int brightness = progress - 250;
-            bitmapTemp = brightnessController(ScannerConstants.bitmapSelectedImage, brightness);
+            int brightness = progress - 150;
+            bitmapTemp = brightnessController(Constants.bitmapSelectedImage, brightness);
             binding.imageView.setImageBitmap(bitmapTemp);
             binding.textViewBrightness.setText(getString(R.string.brightness).concat(String.valueOf(brightness)));
         }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
         }
     };
     SeekBar.OnSeekBarChangeListener onSeekBarChangeListenerContrast = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             float contrast = (float) (progress) / 10;
-            bitmapTemp = contrastController(ScannerConstants.bitmapSelectedImage, contrast,
+            bitmapTemp = contrastController(Constants.bitmapSelectedImage, contrast,
                     binding.seekBarBrightness.getProgress() - 250);
             binding.imageView.setImageBitmap(bitmapTemp);
             binding.textViewContrast.setText(getString(R.string.contrast).concat(String.valueOf(contrast)));
@@ -60,15 +70,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
-    View.OnClickListener onClickListenerAccepted = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ScannerConstants.bitmapSelectedImage = bitmapTemp;
-            setResult(RESULT_OK);
-            finish();
-        }
-    };
-    View.OnClickListener onClickListenerClose = v -> finish();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,16 +80,17 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         initialize();
     }
 
+    @SuppressLint({"UseCompatLoadingForDrawables", "NewApi"})
     void initialize() {
-        binding.seekBarBrightness.setMax(500);
+        binding.seekBarBrightness.setMax(300);
         binding.seekBarBrightness.setOnSeekBarChangeListener(onSeekBarChangeListenerBrightness);
-        binding.seekBarBrightness.setProgress(250);
+        binding.seekBarBrightness.setProgress(150);
 
         binding.seekBarContrast.setMax(100);
         binding.seekBarContrast.setOnSeekBarChangeListener(onSeekBarChangeListenerContrast);
         binding.seekBarContrast.setProgress(50);
 
-        bitmapTemp = ScannerConstants.bitmapSelectedImage;
+        bitmapTemp = Constants.bitmapSelectedImage;
         binding.imageView.setImageBitmap(bitmapTemp);
 
         binding.buttonAccepted.setOnClickListener(onClickListenerAccepted);
@@ -118,5 +120,24 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         Bitmap result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(src, result);
         return result;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding.imageView.setImageDrawable(null);
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 }

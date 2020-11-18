@@ -5,14 +5,14 @@ package com.leon.estimate.Enums;
  */
 
 public enum SharedReferenceKeys {
+    USERNAME_TEMP("username_temp"),
+    PASSWORD_TEMP("password_temp"),
     USERNAME("username"),
     PASSWORD("password"),
     TOKEN("token"),
     TOKEN_FOR_FILE("token_for_file"),
     REFRESH_TOKEN("refresh_token"),
-    THEME_STABLE("theme_stable"),
-    THEME_TEMPORARY("theme_temporary"),
-    BILL_COUNTER("bill_counter");
+    TRACK_NUMBER("track_number");
 
     private final String value;
 

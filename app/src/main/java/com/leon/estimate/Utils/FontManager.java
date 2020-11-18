@@ -19,7 +19,7 @@ import java.util.Stack;
 public class FontManager {
     Context context;
     private Typeface typeface;
-    private String fontName = "font/BYekan_3.ttf";
+    private String fontName = "font/my_font1.ttf";
 
     public FontManager(Context context) {
         this.context = context;

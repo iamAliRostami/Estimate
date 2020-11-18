@@ -6,7 +6,8 @@ import android.content.Context;
 
 
 public class MyApplication extends Application {
-
+    public static boolean isLocal = false;
+    public static final String fontName = "font/my_font1.ttf";
     @SuppressLint("StaticFieldLeak")
     private static Context sContext;
 

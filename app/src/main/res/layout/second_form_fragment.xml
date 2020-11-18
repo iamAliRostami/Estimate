@@ -1,0 +1,917 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    tools:context="com.leon.estimate.fragments.SecondFormFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_mid_margin"
+        android:layout_marginRight="@dimen/activity_mid_margin"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_large_margin"
+            android:text="@string/second_form"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeHuge"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_mid_margin"
+            android:background="@drawable/border_white_1"
+            android:padding="@dimen/activity_mid_padding"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/distance_water_network"
+                        android:textSize="@dimen/textSizeMedium" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/khaki"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextKhaki"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/asphalt"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextAsphalt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/sang"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextSange"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/other"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextOther"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            tools:ignore="DisableBaselineAlignment">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/ezhar_ab"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <CheckBox
+                                android:id="@+id/checkBoxVahedAb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/activity_medium_margin"
+                                android:text="@string/omq_shabake_fazelab"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge" />
+
+                            <EditText
+                                android:id="@+id/editTextOmqFazelab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor,NestedWeights" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/distance_fazelab_network"
+                        android:textSize="@dimen/textSizeMedium" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/khaki"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextKhakiFazelab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/asphalt"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextAsphaltFazelab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/sang"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextSangeFazelab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/other"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights,RtlHardcoded" />
+
+                            <EditText
+                                android:id="@+id/editTextOtherFazelab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/border_white_1"
+                                android:gravity="center"
+                                android:inputType="numberSigned"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:text="@string/zero"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/activity_medium_padding"
+                            android:gravity="right"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/ezhar_fazelab"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="NestedWeights,RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxVahedFazelab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:paddingTop="@dimen/activity_medium_padding"
+                            android:paddingBottom="@dimen/activity_medium_padding"
+                            tools:ignore="Autofill,LabelFor" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/loole"
+                        android:textSize="@dimen/textSizeMedium" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/qotr_loole"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights" />
+
+                            <Spinner
+                                android:id="@+id/spinnerLoole"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_mid_margin"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:spinnerMode="dialog"
+                                tools:ignore="NestedWeights" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_medium_padding"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/activity_mid_padding"
+                                android:paddingRight="@dimen/activity_mid_padding"
+                                android:text="@string/jens_loole"
+                                android:textColor="@color/blue4"
+                                android:textSize="@dimen/textSizeLarge"
+                                tools:ignore="NestedWeights" />
+
+                            <Spinner
+                                android:id="@+id/spinnerLooleJens"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/activity_mid_margin"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/activity_medium_padding"
+                                android:paddingBottom="@dimen/activity_medium_padding"
+                                android:spinnerMode="dialog"
+                                tools:ignore="NestedWeights" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="@string/loole_ab"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxLooleAb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/activity_medium_padding"
+                            android:text="@string/have"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeMedium" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="@string/loole_fazelab"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxLooleFazelab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/activity_medium_padding"
+                            android:text="@string/have"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeMedium" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/noe_masraf"
+                        android:textSize="@dimen/textSizeMedium" />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupMasraf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonNormal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/normal"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonSakht"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/sakht"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonService"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/services"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonMedical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/shorb_o_behdasht"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextNoeMasrafDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_padding"
+                        android:background="@drawable/border_white_1"
+                        android:gravity="top|right"
+                        android:hint="@string/description"
+                        android:inputType="textMultiLine"
+                        android:lines="4"
+                        android:padding="@dimen/activity_medium_padding"
+                        tools:ignore="Autofill,RtlHardcoded" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/eshterak"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge" />
+
+                    <EditText
+                        android:id="@+id/editTextEshterak"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_white_1"
+                        android:gravity="center"
+                        android:inputType="numberSigned"
+                        android:maxLength="12"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        tools:ignore="Autofill,LabelFor" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/vaziat_nasb_pomp"
+                        android:textSize="@dimen/textSizeMedium" />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupVaziatPomp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:checkedButton="@id/radioButtonNormalPomp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonNormalPomp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/monaseb"
+                            android:textSize="@dimen/textSizeLarge" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonANormalPomp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/namonaseb"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonDontHave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/activity_mid_padding"
+                            android:paddingRight="@dimen/activity_mid_padding"
+                            android:text="@string/have_n"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:text="@string/omq_zirzamin"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="TooManyViews" />
+
+                    <EditText
+                        android:id="@+id/editTextOmqZirzamin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/border_white_1"
+                        android:gravity="center"
+                        android:inputType="numberSigned"
+                        android:paddingTop="@dimen/activity_medium_padding"
+                        android:paddingBottom="@dimen/activity_medium_padding"
+                        android:text="@string/zero"
+                        tools:ignore="Autofill,LabelFor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="@dimen/activity_medium_margin"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/etesal_shabake_zirzamin"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeLarge"
+                        tools:ignore="RtlHardcoded" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxEtesalZirzamin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/activity_medium_padding"
+                        android:text="@string/have"
+                        android:textColor="@color/blue4"
+                        android:textSize="@dimen/textSizeMedium" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_mid_margin"
+                    android:background="@drawable/border_gray_2"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_mid_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_medium_margin"
+                            android:text="@string/chah_ab_baran"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeLarge"
+                            tools:ignore="RtlHardcoded" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxChahAbBaran"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/activity_medium_padding"
+                            android:text="@string/have"
+                            android:textColor="@color/blue4"
+                            android:textSize="@dimen/textSizeMedium" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/editTextDescriptionChahAbBaran"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_medium_padding"
+                        android:background="@drawable/border_white_1"
+                        android:gravity="top|right"
+                        android:hint="@string/description"
+                        android:inputType="textMultiLine"
+                        android:lines="4"
+                        android:padding="@dimen/activity_medium_padding"
+                        tools:ignore="Autofill,RtlHardcoded" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>

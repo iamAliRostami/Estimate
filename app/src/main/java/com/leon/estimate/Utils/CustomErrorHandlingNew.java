@@ -48,7 +48,7 @@ public class CustomErrorHandlingNew {
     public APIError parseError(Response<?> response) {
         try {
             Converter<ResponseBody, APIError> converter =
-                    NetworkHelper.getInstance(false, "").
+                    NetworkHelper.getInstance().
                             responseBodyConverter(APIError.class, new Annotation[0]);
             APIError error;
             error = converter.convert(Objects.requireNonNull(response.errorBody()));

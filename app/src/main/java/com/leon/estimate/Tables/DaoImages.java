@@ -13,6 +13,7 @@ public interface DaoImages {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertImage(Images images);
 
+
     @Query("SELECT * FROM Images")
     List<Images> getImages();
 
@@ -30,4 +31,7 @@ public interface DaoImages {
 
     @Query("SELECT * FROM Images WHERE trackingNumber =:trackingNumber OR billId =:billId")
     List<Images> getImagesByTrackingNumberOrBillId(String trackingNumber, String billId);
+
+    @Query("DELETE FROM Images WHERE imageId = :imageId")
+    void deleteByID(int imageId);
 }

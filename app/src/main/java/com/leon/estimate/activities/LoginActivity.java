@@ -6,13 +6,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -31,8 +31,8 @@ import com.leon.estimate.Infrastructure.IAbfaService;
 import com.leon.estimate.Infrastructure.ICallback;
 import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
+import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Utils.Crypto;
 import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
@@ -47,13 +47,12 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 public class LoginActivity extends AppCompatActivity {
-    LoginActivityBinding binding;
-    int REQUEST_LOCATION_CODE = 1236;
+    private LoginActivityBinding binding;
     private SharedPreferenceManager sharedPreferenceManager;
-    private String username;
-    private String password;
-    private View viewFocus;
+    private String username, password;
     private Context context;
 
     @Override
@@ -69,9 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         context = this;
         binding.textViewVersion.setText(getString(R.string.version).concat(" ")
                 .concat(BuildConfig.VERSION_NAME));
-        sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
-                SharedReferenceNames.ACCOUNT.getValue());
-        String deviceId = Build.SERIAL;
+        loadPreference();
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
         binding.imageViewPerson.setImageResource(R.drawable.img_profile);
@@ -81,15 +78,14 @@ public class LoginActivity extends AppCompatActivity {
         setEditTextUsernameOnFocusChangeListener();
         setEditTextPasswordOnFocusChangeListener();
         setImageViewOnClickListener();
-        setButtonOnClickListener();
-        setButtonOnLongClickListener();
+        setButtonLoginOnClickListener();
+        setButtonLocalOnClickListener();
     }
 
     void attemptLogin() {
-        Retrofit retrofit = NetworkHelper.getInstance(true, "");
+        Retrofit retrofit = NetworkHelper.getInstance("");
         final IAbfaService loginInfo = retrofit.create(IAbfaService.class);
-        Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login1(
-                username, password);
+        Call<com.leon.estimate.Tables.LoginFeedBack> call = loginInfo.login1(username, password);
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW_CANCELABLE.getValue(), this,
                 new LoginFeedBack(), new GetErrorIncomplete(), new GetError());
     }
@@ -121,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setPermissions(
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.CAMERA,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).check();
@@ -143,20 +140,6 @@ public class LoginActivity extends AppCompatActivity {
         } else askPermission();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        GpsEnabled();
-    }
-
-    private void forceClose() {
-        new CustomDialog(DialogType.Red, getApplicationContext(),
-                getApplicationContext().getString(R.string.permission_not_completed),
-                getApplicationContext().getString(R.string.dear_user),
-                getApplicationContext().getString(R.string.call_operator),
-                getApplicationContext().getString(R.string.force_close));
-        finishAffinity();
-    }
 
     private void setEditTextUsernameChangedListener() {
         binding.editTextUsername.addTextChangedListener(new TextWatcher() {
@@ -196,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setEditTextUsernameOnFocusChangeListener() {
         binding.editTextUsername.setOnFocusChangeListener((view, b) -> {
             binding.editTextUsername.setHint("");
@@ -209,6 +193,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setEditTextPasswordOnFocusChangeListener() {
         binding.editTextPassword.setOnFocusChangeListener((view, b) -> {
             binding.editTextPassword.setHint("");
@@ -224,17 +209,18 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setImageViewOnClickListener() {
         binding.imageViewPassword.setOnClickListener(view -> {
-            if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_NUMBER)
-                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
-            else
-                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_NUMBER |
-                        InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            if (binding.editTextPassword.getInputType() != InputType.TYPE_CLASS_TEXT) {
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else
+                binding.editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
         });
     }
 
-    private void setButtonOnClickListener() {
+    private void setButtonLoginOnClickListener() {
         binding.buttonLogin.setOnClickListener(view -> {
-
+            Log.e("buttonLogin", "click");
+            View viewFocus;
             boolean cancel = false;
             username = binding.editTextUsername.getText().toString();
             password = binding.editTextPassword.getText().toString();
@@ -251,22 +237,63 @@ public class LoginActivity extends AppCompatActivity {
                 cancel = true;
             }
             if (!cancel) {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//                finish();
+                MyApplication.isLocal = false;
                 attemptLogin();
             }
         });
     }
 
-    private void setButtonOnLongClickListener() {
-        binding.buttonLogin.setOnLongClickListener(view -> {
-//            Intent intent = new Intent(getApplicationContext(), DocumentActivity1.class);
-//            intent.putExtra(BundleEnum.BILL_ID.getValue(), "10000018");
-//            startActivity(intent);
-//            finish();
-            return false;
+    private void setButtonLocalOnClickListener() {
+        binding.buttonLoginLocal.setOnClickListener(v -> {
+            Log.e("buttonLogin", "Long");
+            View viewFocus;
+            boolean cancel = false;
+            username = binding.editTextUsername.getText().toString();
+            password = binding.editTextPassword.getText().toString();
+            if (username.length() < 1) {
+                viewFocus = binding.editTextUsername;
+                viewFocus.requestFocus();
+                binding.editTextUsername.setError(getString(R.string.error_empty));
+                cancel = true;
+            }
+            if (!cancel && password.length() < 1) {
+                viewFocus = binding.editTextPassword;
+                viewFocus.requestFocus();
+                binding.editTextPassword.setError(getString(R.string.error_empty));
+                cancel = true;
+            }
+            if (!cancel) {
+                MyApplication.isLocal = true;
+                attemptLogin();
+            }
         });
+    }
+
+    void loadPreference() {
+        sharedPreferenceManager = new SharedPreferenceManager(getApplicationContext(),
+                SharedReferenceNames.ACCOUNT.getValue());
+        if (sharedPreferenceManager.checkIsNotEmpty(SharedReferenceKeys.USERNAME.getValue()) &&
+                sharedPreferenceManager.checkIsNotEmpty(SharedReferenceKeys.PASSWORD.getValue())) {
+            binding.editTextUsername.setText(sharedPreferenceManager.getStringData(
+                    SharedReferenceKeys.USERNAME.getValue()));
+            binding.editTextPassword.setText(sharedPreferenceManager.getStringData(
+                    SharedReferenceKeys.PASSWORD.getValue()));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        GpsEnabled();
+    }
+
+    private void forceClose() {
+        new CustomDialog(DialogType.Red, getApplicationContext(),
+                getApplicationContext().getString(R.string.permission_not_completed),
+                getApplicationContext().getString(R.string.dear_user),
+                getApplicationContext().getString(R.string.call_operator),
+                getApplicationContext().getString(R.string.force_close));
+        finishAffinity();
     }
 
     class LoginFeedBack
@@ -279,10 +306,19 @@ public class LoginActivity extends AppCompatActivity {
                     loginFeedBack.getRefresh_token().length() < 1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_is_not_match), Toast.LENGTH_SHORT).show();
             } else {
+                if (MyApplication.isLocal) {
+                    Toast.makeText(getApplicationContext(), "شبکه داخلی فعال شد.", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "اینترنت فعال شد.", Toast.LENGTH_LONG).show();
+                sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME_TEMP.getValue(), username);
+//                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
+                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD_TEMP.getValue(), password);
                 sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN.getValue(), loginFeedBack.getAccess_token());
-                sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME.getValue(), username);
-                sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), Crypto.encrypt(password));
                 sharedPreferenceManager.putData(SharedReferenceKeys.REFRESH_TOKEN.getValue(), loginFeedBack.getRefresh_token());
+                if (binding.checkBoxSave.isChecked()) {
+                    sharedPreferenceManager.putData(SharedReferenceKeys.USERNAME.getValue(), username);
+                    sharedPreferenceManager.putData(SharedReferenceKeys.PASSWORD.getValue(), password);
+                }
                 GpsEnabled();
             }
         }
@@ -291,10 +327,9 @@ public class LoginActivity extends AppCompatActivity {
     class GetErrorIncomplete implements ICallbackIncomplete<com.leon.estimate.Tables.LoginFeedBack> {
         @Override
         public void executeIncomplete(Response<com.leon.estimate.Tables.LoginFeedBack> response) {
-//            sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(), "PHPSESSID=q66qf0c3jqms5eqg5aac9khfq6");
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            if (response.code() == 404) {
+            if (response.code() == 401) {
                 error = LoginActivity.this.getString(R.string.error_is_not_match);
             }
             new CustomDialog(DialogType.Yellow, LoginActivity.this, error,
@@ -348,5 +383,4 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         initialize();
     }
-
 }

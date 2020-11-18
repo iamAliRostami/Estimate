@@ -4,6 +4,7 @@
     android:id="@+id/activity_admin_forget_password"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".activities.LoginActivity">
 
     <LinearLayout
@@ -76,10 +77,10 @@
                     android:hint="@string/username"
                     android:inputType="text"
                     android:lines="1"
-                    android:text="appExam"
                     android:padding="@dimen/activity_medium_padding"
                     tools:ignore="Autofill" />
 
+                <!--                android:text="appExam"-->
                 <!--                android:text="test_u1"-->
                 <ImageView
                     android:id="@+id/imageViewUsername"
@@ -110,9 +111,9 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:padding="@dimen/activity_medium_padding"
-                    android:text="123456"
                     tools:ignore="Autofill" />
 
+                <!--                android:text="123456"-->
                 <!--                android:text="pspihp"-->
 
                 <ImageView
@@ -122,6 +123,44 @@
                     android:src="@drawable/img_password"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/check_box_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/activity_mid_margin"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/activity_mid_margin"
+                android:text="@string/save"
+                android:textSize="@dimen/textSizeMedium"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:background="@drawable/border_blue_1"
+                android:text="@string/login"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/textSizeLarge"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonLoginLocal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:background="@drawable/border_green_2"
+                android:text="@string/login_lcoal"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/textSizeLarge"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imageViewLogo"
@@ -133,18 +172,6 @@
                 android:src="@drawable/img_bg_logo"
                 tools:ignore="ContentDescription" />
 
-            <Button
-                android:id="@+id/buttonLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_30sdp"
-                android:background="@drawable/border_blue_1"
-                android:text="@string/login"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/textSizeLarge"
-                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_mid_margin"
-        android:background="@drawable/border_gray_2"
+        android:background="@drawable/border_white_1"
         android:layoutDirection="rtl"
         android:orientation="horizontal"
         tools:ignore="UselessParent">
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="item"
+            android:text="@string/services"
             android:textDirection="rtl"
             android:textSize="@dimen/textSizeLarge" />
 

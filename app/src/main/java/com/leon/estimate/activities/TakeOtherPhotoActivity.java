@@ -29,7 +29,7 @@ import com.gun0912.tedpermission.TedPermission;
 import com.leon.estimate.Tables.DaoImages;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.ScannerConstants;
+import com.leon.estimate.Utils.Constants;
 import com.leon.estimate.databinding.TakeOtherPhotoActivityBinding;
 
 import org.jetbrains.annotations.Nullable;
@@ -46,11 +46,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.leon.estimate.Utils.Constants.CAMERA_REQUEST;
+import static com.leon.estimate.Utils.Constants.GALLERY_REQUEST;
+
 public final class TakeOtherPhotoActivity extends AppCompatActivity {
-    private final int CAMERA_REQUEST = 1888;
-    private final int GALLERY_REQUEST = 1888;
-    private final int IMAGE_CROP_REQUEST = 1234;
-    private final int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
     static String imageFileName;
     String mCurrentPhotoPath;
     boolean replace = false;
@@ -82,6 +81,8 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST = 1324;
+        int IMAGE_CROP_REQUEST = 1234;
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             Bitmap btimap = null;
@@ -90,7 +91,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
                 Objects.requireNonNull(uri);
                 InputStream inputStream = this.getContentResolver().openInputStream(Objects.requireNonNull(selectedImage));
                 btimap = BitmapFactory.decodeStream(inputStream);
-                ScannerConstants.bitmapSelectedImage = btimap;
+                Constants.bitmapSelectedImage = btimap;
                 this.startActivityForResult(new Intent(this, CropActivity.class), IMAGE_CROP_REQUEST);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -98,7 +99,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             ContentResolver contentResolver = this.getContentResolver();
             try {
-                ScannerConstants.bitmapSelectedImage = Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath));
+                Constants.bitmapSelectedImage = Media.getBitmap(contentResolver, Uri.parse(mCurrentPhotoPath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,10 +109,10 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
             this.startActivityForResult(new Intent(this, BrightnessContrastActivity.class),
                     IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST);
         } else if (requestCode == IMAGE_BRIGHTNESS_AND_CONTRAST_REQUEST && resultCode == RESULT_OK) {
-            binding.imageView.setImageBitmap(ScannerConstants.bitmapSelectedImage);
+            binding.imageView.setImageBitmap(Constants.bitmapSelectedImage);
             binding.buttonPick.setText("تغییر عکس");
-            saveTempBitmap(ScannerConstants.bitmapSelectedImage);
-            if (ScannerConstants.bitmapSelectedImage != null) {
+            saveTempBitmap(Constants.bitmapSelectedImage);
+            if (Constants.bitmapSelectedImage != null) {
                 Toast.makeText(this, "انجام شد", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "انجام نشد", Toast.LENGTH_SHORT).show();
@@ -252,7 +253,7 @@ public final class TakeOtherPhotoActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        ScannerConstants.fileName = imageFileName;
+        Constants.fileName = imageFileName;
         TakeOtherPhotoActivity.imageFileName = imageFileName;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
