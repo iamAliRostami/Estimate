@@ -97,6 +97,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -462,9 +463,22 @@ public class MainActivity extends AppCompatActivity
             Retrofit retrofit = NetworkHelper.getInstance(token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
 
-//            Collections.sort(calculationUserInputSends, (m1, m2) -> (int) (m2.zoneId - m1.zoneId));
-
-            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
+            Collections.sort(calculationUserInputSends, (c1, c2) -> (int) (c2.zoneId - c1.zoneId));
+            ArrayList<Integer> zoneIds = new ArrayList<>();
+            zoneIds.add(calculationUserInputSends.get(0).zoneId);
+            ArrayList<CalculationUserInputSend> calculationUserInputSendsTemp = new ArrayList<>();
+            calculationUserInputSendsTemp.add(calculationUserInputSends.get(0));
+            for (int i = 1; i < calculationUserInputSends.size(); i++) {
+                if (zoneIds.get(zoneIds.size() - 1) != calculationUserInputSends.get(i).zoneId) {
+                    Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSendsTemp);
+                    HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
+                            new SendCalculationIncomplete(), new GetError());
+                    zoneIds.add(calculationUserInputSends.get(i).zoneId);
+                    calculationUserInputSendsTemp = new ArrayList<>();
+                }
+                calculationUserInputSendsTemp.add(calculationUserInputSends.get(i));
+            }
+            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSendsTemp);
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
                     new SendCalculationIncomplete(), new GetError());
         } else
