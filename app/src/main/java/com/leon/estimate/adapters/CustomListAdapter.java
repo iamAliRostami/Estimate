@@ -37,13 +37,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {
         this.context = context;
-//        for (int i = 0; i < examinerDuties.size(); i++) {
-//            if (examinerDuties.get(i).getZoneId() == null ||
-//                    examinerDuties.get(i).getZoneId().equals("0")) {
-//                examinerDuties.remove(i);
-//                i--;
-//            }
-//        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             examinerDuties.sort(Comparator.comparing(ExaminerDuties::isPeymayesh).thenComparing(ExaminerDuties::getExaminationDay));
         } else

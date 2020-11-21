@@ -457,12 +457,13 @@ public class MainActivity extends AppCompatActivity
                 CalculationUserInputSend calculationUserInputSend =
                         new CalculationUserInputSend(calculationUserInputList.get(i), examinerDuties);
                 calculationUserInputSends.add(calculationUserInputSend);
-            }
-            SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(
-                    getApplicationContext(), SharedReferenceNames.ACCOUNT.getValue());
+            }//TODO
             String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
             Retrofit retrofit = NetworkHelper.getInstance(token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+
+//            Collections.sort(calculationUserInputSends, (m1, m2) -> (int) (m2.zoneId - m1.zoneId));
+
             Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
                     new SendCalculationIncomplete(), new GetError());
@@ -518,14 +519,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    static class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
-
-        @Override
-        public void executeIncomplete(Response<Login> response) {
-            Log.e("Login incomplete", response.toString());
-        }
-    }
-
     @SuppressLint("WrongConstant")
     void setActionBarTitle(String title) {
         toolbar.setTitle(title);
@@ -544,20 +537,6 @@ public class MainActivity extends AppCompatActivity
         toolbar.setNavigationOnClickListener(view1 -> drawer.openDrawer(Gravity.START));
     }
 
-    static class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
-        @Override
-        public void executeIncomplete(Response<UploadImage> response) {
-            Log.e("UploadImageDoc error", response.toString());
-        }
-    }
-
-    static class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
-        @Override
-        public void executeIncomplete(Response<SimpleMessage> response) {
-            Log.e("SendCalculation Error", response.toString());
-        }
-    }
-
     class SendCalculation implements ICallback<SimpleMessage> {
         @Override
         public void execute(SimpleMessage simpleMessage) {
@@ -569,21 +548,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class GetXYIncomplete implements ICallbackIncomplete<Place> {
+    class LoginDocumentIncomplete implements ICallbackIncomplete<Login> {
+
         @Override
-        public void executeIncomplete(Response<Place> response) {
-            counter = counter + 1;
-            if (counter < examinerDuties.size()) {
-                if (examinerDuties.get(counter).getBillId() != null
-                        && examinerDuties.get(counter).getBillId().length() > 0)
-                    getXY(examinerDuties.get(counter).getBillId());
-                else getXY(examinerDuties.get(counter).getNeighbourBillId());
-            }
-            if (counter == examinerDuties.size())
-                setActionBarTitle(getString(R.string.home));
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
-            Log.e("GetXYIncomplete", error);
+        public void executeIncomplete(Response<Login> response) {
+            Log.e("Login incomplete", response.toString());
         }
     }
 
@@ -621,14 +590,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class GetError implements ICallbackError {
+    class SendCalculationIncomplete implements ICallbackIncomplete<SimpleMessage> {
         @Override
-        public void executeError(Throwable t) {
-            Log.e("Error", Objects.requireNonNull(t.getMessage()));
-            setActionBarTitle(getString(R.string.home));
+        public void executeIncomplete(Response<SimpleMessage> response) {
+            Log.e("SendCalculation Error", response.toString());
         }
     }
-
 
     class UploadImageDoc implements ICallback<UploadImage> {
         @Override
@@ -647,6 +614,24 @@ public class MainActivity extends AppCompatActivity
                         MainActivity.this.getString(R.string.dear_user),
                         MainActivity.this.getString(R.string.upload_image),
                         MainActivity.this.getString(R.string.accepted));
+        }
+    }
+
+    class GetXYIncomplete implements ICallbackIncomplete<Place> {
+        @Override
+        public void executeIncomplete(Response<Place> response) {
+            counter = counter + 1;
+            if (counter < examinerDuties.size()) {
+                if (examinerDuties.get(counter).getBillId() != null
+                        && examinerDuties.get(counter).getBillId().length() > 0)
+                    getXY(examinerDuties.get(counter).getBillId());
+                else getXY(examinerDuties.get(counter).getNeighbourBillId());
+            }
+            if (counter == examinerDuties.size())
+                setActionBarTitle(getString(R.string.home));
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            Log.e("GetXYIncomplete", error);
         }
     }
 
@@ -727,6 +712,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    class UploadImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
+        @Override
+        public void executeIncomplete(Response<UploadImage> response) {
+            Log.e("UploadImageDoc error", response.toString());
+        }
+    }
+
+    class GetError implements ICallbackError {
+        @Override
+        public void executeError(Throwable t) {
+            Log.e("Error", Objects.requireNonNull(t.getMessage()));
+            setActionBarTitle(getString(R.string.home));
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -762,7 +762,6 @@ public class MainActivity extends AppCompatActivity
         if (counter == examinerDuties.size())
             setActionBarTitle(getString(R.string.home));
     }
-
 
     @Override
     protected void onStop() {
