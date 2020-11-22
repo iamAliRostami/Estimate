@@ -97,7 +97,6 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -204,9 +203,9 @@ public class MainActivity extends AppCompatActivity
         binding.imageViewDownload.setOnClickListener(onClickListener);
         binding.imageViewUpload.setOnClickListener(onClickListener);
         binding.imageViewPaper.setOnClickListener(onClickListener);
+        binding.imageViewExit.setOnClickListener(onClickListener);
         binding.imageViewForm.setOnClickListener(onClickListener);
         binding.imageViewRequest.setOnClickListener(onClickListener);
-        binding.imageViewExit.setOnClickListener(onClickListener);
     }
 
     void initializeMap() {
@@ -216,16 +215,13 @@ public class MainActivity extends AppCompatActivity
             mapView = findViewById(R.id.mapView);
             if (MyApplication.isLocal) {
                 final OnlineTileSourceBase custom = new OnlineTileSourceBase("custom",
-                        0, 19, 256,
-                        ".png", new String[]{
-                        DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)
+                        0, 19, 256, ".png", new String[]{
+                        DifferentCompanyManager.getLocalBaseUrl(CompanyNames.ESF_MAP)//"http://192.168.142.206:8080/styles/klokantech-basic/"
                 }) {
                     @Override
                     public String getTileURLString(long aTile) {
-                        return getBaseUrl() + MapTileIndex.getZoom(aTile)
-                                + "/" + MapTileIndex.getX(aTile)
-                                + "/" + MapTileIndex.getY(aTile)
-                                + mImageFilenameEnding;
+                        return getBaseUrl() + MapTileIndex.getZoom(aTile) + "/" + MapTileIndex.getX(aTile)
+                                + "/" + MapTileIndex.getY(aTile) + mImageFilenameEnding;
                     }
                 };
                 mapView.setTileSource(custom);
@@ -292,16 +288,13 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(context, R.string.is_peymayesh, Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(context, FormActivity.class);
-                    intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(),
-                            examinerDuties.getTrackNumber());
-                    intent.putExtra(BundleEnum.SERVICES.getValue(),
-                            examinerDuties.getRequestDictionaryString());
+                    intent.putExtra(BundleEnum.TRACK_NUMBER.getValue(), examinerDuties.getTrackNumber());
+                    intent.putExtra(BundleEnum.SERVICES.getValue(), examinerDuties.getRequestDictionaryString());
                     context.startActivity(intent);
                 }
             } else {
                 gpsTracker.getLocation();
-                new AddRoutOverlay().execute(new GeoPoint(
-                        gpsTracker.getLatitude(), gpsTracker.getLongitude()), startPoint);
+                new AddRoutOverlay().execute(new GeoPoint(gpsTracker.getLatitude(), gpsTracker.getLongitude()), startPoint);
                 startMarker.setTitle(examinerDuties.getNameAndFamily().concat("\n")
                         .concat(examinerDuties.getServiceGroup()));
                 startMarker.setSubDescription(examinerDuties.getAddress().concat("\n")
@@ -381,8 +374,7 @@ public class MainActivity extends AppCompatActivity
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(), "مجوز ها داده شده",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "مجوز ها داده شده", Toast.LENGTH_SHORT).show();
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
@@ -470,22 +462,9 @@ public class MainActivity extends AppCompatActivity
             Retrofit retrofit = NetworkHelper.getInstance(token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
 
-            Collections.sort(calculationUserInputSends, (c1, c2) -> (int) (c2.zoneId - c1.zoneId));
-            ArrayList<Integer> zoneIds = new ArrayList<>();
-            zoneIds.add(calculationUserInputSends.get(0).zoneId);
-            ArrayList<CalculationUserInputSend> calculationUserInputSendsTemp = new ArrayList<>();
-            calculationUserInputSendsTemp.add(calculationUserInputSends.get(0));
-            for (int i = 1; i < calculationUserInputSends.size(); i++) {
-                if (zoneIds.get(zoneIds.size() - 1) != calculationUserInputSends.get(i).zoneId) {
-                    Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSendsTemp);
-                    HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
-                            new SendCalculationIncomplete(), new GetError());
-                    zoneIds.add(calculationUserInputSends.get(i).zoneId);
-                    calculationUserInputSendsTemp = new ArrayList<>();
-                }
-                calculationUserInputSendsTemp.add(calculationUserInputSends.get(i));
-            }
-            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSendsTemp);
+//            Collections.sort(calculationUserInputSends, (m1, m2) -> (int) (m2.zoneId - m1.zoneId));
+
+            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSends);
             HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
                     new SendCalculationIncomplete(), new GetError());
         } else
