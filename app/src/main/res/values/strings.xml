@@ -63,6 +63,7 @@
     <string name="error_internal">با عرض پوزش، سرور در حال به روزرسانی، لطفا دقایقی دیگر امتحان فرمایید.</string>
     <string name="error_input">ورودی های خود را چک کنید.</string>
     <string name="error_change_server">سرور در حال تغییرات است، لطفا منتظر بمانید و در صورت برطرف نشدن مشکل با پشتیبان تماس حاصل فرمایید.</string>
+    <string name="error_value">در این منطقه ارزش معاملاتی تعریف نشده است.</string>
     <string name="error_user_password">نام کاربری و گذرواژه در سیستم موجود نیست، لطفا در ورود اطلاعات دقت قرمایید.</string>
     <string name="error_not_update">لطفا نسخه به روز شده اپلیکیشن را از فهرست فوری، بخش به روز رسانی دریافت نمایید.</string>
 

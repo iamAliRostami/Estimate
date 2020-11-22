@@ -526,7 +526,7 @@ public class FormFragment extends Fragment {
                 }
             } else {
                 new CustomDialog(DialogType.Yellow, context,
-                        context.getString(R.string.error_change_server),
+                        context.getString(R.string.error_value),
                         getString(R.string.dear_user),
                         getString(R.string.arzesh_mantaghe),
                         getString(R.string.accepted));
