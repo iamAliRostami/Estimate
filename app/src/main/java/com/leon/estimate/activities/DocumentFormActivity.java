@@ -457,6 +457,7 @@ public class DocumentFormActivity extends AppCompatActivity {
                     @NotNull
                     @Override
                     public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+                        Log.e("here", "hre");
                         View view = super.getView(position, convertView, parent);
                         final CheckedTextView textView = view.findViewById(android.R.id.text1);
                         textView.setChecked(true);

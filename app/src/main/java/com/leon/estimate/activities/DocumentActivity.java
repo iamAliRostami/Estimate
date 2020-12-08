@@ -224,8 +224,10 @@ public class DocumentActivity extends AppCompatActivity {
                 for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
                     arrayListTitle.add(dataTitle.getTitle());
                 }
-                images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
-                imageViewAdapter.notifyDataSetChanged();
+                if (!isNeighbour) {
+                    images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
+                    imageViewAdapter.notifyDataSetChanged();
+                }
             } else {
                 Toast.makeText(DocumentActivity.this,
                         DocumentActivity.this.getString(R.string.error_call_backup),
@@ -259,11 +261,11 @@ public class DocumentActivity extends AppCompatActivity {
                     }
                     if (imageDataThumbnailUri.size() > 0)
                         getImageThumbnail(imageDataThumbnail.get(0).getImg());
-                    else {
+                    else if (images.isEmpty()) {
                         binding.progressBar.setVisibility(View.GONE);
                         binding.textViewEmpty.setVisibility(View.VISIBLE);
                         binding.gridViewImage.setVisibility(View.GONE);
-                    }
+                    } else binding.progressBar.setVisibility(View.GONE);
                 } else binding.progressBar.setVisibility(View.GONE);
             } else {
                 Toast.makeText(DocumentActivity.this,

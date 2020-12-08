@@ -97,6 +97,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -443,6 +444,50 @@ public class MainActivity extends AppCompatActivity
         Call<Input> call = getKardex.getMyWorks();
         HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
                 new Download(), new DownloadIncomplete(), new GetError());
+    }
+
+    void sendMultiCity() {
+        DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
+        calculationUserInputList = daoCalculationUserInput.getCalculationUserInput();
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        if (calculationUserInputList.size() > 0) {
+            ArrayList<CalculationUserInputSend> calculationUserInputSends = new ArrayList<>();
+            for (int i = 0; i < calculationUserInputList.size(); i++) {
+                ExaminerDuties examinerDuties = daoExaminerDuties.examinerDutiesByTrackNumber(
+                        calculationUserInputList.get(i).trackNumber);
+                CalculationUserInputSend calculationUserInputSend =
+                        new CalculationUserInputSend(calculationUserInputList.get(i), examinerDuties);
+                calculationUserInputSends.add(calculationUserInputSend);
+            }//TODO
+            String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
+            Retrofit retrofit = NetworkHelper.getInstance(token);
+            final IAbfaService abfaService = retrofit.create(IAbfaService.class);
+
+            Collections.sort(calculationUserInputSends, (c1, c2) -> (int) (c2.zoneId - c1.zoneId));
+            ArrayList<Integer> zoneIds = new ArrayList<>();
+            zoneIds.add(calculationUserInputSends.get(0).zoneId);
+            ArrayList<CalculationUserInputSend> calculationUserInputSendsTemp = new ArrayList<>();
+            calculationUserInputSendsTemp.add(calculationUserInputSends.get(0));
+            for (int i = 1; i < calculationUserInputSends.size(); i++) {
+                if (zoneIds.get(zoneIds.size() - 1) != calculationUserInputSends.get(i).zoneId) {
+                    Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSendsTemp);
+                    HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
+                            new SendCalculationIncomplete(), new GetError());
+                    zoneIds.add(calculationUserInputSends.get(i).zoneId);
+                    calculationUserInputSendsTemp = new ArrayList<>();
+                }
+                calculationUserInputSendsTemp.add(calculationUserInputSends.get(i));
+            }
+            Call<SimpleMessage> call = abfaService.setExaminationInfo(calculationUserInputSendsTemp);
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context, new SendCalculation(),
+                    new SendCalculationIncomplete(), new GetError());
+        } else
+            Toast.makeText(getApplicationContext(), R.string.empty_masir, Toast.LENGTH_LONG).show();
+        DaoImages daoImages = dataBase.daoImages();
+        images = daoImages.getImages();
+        if (images.size() > 0) {
+            attemptLogin();
+        }
     }
 
     void send() {
