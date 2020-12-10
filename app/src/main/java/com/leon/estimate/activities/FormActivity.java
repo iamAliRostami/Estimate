@@ -531,6 +531,10 @@ public class FormActivity extends AppCompatActivity {
     class SerializeJson extends AsyncTask<Intent, String, String> {
         ProgressDialog dialog;
 
+        public SerializeJson() {
+            super();
+        }
+
         @Override
         protected String doInBackground(Intent... intents) {
             json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
@@ -651,21 +655,30 @@ public class FormActivity extends AppCompatActivity {
     class GetGISWaterTransfer implements ICallback<String> {
         @Override
         public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+            try {
+                CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
                 try {
-                    kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                    MyKmlStyle.color = 3;
-                    FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                            binding.mapView, null, new MyKmlStyle(), kmlDocument);
-                    geoJsonOverlays[2] = geoJsonOverlay;
-                    binding.checkboxWaterTransfer.setVisibility(View.VISIBLE);
-                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                    CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+                    KmlDocument kmlDocument = new KmlDocument();
+                    String json = ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON);
+                    if (json != null) {
+                        try {
+                            kmlDocument.parseGeoJSON(json);
+                            MyKmlStyle.color = 3;
+                            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                            geoJsonOverlays[2] = geoJsonOverlay;
+                            binding.checkboxWaterTransfer.setVisibility(View.VISIBLE);
+                            binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            Log.e("Error 3", e.toString());
+                        }
+                    }
                 } catch (Exception e) {
-                    Log.e("error map", e.toString());
+                    Log.e("Error 2", e.toString());
                 }
+            } catch (Exception e) {
+                Log.e("Error 1", e.toString());
             }
         }
     }
@@ -674,22 +687,31 @@ public class FormActivity extends AppCompatActivity {
     class GetGISWaterPipe implements ICallback<String> {
         @Override
         public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+            try {
+                CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
                 try {
-                    kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                    MyKmlStyle.color = 2;
-                    FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                            binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                    CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+                    KmlDocument kmlDocument = new KmlDocument();
+                    String json = ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON);
+                    if (json != null) {
+                        try {
+                            kmlDocument.parseGeoJSON(json);
+                            MyKmlStyle.color = 2;
+                            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
 
-                    geoJsonOverlays[1] = geoJsonOverlay;
-                    binding.checkboxWaterPipe.setVisibility(View.VISIBLE);
-                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                            geoJsonOverlays[1] = geoJsonOverlay;
+                            binding.checkboxWaterPipe.setVisibility(View.VISIBLE);
+                            binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            Log.e("Error 3", e.toString());
+                        }
+                    }
                 } catch (Exception e) {
-                    Log.e("error map", e.toString());
+                    Log.e("Error 2", e.toString());
                 }
+            } catch (Exception e) {
+                Log.e("Error 1", e.toString());
             }
 //            binding.progressBar.setVisibility(View.GONE);
         }
@@ -699,22 +721,30 @@ public class FormActivity extends AppCompatActivity {
     class GetGISSanitationTransfer implements ICallback<String> {
         @Override
         public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+            try {
+                CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
                 try {
-                    kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-
-                    MyKmlStyle.color = 4;
-                    FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                            binding.mapView, null, new MyKmlStyle(), kmlDocument);
-                    geoJsonOverlays[3] = geoJsonOverlay;
-                    binding.checkboxSanitationTransfer.setVisibility(View.VISIBLE);
-                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                    CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+                    KmlDocument kmlDocument = new KmlDocument();
+                    String json = ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON);
+                    if (json != null) {
+                        try {
+                            kmlDocument.parseGeoJSON(json);
+                            MyKmlStyle.color = 4;
+                            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                            geoJsonOverlays[3] = geoJsonOverlay;
+                            binding.checkboxSanitationTransfer.setVisibility(View.VISIBLE);
+                            binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            Log.e("Error 3", e.toString());
+                        }
+                    }
                 } catch (Exception e) {
-                    Log.e("error map", e.toString());
+                    Log.e("Error 2", e.toString());
                 }
+            } catch (Exception e) {
+                Log.e("Error 1", e.toString());
             }
         }
     }
@@ -723,21 +753,30 @@ public class FormActivity extends AppCompatActivity {
     class GetGISParcels implements ICallback<String> {
         @Override
         public void execute(String s) {
-            CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
-            CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
-            KmlDocument kmlDocument = new KmlDocument();
-            if (ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON) != null) {
+            try {
+                CustomArcGISJSON customArcGISJSON = ConvertArcToGeo.convertStringToCustomArcGISJSON(s);
                 try {
-                    kmlDocument.parseGeoJSON(ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON));
-                    MyKmlStyle.color = 1;
-                    FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
-                            binding.mapView, null, new MyKmlStyle(), kmlDocument);
-                    geoJsonOverlays[0] = geoJsonOverlay;
-                    binding.checkboxParcels.setVisibility(View.VISIBLE);
-                    binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                    CustomGeoJSON customGeoJSON = ConvertArcToGeo.convertPolygon(customArcGISJSON, "Polygon");
+                    KmlDocument kmlDocument = new KmlDocument();
+                    String json = ConvertArcToGeo.convertCustomGeoJSONToString(customGeoJSON);
+                    if (json != null) {
+                        try {
+                            kmlDocument.parseGeoJSON(json);
+                            MyKmlStyle.color = 1;
+                            FolderOverlay geoJsonOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(
+                                    binding.mapView, null, new MyKmlStyle(), kmlDocument);
+                            geoJsonOverlays[0] = geoJsonOverlay;
+                            binding.checkboxParcels.setVisibility(View.VISIBLE);
+                            binding.linearLayoutAttribute.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            Log.e("Error 3", e.toString());
+                        }
+                    }
                 } catch (Exception e) {
-                    Log.e("error map", e.toString());
+                    Log.e("Error 2", e.toString());
                 }
+            } catch (Exception e) {
+                Log.e("Error 1", e.toString());
             }
             binding.progressBar.setVisibility(View.GONE);
         }
@@ -831,6 +870,10 @@ public class FormActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     class GetDBData extends AsyncTask<Integer, String, String> {
         ProgressDialog dialog;
+
+        public GetDBData() {
+            super();
+        }
 
         @Override
         protected String doInBackground(Integer... integers) {
