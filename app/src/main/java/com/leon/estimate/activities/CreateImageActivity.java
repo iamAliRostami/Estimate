@@ -490,6 +490,7 @@ public class CreateImageActivity extends AppCompatActivity {
         Context context;
 
         public CreateImage(Context context) {
+            super();
             this.context = context;
             progressDialog = new CustomProgressBar();
         }

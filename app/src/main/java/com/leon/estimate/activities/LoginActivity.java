@@ -219,7 +219,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setButtonLoginOnClickListener() {
         binding.buttonLogin.setOnClickListener(view -> {
-            Log.e("buttonLogin", "click");
             View viewFocus;
             boolean cancel = false;
             username = binding.editTextUsername.getText().toString();
