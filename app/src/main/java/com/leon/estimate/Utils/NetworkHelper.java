@@ -42,6 +42,7 @@ public final class NetworkHelper {
                 .writeTimeout(WRITE_TIMEOUT, TIME_UNIT)
                 .connectTimeout(CONNECT_TIMEOUT, TIME_UNIT)
                 .retryOnConnectionFailure(RETRY_ENABLED)
+//                .protocols(Util.immutableListOf(Protocol.HTTP_1_1))//TODO
                 .addInterceptor(chain -> {
                     Request request = chain.request().newBuilder().addHeader("Authorization",
                             "Bearer " + token).build();

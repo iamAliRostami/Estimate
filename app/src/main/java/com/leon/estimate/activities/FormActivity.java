@@ -158,11 +158,15 @@ public class FormActivity extends AppCompatActivity {
                 }
                 break;
         }
-        binding.mapView.invalidate();
-        indexes[0] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
-        indexes[1] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
-        indexes[2] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
-        indexes[3] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
+        try {
+            binding.mapView.invalidate();
+            indexes[0] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
+            indexes[1] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
+            indexes[2] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
+            indexes[3] = binding.mapView.getOverlays().indexOf(geoJsonOverlays[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     };
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @SuppressLint("NonConstantResourceId")
@@ -171,8 +175,9 @@ public class FormActivity extends AppCompatActivity {
             int id = v.getId();
             switch (id) {
                 case R.id.imageViewRefresh1:
+                    //TODO
                     binding.mapView.getOverlays().clear();
-                    binding.mapView.getOverlays().add(startMarker);
+//                    binding.mapView.getOverlays().add(startMarker);
                     place1Index = 0;
                     place2Index = 0;
                     polygonIndex = 0;
@@ -358,12 +363,11 @@ public class FormActivity extends AppCompatActivity {
                             context.getString(R.string.app_name).concat(" / ").concat("صفحه چهارم"));
                     break;
                 case 6:
-                    if (examinerDuties.isNewEnsheab()) {
-                        binding.mapView.getOverlays().add(startMarker);
-                    }
+                    //TODO
                     binding.buttonNext.setText(R.string.crooki);
                     binding.relativeLayoutMap.setVisibility(View.VISIBLE);
                     binding.relativeLayoutEditMap.setVisibility(View.GONE);
+//                    binding.mapView.getOverlays().add(startMarker);
                     setActionBarTitle(
                             context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
                     break;
@@ -407,7 +411,7 @@ public class FormActivity extends AppCompatActivity {
     }
 
     public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -418,20 +422,32 @@ public class FormActivity extends AppCompatActivity {
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         if (place1Index != 0 && place2Index == 0) {
             startMarker.setIcon(getResources().getDrawable(R.drawable.map_siphon_drop_point));
-            binding.mapView.getOverlays().add(startMarker);
-            place2Index = binding.mapView.getOverlays().size() - 2;
+            try {
+                binding.mapView.getOverlays().add(startMarker);
+                place2Index = binding.mapView.getOverlays().size() - 2;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (place2Index != 0) {
-            binding.mapView.getOverlays().remove(place1Index);
-            binding.mapView.getOverlays().remove(place2Index);
-            place1Index = 0;
-            place2Index = 0;
+            try {
+                binding.mapView.getOverlays().remove(place1Index);
+                binding.mapView.getOverlays().remove(place2Index);
+                place1Index = 0;
+                place2Index = 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (place1Index == 0) {
             calculationUserInput.y3 = p.getLatitude();
             calculationUserInput.x3 = p.getLongitude();
             startMarker.setIcon(getResources().getDrawable(R.drawable.map_water_drop_point));
-            binding.mapView.getOverlays().add(startMarker);
-            place1Index = binding.mapView.getOverlays().size() - 1;
+            try {
+                binding.mapView.getOverlays().add(startMarker);
+                place1Index = binding.mapView.getOverlays().size() - 1;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -443,6 +459,7 @@ public class FormActivity extends AppCompatActivity {
         return binding.mapView.getDrawingCache(true);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initializeMap(boolean isRefresh) {
         if (!GpsEnabled()) {
             initialize();
@@ -473,7 +490,11 @@ public class FormActivity extends AppCompatActivity {
         mapController.setCenter(startPoint);
         MyLocationNewOverlay locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), binding.mapView);
         locationOverlay.enableMyLocation();
-        binding.mapView.getOverlays().add(locationOverlay);
+        try {
+            binding.mapView.getOverlays().add(locationOverlay);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         conversion = new CoordinateConversion();
 
         binding.mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
@@ -565,16 +586,28 @@ public class FormActivity extends AppCompatActivity {
         startMarker = new Marker(binding.mapView);
         startMarker.setPosition(startPoint);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        binding.mapView.getOverlayManager().add(startMarker);
+        try {
+            binding.mapView.getOverlayManager().add(startMarker);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void createPolygon(GeoPoint geoPoint) {
         Polyline line = new Polyline(binding.mapView);
         line.getOutlinePaint().setColor(Color.YELLOW);
         if (polygonIndex != 0) {
-            binding.mapView.getOverlays().remove(polygonIndex);
+            try {
+                binding.mapView.getOverlays().remove(polygonIndex);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        binding.mapView.getOverlays().add(line);
+        try {
+            binding.mapView.getOverlays().add(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         polygonPoint.add(geoPoint);
         polygonPoint.add(polygonPoint.get(0));
         line.setPoints(polygonPoint);

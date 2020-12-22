@@ -166,7 +166,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
             list.clear();
             list.addAll(tempExaminerDuties);
         }
-
         if (family.length() > 0) {
             tempExaminerDuties.clear();
             for (ExaminerDuties examinerDuty : list) {
