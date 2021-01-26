@@ -225,6 +225,8 @@ public class DocumentFormActivity extends AppCompatActivity {
     @SuppressLint("SimpleDateFormat")
     Bitmap createImage(Bitmap src, boolean isMap) {
         int small = 50;
+        if (isMap)
+            small = 25;
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cs = new Canvas(dest);
         cs.drawBitmap(src, 0f, 0f, null);
@@ -235,7 +237,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         tPaint.setColor(Color.BLACK);
         tPaint.setTextSize(small);
 
-        float yCoordinate = (float) src.getHeight() * 15 / 144;
+        float yCoordinate = (float) src.getHeight() * 13 / 144;
         float xCoordinate = (float) src.getWidth() * 1 / 36;
 
         PersianCalendar persianCalendar = new PersianCalendar();
@@ -244,7 +246,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         cs.drawText(timeWaterMark.concat(dateWaterMark), xCoordinate, yCoordinate, tPaint);
 
         if (isMap) {
-            small = 65;
+            small = 30;
             tPaint.setTextSize(small);
 
             if (examinerDuties.getMapDescription().length() <= 25) {

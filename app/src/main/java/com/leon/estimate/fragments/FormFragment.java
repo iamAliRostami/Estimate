@@ -181,11 +181,9 @@ public class FormFragment extends Fragment {
                     && arzeshdaraei.zaribs.size() > 0) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction;
-                if (fragmentManager != null) {
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    ValueFragment valueFragment = ValueFragment.newInstance(examinerDuties.getZoneId());
-                    valueFragment.show(fragmentTransaction, "");
-                }
+                fragmentTransaction = fragmentManager.beginTransaction();
+                ValueFragment valueFragment = ValueFragment.newInstance(examinerDuties.getZoneId());
+                valueFragment.show(fragmentTransaction, "");
             } else {
                 getArzeshdaraei();
             }
@@ -466,6 +464,10 @@ public class FormFragment extends Fragment {
     class initializeSpinners extends AsyncTask<Integer, Integer, Integer> {
         ProgressDialog dialog;
 
+        public initializeSpinners() {
+            super();
+        }
+
         @Override
         protected Integer doInBackground(Integer... integers) {
             Objects.requireNonNull(getActivity()).runOnUiThread(FormFragment.this::initializeSpinner);
@@ -519,12 +521,12 @@ public class FormFragment extends Fragment {
                     daoZarib.insertZarib(arzeshdaraei.zaribs.get(i));
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction;
-                if (fragmentManager != null) {
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    ValueFragment valueFragment = ValueFragment.newInstance(examinerDuties.getZoneId());
-                    valueFragment.show(fragmentTransaction, "");
-                }
+                fragmentTransaction = fragmentManager.beginTransaction();
+                ValueFragment valueFragment = ValueFragment.newInstance(examinerDuties.getZoneId());
+                valueFragment.show(fragmentTransaction, "");
             } else {
+                //گوگد و روستایی همون گلشهر
+//                binding.textViewArzeshMelk.setEnabled(true);TODO
                 new CustomDialog(DialogType.Yellow, context,
                         context.getString(R.string.error_value),
                         getString(R.string.dear_user),

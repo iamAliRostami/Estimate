@@ -109,8 +109,8 @@ public class ListActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menu_search) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            SearchFragment signFragment = SearchFragment.newInstance();
-            signFragment.show(fragmentTransaction, "");
+            SearchFragment searchFragment = SearchFragment.newInstance();
+            searchFragment.show(fragmentTransaction, "");
         } else if (id == R.id.menu_clear) {
             customAdapter.filter("", "", "", "", "", "", "");
         } else if (id == R.id.menu_last) {
