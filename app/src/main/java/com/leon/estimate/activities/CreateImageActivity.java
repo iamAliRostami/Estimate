@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -313,7 +314,7 @@ public class CreateImageActivity extends AppCompatActivity {
         cs.drawText(noeVagozari, xCoordinate, yCoordinate, tPaint);
 
         yCoordinate = (float) src.getHeight() * 63 / 288;
-        xCoordinate = (float) src.getWidth() * 27 / 36;
+        xCoordinate = (float) src.getWidth() * 26 / 36;
         cs.drawText(qotrEnsheab, xCoordinate, yCoordinate, tPaint);
         xCoordinate = (float) src.getWidth() * 20 / 36;
         cs.drawText(String.valueOf(examinerDuties.getArse()), xCoordinate, yCoordinate, tPaint);
@@ -446,32 +447,80 @@ public class CreateImageActivity extends AppCompatActivity {
             cs.drawText(getString(R.string.have), xCoordinate, yCoordinate, tPaint);
         else cs.drawText(getString(R.string.have_n), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 188 / 288;
-        xCoordinate = (float) src.getWidth() * 4 / 36;
-        if (secondForm.getMasrafDescription().length() > 80) {
-            cs.drawText(secondForm.getMasrafDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
-            yCoordinate = (float) src.getHeight() * 193 / 288;
-            cs.drawText(secondForm.getMasrafDescription().substring(80), xCoordinate, yCoordinate, tPaint);
-        } else
-            cs.drawText(secondForm.getMasrafDescription(), xCoordinate, yCoordinate, tPaint);
+        String description = secondForm.getMasrafDescription().concat(" **** ").concat(
+                secondForm.getChahDescription()).concat(" **** ").concat(examinerDuties.getDescription());
+        xCoordinate = (float) src.getWidth() * 32 / 36;
+        tPaint.setTextAlign(Paint.Align.RIGHT);
 
-        yCoordinate = (float) src.getHeight() * 202 / 288;
+        Log.e("Description 1", examinerDuties.getDescription());
+        Log.e("Description 2", description);
+        for (int i = 0; i <= description.length() / 85; i++) {
+            yCoordinate = (float) src.getHeight() * (188 + i * 5) / 288;
+            Log.e("here", "1");
+            if (description.length() < 85) {
+                Log.e("here", "2");
+                cs.drawText(description, xCoordinate, yCoordinate, tPaint);
+            } else if (description.length() < (i + 1) * 85) {
+                Log.e("here", "3");
+                cs.drawText(description.substring(i * 85), xCoordinate, yCoordinate, tPaint);
+            } else {
+                Log.e("here", "4");
+                cs.drawText(description.substring(i * 85, (i + 1) * 85),
+                        xCoordinate, yCoordinate, tPaint);
+            }
+        }
+//        yCoordinate = (float) src.getHeight() * 188 / 288;
+//        xCoordinate = (float) src.getWidth() * 4 / 36;
+//        if (secondForm.getMasrafDescription().length() > 80) {
+//            cs.drawText(secondForm.getMasrafDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+//            yCoordinate = (float) src.getHeight() * 193 / 288;
+//            cs.drawText(secondForm.getMasrafDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+//        } else
+//            cs.drawText(secondForm.getMasrafDescription(), xCoordinate, yCoordinate, tPaint);
+//
+//        yCoordinate = (float) src.getHeight() * 202 / 288;
+//
+//        if (secondForm.getChahDescription().length() > 80) {
+//            cs.drawText(secondForm.getChahDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+//            yCoordinate = (float) src.getHeight() * 207 / 288;
+//            cs.drawText(secondForm.getChahDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+//        } else
+//            cs.drawText(secondForm.getChahDescription(), xCoordinate, yCoordinate, tPaint);
+//
+//        yCoordinate = (float) src.getHeight() * 216 / 288;
+//        if (examinerDuties.getDescription().length() > 80) {
+//            cs.drawText(examinerDuties.getDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+//            yCoordinate = (float) src.getHeight() * 221 / 288;
+//            cs.drawText(examinerDuties.getDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+//        } else
+//            cs.drawText(examinerDuties.getDescription(), xCoordinate, yCoordinate, tPaint);
 
-        if (secondForm.getChahDescription().length() > 80) {
-            cs.drawText(secondForm.getChahDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
-            yCoordinate = (float) src.getHeight() * 207 / 288;
-            cs.drawText(secondForm.getChahDescription().substring(80), xCoordinate, yCoordinate, tPaint);
-        } else
-            cs.drawText(secondForm.getChahDescription(), xCoordinate, yCoordinate, tPaint);
 
-        yCoordinate = (float) src.getHeight() * 216 / 288;
-        if (examinerDuties.getDescription().length() > 80) {
-            cs.drawText(examinerDuties.getDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
-            yCoordinate = (float) src.getHeight() * 221 / 288;
-            cs.drawText(examinerDuties.getDescription().substring(80), xCoordinate, yCoordinate, tPaint);
-        } else
-            cs.drawText(examinerDuties.getDescription(), xCoordinate, yCoordinate, tPaint);
+//        if (secondForm.getMasrafDescription().length() > 80) {
+//            cs.drawText(secondForm.getMasrafDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+//            yCoordinate = (float) src.getHeight() * 193 / 288;
+//            cs.drawText(secondForm.getMasrafDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+//        } else
+//            cs.drawText(secondForm.getMasrafDescription(), xCoordinate, yCoordinate, tPaint);
+//
+//        yCoordinate = (float) src.getHeight() * 202 / 288;
 
+//        if (secondForm.getChahDescription().length() > 80) {
+//            cs.drawText(secondForm.getChahDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+//            yCoordinate = (float) src.getHeight() * 207 / 288;
+//            cs.drawText(secondForm.getChahDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+//        } else
+//            cs.drawText(secondForm.getChahDescription(), xCoordinate, yCoordinate, tPaint);
+//
+//        yCoordinate = (float) src.getHeight() * 216 / 288;
+//        if (examinerDuties.getDescription().length() > 80) {
+//            cs.drawText(examinerDuties.getDescription().substring(0, 80), xCoordinate, yCoordinate, tPaint);
+//            yCoordinate = (float) src.getHeight() * 221 / 288;
+//            cs.drawText(examinerDuties.getDescription().substring(80), xCoordinate, yCoordinate, tPaint);
+//        } else
+//            cs.drawText(examinerDuties.getDescription(), xCoordinate, yCoordinate, tPaint);
+
+        tPaint.setTextAlign(Paint.Align.LEFT);
         yCoordinate = (float) src.getHeight() * 241 / 288;
         xCoordinate = (float) src.getWidth() * 20 / 36;
         PersianCalendar persianCalendar = new PersianCalendar();

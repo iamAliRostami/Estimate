@@ -246,4 +246,5 @@
     <string name="login_lcoal">ورود به شبکه داخلی</string>
     <string name="add_document">افزودن ردیف</string>
     <string name="add_successful">افزودن ردیف با موفقیت انجام شد.</string>
+    <string name="tejari_over_flow">شما از محدودیت تعداد سطر تجاری گذر کرده اید.</string>
 </resources>

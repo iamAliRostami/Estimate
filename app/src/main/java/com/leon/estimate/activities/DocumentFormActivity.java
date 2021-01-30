@@ -237,7 +237,7 @@ public class DocumentFormActivity extends AppCompatActivity {
         tPaint.setColor(Color.BLACK);
         tPaint.setTextSize(small);
 
-        float yCoordinate = (float) src.getHeight() * 13 / 144;
+        float yCoordinate = (float) src.getHeight() * 5 / 144;
         float xCoordinate = (float) src.getWidth() * 1 / 36;
 
         PersianCalendar persianCalendar = new PersianCalendar();
@@ -249,24 +249,24 @@ public class DocumentFormActivity extends AppCompatActivity {
             small = 30;
             tPaint.setTextSize(small);
 
-            if (examinerDuties.getMapDescription().length() <= 25) {
-                yCoordinate = (float) src.getHeight() * 25 / 144;
+            if (examinerDuties.getMapDescription().length() <= 50) {
+                yCoordinate = (float) src.getHeight() * 10 / 144;
                 cs.drawText(examinerDuties.getMapDescription(), xCoordinate, yCoordinate, tPaint);
             } else {
-                for (int i = 0; i <= examinerDuties.getMapDescription().length() / 25; i++) {
-                    yCoordinate = (float) src.getHeight() * (25 + 10 * i) / 144;
-                    if (i == examinerDuties.getMapDescription().length() / 25) {
-                        cs.drawText(examinerDuties.getMapDescription().substring(i * 25), xCoordinate, yCoordinate, tPaint);
+                for (int i = 0; i <= examinerDuties.getMapDescription().length() / 50; i++) {
+                    yCoordinate = (float) src.getHeight() * (10 + 5 * i) / 144;
+                    if (i == examinerDuties.getMapDescription().length() / 50) {
+                        cs.drawText(examinerDuties.getMapDescription().substring(i * 50), xCoordinate, yCoordinate, tPaint);
                     } else
-                        cs.drawText(examinerDuties.getMapDescription().substring(i * 25, 25 * (i + 1)), xCoordinate, yCoordinate, tPaint);
+                        cs.drawText(examinerDuties.getMapDescription().substring(i * 50, 50 * (i + 1)), xCoordinate, yCoordinate, tPaint);
                 }
             }
             if (calculationUserInput.x3 > 0 && calculationUserInput.y3 > 0) {
-                small = 50;
-                tPaint.setTextSize(small);
+                small = 40;
                 yCoordinate = (float) src.getHeight() * 140 / 144;
-                cs.drawText("x: ".concat(String.valueOf(calculationUserInput.x3)).concat(" , ").
-                        concat("y: ").concat(String.valueOf(calculationUserInput.y3)), xCoordinate, yCoordinate, tPaint);
+                tPaint.setTextSize(small);
+                cs.drawText("x: ".concat(String.valueOf(calculationUserInput.x3)).concat(" , y: ").
+                        concat(String.valueOf(calculationUserInput.y3)), xCoordinate, yCoordinate, tPaint);
             }
         }
         return dest;
@@ -459,7 +459,6 @@ public class DocumentFormActivity extends AppCompatActivity {
                     @NotNull
                     @Override
                     public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-                        Log.e("here", "hre");
                         View view = super.getView(position, convertView, parent);
                         final CheckedTextView textView = view.findViewById(android.R.id.text1);
                         textView.setChecked(true);

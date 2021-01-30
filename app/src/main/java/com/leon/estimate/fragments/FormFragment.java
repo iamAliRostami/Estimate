@@ -145,6 +145,14 @@ public class FormFragment extends Fragment {
             if (checkIsNoEmpty(binding.editTextVahed) && checkIsNoEmpty(binding.editTextNoeShoql)
                     && checkIsNoEmpty(binding.editTextVahedMohasebe)
                     && checkIsNoEmpty(binding.editTextA2)) {
+                if (others.size() == 8) {
+                    new CustomDialog(DialogType.Yellow, context,
+                            getString(R.string.tejari_over_flow),
+                            getString(R.string.dear_user),
+                            getString(R.string.tejari),
+                            getString(R.string.accepted));
+                    return;
+                }
                 String karbari = karbariDictionaries.get(
                         binding.spinner5.getSelectedItemPosition()).getTitle();
                 String noeShoql = binding.editTextNoeShoql.getText().toString();

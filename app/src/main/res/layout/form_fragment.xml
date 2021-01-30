@@ -780,9 +780,11 @@
                                     android:inputType="text"
                                     android:lines="1"
                                     android:maxLines="1"
+                                    android:nextFocusDown="@id/editTextVahed"
                                     tools:ignore="Autofill,RtlHardcoded,TextFields" />
 
                                 <EditText
+                                    android:nextFocusDown="@id/editTextVahedMohasebe"
                                     android:id="@+id/editTextVahed"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -795,6 +797,7 @@
                                     tools:ignore="Autofill,RtlHardcoded,TextFields" />
 
                                 <EditText
+                                    android:nextFocusDown="@id/editTextA2"
                                     android:id="@+id/editTextVahedMohasebe"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
