@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/activity_mid_margin"
         android:layout_marginRight="@dimen/activity_mid_margin"
-        android:gravity="top|center_horizontal"
+        android:gravity="center"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 

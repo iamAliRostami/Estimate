@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.provider.Settings;
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     void initialize() {
         context = this;
         binding.textViewVersion.setText(getString(R.string.version).concat(" ")
-                .concat(BuildConfig.VERSION_NAME));
+                .concat(BuildConfig.VERSION_NAME).concat(" *** ").concat(getAndroidVersion()));
         loadPreference();
         binding.imageViewPassword.setImageResource(R.drawable.img_password);
         binding.imageViewLogo.setImageResource(R.drawable.img_bg_logo);
@@ -80,6 +81,12 @@ public class LoginActivity extends AppCompatActivity {
         setImageViewOnClickListener();
         setButtonLoginOnClickListener();
         setButtonLocalOnClickListener();
+    }
+
+    public String getAndroidVersion() {
+        String release = Build.VERSION.RELEASE;
+        int sdkVersion = Build.VERSION.SDK_INT;
+        return "Android SDK: " + sdkVersion + " (" + release + ")";
     }
 
     void attemptLogin() {

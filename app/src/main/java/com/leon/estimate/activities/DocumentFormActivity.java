@@ -422,12 +422,15 @@ public class DocumentFormActivity extends AppCompatActivity {
                         else
                             intent.putExtra(BundleEnum.BILL_ID.getValue(), examinerDuties.getNeighbourBillId());
                         intent.putExtra(BundleEnum.NEW_ENSHEAB.getValue(), examinerDuties.isNewEnsheab());
-                        int tempTitleId = 0;
+                        int tempTitleId = 0, tempDescriptionTitleId = 0;
                         for (ImageDataTitle.DataTitle imageDataTitleTemp : imageDataTitle.getData()) {
                             if (imageDataTitleTemp.getTitle().equals("ارزیابی"))
                                 tempTitleId = imageDataTitleTemp.getId();
+                            if (imageDataTitleTemp.getTitle().equals("سایر"))
+                                tempDescriptionTitleId = imageDataTitleTemp.getId();
                         }
                         intent.putExtra(BundleEnum.TITLE.getValue(), tempTitleId);
+                        intent.putExtra(BundleEnum.OTHER_TITLE.getValue(), tempDescriptionTitleId);
                         startActivity(intent);
                         FormActivity.activity.finish();
                         finish();

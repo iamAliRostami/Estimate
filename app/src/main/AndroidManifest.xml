@@ -32,13 +32,6 @@
         android:name="android.hardware.wifi"
         android:required="false" />
 
-    <meta-data
-        android:name="MAPBOX_MAPID"
-        android:value="mapbox.streets-satellite" />
-    <meta-data
-        android:name="MAPBOX_ACCESS_TOKEN"
-        android:value="pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrZnlhOWU5ejFzYm0yd3Q4eXh6dXlqMzIifQ.jUMpwF5jUG5PJ5pMUooPjg" />
-
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -64,18 +57,16 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activities.BrightnessContrastActivity" />
         <activity android:name=".activities.CropActivity" />
-        <activity android:name=".activities.ListActivity">
+        <activity android:name=".activities.ListActivity" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity">
-
         </activity>
         <activity
             android:name=".activities.MainActivity"

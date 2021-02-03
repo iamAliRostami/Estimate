@@ -9,9 +9,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -80,13 +80,13 @@ import static com.leon.estimate.Utils.Constants.secondForm;
 public class CreateImageActivity extends AppCompatActivity {
     Context context;
     CreateImageActivityBinding binding;
-    Bitmap bitmap;
+    Bitmap bitmap, bitmapDescription = null;
     List<ResultDictionary> resultDictionaries;
     MyDatabase dataBase;
     SharedPreferenceManager sharedPreferenceManager;
     String trackNumber, billId;
     boolean isNew;
-    int docId;
+    int docId, docIdDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +150,13 @@ public class CreateImageActivity extends AppCompatActivity {
                 Toast.makeText(context, R.string.request_sign, Toast.LENGTH_LONG).show();
             } else {
                 addImageSign();
+                if (binding.editTextDescription.getText().toString().length() > 0) {
+                    bitmapDescription =
+                            createImageDescription(binding.editTextDescription.getText().toString());
+                }
+//                uploadImage();
+//                if (bitmapDescription != null)
+//                    uploadDescriptionImage();
                 send();
             }
         });
@@ -196,6 +203,21 @@ public class CreateImageActivity extends AppCompatActivity {
                 new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
     }
 
+    void uploadDescriptionImage() {
+        Retrofit retrofit = NetworkHelper.getInstance("");
+        final IAbfaService getImage = retrofit.create(IAbfaService.class);
+        MultipartBody.Part body = CustomFile.bitmapToFile(bitmapDescription, context, null);
+        Call<UploadImage> call;
+        if (isNew)
+            call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
+                    SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docIdDescription, trackNumber);
+        else
+            call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
+                    SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docIdDescription, billId);
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+                new UploadDescriptionImageDoc(), new UploadDescriptionImageDocIncomplete(), new GetError());
+    }
+
     void send() {
         String token = sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue());
         Retrofit retrofit = NetworkHelper.getInstance(token);
@@ -227,13 +249,51 @@ public class CreateImageActivity extends AppCompatActivity {
                     getIntent().getExtras()).getString(BundleEnum.BILL_ID.getValue());
             trackNumber = getIntent().getExtras().getString(BundleEnum.TRACK_NUMBER.getValue());
             docId = getIntent().getExtras().getInt(BundleEnum.TITLE.getValue());
+            docIdDescription = getIntent().getExtras().getInt(BundleEnum.OTHER_TITLE.getValue());
             isNew = getIntent().getExtras().getBoolean(BundleEnum.NEW_ENSHEAB.getValue());
         }
     }
 
     @SuppressLint("SimpleDateFormat")
+    Bitmap createImageDescription(String description) {
+        int small = 100;
+        if (Build.VERSION.SDK_INT == 29)
+            small = 85;
+        Bitmap src = BitmapFactory.decodeResource(getResources(), R.drawable.description);
+        Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas cs = new Canvas(dest);
+        cs.drawBitmap(src, 0f, 0f, null);
+
+        Paint tPaint = new Paint();
+        tPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), MyApplication.fontName));
+        tPaint.setStyle(Paint.Style.FILL);
+        tPaint.setColor(Color.BLACK);
+        tPaint.setTextAlign(Paint.Align.RIGHT);
+        tPaint.setTextSize(small);
+
+        float yCoordinate;
+        float xCoordinate = (float) src.getWidth() * 33 / 36;
+
+        for (int i = 0; i <= description.length() / 100; i++) {
+            yCoordinate = (float) src.getHeight() * (14 + i * 5) / 288;
+            if (description.length() < 100) {
+                cs.drawText(description, xCoordinate, yCoordinate, tPaint);
+            } else if (description.length() < (i + 1) * 100) {
+                cs.drawText(description.substring(i * 100), xCoordinate, yCoordinate, tPaint);
+            } else {
+                cs.drawText(description.substring(i * 100, (i + 1) * 100),
+                        xCoordinate, yCoordinate, tPaint);
+            }
+        }
+
+        return dest;
+    }
+
+    @SuppressLint("SimpleDateFormat")
     Bitmap createImage() {
         int small = 35;
+        if (Build.VERSION.SDK_INT == 29)
+            small = 25;
         Bitmap src = BitmapFactory.decodeResource(getResources(), R.drawable.export);
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cs = new Canvas(dest);
@@ -452,19 +512,13 @@ public class CreateImageActivity extends AppCompatActivity {
         xCoordinate = (float) src.getWidth() * 32 / 36;
         tPaint.setTextAlign(Paint.Align.RIGHT);
 
-        Log.e("Description 1", examinerDuties.getDescription());
-        Log.e("Description 2", description);
         for (int i = 0; i <= description.length() / 85; i++) {
             yCoordinate = (float) src.getHeight() * (188 + i * 5) / 288;
-            Log.e("here", "1");
             if (description.length() < 85) {
-                Log.e("here", "2");
                 cs.drawText(description, xCoordinate, yCoordinate, tPaint);
             } else if (description.length() < (i + 1) * 85) {
-                Log.e("here", "3");
                 cs.drawText(description.substring(i * 85), xCoordinate, yCoordinate, tPaint);
             } else {
-                Log.e("here", "4");
                 cs.drawText(description.substring(i * 85, (i + 1) * 85),
                         xCoordinate, yCoordinate, tPaint);
             }
@@ -568,6 +622,8 @@ public class CreateImageActivity extends AppCompatActivity {
         @Override
         public void execute(SimpleMessage simpleMessage) {
             uploadImage();
+            if (bitmapDescription != null)
+                uploadDescriptionImage();
             DaoCalculationUserInput daoCalculationUserInput = dataBase.daoCalculationUserInput();
             daoCalculationUserInput.updateCalculationUserInput(true, trackNumber);
         }
@@ -577,6 +633,8 @@ public class CreateImageActivity extends AppCompatActivity {
         @Override
         public void executeIncomplete(Response<SimpleMessage> response) {
             uploadImage();
+            if (bitmapDescription != null)
+                uploadDescriptionImage();
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
@@ -621,11 +679,50 @@ public class CreateImageActivity extends AppCompatActivity {
         }
     }
 
+    class UploadDescriptionImageDoc implements ICallback<UploadImage> {
+        @Override
+        public void execute(UploadImage responseBody) {
+            if (responseBody.isSuccess()) {
+                Toast.makeText(CreateImageActivity.this,
+                        CreateImageActivity.this.getString(R.string.upload_success), Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                CustomFile.saveTempBitmap(bitmapDescription, context, dataBase, billId, trackNumber,
+                        String.valueOf(docIdDescription), "ارزیابی", isNew);
+                new CustomDialog(DialogType.Yellow, CreateImageActivity.this,
+                        CreateImageActivity.this.getString(R.string.error_upload).concat("\n")
+                                .concat(responseBody.getError()),
+                        CreateImageActivity.this.getString(R.string.dear_user),
+                        CreateImageActivity.this.getString(R.string.upload_image),
+                        CreateImageActivity.this.getString(R.string.accepted));
+            }
+        }
+    }
+
+    class UploadDescriptionImageDocIncomplete implements ICallbackIncomplete<UploadImage> {
+
+        @Override
+        public void executeIncomplete(Response<UploadImage> response) {
+            CustomFile.saveTempBitmap(bitmapDescription, context, dataBase, billId, trackNumber,
+                    String.valueOf(docIdDescription), "ارزیابی", isNew);
+            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            new CustomDialog(DialogType.Yellow, CreateImageActivity.this, error,
+                    CreateImageActivity.this.getString(R.string.dear_user),
+                    CreateImageActivity.this.getString(R.string.upload_image),
+                    CreateImageActivity.this.getString(R.string.accepted));
+        }
+    }
+
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
             CustomFile.saveTempBitmap(Constants.bitmapSelectedImage, context, dataBase, billId, trackNumber,
                     String.valueOf(docId), "ارزیابی", isNew);
+            if (bitmapDescription != null) {
+                CustomFile.saveTempBitmap(bitmapDescription, context, dataBase, billId, trackNumber,
+                        String.valueOf(docIdDescription), "ارزیابی", isNew);
+            }
             CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(CreateImageActivity.this, error, Toast.LENGTH_LONG).show();

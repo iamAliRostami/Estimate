@@ -14,6 +14,7 @@ public enum BundleEnum {
     ACCOUNT("ACCOUNT"),
     TYPE("type"),
     TITLE("title"),
+    OTHER_TITLE("other_title"),
     ON_OFFLOAD("ON_OFFLOAD"),
     POSITION("position"),
     SPINNER_POSITION("spinner_position"),

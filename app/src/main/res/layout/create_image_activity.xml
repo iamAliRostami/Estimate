@@ -7,11 +7,28 @@
     android:layoutDirection="rtl"
     tools:context="com.leon.estimate.activities.CreateImageActivity">
 
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_large_margin"
+        android:layout_marginTop="@dimen/activity_medium_padding"
+        android:layout_marginRight="@dimen/activity_large_margin"
+        android:layout_marginBottom="@dimen/activity_medium_padding"
+        android:background="@drawable/border_gray_1"
+        android:gravity="top"
+        android:hint="@string/description"
+        android:lines="5"
+        android:padding="@dimen/activity_medium_padding"
+        tools:ignore="Autofill,TextFields" />
+
     <ImageView
         android:id="@+id/imageViewExport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button_accepted"
+        android:layout_below="@id/editTextDescription"
+        android:layout_marginBottom="@dimen/activity_large_margin"
         android:src="@drawable/export"
         android:visibility="visible"
         tools:ignore="ContentDescription" />
@@ -33,7 +50,7 @@
         <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
             android:id="@+id/signature_view2"
             android:layout_width="0dp"
-            android:layout_height="120dp"
+            android:layout_height="150dp"
             android:layout_marginLeft="@dimen/activity_medium_margin"
             android:layout_marginRight="@dimen/activity_mid_margin"
             android:layout_weight="1"
@@ -46,7 +63,7 @@
         <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
             android:id="@+id/signature_view1"
             android:layout_width="0dp"
-            android:layout_height="120dp"
+            android:layout_height="150dp"
             android:layout_weight="1"
             android:visibility="visible"
             sign:enableSignature="true"
@@ -129,5 +146,5 @@
         android:text="@string/cancel"
         android:textColor="@color/white"
         android:textSize="@dimen/textSizeLarge"
-        tools:ignore="ObsoleteLayoutParam,RtlHardcoded" />
+        tools:ignore="ObsoleteLayoutParam,RelativeOverlap,RtlHardcoded" />
 </RelativeLayout>

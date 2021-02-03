@@ -37,4 +37,6 @@ public class Constants {
     public static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 2;
     public static final long MIN_TIME_BW_UPDATES = 1000;
 
+    public static String DESCRIPTION;
+
 }
