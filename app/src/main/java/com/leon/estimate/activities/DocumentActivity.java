@@ -221,12 +221,16 @@ public class DocumentActivity extends AppCompatActivity {
         public void execute(ImageDataTitle imageDataTitle) {
             if (imageDataTitle.isSuccess()) {
 //                DocumentActivity.imageDataTitle = imageDataTitle;
-                for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
-                    arrayListTitle.add(dataTitle.getTitle());
-                }
-                if (!isNeighbour) {
-                    images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
-                    imageViewAdapter.notifyDataSetChanged();
+                try {
+                    for (ImageDataTitle.DataTitle dataTitle : imageDataTitle.getData()) {
+                        arrayListTitle.add(dataTitle.getTitle());
+                    }
+                    if (!isNeighbour) {
+                        images.addAll(CustomFile.loadImage(dataBase, trackNumber, billId, imageDataTitle, context));
+                        imageViewAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception ignored) {
+
                 }
             } else {
                 Toast.makeText(DocumentActivity.this,

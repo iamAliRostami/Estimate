@@ -227,6 +227,9 @@ public class MainActivity extends AppCompatActivity
                 };
                 mapView.setTileSource(custom);
             }
+
+//            mapView.setTileSource(new GoogleTileSource());
+
             mapView.getZoomController().setVisibility(
                     CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);

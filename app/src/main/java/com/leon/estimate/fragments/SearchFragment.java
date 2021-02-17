@@ -14,6 +14,8 @@ import com.sardari.daterangepicker.dialog.DatePickerDialog;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 import static com.leon.estimate.Utils.Constants.customAdapter;
 
 public class SearchFragment extends DialogFragment {
@@ -69,7 +71,7 @@ public class SearchFragment extends DialogFragment {
 
     @Override
     public void onResume() {
-        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+        WindowManager.LayoutParams params = Objects.requireNonNull(getDialog()).getWindow().getAttributes();
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setAttributes(params);
