@@ -8,6 +8,15 @@ public class Arzeshdaraei {
     public ArrayList<Formula> formulas;
     public ArrayList<Zarib> zaribs;
 
+    public Arzeshdaraei() {
+        this.blocks = new ArrayList<>();
+        this.blocks.clear();
+        this.formulas = new ArrayList<>();
+        this.formulas.clear();
+        this.zaribs = new ArrayList<>();
+        this.zaribs.clear();
+    }
+
     public Arzeshdaraei(List<Block> blocks, List<Formula> formulas, List<Zarib> zaribs) {
         this.blocks = new ArrayList<>();
         this.blocks.addAll(blocks);

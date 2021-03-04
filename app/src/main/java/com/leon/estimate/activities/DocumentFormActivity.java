@@ -542,9 +542,17 @@ public class DocumentFormActivity extends AppCompatActivity {
                     else binding.progressBar.setVisibility(View.GONE);
                 } else binding.progressBar.setVisibility(View.GONE);
             } else {
-                Toast.makeText(DocumentFormActivity.this,
-                        DocumentFormActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
-                finish();
+
+                new CustomDialog(DialogType.Yellow, DocumentFormActivity.this,
+                        DocumentFormActivity.this.getString(R.string.download_document).concat("\n")
+                                .concat(responseBody.error),
+                        DocumentFormActivity.this.getString(R.string.dear_user),
+                        DocumentFormActivity.this.getString(R.string.download_document),
+                        DocumentFormActivity.this.getString(R.string.accepted));
+                binding.progressBar.setVisibility(View.GONE);
+//                Toast.makeText(DocumentFormActivity.this,
+//                        DocumentFormActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+//                finish();
             }
         }
     }

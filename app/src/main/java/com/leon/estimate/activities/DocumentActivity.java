@@ -272,8 +272,11 @@ public class DocumentActivity extends AppCompatActivity {
                     } else binding.progressBar.setVisibility(View.GONE);
                 } else binding.progressBar.setVisibility(View.GONE);
             } else {
+//                Toast.makeText(DocumentActivity.this,
+//                        DocumentActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+
                 Toast.makeText(DocumentActivity.this,
-                        DocumentActivity.this.getString(R.string.error_not_auth), Toast.LENGTH_LONG).show();
+                        responseBody.error, Toast.LENGTH_LONG).show();
                 finish();
             }
         }
