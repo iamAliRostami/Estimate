@@ -910,6 +910,8 @@ public class FormActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Integer... integers) {
+            arzeshdaraei = new Arzeshdaraei();
+
             dataBase = Room.databaseBuilder(context, MyDatabase.class, MyApplication.getDBNAME())
                     .allowMainThreadQueries().build();
             DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();

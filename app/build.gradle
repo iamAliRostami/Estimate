@@ -26,7 +26,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
-        versionName "99.11.15.1"
+        versionName "99.12.18.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -94,7 +94,7 @@ dependencies {
     implementation 'com.yarolegovich:lovely-dialog:1.0.7'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
     implementation "com.squareup.retrofit2:converter-scalars:2.6.2"
 
     implementation 'androidx.multidex:multidex:2.0.1'

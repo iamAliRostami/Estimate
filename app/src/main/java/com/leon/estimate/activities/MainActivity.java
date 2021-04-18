@@ -227,6 +227,9 @@ public class MainActivity extends AppCompatActivity
                 };
                 mapView.setTileSource(custom);
             }
+
+//            mapView.setTileSource(new GoogleTileSource());
+
             mapView.getZoomController().setVisibility(
                     CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
             mapView.setMultiTouchControls(true);
@@ -463,7 +466,7 @@ public class MainActivity extends AppCompatActivity
             Retrofit retrofit = NetworkHelper.getInstance(token);
             final IAbfaService abfaService = retrofit.create(IAbfaService.class);
 
-            Collections.sort(calculationUserInputSends, (c1, c2) -> (int) (c2.zoneId - c1.zoneId));
+            Collections.sort(calculationUserInputSends, (c1, c2) -> c2.zoneId - c1.zoneId);
             ArrayList<Integer> zoneIds = new ArrayList<>();
             zoneIds.add(calculationUserInputSends.get(0).zoneId);
             ArrayList<CalculationUserInputSend> calculationUserInputSendsTemp = new ArrayList<>();
@@ -747,8 +750,16 @@ public class MainActivity extends AppCompatActivity
     class DownloadIncomplete implements ICallbackIncomplete<Input> {
         @Override
         public void executeIncomplete(Response<Input> response) {
-            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
-            String error = customErrorHandlingNew.getErrorMessageDefault(response);
+            String error;
+            if (response.code() == 400) {
+                error = "داده ای  برای بارگیری وجود ندارد";
+            } else {
+                CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(activity);
+                error = customErrorHandlingNew.getErrorMessageDefault(response);
+            }
+
+//            CustomErrorHandlingNew customErrorHandlingNew = new CustomErrorHandlingNew(context);
+//            String error = customErrorHandlingNew.getErrorMessageDefault(response);
             new CustomDialog(DialogType.Yellow, context, error,
                     getString(R.string.dear_user),
                     getString(R.string.download),

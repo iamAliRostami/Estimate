@@ -230,6 +230,8 @@ public class LoginActivity extends AppCompatActivity {
             boolean cancel = false;
             username = binding.editTextUsername.getText().toString();
             password = binding.editTextPassword.getText().toString();
+            Log.e("username", username);
+            Log.e("password", password);
             if (username.length() < 1) {
                 viewFocus = binding.editTextUsername;
                 viewFocus.requestFocus();

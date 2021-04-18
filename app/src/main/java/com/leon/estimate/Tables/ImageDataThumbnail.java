@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ImageDataThumbnail {
     boolean success;
+    public String error;
     ArrayList<Data> data;
 
     public boolean isSuccess() {
