@@ -88,13 +88,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'
     implementation 'com.github.MKergall:osmbonuspack:6.3'
-    implementation 'org.osmdroid:osmdroid-android:6.1.7@aar'
+    implementation 'org.osmdroid:osmdroid-android:6.1.10@aar'
     implementation 'com.cocoahero.android:geojson:1.0.1@jar'
 
     implementation 'com.yarolegovich:lovely-dialog:1.0.7'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
     implementation "com.squareup.retrofit2:converter-scalars:2.6.2"
 
     implementation 'androidx.multidex:multidex:2.0.1'
