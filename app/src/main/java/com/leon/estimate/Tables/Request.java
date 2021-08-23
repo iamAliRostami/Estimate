@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class Request {
     public String neighbourBillId;
+    public String billId;
+    public String address;
+    public String mobile;
+    public String notificationMobile;
+    public String nationalId;
     public ArrayList<Integer> selectedServices;
     public String firstName;
     public String sureName;
-    public String mobile;
-    public String nationalId;
-    public String address;
-    public String billId;
-    public String notificationMobile;
 
     public Request(String neighbourBillId, ArrayList<Integer> selectedServices, String firstName,
                    String sureName, String mobile, String nationalId, String address) {
