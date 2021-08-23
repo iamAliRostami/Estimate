@@ -1,5 +1,7 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.customAdapter;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,8 +36,6 @@ import com.leon.estimate.fragments.SearchFragment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static com.leon.estimate.Utils.Constants.customAdapter;
 
 public class ListActivity extends AppCompatActivity {
     Context context;

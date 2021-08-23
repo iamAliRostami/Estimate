@@ -784,7 +784,6 @@
                                     tools:ignore="Autofill,RtlHardcoded,TextFields" />
 
                                 <EditText
-                                    android:nextFocusDown="@id/editTextVahedMohasebe"
                                     android:id="@+id/editTextVahed"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -794,10 +793,10 @@
                                     android:gravity="center"
                                     android:hint="@string/tedad_vahed"
                                     android:inputType="numberSigned"
+                                    android:nextFocusDown="@id/editTextVahedMohasebe"
                                     tools:ignore="Autofill,RtlHardcoded,TextFields" />
 
                                 <EditText
-                                    android:nextFocusDown="@id/editTextA2"
                                     android:id="@+id/editTextVahedMohasebe"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -809,6 +808,7 @@
                                     android:inputType="text"
                                     android:lines="1"
                                     android:maxLines="1"
+                                    android:nextFocusDown="@id/editTextA2"
                                     tools:ignore="Autofill,RtlHardcoded,TextFields" />
 
                                 <EditText

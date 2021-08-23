@@ -272,9 +272,9 @@
         android:background="@drawable/border_green_2"
         android:paddingLeft="@dimen/activity_medium_padding"
         android:paddingRight="@dimen/activity_medium_padding"
-        android:textSize="@dimen/textSizeLarge"
         android:text="@string/search"
         android:textColor="@color/white"
+        android:textSize="@dimen/textSizeLarge"
         tools:ignore="ObsoleteLayoutParam,RelativeOverlap,RtlHardcoded" />
 
     <!--    <Button-->

@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder> {
-    private Context context;
     private final List<ExaminerDuties> examinerDuties;
     private final ArrayList<ExaminerDuties> tempExaminerDuties;
+    private Context context;
     private int size = 0;
 
     public CustomListAdapter(Context context, List<ExaminerDuties> examinerDuties) {

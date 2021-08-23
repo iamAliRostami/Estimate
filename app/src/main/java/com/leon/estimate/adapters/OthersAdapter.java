@@ -1,5 +1,7 @@
 package com.leon.estimate.adapters;
 
+import static com.leon.estimate.Utils.Constants.others;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +19,9 @@ import com.leon.estimate.Tables.DaoTejariha;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Tejariha;
 
-import static com.leon.estimate.Utils.Constants.others;
-
 public class OthersAdapter extends RecyclerView.Adapter<OthersAdapter.ViewHolder> {
-    private Context context;
     private final MyDatabase dataBase;
+    private Context context;
 
     public OthersAdapter(Context context) {
         this.context = context;

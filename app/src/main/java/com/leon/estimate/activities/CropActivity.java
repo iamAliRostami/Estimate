@@ -41,10 +41,10 @@ import io.reactivex.schedulers.Schedulers;
 import team.clevel.documentscanner.libraries.NativeClass;
 
 public class CropActivity extends AppCompatActivity {
+    private final View.OnClickListener onButtonCloseClickListener = v -> finish();
+    CropActivityBinding binding;
     private Bitmap bitmapSelectedImage, bitmapTempOriginal;
     private NativeClass nativeClass;
-    private boolean isInverted;
-    CropActivityBinding binding;
     @SuppressLint("CheckResult")
     private final View.OnClickListener onButtonCropClickListener = v -> {
         setProgressBar(true);
@@ -62,13 +62,7 @@ public class CropActivity extends AppCompatActivity {
                     }
                 });
     };
-    private final View.OnClickListener onButtonCloseClickListener = v -> finish();
-    private final View.OnClickListener onImageViewRebase = v -> {
-        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
-                bitmapTempOriginal.getConfig(), true);
-        isInverted = false;
-        initializeElement();
-    };
+    private boolean isInverted;
     @SuppressLint("CheckResult")
     private final View.OnClickListener onButtonInvertColorClickListener = new View.OnClickListener() {
         @Override
@@ -103,6 +97,19 @@ public class CropActivity extends AppCompatActivity {
                     });
         }
     };
+    private final View.OnClickListener onImageViewRebase = v -> {
+        Constants.bitmapSelectedImage = bitmapTempOriginal.copy(
+                bitmapTempOriginal.getConfig(), true);
+        isInverted = false;
+        initializeElement();
+    };
+
+    public static Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,13 +124,6 @@ public class CropActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.error_no_image_selected), Toast.LENGTH_LONG).show();
             finish();
         }
-    }
-
-    public static Bitmap rotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
     }
 
     private void setImageRotation() {

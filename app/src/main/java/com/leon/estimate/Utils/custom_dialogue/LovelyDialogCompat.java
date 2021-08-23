@@ -1,12 +1,8 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.Utils.custom_dialogue;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.view.View;
-
-/**
- * Created by Leon on 2/7/2018.
- */
 
 public class LovelyDialogCompat {
 
@@ -20,13 +16,13 @@ public class LovelyDialogCompat {
 
     static class DialogOnClickListenerAdapter implements View.OnClickListener {
 
-        private Dialog.OnClickListener adapted;
+        private final Dialog.OnClickListener adapted;
 
         DialogOnClickListenerAdapter(DialogInterface.OnClickListener adapted) {
             this.adapted = adapted;
         }
 
-        public void onClick(DialogInterface dialogInterface, int which) {
+        void onClick(DialogInterface dialogInterface, int which) {
             if (adapted != null) {
                 adapted.onClick(dialogInterface, which);
             }
@@ -38,3 +34,4 @@ public class LovelyDialogCompat {
         }
     }
 }
+

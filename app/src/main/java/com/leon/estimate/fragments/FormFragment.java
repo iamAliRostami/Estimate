@@ -1,5 +1,12 @@
 package com.leon.estimate.fragments;
 
+import static com.leon.estimate.Utils.Constants.arzeshdaraei;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.karbari;
+import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.others;
+import static com.leon.estimate.Utils.Constants.qotrEnsheab;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -53,11 +60,11 @@ import com.leon.estimate.Tables.NoeVagozariDictionary;
 import com.leon.estimate.Tables.QotrEnsheabDictionary;
 import com.leon.estimate.Tables.TaxfifDictionary;
 import com.leon.estimate.Tables.Tejariha;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.adapters.OthersAdapter;
 import com.leon.estimate.databinding.FormFragmentBinding;
@@ -73,13 +80,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static com.leon.estimate.Utils.Constants.arzeshdaraei;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-import static com.leon.estimate.Utils.Constants.karbari;
-import static com.leon.estimate.Utils.Constants.noeVagozari;
-import static com.leon.estimate.Utils.Constants.others;
-import static com.leon.estimate.Utils.Constants.qotrEnsheab;
 
 public class FormFragment extends Fragment {
     private Context context;
@@ -468,6 +468,18 @@ public class FormFragment extends Fragment {
         };
     }
 
+    void getArzeshdaraei() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context,
+                SharedReferenceNames.ACCOUNT.getValue());
+        Retrofit retrofit = NetworkHelper.getInstance(
+                sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
+        final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
+        Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(
+                examinerDuties.getZoneId()));
+        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
+                new GetArzeshdaraei(), new GetArzeshdaraeiIncomplete(), new GetError());
+    }
+
     @SuppressLint("StaticFieldLeak")
     class initializeSpinners extends AsyncTask<Integer, Integer, Integer> {
         ProgressDialog dialog;
@@ -497,18 +509,6 @@ public class FormFragment extends Fragment {
             super.onPostExecute(s);
             dialog.dismiss();
         }
-    }
-
-    void getArzeshdaraei() {
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context,
-                SharedReferenceNames.ACCOUNT.getValue());
-        Retrofit retrofit = NetworkHelper.getInstance(
-                sharedPreferenceManager.getStringData(SharedReferenceKeys.TOKEN.getValue()));
-        final IAbfaService arzeshdaraei = retrofit.create(IAbfaService.class);
-        Call<Arzeshdaraei> call = arzeshdaraei.getArzeshDaraii(Integer.parseInt(
-                examinerDuties.getZoneId()));
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), context,
-                new GetArzeshdaraei(), new GetArzeshdaraeiIncomplete(), new GetError());
     }
 
     class GetArzeshdaraei implements ICallback<Arzeshdaraei> {

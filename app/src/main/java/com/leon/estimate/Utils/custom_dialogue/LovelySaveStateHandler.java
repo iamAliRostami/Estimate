@@ -1,19 +1,15 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.Utils.custom_dialogue;
 
 import android.os.Bundle;
 import android.util.SparseArray;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by Leon on 2/7/2018.
- */
-
 public class LovelySaveStateHandler {
 
-    private static final String KEY_DIALOG_ID = "id";
+    private static final String KEY_DIALOG_ID = "idCustom";
 
-    private SparseArray<WeakReference<AbsLovelyDialog<?>>> handledDialogs;
+    private final SparseArray<WeakReference<AbsLovelyDialog<?>>> handledDialogs;
 
     public LovelySaveStateHandler() {
         handledDialogs = new SparseArray<>();
@@ -44,6 +40,6 @@ public class LovelySaveStateHandler {
     }
 
     void handleDialogStateSave(int id, AbsLovelyDialog<?> dialog) {
-        handledDialogs.put(id, new WeakReference<AbsLovelyDialog<?>>(dialog));
+        handledDialogs.put(id, new WeakReference<>(dialog));
     }
 }

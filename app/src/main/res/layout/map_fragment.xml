@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewTitle"
         android:layout_margin="@dimen/activity_medium_margin"
-        android:padding="@dimen/activity_medium_padding"
         android:hint="@string/map_description"
+        android:padding="@dimen/activity_medium_padding"
         android:textSize="@dimen/textSizeMedium"
         tools:ignore="Autofill,TextFields" />
 

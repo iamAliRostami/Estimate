@@ -1,5 +1,13 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.karbari;
+import static com.leon.estimate.Utils.Constants.noeVagozari;
+import static com.leon.estimate.Utils.Constants.others;
+import static com.leon.estimate.Utils.Constants.qotrEnsheab;
+import static com.leon.estimate.Utils.Constants.secondForm;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -43,7 +51,6 @@ import com.leon.estimate.Tables.ResultDictionary;
 import com.leon.estimate.Tables.Tejariha;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.Constants;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.CustomProgressBar;
@@ -52,6 +59,7 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.databinding.CreateImageActivityBinding;
 import com.leon.estimate.fragments.HighQualityFragment;
 import com.sardari.daterangepicker.utils.PersianCalendar;
@@ -68,14 +76,6 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static com.leon.estimate.Utils.Constants.calculationUserInput;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-import static com.leon.estimate.Utils.Constants.karbari;
-import static com.leon.estimate.Utils.Constants.noeVagozari;
-import static com.leon.estimate.Utils.Constants.others;
-import static com.leon.estimate.Utils.Constants.qotrEnsheab;
-import static com.leon.estimate.Utils.Constants.secondForm;
 
 public class CreateImageActivity extends AppCompatActivity {
     Context context;
@@ -586,6 +586,24 @@ public class CreateImageActivity extends AppCompatActivity {
         return dest;
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding.imageViewExport.setImageDrawable(null);
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
 
     @SuppressLint("StaticFieldLeak")
     class CreateImage extends AsyncTask<Integer, Integer, Integer> {
@@ -727,24 +745,5 @@ public class CreateImageActivity extends AppCompatActivity {
             String error = customErrorHandlingNew.getErrorMessageTotal(t);
             Toast.makeText(CreateImageActivity.this, error, Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding.imageViewExport.setImageDrawable(null);
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 }

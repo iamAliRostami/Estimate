@@ -1,5 +1,7 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -65,7 +67,6 @@ import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Place;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.CoordinateConversion;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.CustomProgressBar;
@@ -75,6 +76,7 @@ import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.databinding.MainActivityBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -105,8 +107,6 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -344,30 +344,6 @@ public class MainActivity extends AppCompatActivity
         mapView.invalidate();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class AddRoutOverlay extends AsyncTask<GeoPoint, Integer, Integer> {
-        CustomProgressBar progressBar;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar = new CustomProgressBar();
-            progressBar.show(context, context.getString(R.string.waiting_for_routing));
-        }
-
-        @Override
-        protected Integer doInBackground(GeoPoint... geoPoints) {
-            addRouteOverlay(geoPoints[0], geoPoints[1]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
-            progressBar.getDialog().dismiss();
-        }
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NotNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
@@ -556,17 +532,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class LoginDocument implements ICallback<Login> {
-        @Override
-        public void execute(Login loginFeedBack) {
-            if (loginFeedBack.isSuccess()) {
-                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
-                        loginFeedBack.getData().getToken());
-                uploadImage(images.get(0));
-            }
-        }
-    }
-
     @SuppressLint("WrongConstant")
     void setActionBarTitle(String title) {
         toolbar.setTitle(title);
@@ -583,6 +548,148 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toolbar.setNavigationOnClickListener(view1 -> drawer.openDrawer(Gravity.START));
+    }
+
+    List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            Gson gson = new Gson();
+            examinerDutiesList.get(i).setRequestDictionaryString(
+                    gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+            if (examinerDutiesList.get(i).getZoneId() == null ||
+                    examinerDutiesList.get(i).getZoneId().equals("0")) {
+                examinerDutiesList.remove(i);
+                i--;
+            }
+        }
+        return examinerDutiesList;
+    }
+
+    int removeExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            examinerDutiesList.get(i).setTrackNumber(
+                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+            examinerDutiesList.get(i).setRadif(
+                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
+            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
+                        || examinerDuties.getZoneId() == null
+                        || examinerDuties.getZoneId().equals("0")) {
+                    examinerDutiesList.remove(i);
+                    j = examinerDutiesListTemp.size();
+                    i--;
+                }
+            }
+        }
+        daoExaminerDuties.insertAll(examinerDutiesList);
+        return examinerDutiesList.size();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                HttpClientWrapper.call.cancel();
+                super.onBackPressed();
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.imageViewDownload.setImageResource(R.drawable.image_download);
+        binding.imageViewExit.setImageResource(R.drawable.image_exit);
+        binding.imageViewUpload.setImageResource(R.drawable.image_upload);
+        binding.imageViewPaper.setImageResource(R.drawable.image_paper);
+        binding.imageViewRequest.setImageResource(R.drawable.image_request);
+        binding.imageViewForm.setImageResource(R.drawable.image_form);
+        mapView.onResume();
+        if (counter < examinerDuties.size()) {
+            setActionBarTitle("در حال جانمایی میسرها...");
+            if (examinerDuties.get(counter).getBillId() != null
+                    && examinerDuties.get(counter).getBillId().length() > 0)
+                getXY(examinerDuties.get(counter).getBillId());
+            else getXY(examinerDuties.get(counter).getNeighbourBillId());
+        }
+        if (counter == examinerDuties.size())
+            setActionBarTitle(getString(R.string.home));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        binding.imageViewDownload.setImageDrawable(null);
+        binding.imageViewUpload.setImageDrawable(null);
+        binding.imageViewExit.setImageDrawable(null);
+        binding.imageViewForm.setImageDrawable(null);
+        binding.imageViewPaper.setImageDrawable(null);
+        binding.imageViewRequest.setImageDrawable(null);
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+        HttpClientWrapper.call.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class AddRoutOverlay extends AsyncTask<GeoPoint, Integer, Integer> {
+        CustomProgressBar progressBar;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar = new CustomProgressBar();
+            progressBar.show(context, context.getString(R.string.waiting_for_routing));
+        }
+
+        @Override
+        protected Integer doInBackground(GeoPoint... geoPoints) {
+            addRouteOverlay(geoPoints[0], geoPoints[1]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            progressBar.getDialog().dismiss();
+        }
+    }
+
+    class LoginDocument implements ICallback<Login> {
+        @Override
+        public void execute(Login loginFeedBack) {
+            if (loginFeedBack.isSuccess()) {
+                sharedPreferenceManager.putData(SharedReferenceKeys.TOKEN_FOR_FILE.getValue(),
+                        loginFeedBack.getData().getToken());
+                uploadImage(images.get(0));
+            }
+        }
     }
 
     class SendCalculation implements ICallback<SimpleMessage> {
@@ -683,44 +790,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            Gson gson = new Gson();
-            examinerDutiesList.get(i).setRequestDictionaryString(
-                    gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-            if (examinerDutiesList.get(i).getZoneId() == null ||
-                    examinerDutiesList.get(i).getZoneId().equals("0")) {
-                examinerDutiesList.remove(i);
-                i--;
-            }
-        }
-        return examinerDutiesList;
-    }
-
-    int removeExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            examinerDutiesList.get(i).setTrackNumber(
-                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-            examinerDutiesList.get(i).setRadif(
-                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
-            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
-                        || examinerDuties.getZoneId() == null
-                        || examinerDuties.getZoneId().equals("0")) {
-                    examinerDutiesList.remove(i);
-                    j = examinerDutiesListTemp.size();
-                    i--;
-                }
-            }
-        }
-        daoExaminerDuties.insertAll(examinerDutiesList);
-        return examinerDutiesList.size();
-    }
-
     class Download implements ICallback<Input> {
         @Override
         public void execute(Input input) {
@@ -781,74 +850,5 @@ public class MainActivity extends AppCompatActivity
             Log.e("Error", Objects.requireNonNull(t.getMessage()));
             setActionBarTitle(getString(R.string.home));
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                HttpClientWrapper.call.cancel();
-                super.onBackPressed();
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.to_exit_reback, Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        binding.imageViewDownload.setImageResource(R.drawable.image_download);
-        binding.imageViewExit.setImageResource(R.drawable.image_exit);
-        binding.imageViewUpload.setImageResource(R.drawable.image_upload);
-        binding.imageViewPaper.setImageResource(R.drawable.image_paper);
-        binding.imageViewRequest.setImageResource(R.drawable.image_request);
-        binding.imageViewForm.setImageResource(R.drawable.image_form);
-        mapView.onResume();
-        if (counter < examinerDuties.size()) {
-            setActionBarTitle("در حال جانمایی میسرها...");
-            if (examinerDuties.get(counter).getBillId() != null
-                    && examinerDuties.get(counter).getBillId().length() > 0)
-                getXY(examinerDuties.get(counter).getBillId());
-            else getXY(examinerDuties.get(counter).getNeighbourBillId());
-        }
-        if (counter == examinerDuties.size())
-            setActionBarTitle(getString(R.string.home));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        binding.imageViewDownload.setImageDrawable(null);
-        binding.imageViewUpload.setImageDrawable(null);
-        binding.imageViewExit.setImageDrawable(null);
-        binding.imageViewForm.setImageDrawable(null);
-        binding.imageViewPaper.setImageDrawable(null);
-        binding.imageViewRequest.setImageDrawable(null);
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-        HttpClientWrapper.call.cancel();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 }

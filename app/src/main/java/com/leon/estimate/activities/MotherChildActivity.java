@@ -31,12 +31,12 @@ import com.leon.estimate.Tables.ExaminerDuties;
 import com.leon.estimate.Tables.Input;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.Request;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
 import com.leon.estimate.Utils.SimpleMessage;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.databinding.MotherChildActivityBinding;
 
 import org.json.JSONObject;
@@ -181,6 +181,43 @@ public class MotherChildActivity extends AppCompatActivity {
                 new Download(), new DownloadIncomplete(), new GetError());
     }
 
+    List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            Gson gson = new Gson();
+            examinerDutiesList.get(i).setRequestDictionaryString(
+                    gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
+            if (examinerDutiesList.get(i).getZoneId() == null ||
+                    examinerDutiesList.get(i).getZoneId().equals("0")) {
+                examinerDutiesList.remove(i);
+                i--;
+            }
+        }
+        return examinerDutiesList;
+    }
+
+    void removeExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
+        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
+        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
+        for (int i = 0; i < examinerDutiesList.size(); i++) {
+            examinerDutiesList.get(i).setTrackNumber(
+                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
+            examinerDutiesList.get(i).setRadif(
+                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
+            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
+            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
+                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
+                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
+                        || examinerDuties.getZoneId() == null
+                        || examinerDuties.getZoneId().equals("0")) {
+                    examinerDutiesList.remove(i);
+                    j = examinerDutiesListTemp.size();
+                    i--;
+                }
+            }
+        }
+        daoExaminerDuties.insertAll(examinerDutiesList);
+    }
+
     class GetError implements ICallbackError {
         @Override
         public void executeError(Throwable t) {
@@ -230,43 +267,6 @@ public class MotherChildActivity extends AppCompatActivity {
                     getString(R.string.dear_user), getString(R.string.request),
                     getString(R.string.accepted));
         }
-    }
-
-    List<ExaminerDuties> prepareExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            Gson gson = new Gson();
-            examinerDutiesList.get(i).setRequestDictionaryString(
-                    gson.toJson(examinerDutiesList.get(i).getRequestDictionary()));
-            if (examinerDutiesList.get(i).getZoneId() == null ||
-                    examinerDutiesList.get(i).getZoneId().equals("0")) {
-                examinerDutiesList.remove(i);
-                i--;
-            }
-        }
-        return examinerDutiesList;
-    }
-
-    void removeExaminerDuties(List<ExaminerDuties> examinerDutiesList) {
-        DaoExaminerDuties daoExaminerDuties = dataBase.daoExaminerDuties();
-        List<ExaminerDuties> examinerDutiesListTemp = daoExaminerDuties.getExaminerDuties();
-        for (int i = 0; i < examinerDutiesList.size(); i++) {
-            examinerDutiesList.get(i).setTrackNumber(
-                    examinerDutiesList.get(i).getTrackNumber().replace(".0", ""));
-            examinerDutiesList.get(i).setRadif(
-                    examinerDutiesList.get(i).getRadif().replace(".0", ""));
-            ExaminerDuties examinerDuties = examinerDutiesList.get(i);
-            for (int j = 0; j < examinerDutiesListTemp.size(); j++) {
-                ExaminerDuties examinerDutiesTemp = examinerDutiesListTemp.get(j);
-                if (examinerDuties.getTrackNumber().equals(examinerDutiesTemp.getTrackNumber())
-                        || examinerDuties.getZoneId() == null
-                        || examinerDuties.getZoneId().equals("0")) {
-                    examinerDutiesList.remove(i);
-                    j = examinerDutiesListTemp.size();
-                    i--;
-                }
-            }
-        }
-        daoExaminerDuties.insertAll(examinerDutiesList);
     }
 
     class Download implements ICallback<Input> {

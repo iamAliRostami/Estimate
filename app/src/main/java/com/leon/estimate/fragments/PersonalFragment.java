@@ -1,5 +1,7 @@
 package com.leon.estimate.fragments;
 
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,8 +22,6 @@ import com.leon.estimate.databinding.PersonalFragmentBinding;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-
-import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 
 public class PersonalFragment extends Fragment {

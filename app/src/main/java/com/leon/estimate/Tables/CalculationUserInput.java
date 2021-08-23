@@ -1,5 +1,9 @@
 package com.leon.estimate.Tables;
 
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -12,10 +16,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.leon.estimate.Utils.Constants.calculationUserInput;
-import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 @Entity(tableName = "CalculationUserInput", indices = @Index(value = {"trackNumber"}, unique = true))
 
@@ -62,21 +62,20 @@ public class CalculationUserInput {
     public boolean adamTaxfifFazelab;
     public String address;
     public String description;
-    @PrimaryKey(autoGenerate = true)
-    int id;
     public String shenasname;
     @Ignore
     public List<RequestDictionary> selectedServicesObject;
-    @Ignore
-    int pelak;
     @Ignore
     public double x3, y3;
     public int resultId;
     public double x1, x2, y1, y2;
     public double accuracy;
-
     public int arzeshMelk;
     public int karbariId;
+    @PrimaryKey(autoGenerate = true)
+    int id;
+    @Ignore
+    int pelak;
 
     public CalculationUserInput() {
     }

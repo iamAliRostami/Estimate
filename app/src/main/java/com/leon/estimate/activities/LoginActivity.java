@@ -1,5 +1,7 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -34,11 +36,11 @@ import com.leon.estimate.Infrastructure.ICallbackError;
 import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.MyApplication;
 import com.leon.estimate.R;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.databinding.LoginActivityBinding;
 
 import java.util.ArrayList;
@@ -47,8 +49,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginActivityBinding binding;
@@ -304,6 +304,39 @@ public class LoginActivity extends AppCompatActivity {
         finishAffinity();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        context = null;
+        binding.imageViewPerson.setImageDrawable(null);
+        binding.imageViewPassword.setImageDrawable(null);
+        binding.imageViewLogo.setImageDrawable(null);
+        binding.imageViewUsername.setImageDrawable(null);
+        System.gc();
+        Runtime.getRuntime().gc();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.gc();
+        Runtime.getRuntime().gc();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initialize();
+    }
+
     class LoginFeedBack
             implements ICallback<com.leon.estimate.Tables.LoginFeedBack> {
         @Override
@@ -357,38 +390,5 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.getString(R.string.login),
                     LoginActivity.this.getString(R.string.accepted));
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        context = null;
-        binding.imageViewPerson.setImageDrawable(null);
-        binding.imageViewPassword.setImageDrawable(null);
-        binding.imageViewLogo.setImageDrawable(null);
-        binding.imageViewUsername.setImageDrawable(null);
-        System.gc();
-        Runtime.getRuntime().gc();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        System.gc();
-        Runtime.getRuntime().gc();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initialize();
     }
 }

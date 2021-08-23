@@ -1,5 +1,8 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.CAMERA_REQUEST;
+import static com.leon.estimate.Utils.Constants.GALLERY_REQUEST;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -45,9 +48,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-import static com.leon.estimate.Utils.Constants.CAMERA_REQUEST;
-import static com.leon.estimate.Utils.Constants.GALLERY_REQUEST;
 
 public final class TakeOtherPhotoActivity extends AppCompatActivity {
     static String imageFileName;

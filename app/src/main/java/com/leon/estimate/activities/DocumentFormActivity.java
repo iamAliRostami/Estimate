@@ -1,5 +1,12 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.CAMERA_REQUEST;
+import static com.leon.estimate.Utils.Constants.GALLERY_REQUEST;
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.fileName;
+import static com.leon.estimate.Utils.Constants.imageFileName;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -53,18 +60,18 @@ import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
 import com.leon.estimate.Tables.UploadImage;
 import com.leon.estimate.Utils.Constants;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
+import com.leon.estimate.Utils.custom_dialogue.LovelyStandardDialog;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentFormActivityBinding;
 import com.leon.estimate.fragments.AddDocumentFragment;
 import com.leon.estimate.fragments.HighQualityFragment;
 import com.sardari.daterangepicker.utils.PersianCalendar;
-import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,13 +89,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static com.leon.estimate.Utils.Constants.CAMERA_REQUEST;
-import static com.leon.estimate.Utils.Constants.GALLERY_REQUEST;
-import static com.leon.estimate.Utils.Constants.calculationUserInput;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-import static com.leon.estimate.Utils.Constants.fileName;
-import static com.leon.estimate.Utils.Constants.imageFileName;
 
 public class DocumentFormActivity extends AppCompatActivity {
     ImageDataTitle imageDataTitle;
@@ -405,7 +405,51 @@ public class DocumentFormActivity extends AppCompatActivity {
                 ).check();
     }
 
-    class ShowDialogue implements CustomDialog.Inline {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isNew)
+            getMenuInflater().inflate(R.menu.add_document_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.add_document_menu) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            AddDocumentFragment addDocumentFragment = AddDocumentFragment.newInstance();
+            addDocumentFragment.show(fragmentTransaction, "");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    class ShowDialogue implements CustomDialog.Inline1 {
         private final LovelyStandardDialog lovelyStandardDialog;
 
         ShowDialogue(String message, String title, String top, String positiveButtonText, String negativeButtonText,
@@ -676,50 +720,6 @@ public class DocumentFormActivity extends AppCompatActivity {
             Toast.makeText(DocumentFormActivity.this, error, Toast.LENGTH_LONG).show();
             binding.progressBar.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (isNew)
-            getMenuInflater().inflate(R.menu.add_document_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.add_document_menu) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            AddDocumentFragment addDocumentFragment = AddDocumentFragment.newInstance();
-            addDocumentFragment.show(fragmentTransaction, "");
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 }
 

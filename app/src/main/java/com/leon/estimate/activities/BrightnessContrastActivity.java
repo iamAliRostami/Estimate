@@ -71,6 +71,22 @@ public class BrightnessContrastActivity extends AppCompatActivity {
         }
     };
 
+    public static Bitmap contrastController(Bitmap bitmap, float contrast, float brightness) {
+        ColorMatrix colorMatrix = new ColorMatrix(new float[]
+                {
+                        contrast, 0, 0, 0, brightness,
+                        0, contrast, 0, 0, brightness,
+                        0, 0, contrast, 0, brightness,
+                        0, 0, 0, 1, 0
+                });
+        Bitmap ret = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Canvas canvas = new Canvas(ret);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return ret;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,22 +111,6 @@ public class BrightnessContrastActivity extends AppCompatActivity {
 
         binding.buttonAccepted.setOnClickListener(onClickListenerAccepted);
         binding.buttonClose.setOnClickListener(onClickListenerClose);
-    }
-
-    public static Bitmap contrastController(Bitmap bitmap, float contrast, float brightness) {
-        ColorMatrix colorMatrix = new ColorMatrix(new float[]
-                {
-                        contrast, 0, 0, 0, brightness,
-                        0, contrast, 0, 0, brightness,
-                        0, 0, contrast, 0, brightness,
-                        0, 0, 0, 1, 0
-                });
-        Bitmap ret = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-        Canvas canvas = new Canvas(ret);
-        Paint paint = new Paint();
-        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-        return ret;
     }
 
     private Bitmap brightnessController(Bitmap bitmap, int value) {

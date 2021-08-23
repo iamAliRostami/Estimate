@@ -1,10 +1,12 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.Utils.custom_dialogue;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,26 +22,22 @@ import androidx.core.content.ContextCompat;
 
 import com.leon.estimate.R;
 
-
 public abstract class AbsLovelyDialog<T extends AbsLovelyDialog> {
-
     private static final String KEY_SAVED_STATE_TOKEN = "key_saved_state_token";
-
+    private final Context context;
     private Dialog dialog;
     private View dialogView;
-
     private ImageView iconView;
     private TextView topTitleView;
     private TextView titleView;
     private TextView messageView;
-    private Context context;
 
-    public AbsLovelyDialog(Context context) {
+    AbsLovelyDialog(Context context) {
         this.context = context;
         init(new AlertDialog.Builder(this.context));
     }
 
-    public AbsLovelyDialog(Context context, int theme) {
+    AbsLovelyDialog(Context context, int theme) {
         this.context = context;
         init(new AlertDialog.Builder(context, theme));
     }
@@ -47,7 +45,6 @@ public abstract class AbsLovelyDialog<T extends AbsLovelyDialog> {
     private void init(AlertDialog.Builder dialogBuilder) {
         dialogView = LayoutInflater.from(dialogBuilder.getContext()).inflate(getLayout(), null);
         dialog = dialogBuilder.setView(dialogView).create();
-
         iconView = findView(R.id.ld_icon);
         titleView = findView(R.id.ld_title);
         messageView = findView(R.id.ld_message);
@@ -81,6 +78,7 @@ public abstract class AbsLovelyDialog<T extends AbsLovelyDialog> {
         return (T) this;
     }
 
+    @SuppressLint("ResourceAsColor")
     public T setTopTitle(CharSequence title) {
         topTitleView.setVisibility(View.VISIBLE);
         topTitleView.setText(title);
@@ -88,9 +86,17 @@ public abstract class AbsLovelyDialog<T extends AbsLovelyDialog> {
         return (T) this;
     }
 
-    public T setTopTitleColor(int color) {
-        topTitleView.setTextColor(color);
+    //    public T setTopTitleColor(int color) {
+//        topTitleView.setTextColor(color);
+//        return (T) this;
+//    }
+    public T setTopTitleColor(@ColorInt int topColor) {
+        ((TextView) findView(R.id.ld_top_title)).setTextColor(topColor);
         return (T) this;
+    }
+
+    public T setTopTitleColorRes(@ColorRes int topColoRes) {
+        return setTopTitleColor(color(topColoRes));
     }
 
     public T setIcon(Bitmap bitmap) {
@@ -163,7 +169,11 @@ public abstract class AbsLovelyDialog<T extends AbsLovelyDialog> {
     }
 
     public Dialog show() {
-        dialog.show();
+        try {
+            dialog.show();//TODO
+        } catch (Exception e) {
+            Log.e("Error in Dialog", e.toString());
+        }
         return dialog;
     }
 
@@ -194,20 +204,20 @@ public abstract class AbsLovelyDialog<T extends AbsLovelyDialog> {
         return ContextCompat.getColor(getContext(), colorRes);
     }
 
-    protected Context getContext() {
+    Context getContext() {
         return dialogView.getContext();
     }
 
-    protected <ViewClass extends View> ViewClass findView(int id) {
-        return (ViewClass) dialogView.findViewById(id);
+    <ViewClass extends View> ViewClass findView(int id) {
+        return dialogView.findViewById(id);
     }
 
     protected class ClickListenerDecorator implements View.OnClickListener {
 
-        private View.OnClickListener clickListener;
-        private boolean closeOnClick;
+        private final View.OnClickListener clickListener;
+        private final boolean closeOnClick;
 
-        protected ClickListenerDecorator(View.OnClickListener clickListener, boolean closeOnClick) {
+        ClickListenerDecorator(View.OnClickListener clickListener, boolean closeOnClick) {
             this.clickListener = clickListener;
             this.closeOnClick = closeOnClick;
         }

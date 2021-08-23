@@ -1,5 +1,8 @@
 package com.leon.estimate.fragments;
 
+import static android.content.Context.LOCATION_SERVICE;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -61,20 +64,17 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static android.content.Context.LOCATION_SERVICE;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-
 public class MapFragment extends Fragment implements LocationListener {
+    private final ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     String token, billId;
     CoordinateConversion conversion;
+    double[] latLong;
+    MapFragmentBinding binding;
     private LocationManager locationManager;
     private double latitude, longitude;
-    double[] latLong;
-    private final ArrayList<GeoPoint> polygonPoint = new ArrayList<>();
     private int polygonIndex;
     private int place1Index;
     private int place2Index;
-    MapFragmentBinding binding;
     private Context context;
 
     public MapFragment() {

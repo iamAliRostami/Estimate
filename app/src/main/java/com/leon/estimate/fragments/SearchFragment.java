@@ -1,5 +1,7 @@
 package com.leon.estimate.fragments;
 
+import static com.leon.estimate.Utils.Constants.customAdapter;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,6 @@ import com.sardari.daterangepicker.dialog.DatePickerDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-
-import static com.leon.estimate.Utils.Constants.customAdapter;
 
 public class SearchFragment extends DialogFragment {
     SearchFragmentBinding binding;

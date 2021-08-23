@@ -1,5 +1,8 @@
-package com.leon.estimate.Utils;
+package com.leon.estimate.Utils.custom_dialogue;
 
+import static android.view.View.VISIBLE;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
@@ -8,30 +11,25 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.leon.estimate.R;
 
-import static android.view.View.VISIBLE;
-
-/**
- * Created by Leon on 2/7/2018.
- */
-
 public class LovelyStandardDialog extends AbsLovelyDialog<LovelyStandardDialog> {
 
-    public static final int POSITIVE_BUTTON = com.yarolegovich.lovelydialog.R.id.ld_btn_yes;
-    public static final int NEGATIVE_BUTTON = com.yarolegovich.lovelydialog.R.id.ld_btn_no;
-    public static final int NEUTRAL_BUTTON = com.yarolegovich.lovelydialog.R.id.ld_btn_neutral;
+    public static final int POSITIVE_BUTTON = R.id.button_yes;
+    public static final int NEGATIVE_BUTTON = R.id.button_no;
+    public static final int NEUTRAL_BUTTON = R.id.button_neutral;
 
-    private Button positiveButton;
-    private Button negativeButton;
-    private Button neutralButton;
-    private Context context;
+    private final Button positiveButton;
+    private final Button negativeButton;
+    private final Button neutralButton;
+    private final Context context;
 
     {
-        positiveButton = findView(R.id.ld_btn_yes);
-        negativeButton = findView(R.id.ld_btn_no);
-        neutralButton = findView(R.id.ld_btn_neutral);
+        positiveButton = findView(R.id.button_yes);
+        negativeButton = findView(R.id.button_no);
+        neutralButton = findView(R.id.button_neutral);
     }
 
     public LovelyStandardDialog(Context context) {
@@ -52,7 +50,7 @@ public class LovelyStandardDialog extends AbsLovelyDialog<LovelyStandardDialog> 
     public LovelyStandardDialog setPositiveButton(String text, @Nullable View.OnClickListener listener) {
         positiveButton.setVisibility(VISIBLE);
         positiveButton.setText(text);
-        positiveButton.setTextColor(context.getResources().getColor(R.color.white));
+        positiveButton.setTextColor(ContextCompat.getColor(context, R.color.white));
 //        positiveButton.setTextSize(context.getResources().getDimension(R.dimen.textSizeMedium));
         positiveButton.setOnClickListener(new ClickListenerDecorator(listener, true));
         return this;
@@ -107,10 +105,11 @@ public class LovelyStandardDialog extends AbsLovelyDialog<LovelyStandardDialog> 
         return setButtonsColor(color(colorRes));
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private LovelyStandardDialog setButtonsBackgroundRes(int res) {
-        positiveButton.setBackgroundDrawable(context.getResources().getDrawable(res));
-        negativeButton.setBackgroundDrawable(context.getResources().getDrawable(res));
-        neutralButton.setBackgroundDrawable(context.getResources().getDrawable(res));
+        positiveButton.setBackground(ContextCompat.getDrawable(context, res));
+        negativeButton.setBackground(ContextCompat.getDrawable(context, res));
+        neutralButton.setBackground(ContextCompat.getDrawable(context, res));
         return this;
     }
 

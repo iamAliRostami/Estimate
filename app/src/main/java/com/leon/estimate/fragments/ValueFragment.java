@@ -1,5 +1,9 @@
 package com.leon.estimate.fragments;
 
+import static com.leon.estimate.Utils.Constants.arzeshdaraei;
+import static com.leon.estimate.Utils.Constants.valueInteger;
+import static com.leon.estimate.activities.FormActivity.activity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,29 +40,12 @@ import java.util.List;
 
 import retrofit2.Response;
 
-import static com.leon.estimate.Utils.Constants.arzeshdaraei;
-import static com.leon.estimate.Utils.Constants.valueInteger;
-import static com.leon.estimate.activities.FormActivity.activity;
-
 
 public class ValueFragment extends DialogFragment {
     ValueFragmentBinding binding;
     Context context;
     TextView textview;
-    private String zoneId;
     int maskooni = 0, tejari = 0, omoomi = 0, sanati = 0, edari = 0, hotel = 0;
-
-    public ValueFragment() {
-    }
-
-    public static ValueFragment newInstance(String param1) {
-        ValueFragment fragment = new ValueFragment();
-        Bundle args = new Bundle();
-        args.putString(BundleEnum.ZONE_ID.getValue(), param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,6 +62,18 @@ public class ValueFragment extends DialogFragment {
             counting(false);
         }
     };
+    private String zoneId;
+
+    public ValueFragment() {
+    }
+
+    public static ValueFragment newInstance(String param1) {
+        ValueFragment fragment = new ValueFragment();
+        Bundle args = new Bundle();
+        args.putString(BundleEnum.ZONE_ID.getValue(), param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,

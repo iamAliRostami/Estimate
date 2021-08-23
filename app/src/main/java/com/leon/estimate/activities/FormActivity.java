@@ -1,5 +1,17 @@
 package com.leon.estimate.activities;
 
+import static android.graphics.Color.BLUE;
+import static android.graphics.Color.RED;
+import static android.graphics.Color.YELLOW;
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+import static com.leon.estimate.Utils.Constants.arzeshdaraei;
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.others;
+import static com.leon.estimate.Utils.Constants.secondForm;
+import static com.leon.estimate.Utils.Constants.valueInteger;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -95,18 +107,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static android.graphics.Color.BLUE;
-import static android.graphics.Color.RED;
-import static android.graphics.Color.YELLOW;
-import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
-import static com.leon.estimate.Utils.Constants.arzeshdaraei;
-import static com.leon.estimate.Utils.Constants.calculationUserInput;
-import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-import static com.leon.estimate.Utils.Constants.others;
-import static com.leon.estimate.Utils.Constants.secondForm;
-import static com.leon.estimate.Utils.Constants.valueInteger;
 
 public class FormActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
@@ -548,39 +548,6 @@ public class FormActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class SerializeJson extends AsyncTask<Intent, String, String> {
-        ProgressDialog dialog;
-
-        public SerializeJson() {
-            super();
-        }
-
-        @Override
-        protected String doInBackground(Intent... intents) {
-            json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
-            Gson gson = new GsonBuilder().create();
-            Constants.requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(context);
-            dialog.setMessage(context.getString(R.string.loading_getting_info));
-            dialog.setTitle(context.getString(R.string.loading_connecting));
-            dialog.setCancelable(false);
-            dialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            dialog.dismiss();
-        }
-    }
-
     private void addUserPlace(GeoPoint p) {
         GeoPoint startPoint = new GeoPoint(p.getLatitude(), p.getLongitude());
         startMarker = new Marker(binding.mapView);
@@ -682,6 +649,71 @@ public class FormActivity extends AppCompatActivity {
             enterBillIdFragment.show(fragmentTransaction, "bill Id");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.document_menu, menu);
+        if (!examinerDuties.isNewEnsheab()) {
+            menu.getItem(1).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    class SerializeJson extends AsyncTask<Intent, String, String> {
+        ProgressDialog dialog;
+
+        public SerializeJson() {
+            super();
+        }
+
+        @Override
+        protected String doInBackground(Intent... intents) {
+            json = Objects.requireNonNull(getIntent().getExtras()).getString(BundleEnum.SERVICES.getValue());
+            Gson gson = new GsonBuilder().create();
+            Constants.requestDictionaries = Arrays.asList(gson.fromJson(json, RequestDictionary[].class));
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setMessage(context.getString(R.string.loading_getting_info));
+            dialog.setTitle(context.getString(R.string.loading_connecting));
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -891,15 +923,6 @@ public class FormActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.document_menu, menu);
-        if (!examinerDuties.isNewEnsheab()) {
-            menu.getItem(1).setVisible(false);
-        }
-        return true;
-    }
-
     @SuppressLint("StaticFieldLeak")
     class GetDBData extends AsyncTask<Integer, String, String> {
         ProgressDialog dialog;
@@ -970,28 +993,5 @@ public class FormActivity extends AppCompatActivity {
             initializeMap(false);
             dialog.dismiss();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 }

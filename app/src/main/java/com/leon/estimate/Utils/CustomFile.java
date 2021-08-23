@@ -1,5 +1,8 @@
 package com.leon.estimate.Utils;
 
+import static com.leon.estimate.Utils.Constants.fileName;
+import static com.leon.estimate.Utils.Constants.imageFileName;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -47,9 +50,6 @@ import java.util.Objects;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static com.leon.estimate.Utils.Constants.fileName;
-import static com.leon.estimate.Utils.Constants.imageFileName;
 
 public class CustomFile {
 
@@ -228,12 +228,6 @@ public class CustomFile {
         daoResultDictionary.insertAll(input.getResultDictionary());
     }
 
-    private byte[] convertBitmapToByte(Bitmap bitmap) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
-        return bos.toByteArray();
-    }
-
     public static Images getImage(Images images, Context context) {
         try {
             File f = new File(Environment.getExternalStoragePublicDirectory(
@@ -276,5 +270,11 @@ public class CustomFile {
             }
         }
         return images;
+    }
+
+    private byte[] convertBitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
+        return bos.toByteArray();
     }
 }

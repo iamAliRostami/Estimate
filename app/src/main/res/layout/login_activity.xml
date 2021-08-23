@@ -125,7 +125,6 @@
             </LinearLayout>
 
             <CheckBox
-                android:checked="true"
                 android:id="@+id/check_box_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,6 +132,7 @@
                 android:layout_marginTop="@dimen/activity_mid_margin"
                 android:layout_marginRight="@dimen/_20sdp"
                 android:layout_marginBottom="@dimen/activity_mid_margin"
+                android:checked="true"
                 android:text="@string/save"
                 android:textSize="@dimen/textSizeMedium"
                 android:textStyle="bold" />

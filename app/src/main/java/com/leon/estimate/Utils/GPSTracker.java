@@ -1,5 +1,8 @@
 package com.leon.estimate.Utils;
 
+import static com.leon.estimate.Utils.Constants.MIN_DISTANCE_CHANGE_FOR_UPDATES;
+import static com.leon.estimate.Utils.Constants.MIN_TIME_BW_UPDATES;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
@@ -16,9 +19,6 @@ import android.widget.Toast;
 import com.leon.estimate.R;
 
 import org.osmdroid.config.Configuration;
-
-import static com.leon.estimate.Utils.Constants.MIN_DISTANCE_CHANGE_FOR_UPDATES;
-import static com.leon.estimate.Utils.Constants.MIN_TIME_BW_UPDATES;
 
 public class GPSTracker extends Service {
     final Activity activity;

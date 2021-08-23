@@ -21,11 +21,11 @@ import com.leon.estimate.Infrastructure.ICallbackIncomplete;
 import com.leon.estimate.R;
 import com.leon.estimate.Tables.AddDocument;
 import com.leon.estimate.Utils.Constants;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.databinding.AddDocumentFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;

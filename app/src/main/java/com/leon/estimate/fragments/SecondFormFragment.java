@@ -1,5 +1,8 @@
 package com.leon.estimate.fragments;
 
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+import static com.leon.estimate.Utils.Constants.secondForm;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,9 +21,6 @@ import com.leon.estimate.activities.FormActivity;
 import com.leon.estimate.databinding.SecondFormFragmentBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-import static com.leon.estimate.Utils.Constants.secondForm;
 
 public class SecondFormFragment extends Fragment {
     SecondFormFragmentBinding binding;

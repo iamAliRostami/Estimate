@@ -34,12 +34,12 @@ import com.leon.estimate.Tables.ImageDataTitle;
 import com.leon.estimate.Tables.Images;
 import com.leon.estimate.Tables.Login;
 import com.leon.estimate.Tables.MyDatabase;
-import com.leon.estimate.Utils.CustomDialog;
 import com.leon.estimate.Utils.CustomErrorHandlingNew;
 import com.leon.estimate.Utils.CustomFile;
 import com.leon.estimate.Utils.HttpClientWrapper;
 import com.leon.estimate.Utils.NetworkHelper;
 import com.leon.estimate.Utils.SharedPreferenceManager;
+import com.leon.estimate.Utils.custom_dialogue.CustomDialog;
 import com.leon.estimate.adapters.ImageViewAdapter;
 import com.leon.estimate.databinding.DocumentActivityBinding;
 
@@ -182,6 +182,37 @@ public class DocumentActivity extends AppCompatActivity {
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).check();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HttpClientWrapper.call.cancel();
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        HttpClientWrapper.call.cancel();
+        imageViewAdapter = null;
+        images = null;
+        imageDataThumbnail = null;
+        imageDataThumbnailUri = null;
+        arrayListTitle = null;
+        Runtime.getRuntime().totalMemory();
+        Runtime.getRuntime().freeMemory();
+        Runtime.getRuntime().maxMemory();
+        Debug.getNativeHeapAllocatedSize();
     }
 
     class LoginDocument implements ICallback<Login> {
@@ -350,37 +381,6 @@ public class DocumentActivity extends AppCompatActivity {
             Toast.makeText(DocumentActivity.this, error, Toast.LENGTH_LONG).show();
             binding.progressBar.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        HttpClientWrapper.call.cancel();
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        HttpClientWrapper.call.cancel();
-        imageViewAdapter = null;
-        images = null;
-        imageDataThumbnail = null;
-        imageDataThumbnailUri = null;
-        arrayListTitle = null;
-        Runtime.getRuntime().totalMemory();
-        Runtime.getRuntime().freeMemory();
-        Runtime.getRuntime().maxMemory();
-        Debug.getNativeHeapAllocatedSize();
     }
 }
 

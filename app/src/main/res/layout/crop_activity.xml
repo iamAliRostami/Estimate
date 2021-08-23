@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlContainer"
-    android:layoutDirection="rtl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context="com.leon.estimate.activities.CropActivity">
 
     <LinearLayout
@@ -60,12 +60,12 @@
         </RelativeLayout>
 
         <FrameLayout
-            android:background="@drawable/border_2"
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_weight="8">
+            android:layout_weight="8"
+            android:background="@drawable/border_2">
 
             <FrameLayout
                 android:id="@+id/holderImageCrop"
@@ -115,6 +115,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeLarge"
                 tools:ignore="ButtonStyle" />
+
             <Button
                 android:id="@+id/buttonClose"
                 android:layout_width="0dp"

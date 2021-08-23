@@ -3,8 +3,8 @@ package com.leon.estimate.Tables;
 import java.util.ArrayList;
 
 public class ImageDataThumbnail {
-    boolean success;
     public String error;
+    boolean success;
     ArrayList<Data> data;
 
     public boolean isSuccess() {

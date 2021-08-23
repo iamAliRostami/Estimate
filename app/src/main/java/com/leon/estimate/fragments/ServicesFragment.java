@@ -1,6 +1,8 @@
 package com.leon.estimate.fragments;
 
 
+import static com.leon.estimate.Utils.Constants.requestDictionaries;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,14 +26,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-import static com.leon.estimate.Utils.Constants.requestDictionaries;
-
 public class ServicesFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
-    ServicesFragmentBinding binding;
-    private Context context;
     @SuppressLint("StaticFieldLeak")
     static CheckBoxAdapter checkBoxAdapter;
+    ServicesFragmentBinding binding;
+    private Context context;
 
     public ServicesFragment() {
 

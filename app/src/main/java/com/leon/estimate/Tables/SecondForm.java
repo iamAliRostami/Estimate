@@ -132,6 +132,10 @@ public class SecondForm {
         return asphalutAb;
     }
 
+    public void setAsphalutAb(int asphalutAb) {
+        this.asphalutAb = asphalutAb;
+    }
+
     public boolean isEzhaNazarA() {
         return ezhaNazarA;
     }
@@ -178,10 +182,6 @@ public class SecondForm {
 
     public void setLooleF(boolean looleF) {
         this.looleF = looleF;
-    }
-
-    public void setAsphalutAb(int asphalutAb) {
-        this.asphalutAb = asphalutAb;
     }
 
     public int getAsphalutFazelab() {

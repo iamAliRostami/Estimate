@@ -17,4 +17,17 @@
     <dimen name="textSizeLarge">23sp</dimen>
     <dimen name="textSizeMedium">18sp</dimen>
     <dimen name="textSizeSmall">15sp</dimen>
+
+
+
+    <dimen name="small_dp">2dp</dimen>
+    <dimen name="low_dp">6dp</dimen>
+    <dimen name="medium_dp">10dp</dimen>
+    <dimen name="large_dp">20dp</dimen>
+    <dimen name="huge_dp">30dp</dimen>
+
+    <dimen name="text_size_small">15sp</dimen>
+    <dimen name="text_size_medium">20sp</dimen>
+    <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_huge">35sp</dimen>
 </resources>

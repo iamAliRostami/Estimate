@@ -1,13 +1,13 @@
 package com.leon.estimate.Utils;
 
+import static android.content.Context.WIFI_SERVICE;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.lang.reflect.Method;
-
-import static android.content.Context.WIFI_SERVICE;
 
 /**
  * Created by Leon on 12/18/2017.

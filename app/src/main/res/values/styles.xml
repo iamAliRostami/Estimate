@@ -41,4 +41,15 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="DialogButton">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:paddingTop">@dimen/medium_dp</item>
+        <item name="android:paddingBottom">@dimen/medium_dp</item>
+        <item name="android:paddingLeft">@dimen/large_dp</item>
+        <item name="android:paddingRight">@dimen/large_dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
 </resources>

@@ -5,7 +5,7 @@ import okhttp3.MultipartBody;
 public class UploadImage {
     boolean success;
     String error;
-//    String data;
+    //    String data;
     String billId;
     String trackingNumber;
     int docId;

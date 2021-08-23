@@ -1,5 +1,9 @@
 package com.leon.estimate.Tables;
 
+import static com.leon.estimate.Utils.Constants.calculationUserInput;
+import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -7,12 +11,10 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
-import static com.leon.estimate.Utils.Constants.calculationUserInput;
-import static com.leon.estimate.Utils.Constants.calculationUserInputTemp;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
-
 @Entity(tableName = "ExaminerDuties", indices = @Index(value = {"trackNumber", "id"}, unique = true))
 public class ExaminerDuties {
+    public int noeVagozariId;
+    public int pelak;
     @PrimaryKey(autoGenerate = true)
     int id;
     String trackNumber;
@@ -69,7 +71,6 @@ public class ExaminerDuties {
     boolean hasRadif;
     String requestDictionaryString;
     String shenasname;
-
     boolean ezhaNazarA;
     boolean ezhaNazarF;
     int qotrLooleI;
@@ -83,8 +84,6 @@ public class ExaminerDuties {
     int vaziatNasbPompI;
     boolean etesalZirzamin;
     int omqFazelab;
-    public int noeVagozariId;
-    public int pelak;
     boolean sanad;
     String examinerName;
     boolean estelamShahrdari, parvane, motaqazi;
@@ -223,6 +222,10 @@ public class ExaminerDuties {
 
     public int getVaziatNasbPompI() {
         return vaziatNasbPompI;
+    }
+
+    public void setVaziatNasbPompI(int vaziatNasbPompI) {
+        this.vaziatNasbPompI = vaziatNasbPompI;
     }
 
     public String getExaminerName() {
@@ -725,6 +728,10 @@ public class ExaminerDuties {
         return requestDictionaryString;
     }
 
+    public void setRequestDictionaryString(String requestDictionaryString) {
+        this.requestDictionaryString = requestDictionaryString;
+    }
+
     public int getId() {
         return id;
     }
@@ -897,10 +904,6 @@ public class ExaminerDuties {
         return vaziatNasbPompI;
     }
 
-    public void setVaziatNasbPompI(int vaziatNasbPompI) {
-        this.vaziatNasbPompI = vaziatNasbPompI;
-    }
-
     public int getOmqeZirzamin() {
         return omqeZirzamin;
     }
@@ -931,10 +934,6 @@ public class ExaminerDuties {
 
     public void setChahAbBaran(boolean chahAbBaran) {
         this.chahAbBaran = chahAbBaran;
-    }
-
-    public void setRequestDictionaryString(String requestDictionaryString) {
-        this.requestDictionaryString = requestDictionaryString;
     }
 
     public ArrayList<RequestDictionary> getRequestDictionary() {

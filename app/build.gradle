@@ -10,7 +10,7 @@ android {
         exclude 'lib/mips/libopencv_java3.so'
         exclude 'lib/armeabi/libopencv_java3.so'
     }
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "29.0.3"
     signingConfigs {
         config {
@@ -24,7 +24,7 @@ android {
         multiDexEnabled true
         applicationId "com.leon.estimate"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "99.12.18.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -72,14 +72,14 @@ dependencies {
 
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     //noinspection GradleDependency
     testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -91,7 +91,7 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-android:6.1.10@aar'
     implementation 'com.cocoahero.android:geojson:1.0.1@jar'
 
-    implementation 'com.yarolegovich:lovely-dialog:1.0.7'
+//    implementation 'com.yarolegovich:lovely-dialog:1.0.7'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'

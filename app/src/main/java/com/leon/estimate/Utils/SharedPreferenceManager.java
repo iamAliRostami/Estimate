@@ -1,13 +1,13 @@
 package com.leon.estimate.Utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.leon.estimate.Infrastructure.ISharedPreferenceManager;
 
 import java.util.Objects;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Leon on 12/13/2017.
