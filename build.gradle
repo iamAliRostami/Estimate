@@ -3,7 +3,6 @@
 buildscript {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
@@ -38,6 +37,7 @@ ext {
 allprojects {
     repositories {
         google()
+        //noinspection JcenterRepositoryObsolete
         jcenter()
         maven {
             url 'http://www.idescout.com/maven/repo/'

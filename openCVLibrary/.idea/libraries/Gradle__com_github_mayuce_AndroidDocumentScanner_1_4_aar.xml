@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.mayuce:AndroidDocumentScanner:1.4@aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../Programming/.gradle/caches/transforms-2/files-2.1/ea874e8f9deba4d2150a36abaa9ced93/jetified-AndroidDocumentScanner-1.4/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../Programming/.gradle/caches/transforms-2/files-2.1/ea874e8f9deba4d2150a36abaa9ced93/jetified-AndroidDocumentScanner-1.4/res" />
+      <root url="file://$PROJECT_DIR$/../../../Programming/.gradle/caches/transforms-2/files-2.1/ea874e8f9deba4d2150a36abaa9ced93/jetified-AndroidDocumentScanner-1.4/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../Programming/.gradle/caches/modules-2/files-2.1/com.github.mayuce/AndroidDocumentScanner/1.4/bb5f7f67ad3dc5c7c9036ad1048511c90fe994c9/AndroidDocumentScanner-1.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
