@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:padding="@dimen/activity_mid_padding"
+    tools:context="com.leon.estimate.activities.FormActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/buttonNext" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/buttonNext"
+        android:layoutDirection="rtl"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textViewTitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/activity_large_margin"
+            android:gravity="center"
+            android:text="@string/location"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeHuge"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/textViewTitle1"
+            android:background="@drawable/border_gray_2">
+
+            <EditText
+                android:id="@+id/editTextDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:background="@drawable/border_white_2"
+                android:gravity="right|top"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:maxLines="2"
+                android:padding="@dimen/activity_medium_padding"
+                android:textSize="@dimen/textSizeMedium"
+                tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutAttribute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextDescription"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:background="@drawable/border_white_2"
+                android:orientation="horizontal"
+                android:padding="@dimen/activity_mid_padding"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkboxParcels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parcels"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/checkboxWaterPipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/water_pipe"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/checkboxWaterTransfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/water_transfer"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/checkboxSanitationTransfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sanitation_transfer"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <org.osmdroid.views.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/linearLayoutAttribute"
+                android:layout_margin="@dimen/activity_mid_margin"
+                android:background="@drawable/border_gray_1"
+                android:padding="@dimen/activity_mid_padding" />
+
+            <ImageView
+                android:id="@+id/imageViewRefresh1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayoutAttribute"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/activity_medium_margin"
+                android:padding="@dimen/activity_mid_padding"
+                android:src="@drawable/refresh"
+                app:srcCompat="@drawable/refresh"
+                tools:ignore="ContentDescription,RtlHardcoded" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayoutAttribute"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="@dimen/activity_medium_margin"
+                android:padding="@dimen/activity_mid_padding"
+                tools:ignore="RtlHardcoded" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutEditMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/buttonNext"
+        android:layoutDirection="rtl"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textViewTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/activity_large_margin"
+            android:gravity="center"
+            android:text="@string/crooki"
+            android:textColor="@color/blue4"
+            android:textSize="@dimen/textSizeHuge"
+            android:textStyle="bold" />
+
+        <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/signature_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/imageViewColorBlue"
+            android:layout_marginLeft="@dimen/activity_medium_margin"
+            android:layout_marginRight="@dimen/activity_medium_margin"
+            android:layout_marginBottom="@dimen/activity_medium_margin"
+            android:padding="@dimen/activity_mid_padding"
+            sign:penColor="#000000" />
+
+        <ImageView
+            android:id="@+id/imageViewRefresh2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/refresh"
+            app:srcCompat="@drawable/refresh"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/imageViewColorYellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_toLeftOf="@id/imageViewRefresh2"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/color_yellow"
+            app:srcCompat="@drawable/color_yellow"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/imageViewColorBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_toLeftOf="@id/imageViewColorYellow"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/color_blue"
+            app:srcCompat="@drawable/color_blue"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/imageViewColorRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle2"
+            android:layout_margin="@dimen/activity_medium_margin"
+            android:layout_toLeftOf="@id/imageViewColorBlue"
+            android:padding="@dimen/activity_mid_padding"
+            android:src="@drawable/color_red"
+            app:srcCompat="@drawable/color_red"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/buttonPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_mid_padding"
+        android:background="@drawable/border_red_2"
+        android:paddingLeft="@dimen/activity_medium_padding"
+        android:paddingRight="@dimen/activity_medium_padding"
+        android:text="@string/previous"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeLarge"
+        tools:ignore="RelativeOverlap,RtlHardcoded" />
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_mid_padding"
+        android:background="@drawable/border_green_2"
+        android:paddingLeft="@dimen/activity_medium_padding"
+        android:paddingRight="@dimen/activity_medium_padding"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeLarge"
+        tools:ignore="RtlHardcoded" />
+</RelativeLayout>
