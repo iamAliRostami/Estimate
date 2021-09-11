@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/medium_dp"
+    tools:context=".activities.DocumentFormActivity">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/progress_bar"
+        android:padding="@dimen/medium_dp"
+        android:text="@string/document_received"
+        android:textSize="@dimen/text_size_medium" />
+
+    <GridView
+        android:id="@+id/gridViewImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/text_view_continue"
+        android:layout_below="@+id/progress_bar"
+        android:background="@drawable/border_gray_1"
+        android:nestedScrollingEnabled="true"
+        android:numColumns="2"
+        tools:listitem="@layout/item_image" />
+
+    <TextView
+        android:id="@+id/text_view_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linear_layout_confirm"
+        android:padding="@dimen/medium_dp"
+        android:text="@string/to_continue"
+        android:textSize="@dimen/text_size_medium" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:background="@drawable/border_gray_2"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/low_dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_finder_camera"
+            tools:ignore="ContentDescription,NestedWeights" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/low_dp"
+                android:layout_marginRight="@dimen/low_dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_take_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_white_1"
+                    android:orientation="vertical"
+                    android:padding="@dimen/low_dp">
+
+                    <Button
+                        android:id="@+id/button_pick"
+                        style="@style/Button.Neutral"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="@dimen/low_dp"
+                        android:paddingLeft="@dimen/low_dp"
+                        android:paddingRight="@dimen/low_dp"
+                        android:text="@string/pick_an_image"
+                        android:textSize="@dimen/text_size_medium"
+                        tools:ignore="MissingConstraints" />
+
+                    <Spinner
+                        android:id="@+id/spinner_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/low_dp"
+                        android:layout_marginBottom="@dimen/low_dp"
+                        android:paddingLeft="@dimen/large_dp"
+                        android:paddingRight="@dimen/large_dp"
+                        android:spinnerMode="dialog" />
+
+                    <Button
+                        android:id="@+id/button_upload"
+                        style="@style/Button.Positive"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/low_dp"
+                        android:text="@string/upload_image"
+                        android:textSize="@dimen/text_size_medium"
+                        android:visibility="gone"
+                        tools:ignore="MissingConstraints" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button_accepted"
+                    style="@style/Button.Negative"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/linear_layout_take_photo"
+                    android:layout_marginTop="@dimen/low_dp"
+                    android:layout_marginBottom="@dimen/low_dp"
+                    android:text="@string/final_accepted" />
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</RelativeLayout>
