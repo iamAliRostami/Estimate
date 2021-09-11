@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion = '31.0.0'
+    compileSdkVersion 30
+
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 31
+        minSdkVersion 15
+        targetSdkVersion 30
     }
 
     buildTypes {
@@ -14,8 +14,5 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    buildToolsVersion = '29.0.3'
 }

@@ -1,33 +1,9 @@
 <resources>
-    <string name="app_name">ارزیابی</string>
-
-    <string name="error_no_image_selected">هیچ تصویری انتخاب نشده است ، لطفاً دوباره امتحان کنید.</string>
-    <string name="error_incorrect_selection">شما یک فیلد معتبر انتخاب نکرده اید. لطفاً تا زمانی که خطوط به رنگ آبی نباشد ، تصحیح کنید.</string>
-    <string name="brightness">درخشش:</string>
-    <string name="contrast">کنتراست:</string>
-    <string name="crop">برش</string>
-    <string name="accepted">تایید</string>
-    <string name="final_accepted">تایید نهایی</string>
-    <string name="close">بستن</string>
-
-    <string name="document_received">مدارکی که تا کنون دریافت شده است:</string>
-    <string name="to_continue">جهت ادامه یکی از عملیات های زیر را انتخاب کنید:</string>
-    <string name="open_camera">بازکردن دوربین</string>
-    <string name="pick_an_image">برگزیدن عکس</string>
+    <string name="app_name">ارزیابی آبفا</string>
     <string name="download">بارگیری</string>
     <string name="upload">بارگذاری</string>
     <string name="upload_image">بارگذاری عکس</string>
     <string name="paper">مدارک</string>
-
-    <string name="choose_document">انتخاب مدرک</string>
-    <string name="select_source">تصویر را از کجا انتخاب میکنید؟</string>
-    <string name="gallery">گالری</string>
-    <string name="camera">دوربین</string>
-    <string name="camera_folder">/AbfaCamera/</string>
-    <string name="audio_folder">/AbfaAudioRecord/</string>
-    <string name="save_format_name">yyyyMMdd_HHmmss</string>
-    <string name="save_format_name_melli">yyyyMMdd_HHmmss_SSS</string>
-
     <string name="exit">خروج</string>
     <string name="form">فرم</string>
     <string name="form1">فرم اولیه</string>
@@ -42,6 +18,7 @@
     <string name="account_number">اشتراک</string>
     <string name="license">پروانه</string>
     <string name="open">بازکردن منو</string>
+    <string name="close">بستن</string>
 
     <string name="username">نام کاربری</string>
     <string name="password">گذرواژه</string>
@@ -52,9 +29,9 @@
     <string name="company_site">AbfaIsfahan.ir</string>
     <string name="copy_right">شبکه تارنما سپاهان</string>
     <string name="version">نسخه</string>
-    <string name="ex_msg_dialog_choice_confirm">Confirm button is only for multi choice lists. You must call setMultiChoiceItems first</string>
-    <string name="ex_msg_dialog_view_not_set">You must call method setView before calling configureView.</string>
 
+    <string name="accepted">تایید</string>
+    <string name="final_accepted">تایید نهایی</string>
     <string name="message">message</string>
     <string name="dear_user">همکار گرامی!</string>
 
@@ -92,6 +69,11 @@
 
     <string name="error_preparing">مشکلی در فرآیند آماده سازی روی داده است</string>
     <string name="error_android_version">نسخه اندروید شما این ویژگی را پشتیبانی نمی کند</string>
+    <string name="error_no_image_selected">هیچ تصویری انتخاب نشده است ، لطفاً دوباره امتحان کنید.</string>
+    <string name="error_incorrect_selection">شما یک فیلد معتبر انتخاب نکرده اید. لطفاً تا زمانی که خطوط به رنگ آبی نباشد ، تصحیح کنید.</string>
+
+    <string name="save_format_name">yyyyMMdd_HHmmss</string>
+    <string name="camera_folder">/AbfaCamera/</string>
     <string name="location">کروکی</string>
     <string name="crooki">ویرایش کروکی</string>
     <string name="setting">تنظیمات برنامه</string>
@@ -106,6 +88,8 @@
     <string name="receive">دریافت</string>
     <string name="force_close">مجوز ها کامل نیست</string>
     <string name="permission_not_completed">بستن برنامه</string>
+    <string name="open_camera">بازکردن دوربین</string>
+    <string name="pick_an_image">برگزیدن عکس</string>
 
     <string name="base_information">اطلاعات پایه</string>
     <string name="final_information">اطلاعات نهایی</string>
@@ -148,6 +132,11 @@
     <string name="moshakhasat_melk">مشخصات ملک</string>
     <string name="second_form">اطلاعات امکان فنی</string>
     <string name="moshakhasat_malek">مشخصات مالک</string>
+    <string name="crop">برش</string>
+    <string name="choose_document">انتخاب مدرک</string>
+    <string name="select_source">تصویر را از کجا انتخاب میکنید؟</string>
+    <string name="gallery">گالری</string>
+    <string name="camera">دوربین</string>
     <string name="done">انجام شد</string>
     <string name="sodur_date">تاریخ صدور پروانه</string>
     <string name="parvane_number">شماره پروانه</string>
@@ -170,6 +159,9 @@
     <string name="_09">09</string>
     <string name="description">توضیحات</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="document_received">مدارکی که تا کنون دریافت شده است:</string>
+    <string name="to_continue">جهت ادامه یکی از عملیات های زیر را انتخاب کنید:</string>
     <string name="to_exit_reback">برای خروج دوباره بازگشت را بزنید.</string>
     <string name="is_peymayesh">این مسیر پیمایش شده است.</string>
     <string name="save_info">ذخیره اطلاعات</string>
@@ -177,7 +169,8 @@
     <string name="no">خیر</string>
     <string name="accepted_question">درصورت تایید، امکان ویرایش وجود نخواهد داشت. آیا تایید میکنید؟</string>
     <string name="map_description">برای ایجاد چند ضلعی، چندین بار بر روی نقشه ضربه بزنید.\n\nبرای تعیین محل، کنتور انگشت خود را چند لحظه روی محل نگه دارید.\n\nبعد از تعیین محل کنتور، برای تعیین محل سیفون، مجددا انگشت خود را چند لحظه روی محل نگه دارید.</string>
-
+    <string name="brightness">درخشش: </string>
+    <string name="contrast">کنتراست: </string>
     <string name="home">خانه</string>
     <string name="distance_water_network">فاصله تا شبکه آب</string>
     <string name="distance_fazelab_network">فاصله تا شبکه فاضلاب</string>
@@ -242,6 +235,7 @@
     <string name="document">سند</string>
     <string name="documents">مدارک</string>
     <string name="neighbour_document">مدارک همسایه</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrZnlhOWU5ejFzYm0yd3Q4eXh6dXlqMzIifQ.jUMpwF5jUG5PJ5pMUooPjg</string>
     <string name="parcels">پارسل</string>
     <string name="water_pipe">لوله آب</string>
     <string name="water_transfer">شبکه انتقال آب</string>

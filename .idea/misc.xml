@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/create_image_activity.xml" value="0.1935185185185185" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_choice.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_custom.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_info.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_item_footer_confirm.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_item_simple_text.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_item_simple_text_multichoice.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_progress.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_standard.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_standard_vertical.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_text_input.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_view_color_area.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dialog_view_title_and_message.xml" value="0.2625" />
-        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/login_activity.xml" value="0.2625" />
-      </map>
-    </option>
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

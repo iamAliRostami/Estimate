@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/low_dp"
+        android:layout_margin="@dimen/activity_mid_margin"
         android:background="@drawable/border_2"
         android:orientation="vertical"
         tools:ignore="MissingConstraints,UselessParent">
@@ -16,7 +16,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_100sdp"
-            android:layout_margin="@dimen/low_dp"
+            android:layout_margin="@dimen/activity_mid_margin"
             android:src="@drawable/icon_finder_camera"
             tools:ignore="ContentDescription" />
 
@@ -25,9 +25,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/low_dp"
+            android:layout_margin="@dimen/activity_mid_margin"
             android:text="@string/pick_an_image"
-            android:textColor="@color/text_color_dark"
-            android:textSize="@dimen/text_size_medium" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeMedium" />
     </LinearLayout>
 </RelativeLayout>

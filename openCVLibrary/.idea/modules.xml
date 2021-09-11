@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1245609361/Estimate.iml" filepath="$PROJECT_DIR$/.idea/modules/1245609361/Estimate.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-456514397/Estimate.app.iml" filepath="$PROJECT_DIR$/.idea/modules/-456514397/Estimate.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Estimate.openCVLibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/Estimate.openCVLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/305693070/Estimate.osmbonuspack_6.6.0.iml" filepath="$PROJECT_DIR$/.idea/modules/305693070/Estimate.osmbonuspack_6.6.0.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/148556894/Estimate.persiandatepicker.iml" filepath="$PROJECT_DIR$/.idea/modules/148556894/Estimate.persiandatepicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../AndroidDocumentScanner-master.iml" filepath="$PROJECT_DIR$/../AndroidDocumentScanner-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../app/app.iml" filepath="$PROJECT_DIR$/../app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../documentscanner/documentscanner.iml" filepath="$PROJECT_DIR$/../documentscanner/documentscanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/openCVLibrary.iml" filepath="$PROJECT_DIR$/openCVLibrary.iml" />
     </modules>
   </component>
 </project>

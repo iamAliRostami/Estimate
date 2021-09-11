@@ -52,6 +52,7 @@ public interface OpenCVEngineInterface extends android.os.IInterface
   /** Local-side IPC implementation stub class. */
   public static abstract class Stub extends android.os.Binder implements org.opencv.engine.OpenCVEngineInterface
   {
+    private static final java.lang.String DESCRIPTOR = "org.opencv.engine.OpenCVEngineInterface";
     /** Construct the stub at attach it to the interface. */
     public Stub()
     {
@@ -86,9 +87,6 @@ public interface OpenCVEngineInterface extends android.os.IInterface
           reply.writeString(descriptor);
           return true;
         }
-      }
-      switch (code)
-      {
         case TRANSACTION_getEngineVersion:
         {
           data.enforceInterface(descriptor);
@@ -159,10 +157,8 @@ public interface OpenCVEngineInterface extends android.os.IInterface
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
           boolean _status = mRemote.transact(Stub.TRANSACTION_getEngineVersion, _data, _reply, 0);
-          if (!_status) {
-            if (getDefaultImpl() != null) {
-              return getDefaultImpl().getEngineVersion();
-            }
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getEngineVersion();
           }
           _reply.readException();
           _result = _reply.readInt();
@@ -187,10 +183,8 @@ public interface OpenCVEngineInterface extends android.os.IInterface
           _data.writeInterfaceToken(DESCRIPTOR);
           _data.writeString(version);
           boolean _status = mRemote.transact(Stub.TRANSACTION_getLibPathByVersion, _data, _reply, 0);
-          if (!_status) {
-            if (getDefaultImpl() != null) {
-              return getDefaultImpl().getLibPathByVersion(version);
-            }
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getLibPathByVersion(version);
           }
           _reply.readException();
           _result = _reply.readString();
@@ -215,10 +209,8 @@ public interface OpenCVEngineInterface extends android.os.IInterface
           _data.writeInterfaceToken(DESCRIPTOR);
           _data.writeString(version);
           boolean _status = mRemote.transact(Stub.TRANSACTION_installVersion, _data, _reply, 0);
-          if (!_status) {
-            if (getDefaultImpl() != null) {
-              return getDefaultImpl().installVersion(version);
-            }
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().installVersion(version);
           }
           _reply.readException();
           _result = (0!=_reply.readInt());
@@ -243,10 +235,8 @@ public interface OpenCVEngineInterface extends android.os.IInterface
           _data.writeInterfaceToken(DESCRIPTOR);
           _data.writeString(version);
           boolean _status = mRemote.transact(Stub.TRANSACTION_getLibraryList, _data, _reply, 0);
-          if (!_status) {
-            if (getDefaultImpl() != null) {
-              return getDefaultImpl().getLibraryList(version);
-            }
+          if (!_status && getDefaultImpl() != null) {
+            return getDefaultImpl().getLibraryList(version);
           }
           _reply.readException();
           _result = _reply.readString();
@@ -264,13 +254,7 @@ public interface OpenCVEngineInterface extends android.os.IInterface
     static final int TRANSACTION_installVersion = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
     static final int TRANSACTION_getLibraryList = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
     public static boolean setDefaultImpl(org.opencv.engine.OpenCVEngineInterface impl) {
-      // Only one user of this interface can use this function
-      // at a time. This is a heuristic to detect if two different
-      // users in the same process use this function.
-      if (Stub.Proxy.sDefaultImpl != null) {
-        throw new IllegalStateException("setDefaultImpl() called twice");
-      }
-      if (impl != null) {
+      if (Stub.Proxy.sDefaultImpl == null && impl != null) {
         Stub.Proxy.sDefaultImpl = impl;
         return true;
       }
@@ -280,7 +264,6 @@ public interface OpenCVEngineInterface extends android.os.IInterface
       return Stub.Proxy.sDefaultImpl;
     }
   }
-  public static final java.lang.String DESCRIPTOR = "org.opencv.engine.OpenCVEngineInterface";
   /**
       * @return Returns service version.
       */

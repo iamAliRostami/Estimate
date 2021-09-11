@@ -1,29 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:1-7:12
 	package
-		ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:3:5-25
-		INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-		INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:3:5-25
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
 	android:versionName
-		ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:5:5-32
+		ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:5:5-32
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:2:11-69
+		ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml:4:5-31
+		ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml:4:5-31
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
 uses-sdk
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-		ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-		INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-		ADDED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
-		INJECTED from D:\AndroidStudioProjects\Estimate-New\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\AndroidManifest.xml

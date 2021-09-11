@@ -1,13 +1,50 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     repositories {
         google()
+        jcenter()
         mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+            name 'OSS-Sonatype'
+        }
+        maven { url 'https://mapbox.bintray.com/mapbox' }
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                // Do not change the username below.
+                // This should always be `mapbox` (not your username).
+                username = 'mapbox'
+                // Use the secret token you stored in gradle.properties as the password
+                password = project.properties['pk.eyJ1IjoiYWxpLWFuZ2VsIiwiYSI6ImNrZnlhOWU5ejFzYm0yd3Q4eXh6dXlqMzIifQ.jUMpwF5jUG5PJ5pMUooPjg'] ?: ""
+            }
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.1'
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
-        classpath 'com.google.firebase:perf-plugin:1.4.0'
+        classpath 'com.android.tools.build:gradle:4.1.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+ext {
+    roomVersion = '1.0.0-alpha4'
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'http://www.idescout.com/maven/repo/'
+            name 'IDEScout, Inc.'
+        }
+        maven { url "https://jitpack.io" }
+
     }
 }
 
