@@ -1,2 +1,22 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+        maven { url 'https://esri.jfrog.io/artifactory/arcgis' }
+        maven { url "https://www.jitpack.io" }
+    }
+    buildscript {
+        repositories {
+            google()
+            maven { url "https://www.jitpack.io" }
+        }
+        dependencies {
+            classpath 'com.google.gms:google-services:4.3.10'
+        }
+    }
+}
+rootProject.name = "Estimate"
 include ':osmbonuspack_6.6.0'
 include ':app', ':openCVLibrary', ':persiandatepicker'

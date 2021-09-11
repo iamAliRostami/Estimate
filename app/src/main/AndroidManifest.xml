@@ -1,90 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.leon.estimate">
+    package="com.leon.estimate_new">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature
-        android:name="android.hardware.camera"
+        android:glEsVersion="0x00020000"
         android:required="true" />
-    <uses-feature
-        android:name="android.hardware.location.network"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.location.gps"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.wifi"
-        android:required="false" />
 
     <application
-        android:name=".MyApplication"
+        android:name=".helpers.MyApplication"
         android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        android:theme="@style/Theme.EstimateNew"
+        android:usesCleartextTraffic="true">
         <activity
-            android:name=".activities.MotherChildActivity"
-            android:label="@string/request" />
-        <activity android:name=".activities.SearchActivity" />
-        <activity android:name=".activities.CreateImageActivity" />
-        <activity android:name=".activities.DocumentActivity" />
-        <activity android:name=".activities.DocumentFormActivity" />
+            android:name=".activities.MainActivity"
+            android:exported="true" />
         <activity
-            android:name=".activities.FormActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activities.BrightnessContrastActivity" />
-        <activity android:name=".activities.CropActivity" />
-        <activity android:name=".activities.ListActivity">
+            android:name=".activities.DocumentFormActivity"
+            android:exported="true">
 
-        </activity>
-        <activity
-            android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".activities.BrightnessContrastActivity" />
+        <activity android:name=".activities.CropImageActivity" />
 
-        </activity>
-        <activity
-            android:name=".activities.LoginActivity"
-            android:label="@string/login"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".activities.TakeOtherPhotoActivity"
-            android:label="@string/paper" />
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <base-config
+        cleartextTrafficPermitted="true"
+        tools:ignore="InsecureBaseConfiguration">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">37.191.92.130</domain>
-        <domain includeSubdomains="true">172.18.12.242</domain>
-        <domain includeSubdomains="true">172.18.12.121</domain>
-        <domain includeSubdomains="true">172.18.12.14</domain>
-        <domain includeSubdomains="true">https://37.191.92.157</domain>
-        <domain includeSubdomains="true">192.168.142.206</domain>
-        <domain includeSubdomains="true">https://www.abfaesfahan.ir</domain>
-        <domain includeSubdomains="true">https://webservice.aspsms.com</domain>
-        <domain includeSubdomains="true">webservice.aspsms.com</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">81.12.106.167:8081</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">81.12.106.167</domain>
     </domain-config>
 </network-security-config>
