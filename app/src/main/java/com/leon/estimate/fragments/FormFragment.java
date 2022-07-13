@@ -110,7 +110,7 @@ public class FormFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ((FormActivity) getActivity()).setActionBarTitle(
+        ((FormActivity) requireActivity()).setActionBarTitle(
                 context.getString(R.string.app_name).concat(" / ").concat("صفحه سوم"));
     }
 
