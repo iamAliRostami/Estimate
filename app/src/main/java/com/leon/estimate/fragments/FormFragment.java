@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-//import com.google.gson.Gson;
 import com.google.gson.Gson;
 import com.leon.estimate.Enums.BundleEnum;
 import com.leon.estimate.Enums.DialogType;
@@ -141,6 +140,7 @@ public class FormFragment extends Fragment {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     void setOnImageViewPlusClickListener() {
         binding.imageViewPlus.setOnClickListener(v -> {
             if (checkIsNoEmpty(binding.editTextVahed) && checkIsNoEmpty(binding.editTextNoeShoql)
@@ -154,8 +154,8 @@ public class FormFragment extends Fragment {
                             getString(R.string.accepted));
                     return;
                 }
-                String karbari = karbariDictionaries.get(
-                        binding.spinner5.getSelectedItemPosition()).getTitle();
+                String karbari = karbariDictionaries.get(binding.spinner5.getSelectedItemPosition())
+                        .getTitle();
                 String noeShoql = binding.editTextNoeShoql.getText().toString();
                 int tedadVahed = Integer.parseInt(binding.editTextVahed.getText().toString());
                 String vahedMohasebe = binding.editTextVahedMohasebe.getText().toString();
