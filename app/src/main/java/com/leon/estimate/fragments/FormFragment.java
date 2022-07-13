@@ -479,7 +479,7 @@ public class FormFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(Integer... integers) {
-            Objects.requireNonNull(getActivity()).runOnUiThread(FormFragment.this::initializeSpinner);
+            requireActivity().runOnUiThread(FormFragment.this::initializeSpinner);
             return null;
         }
 
