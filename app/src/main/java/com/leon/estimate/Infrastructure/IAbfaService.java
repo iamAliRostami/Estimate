@@ -264,6 +264,5 @@ public interface IAbfaService {
 
     @POST("/moshtarakinApi/ExaminationManager/RegisterAS")
     Call<SimpleMessage> sendRequestAfterSale(@Body Request request);
-
 }
 

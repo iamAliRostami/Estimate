@@ -40,7 +40,6 @@ import static com.leon.estimate.Utils.Constants.arzeshdaraei;
 import static com.leon.estimate.Utils.Constants.valueInteger;
 import static com.leon.estimate.activities.FormActivity.activity;
 
-
 public class ValueFragment extends DialogFragment {
     ValueFragmentBinding binding;
     Context context;
@@ -277,28 +276,5 @@ public class ValueFragment extends DialogFragment {
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setAttributes(params);
         super.onResume();
-    }
-
-    class GetArzeshdaraei implements ICallback<Arzeshdaraei> {
-        @Override
-        public void execute(Arzeshdaraei arzeshdaraeiResponse) {
-            arzeshdaraei = arzeshdaraeiResponse;
-            initializeSpinners();
-        }
-    }
-
-    class GetArzeshdaraeiIncomplete implements ICallbackIncomplete<Arzeshdaraei> {
-        @Override
-        public void executeIncomplete(Response<Arzeshdaraei> response) {
-            Log.e("Incomplete", String.valueOf(response.errorBody()));
-        }
-    }
-
-    class GetError implements ICallbackError {
-        @Override
-        public void executeError(Throwable t) {
-            Log.e("Error", String.valueOf(t));
-
-        }
     }
 }

@@ -318,20 +318,20 @@ public class DocumentFormActivity extends AppCompatActivity {
                 new GetImageDoc(), new GetImageDocIncomplete(), new GetError());
     }
 
-    void uploadImage(int docId, Bitmap bitmap) {
-        Retrofit retrofit = NetworkHelper.getInstance("");
-        final IAbfaService getImage = retrofit.create(IAbfaService.class);
-        MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context, null);
-        Call<UploadImage> call;
-        if (isNew)
-            call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
-                    SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, trackNumber);
-        else
-            call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
-                    SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, billId);
+        void uploadImage(int docId, Bitmap bitmap) {
+            Retrofit retrofit = NetworkHelper.getInstance("");
+            final IAbfaService getImage = retrofit.create(IAbfaService.class);
+            MultipartBody.Part body = CustomFile.bitmapToFile(bitmap, context, null);
+            Call<UploadImage> call;
+            if (isNew)
+                call = getImage.uploadDocNew(sharedPreferenceManager.getStringData(
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, trackNumber);
+            else
+                call = getImage.uploadDoc(sharedPreferenceManager.getStringData(
+                        SharedReferenceKeys.TOKEN_FOR_FILE.getValue()), body, docId, billId);
 
-        HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
-                new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
+            HttpClientWrapper.callHttpAsync(call, ProgressType.SHOW.getValue(), this,
+                    new UploadImageDoc(), new UploadImageDocIncomplete(), new GetError());
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/drawable/border_blue_1.xml" value="0.2640625" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/drawable/border_blue_2.xml" value="0.2640625" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/add_document_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/create_image_activity.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/document_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/document_form_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/dropdown_menu_popup_item.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/enter_bill_id_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/form_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/form_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/item_address_1.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/item_address_2.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/item_check_box.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/item_check_box_1.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/item_tejari.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/list_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/login_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/main_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/main_app_bar.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/main_content.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/map_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/mother_child_activity.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/personal_fragment.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/search_fragment.xml" value="0.22777777777777777" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/second_form_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/services_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/layout/value_fragment.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/menu/document_menu.xml" value="0.24375" />
+        <entry key="..\:/AndroidStudioProjects/Estimate/app/src/main/res/menu/search_menu.xml" value="0.24375" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

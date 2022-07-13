@@ -367,7 +367,6 @@ public class FormActivity extends AppCompatActivity {
                     binding.buttonNext.setText(R.string.crooki);
                     binding.relativeLayoutMap.setVisibility(View.VISIBLE);
                     binding.relativeLayoutEditMap.setVisibility(View.GONE);
-//                    binding.mapView.getOverlays().add(startMarker);
                     setActionBarTitle(
                             context.getString(R.string.app_name).concat(" / ").concat("صفحه پنجم"));
                     break;

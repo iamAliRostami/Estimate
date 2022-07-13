@@ -242,8 +242,7 @@ public class CustomFile {
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             images.setBitmap(b);
             return images;
-        } catch (
-                FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
         }

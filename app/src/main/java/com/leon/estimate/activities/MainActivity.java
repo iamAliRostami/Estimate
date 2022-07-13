@@ -1,5 +1,7 @@
 package com.leon.estimate.activities;
 
+import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -105,8 +107,6 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static com.leon.estimate.Utils.Constants.REQUEST_LOCATION_CODE;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
