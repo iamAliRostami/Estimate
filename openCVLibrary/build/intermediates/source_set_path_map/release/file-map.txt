@@ -1,0 +1,8 @@
+org.opencv.openCVLibrary-pngs-0 D:\AndroidStudioProjects\Estimate\openCVLibrary\build\generated\res\pngs\release
+org.opencv.openCVLibrary-resValues-1 D:\AndroidStudioProjects\Estimate\openCVLibrary\build\generated\res\resValues\release
+org.opencv.openCVLibrary-rs-2 D:\AndroidStudioProjects\Estimate\openCVLibrary\build\generated\res\rs\release
+org.opencv.openCVLibrary-mergeReleaseResources-3 D:\AndroidStudioProjects\Estimate\openCVLibrary\build\intermediates\incremental\release\mergeReleaseResources\merged.dir
+org.opencv.openCVLibrary-mergeReleaseResources-4 D:\AndroidStudioProjects\Estimate\openCVLibrary\build\intermediates\incremental\release\mergeReleaseResources\stripped.dir
+org.opencv.openCVLibrary-merged_res-5 D:\AndroidStudioProjects\Estimate\openCVLibrary\build\intermediates\merged_res\release
+org.opencv.openCVLibrary-main-6 D:\AndroidStudioProjects\Estimate\openCVLibrary\src\main\res
+org.opencv.openCVLibrary-release-7 D:\AndroidStudioProjects\Estimate\openCVLibrary\src\release\res

@@ -1,5 +1,8 @@
 package com.leon.estimate.fragments;
 
+import static android.content.Context.LOCATION_SERVICE;
+import static com.leon.estimate.Utils.Constants.examinerDuties;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -55,14 +58,10 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static android.content.Context.LOCATION_SERVICE;
-import static com.leon.estimate.Utils.Constants.examinerDuties;
 
 public class MapFragment extends Fragment implements LocationListener {
     String token, billId;
@@ -216,8 +215,7 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private Location getLastKnownLocation() {
         Location l = null;
-        LocationManager mLocationManager = (LocationManager) Objects.requireNonNull(
-                getActivity()).getSystemService(LOCATION_SERVICE);
+        LocationManager mLocationManager = (LocationManager) requireActivity().getSystemService(LOCATION_SERVICE);
         assert mLocationManager != null;
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;

@@ -1,0 +1,52 @@
+{
+    "logs": [
+        {
+            "outputFile": "org.opencv.openCVLibrary-merged_res-4:/values/values.xml",
+            "map": [
+                {
+                    "source": "D:\\AndroidStudioProjects\\Estimate\\openCVLibrary\\src\\main\\res\\values\\attrs.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "9",
+                        "endColumns": "24",
+                        "endOffsets": "374"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "9",
+                        "endColumns": "24",
+                        "endOffsets": "370"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "org.opencv.openCVLibrary-mergeReleaseResources-2:/values/values.xml",
+            "map": [
+                {
+                    "source": "D:\\AndroidStudioProjects\\Estimate\\openCVLibrary\\src\\main\\res\\values\\attrs.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "9",
+                        "endColumns": "24",
+                        "endOffsets": "374"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "9",
+                        "endColumns": "24",
+                        "endOffsets": "370"
+                    }
+                }
+            ]
+        }
+    ]
+}
